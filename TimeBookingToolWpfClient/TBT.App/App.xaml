@@ -1,0 +1,68 @@
+﻿<Application x:Class="TBT.App.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TBT.App"
+             xmlns:tools="clr-namespace:TBT.App.Models.Tools"
+             Startup="Application_Startup">
+    
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources\Styles\Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <tools:BoolToNotVisibilityConverter x:Key="BoolToNotVisibilityConverter"/>
+            <tools:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <tools:IntToDayOfWeekConverter x:Key="IntToDayOfWeekConverter"/>
+            <tools:IntToShortDayOfWeekConverter x:Key="IntToShortDayOfWeekConverter"/>
+            <tools:IntToMonthConverter x:Key="IntToMonthConverter"/>
+            <tools:IntToShortMonthConverter x:Key="IntToShortMonthConverter"/>
+            <tools:IsDateTimeTodayConverter x:Key="IsDateTimeTodayConverter"/>
+            <tools:TimeEntryConverter x:Key="TimeEntryConverter"/>
+            <tools:DurationConverter x:Key="DurationConverter"/>
+            <tools:ProjectWithCustomerConverter x:Key="ProjectWithCustomerConverter"/>
+            <tools:StartButtonToolTipConverter x:Key="StartButtonToolTipConverter"/>
+            <tools:YearToVisibilityConverter x:Key="YearToVisibilityConverter"/>
+            <tools:EditButtonToVisibilityConverter x:Key="EditButtonToVisibilityConverter"/>
+            <tools:TodayToVisibilityConverter x:Key="TodayToVisibilityConverter"/>
+            <tools:StartButtonContentConverter x:Key="StartButtonContentConverter"/>
+
+            <SolidColorBrush x:Key="CalendarItemBackground" Color="#c2422b"/>
+            <SolidColorBrush x:Key="CalendarItemMouseOverBrush" Color="#00628c"/>
+            <LinearGradientBrush x:Key="CalendarItemIsSelectedBrush">
+                <GradientStop Color="#f77f50" Offset="0" />
+                <GradientStop Color="#d45925" Offset="1" />
+                <LinearGradientBrush.Transform>
+                    <RotateTransform Angle="45" />
+                </LinearGradientBrush.Transform>
+            </LinearGradientBrush>
+            <SolidColorBrush x:Key="CalendarItemIsTodayBrush" Color="#4d4d4d"/>
+            <SolidColorBrush x:Key="CalendarItemForeground" Color="#ffffff"/>
+
+            <SolidColorBrush x:Key="TimeEntryIsEditingBackground" Color="#f2f2f2"/>
+            <SolidColorBrush x:Key="TimeEntryIsEditingForeground" Color="#404040"/>
+            
+            <SolidColorBrush x:Key="TimeEntryIsRunningBackground" Color="#0082ba"/>
+            <SolidColorBrush x:Key="TimeEntryNotRunningBackground" Color="#00245e"/>
+            <SolidColorBrush x:Key="TimeEntryForeground" Color="#ffffff"/>
+            <SolidColorBrush x:Key="TimeEntryButtonBorderBrush" Color="#bfbfbf"/>
+            <SolidColorBrush x:Key="TimeEntryButtonForeground" Color="#dddddd"/>
+            <SolidColorBrush x:Key="TimeEntryButtonBackground" Color="#ffffff"/>
+            <SolidColorBrush x:Key="TimeEntryButtonBackgroundMouseOverBrush" Color="#a6a6a6"/>
+            <SolidColorBrush x:Key="TimeEntryButtonBackgroundDisabled" Color="#737373"/>
+
+            <SolidColorBrush x:Key="SpinnerForeground" Color="#404040"/>
+
+            <SolidColorBrush x:Key="ItemsBackground" Color="#f2f2f2"/>
+
+            <SolidColorBrush x:Key="StartButtonBackground" Color="#00245e"/>
+            <SolidColorBrush x:Key="StartButtonMouseOverBackground" Color="#f2f2f2"/>
+
+
+            <SolidColorBrush x:Key="ChangeWeekButtonBackground" Color="Transparent"/>
+            <SolidColorBrush x:Key="ChangeWeekButtonMouseOverBackground" Color="#00628c"/>
+            <SolidColorBrush x:Key="ChangeWeekButtonForeground" Color="#c2422b"/>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

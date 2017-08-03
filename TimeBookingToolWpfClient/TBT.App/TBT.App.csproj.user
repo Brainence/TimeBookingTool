@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PublishUrlHistory>E:\Brainence projects\TimeBookingToolInstall\|D:\[Applications]\Time Booking Tool\|C:\Users\Tapac\Desktop\Time Booking Tool\|publish\</PublishUrlHistory>
+    <InstallUrlHistory>http://192.168.0.42/timebookingtool/|http://192.168.0.217/timebookingtool/|http://localhost/timebookingtool/|http://192.168.0.217/TimeBookingTool/|http://192.168.0.217/testingapp/</InstallUrlHistory>
+    <SupportUrlHistory />
+    <UpdateUrlHistory>http://192.168.0.217/TimeBookingTool/</UpdateUrlHistory>
+    <BootstrapperUrlHistory>http://localhost/timebookingtool|http://localhost/timebookingtool/Packages/DotNetFX452|http://localhost/timebookingtool/Packages</BootstrapperUrlHistory>
+    <ErrorReportUrlHistory />
+    <FallbackCulture>en-US</FallbackCulture>
+    <VerifyUploadedFiles>false</VerifyUploadedFiles>
+    <ProjectView>ShowAllFiles</ProjectView>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EnableSecurityDebugging>false</EnableSecurityDebugging>
+  </PropertyGroup>
+</Project>

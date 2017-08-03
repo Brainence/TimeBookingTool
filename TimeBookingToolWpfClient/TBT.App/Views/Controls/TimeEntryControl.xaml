@@ -1,0 +1,265 @@
+﻿<UserControl x:Class="TBT.App.Views.Controls.TimeEntryControl"
+             x:Name="this"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TBT.App.Views.Controls"
+             Loaded="this_Loaded"
+             KeyDown="this_KeyDown"
+             mc:Ignorable="d" 
+             d:DesignHeight="150">
+
+    <Grid>
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="true">
+                        <Setter Property="Background" Value="{StaticResource TimeEntryIsRunningBackground}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="false">
+                        <Setter Property="Background" Value="{StaticResource TimeEntryNotRunningBackground}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=this, Path=IsEditing}" Value="True">
+                        <Setter Property="Background" Value="{StaticResource TimeEntryIsEditingBackground}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+
+        <Grid Visibility="{Binding ElementName=this, Path=IsEditing, Converter={StaticResource BoolToNotVisibilityConverter}}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="timerTextBlock"
+                           Margin="10 0 5 0"
+                           FontFamily="Corsiva" 
+                           FontSize="36" 
+                           Foreground="{StaticResource TimeEntryForeground}"
+                           FontWeight="Bold" 
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+
+                <Button x:Name="startStopButton"
+                        IsEnabled="False"
+                        Command="{Binding ElementName=this, Path=StartStopCommand, Mode=TwoWay}" 
+                        Margin="2"
+                        Height="35"
+                        Visibility="{Binding ElementName=this, Path=TimeEntry.Date, Converter={StaticResource TodayToVisibilityConverter}}"
+                        Width="35">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="BorderBrush" Value="{StaticResource TimeEntryButtonBorderBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource TimeEntryButtonForeground}"/>
+                            <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackground}"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="Template" Value="{StaticResource RoundButtonTemplate}"/>
+                            <Style.Triggers>
+                                <Trigger Property ="IsMouseOver" Value ="True">
+                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundMouseOverBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value ="False">
+                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundDisabled}"/>
+                                </Trigger>
+                                <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="true">
+                                    <Setter Property="Content" >
+                                        <Setter.Value>
+                                            <Image Source="/Resources/Icons/stop.png" Stretch="Fill" Height="20" Width="20"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="false">
+                                    <Setter Property="Content" >
+                                        <Setter.Value>
+                                            <Image Source="/Resources/Icons/play.png" Stretch="Fill" Height="20" Width="20"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button x:Name="editButton" 
+                        IsEnabled="False"
+                        Command="{Binding ElementName=this, Path=EditCommand, Mode=TwoWay}" 
+                        Margin="2"
+                        Visibility="{Binding ElementName=this, Path=TimeEntry.Date, Converter={StaticResource EditButtonToVisibilityConverter}}"
+                        Height="35"
+                        Width="35">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="BorderBrush" Value="{StaticResource TimeEntryButtonBorderBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource TimeEntryButtonForeground}"/>
+                            <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackground}"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="Template" Value="{StaticResource RoundButtonTemplate}"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value ="True">
+                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundMouseOverBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value ="False">
+                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundDisabled}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Image Source="/Resources/Icons/editing.png" Stretch="Fill" Height="20" Width="20"/>
+                </Button>
+
+                <Button Command="{Binding ElementName=this, Path=RemoveCommand, Mode=TwoWay}" 
+                        Margin="2"
+                        Height="35"
+                        Width="35">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="BorderBrush" Value="{StaticResource TimeEntryButtonBorderBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource TimeEntryButtonForeground}"/>
+                            <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackground}"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="Template" Value="{StaticResource RoundButtonTemplate}"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value ="True">
+                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundMouseOverBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value ="False">
+                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundDisabled}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Image Source="/Resources/Icons/bin.png" Stretch="Fill" Height="20" Width="20"/>
+                </Button>
+
+                <TextBlock Text="{Binding ElementName=this, Path=TimeEntry, Converter={StaticResource TimeEntryConverter}}" 
+                           Margin="10 0 0 0" FontSize="18" 
+                           VerticalAlignment="Center" 
+                           Foreground="{StaticResource TimeEntryForeground}"/>
+
+                <local:SpinnersApple Margin="10 0 0 0" VerticalAlignment="Center" Visibility="{Binding IsActive, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
+
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="editingGrid" Visibility="{Binding ElementName=this, Path=IsEditing, Converter={StaticResource BoolToVisibilityConverter}}" Height="45">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+                <TextBox Text="{Binding ElementName=this, Path=Comment, Mode=TwoWay}" 
+                         Margin="10 5 10 5" MaxWidth="500" Width="500"
+                         TextWrapping="Wrap" AcceptsReturn="True"
+                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+                <Grid VerticalAlignment="Center">
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBox x:Name="timerTextBox" 
+                             VerticalAlignment="Top"
+                             PreviewTextInput="timerTextBox_PreviewTextInput"
+                             Margin="10"
+                             Grid.Row="0"
+                             FontFamily="Corsiva" 
+                             FontSize="30" 
+                             Height="33"
+                             Width="150"
+                             Foreground="{StaticResource TimeEntryIsEditingForeground}"
+                             FontWeight="Bold" 
+                             TextAlignment="Center"
+                             HorizontalContentAlignment="Center"/>
+
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10" Grid.Row="1">
+                        
+                        <Button VerticalAlignment="Bottom"
+                                HorizontalAlignment="Left"
+                                Click="SaveTimeEntryButton_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid x:Name="thisButtonTemplate" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                                      Width="65">
+
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding ElementName=startButton, Path=IsEnabled}" Value="False">
+                                                                    <Setter Property="Opacity" Value="0.5"/>
+                                                                </DataTrigger>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Cursor" Value="Hand" />
+                                                                    <Setter Property="Background" Value="#005c00"/>
+                                                                </Trigger>
+                                                                <Trigger Property="IsMouseOver" Value="False">
+                                                                    <Setter Property="Background" Value="{StaticResource TimeEntryNotRunningBackground}"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+
+                                                    <TextBlock Text="Save" 
+                                                               Margin="8" 
+                                                               Foreground="#ffffff"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
+
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button VerticalAlignment="Bottom"
+                                HorizontalAlignment="Right"
+                                Click="CancelEditButton_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid x:Name="thisButtonTemplate" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                      Width="65">
+
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding ElementName=startButton, Path=IsEnabled}" Value="False">
+                                                                    <Setter Property="Opacity" Value="0.5"/>
+                                                                </DataTrigger>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Cursor" Value="Hand" />
+                                                                    <Setter Property="Background" Value="#5c002e"/>
+                                                                </Trigger>
+                                                                <Trigger Property="IsMouseOver" Value="False">
+                                                                    <Setter Property="Background" Value="{StaticResource TimeEntryNotRunningBackground}"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+
+                                                    <TextBlock Text="Cancel" 
+                                                               Margin="8" 
+                                                               Foreground="#ffffff"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
+
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</UserControl>

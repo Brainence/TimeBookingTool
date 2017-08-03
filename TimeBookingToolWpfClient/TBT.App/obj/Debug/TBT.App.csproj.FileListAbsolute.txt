@@ -1,0 +1,254 @@
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Authentication\Authentication.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\AllUsersReportPage.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\CalendarControl.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\CheckBoxControl.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\ComboBoxControl.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\DateTimeControl.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\DoubleLabelControl.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\EditTimeEntryControl.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\EditUserControl.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\MultiSelectionComboBox.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\NewUserControl.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\ReportingControl.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\ReportPage.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\SpinnersApple.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\SpinnersCogs.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\TextControl.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\TimeEntryControl.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditUserWindow.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\MainWindow.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\App.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool_MarkupCompile.cache
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool_MarkupCompile.lref
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\App.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Resources\Styles\Styles.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Authentication\Authentication.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\AllUsersReportPage.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\CalendarControl.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\CheckBoxControl.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\ComboBoxControl.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\DateTimeControl.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\DoubleLabelControl.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\EditTimeEntryControl.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\EditUserControl.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\MultiSelectionComboBox.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\NewUserControl.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\ReportingControl.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\ReportPage.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\SpinnersApple.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\SpinnersCogs.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\TextControl.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\TimeEntryControl.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditUserWindow.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\MainWindow.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.g.resources
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.pdb
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.exe.config
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.exe.manifest
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.application
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.exe
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.pdb
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\EntityFramework.dll
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\EntityFramework.SqlServer.dll
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\Newtonsoft.Json.dll
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Net.Http.Formatting.dll
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Web.Http.dll
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Web.Http.WebHost.dll
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\EntityFramework.xml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\EntityFramework.SqlServer.xml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\Newtonsoft.Json.xml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Net.Http.Formatting.xml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Web.Http.xml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Web.Http.WebHost.xml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TBT.App.Properties.Resources.resources
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TBT.App.csproj.GenerateResource.Cache
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.TrustInfo.xml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.exe.manifest
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.application
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.exe
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditCustomerWindow.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditCustomerWindow.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditProjectWindow.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditProjectWindow.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditActivityWindow.g.cs
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditActivityWindow.baml
+D:\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TBT.App.csprojResolveAssemblyReference.cache
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.exe.config
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.exe
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.pdb
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.exe.manifest
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.application
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.exe
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.pdb
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\EntityFramework.dll
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\EntityFramework.SqlServer.dll
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\Newtonsoft.Json.dll
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Net.Http.Formatting.dll
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Web.Http.dll
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Web.Http.WebHost.dll
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\EntityFramework.xml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\EntityFramework.SqlServer.xml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\Newtonsoft.Json.xml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Net.Http.Formatting.xml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Web.Http.xml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Web.Http.WebHost.xml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Authentication\Authentication.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\AllUsersReportPage.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\CalendarControl.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\CheckBoxControl.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\ComboBoxControl.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\DateTimeControl.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\DoubleLabelControl.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\EditTimeEntryControl.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\EditUserControl.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\MultiSelectionComboBox.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\NewUserControl.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\ReportingControl.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\ReportPage.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\SpinnersApple.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\SpinnersCogs.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\TextControl.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\TimeEntryControl.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditActivityWindow.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditCustomerWindow.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditProjectWindow.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditUserWindow.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\MainWindow.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\App.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool_MarkupCompile.cache
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool_MarkupCompile.lref
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\App.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Resources\Styles\Styles.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Authentication\Authentication.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\AllUsersReportPage.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\CalendarControl.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\CheckBoxControl.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\ComboBoxControl.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\DateTimeControl.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\DoubleLabelControl.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\EditTimeEntryControl.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\EditUserControl.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\MultiSelectionComboBox.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\NewUserControl.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\ReportingControl.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\ReportPage.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\SpinnersApple.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\SpinnersCogs.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\TextControl.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Controls\TimeEntryControl.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditActivityWindow.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditCustomerWindow.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditProjectWindow.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\EditUserWindow.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\Views\Windows\MainWindow.baml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.g.resources
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TBT.App.Properties.Resources.resources
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TBT.App.csproj.GenerateResource.Cache
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.TrustInfo.xml
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.exe.manifest
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.application
+E:\Brainence projects\Time Booking Tool Internal\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TBT.App.csprojResolveAssemblyReference.cache
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.exe.config
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.exe
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.pdb
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.exe.manifest
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.application
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.exe
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\TimeBookingTool.pdb
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\EntityFramework.dll
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\EntityFramework.SqlServer.dll
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\Newtonsoft.Json.dll
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Net.Http.Formatting.dll
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Web.Http.dll
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Web.Http.WebHost.dll
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\EntityFramework.xml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\EntityFramework.SqlServer.xml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\Newtonsoft.Json.xml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Net.Http.Formatting.xml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Web.Http.xml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\System.Web.Http.WebHost.xml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool_MarkupCompile.cache
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool_MarkupCompile.lref
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.g.resources
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TBT.App.Properties.Resources.resources
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TBT.App.csproj.GenerateResource.Cache
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.TrustInfo.xml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.exe.manifest
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TimeBookingTool.application
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\bin\Debug\XamlSpy.dll
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\TBT.App.csprojResolveAssemblyReference.cache
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\App.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Resources\Styles\Styles.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Authentication\Authentication.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\AllUsersReportPage.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\CalendarControl.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\CheckBoxControl.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\ComboBoxControl.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\DateTimeControl.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\DoubleLabelControl.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\EditTimeEntryControl.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\EditUserControl.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\MultiSelectionComboBox.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\NewUserControl.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\ReportingControl.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\ReportPage.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\SpinnersApple.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\SpinnersCogs.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\TextControl.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Controls\TimeEntryControl.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Windows\EditActivityWindow.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Windows\EditCustomerWindow.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Windows\EditProjectWindow.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Windows\EditUserWindow.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\Views\Windows\MainWindow.xaml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\xamlspy\_XamlSpyAssemblyInfo.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Authentication\Authentication.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\AllUsersReportPage.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\CalendarControl.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\CheckBoxControl.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\ComboBoxControl.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\DateTimeControl.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\DoubleLabelControl.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\EditTimeEntryControl.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\EditUserControl.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\MultiSelectionComboBox.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\NewUserControl.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\ReportingControl.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\ReportPage.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\SpinnersApple.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\SpinnersCogs.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\TextControl.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\TimeEntryControl.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Windows\EditActivityWindow.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Windows\EditCustomerWindow.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Windows\EditProjectWindow.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Windows\EditUserWindow.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Windows\MainWindow.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\App.g.cs
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\App.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Resources\Styles\Styles.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Authentication\Authentication.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\AllUsersReportPage.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\CalendarControl.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\CheckBoxControl.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\ComboBoxControl.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\DateTimeControl.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\DoubleLabelControl.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\EditTimeEntryControl.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\EditUserControl.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\MultiSelectionComboBox.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\NewUserControl.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\ReportingControl.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\ReportPage.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\SpinnersApple.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\SpinnersCogs.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\TextControl.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Controls\TimeEntryControl.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Windows\EditActivityWindow.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Windows\EditCustomerWindow.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Windows\EditProjectWindow.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Windows\EditUserWindow.baml
+E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\obj\Debug\obj\Debug\xamlspy\Views\Windows\MainWindow.baml

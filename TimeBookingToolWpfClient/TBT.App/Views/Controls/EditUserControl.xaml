@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="TBT.App.Views.Controls.EditUserControl"
+             x:Name="this"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TBT.App.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300">
+
+    <Grid>
+        <StackPanel Grid.IsSharedSizeScope="True">
+            <local:TextControl Margin="2" Label="First name" Text="{Binding ElementName=this, Path=User.FirstName, Mode=TwoWay}"/>
+            <local:TextControl Margin="2" Label="Last Name" Text="{Binding ElementName=this, Path=User.LastName, Mode=TwoWay}"/>
+            <local:TextControl Margin="2" Label="Username" Text="{Binding ElementName=this, Path=User.Username, Mode=TwoWay}"/>
+            <local:TextControl Margin="2" Label="Password" Text="{Binding ElementName=this, Path=User.Password, Mode=TwoWay}"
+                               Visibility="{Binding ElementName=this, Path=ShowPassword, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <local:TextControl Margin="2" Label="Time limit" Text="{Binding ElementName=this, Path=User.TimeLimit, Mode=TwoWay}"
+                               Visibility="{Binding ElementName=this, Path=ShowAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <local:CheckBoxControl Margin="2" Label="Admin" IsChecked="{Binding ElementName=this, Path=User.IsAdmin, Mode=TwoWay}" 
+                               Visibility="{Binding ElementName=this, Path=ShowAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Height="25" Margin="10 5 10 5" Click="AddSaveUser_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=this, Path=ForSaving}" Value="True">
+                                    <Setter Property="Content" Value="Save"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=this, Path=ForSaving}" Value="False">
+                                    <Setter Property="Content" Value="Create new"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button Height="25" Margin="10 5 10 5" Content="Cancel" 
+                        Visibility="{Binding ElementName=this, Path=ForSaving, Converter={StaticResource BoolToVisibilityConverter}}"
+                        Command="{Binding ElementName=this, Path=CancelCommand, Mode=TwoWay}" 
+                        Template="{StaticResource HyperlinkButtonTemplate}"/>
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

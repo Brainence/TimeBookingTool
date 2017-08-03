@@ -1,0 +1,63 @@
+﻿<!--
+***********************************************************************************************
+XamlSpy.Mobile.targets
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy. 
+
+Copyright (C) First Floor Software. All rights reserved.
+***********************************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="FirstFloor.XamlSpy.IncludeXamlSpy" AssemblyFile="$(XamlSpyInstallPath)XamlSpy.Build.dll" Condition="'$(XamlSpyInstallPath)' != ''" />
+
+  <PropertyGroup>
+    <EnableXamlSpy Condition="'$(EnableXamlSpy)' == '' and '$(Configuration)' == 'Debug'">true</EnableXamlSpy>
+
+    <!-- make sure RemoveXamlSpy is run before build -->
+    <BuildDependsOn>RemoveXamlSpy;$(BuildDependsOn);</BuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="AddXamlSpy" BeforeTargets="CoreCompile" DependsOnTargets="ResolveProjectReferences;ResolveAssemblyReferences" Condition="'$(EnableXamlSpy)' == 'true' and '$(XamlSpyInstallPath)' != ''">
+    <!-- include xaml spy -->
+    <IncludeXamlSpy ApplicationDefinitions="@(ApplicationDefinition)"
+                    CompileItems="@(Compile)"
+                    Pages="@(Page)"
+                    References="@(ReferencePath);@(InferredReference->'$(TargetFrameworkDirectory)\%(Identity)')"
+                    Language="$(Language)"
+                    LanguageSourceExtension="$(DefaultLanguageSourceExtension)"
+                    RootNamespace="$(RootNamespace)"
+                    StartupObject="$(StartupObject)"
+                    TargetFrameworkMoniker="$(TargetFrameworkMoniker)"
+                    TargetPlatformIdentifier="$(TargetPlatformIdentifier)"
+                    OutputPath="$(IntermediateOutputPath)xamlspy\">
+      <Output ItemName="Compile" TaskParameter="GeneratedCodeFiles" />
+      <Output ItemName="FileWrites" TaskParameter="GeneratedFiles" />
+      <Output ItemName="ProcessedApplicationDefinition" TaskParameter="ProcessedApplicationDefinitions" />
+      <Output ItemName="ProcessedPage" TaskParameter="ProcessedPages" />
+      <Output PropertyName="NewStartupObject" TaskParameter="NewStartupObject" />
+    </IncludeXamlSpy>
+    <ItemGroup>
+      <ApplicationDefinition Remove="@(ApplicationDefinition)" />
+      <Page Remove="@(Page)" />
+
+      <ApplicationDefinition Include="@(ProcessedApplicationDefinition)" />
+      <Page Include="@(ProcessedPage)" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <StartupObject Condition="'$(NewStartupObject)' != ''">$(NewStartupObject)</StartupObject>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="RemoveXamlSpy" Condition="'$(EnableXamlSpy)' != 'true' or '$(XamlSpyInstallPath)' == ''">
+    <!-- remove XamlSpy reference (added by XamlSpyLibs) from project -->
+    <ItemGroup>
+      <Reference Remove="XamlSpy" />
+    </ItemGroup>
+
+    <Message Text="XAML Spy is not enabled" Importance="High" Condition="'$(EnableXamlSpy)' != 'true' and '$(XamlSpyInstallPath)' != ''" />
+    <Message Text="XAML Spy is not installed on this machine. Get it from http://xamlspy.com/download" Importance="High" Condition="'$(EnableXamlSpy)' == 'true' and '$(XamlSpyInstallPath)' == ''"/>
+  </Target>
+</Project>
