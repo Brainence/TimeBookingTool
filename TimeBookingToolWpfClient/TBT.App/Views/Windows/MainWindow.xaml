@@ -13,14 +13,15 @@
         Icon="../../calendar_clock.ico"
         SizeChanged="this_SizeChanged"
         Title="Time Booking Tool" 
-        Height="768" 
-        Width="1000" 
+        Height="700" 
+        Width="600" 
+        ResizeMode="CanMinimize"
         Style="{StaticResource WindowStyle}">
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
-    <Grid Margin="40 40 40 20">
+    <Grid Margin="20 20 20 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -39,27 +40,25 @@
                 <Grid Background="White">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" Background="{StaticResource ItemsBackground}"
-                                Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <TextBlock Text="User" Margin="20 5 5 5"
-                                   Foreground="#4d4d4d"
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0"
+                                Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Margin="30 20 30 0">
+                        <TextBlock Text="User" Width="50"
+                                   Foreground="#4d4d4d" FontSize="13"
                                    VerticalAlignment="Center"
-                                   TextAlignment="Right"/>
-                        <ComboBox Margin="5 5 20 5"
-                                  Width="300"
+                                   TextAlignment="Left"/>
+                        <ComboBox 
+                                  Width="428" FontSize="13" FontWeight="Bold" Foreground="#c2422b"
                                   VerticalAlignment="Center"
                                   Style="{StaticResource ComboBoxFlatStyle}"
                                   ItemsSource="{Binding ElementName=mainWindow, Path=Users}" 
                                   SelectedValue="{Binding ElementName=mainWindow, Path=ReportingUser, Mode=TwoWay}"/>
                     </StackPanel>
 
-                    <Rectangle Stroke="#C2C2C2" Height="1" Grid.Row="1"/>
 
-                    <controls:ReportingControl Grid.Row="2"
+                    <controls:ReportingControl Grid.Row="2" Margin="30 20 30 20"
                                                TimeEntries="{Binding ElementName=mainWindow, Path=TimeEntries, Mode=TwoWay}" 
                                                ItemsLoading="{Binding ElementName=mainWindow, Path=ItemsLoading, Mode=TwoWay}"
                                                From="{Binding ElementName=mainWindow, Path=From, Mode=TwoWay}"
@@ -643,13 +642,9 @@
         </TabControl>
 
         <Grid Grid.Row="1">
-            <StackPanel HorizontalAlignment="Left" Margin="20 15 20 15" Orientation="Horizontal">
-                <TextBlock x:Name="dateTimeNowTextBox" Foreground="#595959"/>
-            </StackPanel>
-
-            <StackPanel HorizontalAlignment="Right" Margin="10 10 20 10" Orientation="Horizontal">
-                <Button Click="RefreshAll_Click" Height="20" Margin="10 5 0 5" Content="Refresh" Template="{StaticResource HyperlinkButtonTemplate}" HorizontalContentAlignment="Center"/>
-                <Button Click="SignOutButton_Click" Height="20" Margin="10 5 0 5" Content="Sign out" Template="{StaticResource HyperlinkButtonTemplate}" HorizontalContentAlignment="Center"/>
+            <StackPanel HorizontalAlignment="Right" Margin="10 0 20 10" Orientation="Horizontal">
+                <Button Click="RefreshAll_Click" Height="20" Margin="0 5 10 5" Content="Refresh" Template="{StaticResource BottomHyperlinkButtonTemplate}" HorizontalContentAlignment="Center"/>
+                <Button Click="SignOutButton_Click" Height="20" Margin="10 5 0 5" Content="Sign out" Template="{StaticResource BottomHyperlinkButtonTemplate}" HorizontalContentAlignment="Center"/>
             </StackPanel>
         </Grid>
 

@@ -1,4 +1,4 @@
-﻿<Window x:Class="TBT.App.Views.Windows.MainWindow" x:Name="mainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:TBT.App.Views.Windows" xmlns:vm="clr-namespace:TBT.App.ViewModels" xmlns:controls="clr-namespace:TBT.App.Views.Controls" Closing="Window_Closing" mc:Ignorable="d" Loaded="this_Loaded" Icon="../../calendar_clock.ico" SizeChanged="this_SizeChanged" Title="Time Booking Tool" Height="768" Width="1000" Style="{StaticResource WindowStyle}" xmlns:spy="clr-namespace:FirstFloor.XamlSpy;assembly=XamlSpy" spy:XamlMetadata.XamlSpyServiceSettings="127.0.0.1|4530|18048" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|1">
+﻿<Window x:Class="TBT.App.Views.Windows.MainWindow" x:Name="mainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:TBT.App.Views.Windows" xmlns:vm="clr-namespace:TBT.App.ViewModels" xmlns:controls="clr-namespace:TBT.App.Views.Controls" Closing="Window_Closing" mc:Ignorable="d" Loaded="this_Loaded" Icon="../../calendar_clock.ico" SizeChanged="this_SizeChanged" Title="Time Booking Tool" Height="700" Width="600" ResizeMode="CanMinimize" Style="{StaticResource WindowStyle}" xmlns:spy="clr-namespace:FirstFloor.XamlSpy;assembly=XamlSpy" spy:XamlMetadata.XamlSpyServiceSettings="127.0.0.1|4530|18048" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|1">
 
     <Window.DataContext>
         <vm:MainWindowViewModel />
@@ -20,7 +20,8 @@
 
 
 
-    <Grid Margin="40 40 40 20" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|23">
+
+    <Grid Margin="20 20 20 0" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|24">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -30,36 +31,29 @@
         </Grid.ColumnDefinitions>
 
 
-        <TabControl Grid.Row="0" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|33">
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Calendar" Tag="../Icons/calendar.png" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|34">
+        <TabControl Grid.Row="0" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|34">
+            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Calendar" Tag="../Icons/calendar.png" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|35">
                 <controls:CalendarControl x:Name="calendar" User="{Binding CurrentUser, Mode=TwoWay}" IsDateNameShort="False" Background="White" />
             </TabItem>
 
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Reporting" Tag="../Icons/reporting.png" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|38">
-                <Grid Background="White" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|39">
+            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Reporting" Tag="../Icons/reporting.png" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|39">
+                <Grid Background="White" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|40">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" Background="{StaticResource ItemsBackground}" Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|46">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Margin="30 20 30 0" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|46">
 
-                        <TextBlock Text="User" Margin="20 5 5 5" Foreground="#4d4d4d" VerticalAlignment="Center" TextAlignment="Right" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|48" />
+                        <TextBlock Text="User" Width="50" Foreground="#4d4d4d" FontSize="13" VerticalAlignment="Center" TextAlignment="Left" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|48" />
 
 
 
-                        <ComboBox Margin="5 5 20 5" Width="300" VerticalAlignment="Center" Style="{StaticResource ComboBoxFlatStyle}" ItemsSource="{Binding ElementName=mainWindow, Path=Users}" SelectedValue="{Binding ElementName=mainWindow, Path=ReportingUser, Mode=TwoWay}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|52" />
+                        <ComboBox Width="428" FontSize="13" FontWeight="Bold" Foreground="#c2422b" VerticalAlignment="Center" Style="{StaticResource ComboBoxFlatStyle}" ItemsSource="{Binding ElementName=mainWindow, Path=Users}" SelectedValue="{Binding ElementName=mainWindow, Path=ReportingUser, Mode=TwoWay}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|52" />
                     </StackPanel>
 
 
-
-
-
-
-                    <Rectangle Stroke="#C2C2C2" Height="1" Grid.Row="1" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|60" />
-
-                    <controls:ReportingControl Grid.Row="2" TimeEntries="{Binding ElementName=mainWindow, Path=TimeEntries, Mode=TwoWay}" ItemsLoading="{Binding ElementName=mainWindow, Path=ItemsLoading, Mode=TwoWay}" From="{Binding ElementName=mainWindow, Path=From, Mode=TwoWay}" To="{Binding ElementName=mainWindow, Path=To, Mode=TwoWay}" IsAdmin="{Binding DataContext.CurrentUser.IsAdmin, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" User="{Binding ElementName=mainWindow, Path=ReportingUser}" />
+                    <controls:ReportingControl Grid.Row="2" Margin="30 20 30 20" TimeEntries="{Binding ElementName=mainWindow, Path=TimeEntries, Mode=TwoWay}" ItemsLoading="{Binding ElementName=mainWindow, Path=ItemsLoading, Mode=TwoWay}" From="{Binding ElementName=mainWindow, Path=From, Mode=TwoWay}" To="{Binding ElementName=mainWindow, Path=To, Mode=TwoWay}" IsAdmin="{Binding DataContext.CurrentUser.IsAdmin, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" User="{Binding ElementName=mainWindow, Path=ReportingUser}" />
                 </Grid>
             </TabItem>
 
@@ -69,8 +63,13 @@
 
 
 
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="People" Tag="../Icons/people.png" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|72">
-                <Grid Background="White" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|73">
+
+
+
+
+
+            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="People" Tag="../Icons/people.png" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|71">
+                <Grid Background="White" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|72">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -78,16 +77,16 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Grid x:Name="newUserGrid" Grid.Row="0" Margin="10 10 10 0" Width="400" Visibility="{Binding Path=CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|81">
+                    <Grid x:Name="newUserGrid" Grid.Row="0" Margin="10 10 10 0" Width="400" Visibility="{Binding Path=CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|80">
 
                         <controls:NewUserControl User="{Binding ElementName=mainWindow, Path=NewUser, Mode=TwoWay}" HorizontalAlignment="Stretch" />
                     </Grid>
 
 
-                    <Grid Grid.Row="1" Margin="10 10 10 0" Visibility="{Binding ElementName=mainWindow, Path=IsProfileEditing, Converter={StaticResource BoolToVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|87">
+                    <Grid Grid.Row="1" Margin="10 10 10 0" Visibility="{Binding ElementName=mainWindow, Path=IsProfileEditing, Converter={StaticResource BoolToVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|86">
 
 
-                        <Grid HorizontalAlignment="Center" Width="400" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|90">
+                        <Grid HorizontalAlignment="Center" Width="400" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|89">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition />
@@ -103,7 +102,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="Edit profile" FontSize="16" FontWeight="Bold" FontFamily="Sans-Serif Fonts" Margin="5" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|106" />
+                            <TextBlock Text="Edit profile" FontSize="16" FontWeight="Bold" FontFamily="Sans-Serif Fonts" Margin="5" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|105" />
 
                             <controls:EditUserControl User="{Binding Path=CurrentUser, Mode=TwoWay}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ShowAdmin="False" ShowPassword="False" ForSaving="True" />
 
@@ -111,36 +110,36 @@
 
 
 
-                            <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="Change password" Margin="5" FontWeight="Bold" FontFamily="Sans-Serif Fonts" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|114" />
+                            <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="Change password" Margin="5" FontWeight="Bold" FontFamily="Sans-Serif Fonts" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|113" />
 
-                            <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Old password" HorizontalAlignment="Right" Margin="2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|116" />
-                            <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="New password" HorizontalAlignment="Right" Margin="2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|117" />
-                            <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="Confirm password" HorizontalAlignment="Right" Margin="2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|118" />
+                            <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Old password" HorizontalAlignment="Right" Margin="2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|115" />
+                            <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="New password" HorizontalAlignment="Right" Margin="2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|116" />
+                            <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="Confirm password" HorizontalAlignment="Right" Margin="2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|117" />
 
 
-                            <PasswordBox x:Name="oldPassword" Grid.Row="3" Grid.Column="1" Margin="2" Height="20" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|121" />
-                            <PasswordBox x:Name="newPassword" Grid.Row="4" Grid.Column="1" Margin="2" Height="20" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|122" />
-                            <PasswordBox x:Name="confirmPassword" Grid.Row="5" Grid.Column="1" Margin="2" Height="20" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|123" />
+                            <PasswordBox x:Name="oldPassword" Grid.Row="3" Grid.Column="1" Margin="2" Height="20" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|120" />
+                            <PasswordBox x:Name="newPassword" Grid.Row="4" Grid.Column="1" Margin="2" Height="20" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|121" />
+                            <PasswordBox x:Name="confirmPassword" Grid.Row="5" Grid.Column="1" Margin="2" Height="20" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|122" />
 
-                            <Button Grid.Row="6" Grid.Column="1" Click="ChangePassword_ButtonClick" Content="Change" Template="{StaticResource HyperlinkButtonTemplate}" HorizontalAlignment="Right" Height="25" Margin="0 5 10 5" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|125" />
+                            <Button Grid.Row="6" Grid.Column="1" Click="ChangePassword_ButtonClick" Content="Change" Template="{StaticResource HyperlinkButtonTemplate}" HorizontalAlignment="Right" Height="25" Margin="0 5 10 5" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|124" />
 
                         </Grid>
                     </Grid>
 
 
-                    <Grid Grid.Row="2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|131">
-                        <StackPanel Margin="0 10 20 10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|132">
+                    <Grid Grid.Row="2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|130">
+                        <StackPanel Margin="0 10 20 10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|131">
 
-                            <Button Content="Refresh" Margin="5" Click="RefreshUsers_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|134" />
+                            <Button Content="Refresh" Margin="5" Click="RefreshUsers_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|133" />
 
 
-                            <Button x:Name="editProfileButton" Margin="5" Content="Edit profile" Click="EditProfile_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|137" />
+                            <Button x:Name="editProfileButton" Margin="5" Content="Edit profile" Click="EditProfile_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|136" />
 
                         </StackPanel>
                     </Grid>
 
 
-                    <Grid Grid.Row="3" Margin="20" Height="50" Width="50" Visibility="{Binding ElementName=mainWindow, Path=UsersLoading, Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|143">
+                    <Grid Grid.Row="3" Margin="20" Height="50" Width="50" Visibility="{Binding ElementName=mainWindow, Path=UsersLoading, Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|142">
 
                         <controls:SpinnersCogs />
                     </Grid>
@@ -151,29 +150,29 @@
 
 
 
-                    <Grid Grid.Row="3" Visibility="{Binding ElementName=mainWindow, Path=UsersLoading, Converter={StaticResource BoolToNotVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|154">
+                    <Grid Grid.Row="3" Visibility="{Binding ElementName=mainWindow, Path=UsersLoading, Converter={StaticResource BoolToNotVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|153">
 
-                        <ScrollViewer Margin="20" MinHeight="100" VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|156">
-
-
+                        <ScrollViewer Margin="20" MinHeight="100" VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|155">
 
 
 
 
-                            <ItemsControl ItemsSource="{Binding ElementName=mainWindow, Path=Users, Mode=TwoWay}" Grid.IsSharedSizeScope="True" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|163">
+
+
+                            <ItemsControl ItemsSource="{Binding ElementName=mainWindow, Path=Users, Mode=TwoWay}" Grid.IsSharedSizeScope="True" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|162">
 
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid HorizontalAlignment="Stretch" Visibility="{Binding ElementName=mainWindow, Path=IsEditing, Converter={StaticResource BoolToNotVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|167">
+                                        <Grid HorizontalAlignment="Stretch" Visibility="{Binding ElementName=mainWindow, Path=IsEditing, Converter={StaticResource BoolToNotVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|166">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition />
                                             </Grid.RowDefinitions>
 
 
-                                            <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="6" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|174" />
+                                            <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="6" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|173" />
 
-                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="5" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|176">
+                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="5" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|175">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition SharedSizeGroup="FullName" />
                                                     <ColumnDefinition SharedSizeGroup="Username" />
@@ -183,7 +182,7 @@
                                                     <ColumnDefinition SharedSizeGroup="Edit" />
                                                 </Grid.ColumnDefinitions>
 
-                                                <TextBlock Height="20" Grid.Column="0" Margin="10 5 10 5" Text="{Binding FullName}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|186">
+                                                <TextBlock Height="20" Grid.Column="0" Margin="10 5 10 5" Text="{Binding FullName}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|185">
                                                     <TextBlock.Style>
                                                         <Style TargetType="TextBlock">
                                                             <Style.Triggers>
@@ -195,7 +194,7 @@
                                                     </TextBlock.Style>
                                                 </TextBlock>
 
-                                                <TextBlock Height="20" Grid.Column="1" Margin="20 5 10 5" Text="{Binding Username}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|198">
+                                                <TextBlock Height="20" Grid.Column="1" Margin="20 5 10 5" Text="{Binding Username}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|197">
                                                     <TextBlock.Style>
                                                         <Style TargetType="TextBlock">
                                                             <Style.Triggers>
@@ -207,7 +206,7 @@
                                                     </TextBlock.Style>
                                                 </TextBlock>
 
-                                                <CheckBox Content="Admin" Height="20" Grid.Column="2" Margin="20 5 10 5" IsChecked="{Binding IsAdmin, Mode=TwoWay}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsEnabled="False" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|210" />
+                                                <CheckBox Content="Admin" Height="20" Grid.Column="2" Margin="20 5 10 5" IsChecked="{Binding IsAdmin, Mode=TwoWay}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsEnabled="False" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|209" />
 
                                                 <controls:MultiSelectionComboBox Grid.Column="3" Margin="0 3 0 3" ItemsSourceMultiple="{Binding Projects}" Width="250" Style="{StaticResource ComboBoxFlatStyle}" Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" User="{Binding}" />
 
@@ -220,12 +219,12 @@
 
 
 
-                                                <Button Height="20" Grid.Column="4" Margin="10 5 10 5" Content="Remove" Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Click="RemoveUser_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|223" />
+                                                <Button Height="20" Grid.Column="4" Margin="10 5 10 5" Content="Remove" Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Click="RemoveUser_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|222" />
 
 
 
 
-                                                <Button Height="20" Grid.Column="5" Margin="10 5 10 5" Content="Edit" Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Click="EditUser_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|228" />
+                                                <Button Height="20" Grid.Column="5" Margin="10 5 10 5" Content="Edit" Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Click="EditUser_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|227" />
                                             </Grid>
                                         </Grid>
                                     </DataTemplate>
@@ -238,34 +237,34 @@
 
 
 
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Customers" Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Tag="../Icons/customers.png" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|241">
+            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Customers" Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Tag="../Icons/customers.png" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|240">
 
-                <Grid Background="White" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|243">
+                <Grid Background="White" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|242">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
 
-                    <Button Grid.Row="0" HorizontalAlignment="Right" Height="20" Width="100" Margin="10" Content="Refresh" Command="{Binding ElementName=mainWindow, Path=GetCustomersCommand}" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|250" />
+                    <Button Grid.Row="0" HorizontalAlignment="Right" Height="20" Width="100" Margin="10" Content="Refresh" Command="{Binding ElementName=mainWindow, Path=GetCustomersCommand}" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|249" />
 
 
 
-                    <Grid Grid.Row="0" HorizontalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|254">
+                    <Grid Grid.Row="0" HorizontalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|253">
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition SharedSizeGroup="label" />
                             <ColumnDefinition SharedSizeGroup="textBox" MinWidth="150" />
                         </Grid.ColumnDefinitions>
 
-                        <Button Click="CreateNewCustomerButton_Click" Content="Create customer" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|261">
+                        <Button Click="CreateNewCustomerButton_Click" Content="Create customer" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|260">
                         </Button>
 
-                        <TextBox x:Name="NewCustomerTextBox" VerticalContentAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="0" Width="250" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|264" />
+                        <TextBox x:Name="NewCustomerTextBox" VerticalContentAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="0" Width="250" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|263" />
 
                     </Grid>
 
-                    <Grid Grid.Row="1" Margin="20" Height="50" Width="50" Visibility="{Binding ElementName=mainWindow, Path=ItemsLoading, Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|268">
+                    <Grid Grid.Row="1" Margin="20" Height="50" Width="50" Visibility="{Binding ElementName=mainWindow, Path=ItemsLoading, Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|267">
 
                         <controls:SpinnersCogs />
                     </Grid>
@@ -276,29 +275,29 @@
 
 
 
-                    <Grid VerticalAlignment="Top" Grid.Row="1" Margin="20" Visibility="{Binding ElementName=mainWindow, Path=ItemsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|279">
+                    <Grid VerticalAlignment="Top" Grid.Row="1" Margin="20" Visibility="{Binding ElementName=mainWindow, Path=ItemsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|278">
 
 
 
 
-                        <ScrollViewer MinHeight="100" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|284">
+                        <ScrollViewer MinHeight="100" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|283">
 
 
 
 
-                            <ItemsControl x:Name="CustomersItemsControl" ItemsSource="{Binding ElementName=mainWindow, Path=Customers, Mode=TwoWay}" Grid.IsSharedSizeScope="True" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|289">
+                            <ItemsControl x:Name="CustomersItemsControl" ItemsSource="{Binding ElementName=mainWindow, Path=Customers, Mode=TwoWay}" Grid.IsSharedSizeScope="True" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|288">
 
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|293">
+                                        <Grid HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|292">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition />
                                             </Grid.RowDefinitions>
 
-                                            <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="3" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|299" />
+                                            <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="3" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|298" />
 
-                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="10" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|301">
+                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="10" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|300">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition SharedSizeGroup="column1" />
                                                     <ColumnDefinition SharedSizeGroup="column2" />
@@ -306,35 +305,35 @@
                                                     <ColumnDefinition SharedSizeGroup="column4" />
                                                 </Grid.ColumnDefinitions>
 
-                                                <TextBlock Grid.Column="0" MaxWidth="350" Margin="20 5 20 5" Text="{Binding Path=Name}" FontWeight="Bold" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|309" />
+                                                <TextBlock Grid.Column="0" MaxWidth="350" Margin="20 5 20 5" Text="{Binding Path=Name}" FontWeight="Bold" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|308" />
 
 
 
 
 
-                                                <Expander Grid.Column="1" MinWidth="300" Margin="20 5 20 5" Header="Projects" Expanded="customerProjectsExpander_Expanded" Collapsed="customerProjectsExpander_Collapsed" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|315">
+                                                <Expander Grid.Column="1" MinWidth="300" Margin="20 5 20 5" Header="Projects" Expanded="customerProjectsExpander_Expanded" Collapsed="customerProjectsExpander_Collapsed" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|314">
 
 
 
 
 
 
-                                                    <ItemsControl ItemsSource="{Binding Projects}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|322">
+                                                    <ItemsControl ItemsSource="{Binding Projects}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|321">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <StackPanel Background="{StaticResource ItemsBackground}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|325">
-                                                                    <TextBlock Text="{Binding Name}" Margin="20 5 20 5" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|326" />
-                                                                    <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="6" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|327" />
+                                                                <StackPanel Background="{StaticResource ItemsBackground}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|324">
+                                                                    <TextBlock Text="{Binding Name}" Margin="20 5 20 5" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|325" />
+                                                                    <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="6" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|326" />
                                                                 </StackPanel>
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
                                                 </Expander>
 
-                                                <Button Height="20" Grid.Column="2" Margin="10 5 10 5" Content="Remove" VerticalAlignment="Top" Click="RemoveCustomer_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|334" />
+                                                <Button Height="20" Grid.Column="2" Margin="10 5 10 5" Content="Remove" VerticalAlignment="Top" Click="RemoveCustomer_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|333" />
 
 
-                                                <Button Height="20" Grid.Column="3" Margin="10 5 10 5" Content="Edit" VerticalAlignment="Top" Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Click="EditCustomer_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|337" />
+                                                <Button Height="20" Grid.Column="3" Margin="10 5 10 5" Content="Edit" VerticalAlignment="Top" Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Click="EditCustomer_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|336" />
                                             </Grid>
                                         </Grid>
                                     </DataTemplate>
@@ -348,19 +347,19 @@
 
 
 
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Projects" Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Tag="../Icons/projects.png" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|351">
+            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Projects" Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Tag="../Icons/projects.png" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|350">
 
-                <Grid Background="White" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|353">
+                <Grid Background="White" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|352">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Row="0" HorizontalAlignment="Right" Height="20" Width="100" Margin="10" Content="Refresh" Command="{Binding ElementName=mainWindow, Path=GetProjectsCommand}" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|359" />
+                    <Button Grid.Row="0" HorizontalAlignment="Right" Height="20" Width="100" Margin="10" Content="Refresh" Command="{Binding ElementName=mainWindow, Path=GetProjectsCommand}" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|358" />
 
 
 
-                    <Grid Grid.Row="0" HorizontalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|363">
+                    <Grid Grid.Row="0" HorizontalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|362">
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition SharedSizeGroup="label" />
@@ -368,7 +367,7 @@
                             <ColumnDefinition SharedSizeGroup="comboBox" MinWidth="150" />
                         </Grid.ColumnDefinitions>
 
-                        <Button Click="CreateNewProjectButton_Click" Content="Create project" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|371">
+                        <Button Click="CreateNewProjectButton_Click" Content="Create project" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|370">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Style.Triggers>
@@ -380,11 +379,11 @@
                             </Button.Style>
                         </Button>
 
-                        <TextBox x:Name="NewProjectTextBox" VerticalContentAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="0" Height="20" VerticalAlignment="Bottom" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|383" />
+                        <TextBox x:Name="NewProjectTextBox" VerticalContentAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="0" Height="20" VerticalAlignment="Bottom" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|382" />
 
-                        <StackPanel Grid.Column="2" Grid.Row="0" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|385">
-                            <TextBlock Text="Customer:" Margin="5 0 0 0" Height="25" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|386" />
-                            <ComboBox x:Name="createProjectComboBox" Style="{StaticResource ComboBoxFlatStyle}" ItemsSource="{Binding ElementName=mainWindow, Path=CustomersComboBox}" Text="[Select customer]" Width="300" Height="25" Margin="5" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|387" />
+                        <StackPanel Grid.Column="2" Grid.Row="0" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|384">
+                            <TextBlock Text="Customer:" Margin="5 0 0 0" Height="25" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|385" />
+                            <ComboBox x:Name="createProjectComboBox" Style="{StaticResource ComboBoxFlatStyle}" ItemsSource="{Binding ElementName=mainWindow, Path=CustomersComboBox}" Text="[Select customer]" Width="300" Height="25" Margin="5" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|386" />
                         </StackPanel>
 
                     </Grid>
@@ -395,7 +394,7 @@
 
 
 
-                    <Grid Grid.Row="1" Margin="20" Height="50" Width="50" Visibility="{Binding ElementName=mainWindow, Path=ItemsLoading, Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|398">
+                    <Grid Grid.Row="1" Margin="20" Height="50" Width="50" Visibility="{Binding ElementName=mainWindow, Path=ItemsLoading, Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|397">
 
                         <controls:SpinnersCogs />
                     </Grid>
@@ -406,29 +405,29 @@
 
 
 
-                    <Grid VerticalAlignment="Top" Grid.Row="1" Margin="20" Visibility="{Binding ElementName=mainWindow, Path=ItemsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|409">
+                    <Grid VerticalAlignment="Top" Grid.Row="1" Margin="20" Visibility="{Binding ElementName=mainWindow, Path=ItemsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|408">
 
 
 
 
-                        <ScrollViewer MinHeight="100" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|414">
+                        <ScrollViewer MinHeight="100" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|413">
 
 
 
 
-                            <ItemsControl x:Name="ProjectsItemsControl" ItemsSource="{Binding ElementName=mainWindow, Path=Projects, Mode=TwoWay}" Grid.IsSharedSizeScope="True" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|419">
+                            <ItemsControl x:Name="ProjectsItemsControl" ItemsSource="{Binding ElementName=mainWindow, Path=Projects, Mode=TwoWay}" Grid.IsSharedSizeScope="True" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|418">
 
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|423">
+                                        <Grid HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|422">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition />
                                             </Grid.RowDefinitions>
 
-                                            <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="3" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|429" />
+                                            <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="3" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|428" />
 
-                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="10" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|431">
+                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="10" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|430">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition SharedSizeGroup="column1" />
                                                     <ColumnDefinition SharedSizeGroup="column2" />
@@ -438,14 +437,14 @@
                                                 </Grid.ColumnDefinitions>
 
 
-                                                <TextBlock Grid.Column="0" MaxWidth="350" Margin="20 5 5 5" Text="{Binding Path=Customer.Name}" Foreground="#4d4d4d" TextAlignment="Right" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|441" />
+                                                <TextBlock Grid.Column="0" MaxWidth="350" Margin="20 5 5 5" Text="{Binding Path=Customer.Name}" Foreground="#4d4d4d" TextAlignment="Right" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|440" />
 
 
 
 
 
 
-                                                <TextBlock Grid.Column="1" MaxWidth="350" Margin="5 5 20 5" Text="{Binding Path=Name}" TextAlignment="Left" FontWeight="Bold" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|448" />
+                                                <TextBlock Grid.Column="1" MaxWidth="350" Margin="5 5 20 5" Text="{Binding Path=Name}" TextAlignment="Left" FontWeight="Bold" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|447" />
 
 
 
@@ -453,27 +452,27 @@
 
 
 
-                                                <Expander Grid.Column="2" MinWidth="300" Margin="20 5 20 5" Header="Tasks" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|456">
+                                                <Expander Grid.Column="2" MinWidth="300" Margin="20 5 20 5" Header="Tasks" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|455">
 
 
 
 
-                                                    <ItemsControl ItemsSource="{Binding Activities}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|461">
+                                                    <ItemsControl ItemsSource="{Binding Activities}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|460">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <StackPanel Background="{StaticResource ItemsBackground}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|464">
-                                                                    <TextBlock Text="{Binding Name}" Margin="20 5 20 5" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|465" />
-                                                                    <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="6" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|466" />
+                                                                <StackPanel Background="{StaticResource ItemsBackground}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|463">
+                                                                    <TextBlock Text="{Binding Name}" Margin="20 5 20 5" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|464" />
+                                                                    <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="6" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|465" />
                                                                 </StackPanel>
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
                                                 </Expander>
 
-                                                <Button Height="20" Grid.Column="3" Margin="10 5 10 5" Content="Remove" VerticalAlignment="Top" Click="RemoveProject_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|473" />
+                                                <Button Height="20" Grid.Column="3" Margin="10 5 10 5" Content="Remove" VerticalAlignment="Top" Click="RemoveProject_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|472" />
 
 
-                                                <Button Height="20" Grid.Column="4" Margin="10 5 10 5" Content="Edit" VerticalAlignment="Top" Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Click="EditProject_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|476" />
+                                                <Button Height="20" Grid.Column="4" Margin="10 5 10 5" Content="Edit" VerticalAlignment="Top" Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Click="EditProject_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|475" />
                                             </Grid>
                                         </Grid>
                                     </DataTemplate>
@@ -487,19 +486,19 @@
 
 
 
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Tasks" Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Tag="../Icons/tasks.png" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|490">
+            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Tasks" Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Tag="../Icons/tasks.png" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|489">
 
-                <Grid Background="White" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|492">
+                <Grid Background="White" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|491">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Row="0" HorizontalAlignment="Right" Height="20" Width="100" Margin="10" Content="Refresh" Command="{Binding ElementName=mainWindow, Path=GetActivitiesCommand}" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|498" />
+                    <Button Grid.Row="0" HorizontalAlignment="Right" Height="20" Width="100" Margin="10" Content="Refresh" Command="{Binding ElementName=mainWindow, Path=GetActivitiesCommand}" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|497" />
 
 
 
-                    <Grid Grid.Row="0" HorizontalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|502">
+                    <Grid Grid.Row="0" HorizontalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|501">
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition SharedSizeGroup="label" />
@@ -507,7 +506,7 @@
                             <ColumnDefinition SharedSizeGroup="comboBox" MinWidth="150" />
                         </Grid.ColumnDefinitions>
 
-                        <Button Click="CreateNewTaskButton_Click" Content="Create task" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|510">
+                        <Button Click="CreateNewTaskButton_Click" Content="Create task" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|509">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Style.Triggers>
@@ -519,11 +518,11 @@
                             </Button.Style>
                         </Button>
 
-                        <TextBox x:Name="NewTaskTextBox" VerticalContentAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="2" Height="20" VerticalAlignment="Bottom" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|522" />
+                        <TextBox x:Name="NewTaskTextBox" VerticalContentAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="2" Height="20" VerticalAlignment="Bottom" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|521" />
 
-                        <StackPanel Grid.Column="2" Grid.Row="2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|524">
-                            <TextBlock Text="Project:" Margin="5 0 0 0" Height="25" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|525" />
-                            <ComboBox x:Name="createTaskComboBox" Grid.Column="2" Grid.Row="2" Style="{StaticResource ComboBoxFlatStyle}" ItemsSource="{Binding ElementName=mainWindow, Path=ProjectsComboBox}" Text="[Select project]" Width="300" Height="25" Margin="5" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|526" />
+                        <StackPanel Grid.Column="2" Grid.Row="2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|523">
+                            <TextBlock Text="Project:" Margin="5 0 0 0" Height="25" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|524" />
+                            <ComboBox x:Name="createTaskComboBox" Grid.Column="2" Grid.Row="2" Style="{StaticResource ComboBoxFlatStyle}" ItemsSource="{Binding ElementName=mainWindow, Path=ProjectsComboBox}" Text="[Select project]" Width="300" Height="25" Margin="5" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|525" />
                         </StackPanel>
 
                     </Grid>
@@ -535,7 +534,7 @@
 
 
 
-                    <Grid Grid.Row="1" Margin="20" Height="50" Width="50" Visibility="{Binding ElementName=mainWindow, Path=ItemsLoading, Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|538">
+                    <Grid Grid.Row="1" Margin="20" Height="50" Width="50" Visibility="{Binding ElementName=mainWindow, Path=ItemsLoading, Converter={StaticResource BoolToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|537">
 
                         <controls:SpinnersCogs />
                     </Grid>
@@ -546,30 +545,30 @@
 
 
 
-                    <Grid VerticalAlignment="Top" Grid.Row="1" Margin="20" Background="{StaticResource ItemsBackground}" Visibility="{Binding ElementName=mainWindow, Path=ItemsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|549">
+                    <Grid VerticalAlignment="Top" Grid.Row="1" Margin="20" Background="{StaticResource ItemsBackground}" Visibility="{Binding ElementName=mainWindow, Path=ItemsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|548">
 
 
 
 
 
-                        <ScrollViewer MinHeight="100" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|555">
+                        <ScrollViewer MinHeight="100" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|554">
 
 
 
 
-                            <ItemsControl x:Name="TasksItemsControl" ItemsSource="{Binding ElementName=mainWindow, Path=Activities, Mode=TwoWay}" Grid.IsSharedSizeScope="True" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|560">
+                            <ItemsControl x:Name="TasksItemsControl" ItemsSource="{Binding ElementName=mainWindow, Path=Activities, Mode=TwoWay}" Grid.IsSharedSizeScope="True" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|559">
 
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|564">
+                                        <Grid HorizontalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|563">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition />
                                             </Grid.RowDefinitions>
 
-                                            <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="3" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|570" />
+                                            <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="3" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|569" />
 
-                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="10" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|572">
+                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="10" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|571">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition SharedSizeGroup="column1" />
                                                     <ColumnDefinition SharedSizeGroup="column2" />
@@ -577,23 +576,23 @@
                                                     <ColumnDefinition SharedSizeGroup="column4" />
                                                 </Grid.ColumnDefinitions>
 
-                                                <TextBlock Grid.Column="0" MaxWidth="350" Margin="20 5 5 5" Text="{Binding Path=Project.Name}" Foreground="#4d4d4d" TextAlignment="Right" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|580" />
+                                                <TextBlock Grid.Column="0" MaxWidth="350" Margin="20 5 5 5" Text="{Binding Path=Project.Name}" Foreground="#4d4d4d" TextAlignment="Right" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|579" />
 
 
 
 
 
 
-                                                <TextBlock Grid.Column="1" MaxWidth="350" Margin="5 5 20 5" Text="{Binding Path=Name}" FontWeight="Bold" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|587" />
+                                                <TextBlock Grid.Column="1" MaxWidth="350" Margin="5 5 20 5" Text="{Binding Path=Name}" FontWeight="Bold" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|586" />
 
 
 
 
 
-                                                <Button Height="20" Grid.Column="2" Margin="10 5 10 5" Content="Remove" Click="RemoveActivity_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|593" />
+                                                <Button Height="20" Grid.Column="2" Margin="10 5 10 5" Content="Remove" Click="RemoveActivity_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|592" />
 
 
-                                                <Button Height="20" Grid.Column="3" Margin="10 5 10 5" Content="Edit" VerticalAlignment="Top" Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Click="EditActivity_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|596" />
+                                                <Button Height="20" Grid.Column="3" Margin="10 5 10 5" Content="Edit" VerticalAlignment="Top" Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Click="EditActivity_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|595" />
                                             </Grid>
                                         </Grid>
                                     </DataTemplate>
@@ -607,29 +606,29 @@
 
 
 
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Settings" Tag="../Icons/settings.png" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|610">
+            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Settings" Tag="../Icons/settings.png" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|609">
 
-                <Grid Background="White" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|612">
+                <Grid Background="White" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|611">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <GroupBox Header="Settings" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|618">
-                        <StackPanel Margin="10 20 10 10" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|619">
-                            <CheckBox x:Name="RunOnStartupCheckBox" Margin="10" Content="Run on startup" Checked="RunOnStartup_Checked" Unchecked="RunOnStartup_Unchecked" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|620" />
+                    <GroupBox Header="Settings" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|617">
+                        <StackPanel Margin="10 20 10 10" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|618">
+                            <CheckBox x:Name="RunOnStartupCheckBox" Margin="10" Content="Run on startup" Checked="RunOnStartup_Checked" Unchecked="RunOnStartup_Unchecked" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|619" />
 
 
 
 
 
-                            <CheckBox x:Name="EnableNotificationCheckBox" Margin="10" Content="Enable notifications" Checked="EnableNotification_Checked" Unchecked="EnableNotification_Unchecked" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|626" />
+                            <CheckBox x:Name="EnableNotificationCheckBox" Margin="10" Content="Enable notifications" Checked="EnableNotification_Checked" Unchecked="EnableNotification_Unchecked" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|625" />
 
 
 
 
 
-                            <CheckBox x:Name="EnableGreetingNotificationCheckBox" Margin="10" Content="Enable greeting" Checked="EnableGreetingNotificationCheckBox_Checked" Unchecked="EnableGreetingNotificationCheckBox_Unchecked" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|632" />
+                            <CheckBox x:Name="EnableGreetingNotificationCheckBox" Margin="10" Content="Enable greeting" Checked="EnableGreetingNotificationCheckBox_Checked" Unchecked="EnableGreetingNotificationCheckBox_Unchecked" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|631" />
                             
                         </StackPanel>
                     </GroupBox>
@@ -642,14 +641,10 @@
 
 
 
-        <Grid Grid.Row="1" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|645">
-            <StackPanel HorizontalAlignment="Left" Margin="20 15 20 15" Orientation="Horizontal" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|646">
-                <TextBlock x:Name="dateTimeNowTextBox" Foreground="#595959" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|647" />
-            </StackPanel>
-
-            <StackPanel HorizontalAlignment="Right" Margin="10 10 20 10" Orientation="Horizontal" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|650">
-                <Button Click="RefreshAll_Click" Height="20" Margin="10 5 0 5" Content="Refresh" Template="{StaticResource HyperlinkButtonTemplate}" HorizontalContentAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|651" />
-                <Button Click="SignOutButton_Click" Height="20" Margin="10 5 0 5" Content="Sign out" Template="{StaticResource HyperlinkButtonTemplate}" HorizontalContentAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|652" />
+        <Grid Grid.Row="1" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|644">
+            <StackPanel HorizontalAlignment="Right" Margin="10 0 20 10" Orientation="Horizontal" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|645">
+                <Button Click="RefreshAll_Click" Height="20" Margin="0 5 10 5" Content="Refresh" Template="{StaticResource BottomHyperlinkButtonTemplate}" HorizontalContentAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|646" />
+                <Button Click="SignOutButton_Click" Height="20" Margin="10 5 0 5" Content="Sign out" Template="{StaticResource BottomHyperlinkButtonTemplate}" HorizontalContentAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Windows\MainWindow.xaml|647" />
             </StackPanel>
         </Grid>
 

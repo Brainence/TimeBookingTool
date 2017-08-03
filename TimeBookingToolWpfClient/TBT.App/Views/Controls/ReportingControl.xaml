@@ -4,15 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="500">
+             mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="1" 
+        <Grid Grid.Row="2" 
               Height="50"
               Width="50"
               Margin="20"
@@ -22,42 +22,23 @@
 
             <local:SpinnersCogs />
         </Grid>
-
-        <StackPanel Grid.Row="0" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal" VerticalAlignment="Bottom">
-            <Button Height="20" Margin="10 0 10 0"
-                    Content="Company Report" 
-                    Click="CompanyReportButton_Click"
-                    Visibility="{Binding IsAdmin, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                    Template="{StaticResource HyperlinkButtonTemplate}"/>
-
-            <Button Height="20" Margin="10 0 10 0"
-                    Content="User Report" 
-                    Click="UserReportButton_Click"
-                    Template="{StaticResource HyperlinkButtonTemplate}"/>
-
-            <Button Height="20" Margin="10 0 10 0"
-                    Content="Refresh" 
-                    Command="{Binding GetTimeEntriesCommand}"
-                    CommandParameter="{Binding User.Id}"
-                    Template="{StaticResource HyperlinkButtonTemplate}"/>
-        </StackPanel>
-
-        <Grid Grid.Row="0" Margin="20" HorizontalAlignment="Left">
+        
+        <Grid Grid.Row="0" HorizontalAlignment="Left">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="472"/>
             </Grid.ColumnDefinitions>
 
             <RadioButton x:Name="comboRadioButton" GroupName="dateRadioButtons" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Checked="comboRadioButton_Checked"/>
             <RadioButton x:Name="datePickerRadioButton" GroupName="dateRadioButtons" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" IsChecked="True"/>
 
-            <ComboBox x:Name="DateComboBox" Grid.Row="0" Grid.Column="1" Style="{StaticResource ComboBoxFlatStyle}" Margin="10" SelectionChanged="DateComboBox_SelectionChanged" 
-                      IsEnabled="{Binding ElementName=comboRadioButton, Path=IsChecked}" SelectedIndex="0">
+            <ComboBox x:Name="DateComboBox" Grid.Row="0" Grid.Column="1" Style="{StaticResource ComboBoxFlatStyle}" Margin="10 5" SelectionChanged="DateComboBox_SelectionChanged" 
+                      IsEnabled="{Binding ElementName=comboRadioButton, Path=IsChecked}" SelectedIndex="0" Foreground="#c2422b" FontWeight="Bold" FontSize="13" >
                 <ComboBoxItem Content="This week"/>
                 <ComboBoxItem Content="Last week"/>
                 <ComboBoxItem Content="This month"/>
@@ -67,27 +48,45 @@
                 <ComboBoxItem Content="All time"/>
             </ComboBox>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=datePickerRadioButton, Path=IsChecked}" Margin="10">
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=datePickerRadioButton, Path=IsChecked}" Margin="10 5 10 10">
                 <DatePicker SelectedDate="{Binding From, Mode=TwoWay}" 
-                            VerticalAlignment="Center"/>
+                            VerticalAlignment="Center"  Foreground="#c2422b" FontWeight="Bold" FontSize="13" Width="100"/>
 
                 <TextBlock Text="→" Margin="10 0 10 0" TextAlignment="Center" VerticalAlignment="Center"/>
-                
+
                 <DatePicker SelectedDate="{Binding To, Mode=TwoWay}"
-                                    VerticalAlignment="Center"/>
+                                    VerticalAlignment="Center" Foreground="#c2422b" FontWeight="Bold" FontSize="13"  Width="100"/>
             </StackPanel>
 
-            <TextBlock Grid.Row="2" Grid.ColumnSpan="2" 
-                       Text="{Binding ElementName=TimeEntryItemsControl, 
+            <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="0" Orientation="Horizontal" VerticalAlignment="Bottom">
+                <Button Height="20" Margin="10 0 10 0"
+                        Content="Company Report" 
+                        Click="CompanyReportButton_Click"
+                        Visibility="{Binding IsAdmin, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                        Template="{StaticResource HyperlinkButtonTemplate}"/>
+
+                <Button Height="20" Margin="10 0 10 0"
+                        Content="User Report" 
+                        Click="UserReportButton_Click"
+                        Template="{StaticResource HyperlinkButtonTemplate}"/>
+
+                <Button Height="20" Margin="10 0 10 0"
+                        Content="Refresh" 
+                        Command="{Binding GetTimeEntriesCommand}"
+                        CommandParameter="{Binding User.Id}"
+                        Template="{StaticResource HyperlinkButtonTemplate}"/>
+            </StackPanel>
+        </Grid>
+
+        <TextBlock Grid.Row="1" Text="{Binding ElementName=TimeEntryItemsControl, 
                                       Path=ItemsSource, 
                                       Converter={StaticResource DurationConverter}, 
                                       Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}Total time: {0}}"
-                       FontSize="14" Margin="40 10 0 0"
-                       VerticalAlignment="Center"/>
-        </Grid>
+                   FontSize="14" FontWeight="Bold" Margin="0 10 0 0"
+                   VerticalAlignment="Center"/>
 
         <Grid VerticalAlignment="Top" 
-              Grid.Row="1"
+              Grid.Row="2"
               Visibility="{Binding ItemsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}">
 
             <ScrollViewer Margin="0 20 0 0"
@@ -101,76 +100,65 @@
                         <DataTemplate>
                             <Grid HorizontalAlignment="Stretch"
                                               Background="{StaticResource ItemsBackground}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
 
-                                <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="3"/>
 
-                                <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="10">
+                                <Grid HorizontalAlignment="Left" Margin="0 0 0 20">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition SharedSizeGroup="column1"/>
-                                        <ColumnDefinition SharedSizeGroup="column2"/>
-                                        <ColumnDefinition SharedSizeGroup="column3"/>
+                                        <ColumnDefinition SharedSizeGroup="column1" Width="100"/>
+                                        <ColumnDefinition SharedSizeGroup="column2" Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Grid Grid.Column="0" Grid.IsSharedSizeScope="True" Margin="20 5 20 5" HorizontalAlignment="Right">
+                                    <Grid Grid.Column="0" Grid.IsSharedSizeScope="True" Margin="0 5 10 5" HorizontalAlignment="Left">
                                         <StackPanel>
-                                            <TextBlock Text="{Binding Path=Date, StringFormat={}{0:dddd dd MMMM}}"/>
-                                            <TextBlock Text="{Binding Path=Date, StringFormat={}{0:yyyy}}" HorizontalAlignment="Right" Foreground="Gray"/>
+                                            <TextBlock Margin="0 2 0 2"  Text="{Binding Path=Date, StringFormat={}{0:dd MMMM yyyy}}"/>
                                         </StackPanel>
                                     </Grid>
 
-                                    <Grid Grid.Column="1" Grid.IsSharedSizeScope="True" Margin="20 5 20 5">
+                                    <Grid Grid.Column="1" Grid.IsSharedSizeScope="True" Margin="10 5 10 5">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition SharedSizeGroup="column1"/>
-                                            <ColumnDefinition SharedSizeGroup="column2"/>
+                                            <ColumnDefinition SharedSizeGroup="column1" Width="90"/>
+                                            <ColumnDefinition SharedSizeGroup="column2" Width="260"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <TextBlock Grid.Column="0" Grid.Row="0"
-                                                           MaxWidth="350"
-                                                           Margin="20 5 5 5" 
+                                        <TextBlock Grid.Column="0" Grid.Row="0" Margin="0 2 10 2"
                                                            Text="Working hours"
-                                                           Foreground="#4d4d4d"
+                                                           Foreground="Gray"
                                                            TextAlignment="Right"/>
 
-                                        <TextBlock Grid.Column="1" Grid.Row="0"
-                                                           MaxWidth="350"
-                                                           Margin="5 5 20 5" 
+                                        <TextBlock Grid.Column="1" Grid.Row="0" Margin="0 2 0 2"
                                                            Text="{Binding Path=Duration, StringFormat={}{0:hh\\:mm\\:ss}}"
                                                            FontWeight="Bold"/>
 
 
-                                        <TextBlock Grid.Column="0" Grid.Row="1"
-                                                           MaxWidth="350"
-                                                           Margin="20 5 5 5" 
+                                        <TextBlock Grid.Column="0" Grid.Row="1" Margin="0 2 10 2"
                                                            Text="Task"
-                                                           Foreground="#4d4d4d"
+                                                           Foreground="Gray"
                                                            TextAlignment="Right"/>
 
-                                        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Top">
-                                            <TextBlock 
-                                                            MaxWidth="350"
-                                                            Margin="5" 
-                                                            Text="{Binding Path=Activity}"
+                                        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="0 2 0 2">
+                                            <TextBlock Text="{Binding Path=Activity}"
                                                             FontWeight="Bold"/>
-
-                                            <TextBlock 
-                                                            MaxWidth="350"
-                                                            Margin="0 5 20 5" 
-                                                            Text="{Binding Path=Activity.Project.Name, StringFormat={}({0})}"
+                                            <TextBlock  Text="{Binding Path=Activity.Project.Name, StringFormat={} ({0})}"
                                                             Foreground="#4d4d4d"/>
                                         </StackPanel>
 
+
+
+                                        <TextBlock Grid.Column="0" Grid.Row="2" Margin="0 2 10 2"
+                                                   Text="Comment"
+                                                   Foreground="Gray"
+                                                   TextAlignment="Right"/>
+
+                                        <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Path=Comment}"
+                                                   TextWrapping="Wrap" Margin="0 2 0 2"/>
+
                                     </Grid>
 
-                                    <TextBlock Grid.Column="2" Margin="20 5 20 5" Text="{Binding Path=Comment}" MaxWidth="350"
-                                                           TextWrapping="Wrap"/>
 
                                 </Grid>
                             </Grid>

@@ -9,26 +9,39 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=This, Path=IsDateNameShort}" Value="True">
+                        <Setter Property="Width" Value="60"></Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=This, Path=IsDateNameShort}" Value="False">
+                        <Setter Property="Width" Value="150"></Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+        
         <TextBlock 
             Foreground="{Binding ElementName=This, Path=Foreground, Mode=TwoWay}" 
-            Margin="5" FontSize="36" 
+            FontSize="32" 
             FontWeight="Bold" 
             FontFamily="Corsiva" 
             TextAlignment="Center" 
+            VerticalAlignment="Center"
             Text="{Binding ElementName=This, Path=DateTime.Day, StringFormat=\{0:00\}}"/>
 
         <StackPanel 
             Grid.Row="1" 
-            HorizontalAlignment="Center">
+            HorizontalAlignment="Center" >
 
             <TextBlock 
                 Foreground="#c2422b" Padding="5"
-                FontFamily="Corsiva" 
-                HorizontalAlignment="Center">
+                FontFamily="Corsiva" TextAlignment="Center">
 
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
@@ -42,6 +55,7 @@
                                         </MultiBinding>
                                     </Setter.Value>
                                 </Setter>
+                                <Setter Property="Width" Value="60"></Setter>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding ElementName=This, Path=IsDateNameShort}" Value="False">
                                 <Setter Property="Text">
@@ -52,6 +66,7 @@
                                         </MultiBinding>
                                     </Setter.Value>
                                 </Setter>
+                                <Setter Property="Width" Value="150"></Setter>
                             </DataTrigger>
                         </Style.Triggers>
                         <Setter Property="Background" Value="#ffffff" />

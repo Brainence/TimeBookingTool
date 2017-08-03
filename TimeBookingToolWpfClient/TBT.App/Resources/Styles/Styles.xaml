@@ -47,7 +47,7 @@
 
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
-                    <Setter Property="Foreground" Value="#2211CC" />
+                    <Setter Property="Foreground" Value="#00628c" />
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Foreground" Value="Red" />
@@ -62,6 +62,25 @@
                 </Style>
             </TextBlock.Style>
             
+            <ContentPresenter/>
+        </TextBlock>
+    </ControlTemplate>
+    
+    <ControlTemplate x:Key="BottomHyperlinkButtonTemplate" TargetType="Button">
+        <TextBlock HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                   Margin="{TemplateBinding Padding}">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="#ffffff" />
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Foreground" Value="Red" />
+                            <Setter Property="Cursor" Value="Hand" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
             <ContentPresenter/>
         </TextBlock>
     </ControlTemplate>
@@ -87,6 +106,9 @@
     <SolidColorBrush x:Key="ButtonForeground" Color="#dddddd"/>
     <SolidColorBrush x:Key="ButtonBackground" Color="#0082ba"/>
     <SolidColorBrush x:Key="ButtonBackgroundMouseOverBrush" Color="#00628c"/>
+
+    <SolidColorBrush x:Key="ScrollViewerForeground" Color="#c2422b"/>
+    <SolidColorBrush x:Key="ScrollViewerBackground" Color="#ffffff"/>
 
     <SolidColorBrush x:Key="ComboBoxNormalBorderBrush" Color="#e3e9ef" />
     <SolidColorBrush x:Key="ComboBoxNormalBackgroundBrush" Color="#fff" />
@@ -255,8 +277,8 @@
 
     <Style TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
-        <Setter Property="Foreground" Value="{StaticResource ButtonBackground}" />
-        <Setter Property="Background" Value="{StaticResource ButtonForeground}" />
+        <Setter Property="Foreground" Value="{StaticResource ScrollViewerForeground}" />
+        <Setter Property="Background" Value="{StaticResource ScrollViewerBackground}" />
         <Setter Property="Width" Value="10" />
         <Setter Property="Template">
             <Setter.Value>
@@ -566,7 +588,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
-                    <Grid x:Name="tabItemTemplate" Margin="0 0 20 5" Height="75" Width="100">
+                    <Grid x:Name="tabItemTemplate" Margin="0 0 0 2" Height="55" Width="77">
                         <Grid.Style>
                             <Style TargetType="Grid">
                                 <Style.Triggers>
@@ -586,11 +608,11 @@
                             </Style>
                         </Grid.Style>
                         <StackPanel VerticalAlignment="Center">
-                            <Image Height="32" Width="32" Source="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Image Height="22" Width="22" Source="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}}" />
                             <TextBlock x:Name="tabTimeHeader"
                                    Text="{TemplateBinding Header}"
                                    VerticalAlignment="Center"
-                                   FontSize="16" 
+                                   FontSize="12" 
                                    FontWeight="Bold"
                                    HorizontalAlignment="Center">
                                 <TextBlock.Style>

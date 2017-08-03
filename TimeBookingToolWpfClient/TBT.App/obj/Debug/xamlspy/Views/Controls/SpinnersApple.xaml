@@ -1,4 +1,4 @@
-﻿<UserControl x:Name="UserControl" x:Class="TBT.App.Views.Controls.SpinnersApple" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:TBT.App.Views.Controls" mc:Ignorable="d" xmlns:spy="clr-namespace:FirstFloor.XamlSpy;assembly=XamlSpy" spy:XamlMetadata.XamlSpyServiceSettings="127.0.0.1|4530|18048" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|1">
+﻿<UserControl x:Name="UserControl" x:Class="TBT.App.Views.Controls.SpinnersApple" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:TBT.App.Views.Controls" mc:Ignorable="d" xmlns:spy="clr-namespace:FirstFloor.XamlSpy;assembly=XamlSpy" spy:XamlMetadata.XamlSpyServiceSettings="127.0.0.1|4530|18048" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|1">
 
     <UserControl.Resources>
         <Storyboard x:Key="spinner" x:Name="spinner" BeginTime="00:00:00" RepeatBehavior="Forever">
@@ -105,12 +105,12 @@
 
 
 
-    <Canvas x:Name="spinner_1" HorizontalAlignment="Center" Width="24" Height="24" VerticalAlignment="Top" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|108">
+    <Canvas x:Name="spinner_1" HorizontalAlignment="Center" Width="24" Height="24" VerticalAlignment="Top" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|108">
 
-        <Grid x:Name="LayoutRoot" Height="24" Width="24" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|110" />
-        <Canvas Height="24" Width="24" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|111">
-            <Rectangle x:Name="Rectangle01" Fill="Black" Height="5" Width="2" Canvas.Left="11" Canvas.Top="2" RadiusX="1" RadiusY="1" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|112" />
-            <Rectangle x:Name="Rectangle02" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="2" RenderTransformOrigin="0.5,0.5" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|113">
+        <Grid x:Name="LayoutRoot" Height="24" Width="24" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|110" />
+        <Canvas Height="24" Width="24" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|111">
+            <Rectangle x:Name="Rectangle01" Fill="Black" Height="5" Width="2" Canvas.Left="11" Canvas.Top="2" RadiusX="1" RadiusY="1" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|112" />
+            <Rectangle x:Name="Rectangle02" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="2" RenderTransformOrigin="0.5,0.5" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|113">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -120,7 +120,7 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <Rectangle x:Name="Rectangle03" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="2" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|123">
+            <Rectangle x:Name="Rectangle03" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="2" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|123">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -130,7 +130,7 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <Rectangle x:Name="Rectangle04" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="2" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|133">
+            <Rectangle x:Name="Rectangle04" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="2" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|133">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -140,7 +140,7 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <Rectangle x:Name="Rectangle05" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="2" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|143">
+            <Rectangle x:Name="Rectangle05" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="2" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|143">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -150,7 +150,7 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <Rectangle x:Name="Rectangle06" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="2" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|153">
+            <Rectangle x:Name="Rectangle06" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="2" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|153">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -160,8 +160,8 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <Rectangle x:Name="Rectangle07" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="17" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|163" />
-            <Rectangle x:Name="Rectangle08" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="17" RenderTransformOrigin="0.5,0.5" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|164">
+            <Rectangle x:Name="Rectangle07" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="17" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|163" />
+            <Rectangle x:Name="Rectangle08" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="17" RenderTransformOrigin="0.5,0.5" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|164">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -171,7 +171,7 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <Rectangle x:Name="Rectangle09" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="17" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|174">
+            <Rectangle x:Name="Rectangle09" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="17" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|174">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -181,7 +181,7 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <Rectangle x:Name="Rectangle10" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="17" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|184">
+            <Rectangle x:Name="Rectangle10" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="17" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|184">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -191,7 +191,7 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <Rectangle x:Name="Rectangle11" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="17" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|194">
+            <Rectangle x:Name="Rectangle11" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="17" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|194">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -201,7 +201,7 @@
                     </TransformGroup>
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <Rectangle x:Name="Rectangle12" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="17" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|204">
+            <Rectangle x:Name="Rectangle12" Fill="Black" RadiusX="1" RadiusY="1" Height="5" Width="2" Canvas.Left="11" Canvas.Top="17" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Opacity="0.2" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\SpinnersApple.xaml|204">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />

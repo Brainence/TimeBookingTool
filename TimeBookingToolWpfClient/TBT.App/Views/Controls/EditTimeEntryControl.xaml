@@ -5,8 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="600" >
+             mc:Ignorable="d" >
 
     <Grid Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
@@ -22,16 +21,16 @@
                                        ItemsSource="{Binding ElementName=this, Path=User.Projects}"
                                        SelectedItem="{Binding ElementName=this, Path=SelectedProject, Mode=OneWayToSource}"
                                        EmptyText="[Select project]"
-                                       FontSize="16"
-                                       Margin="5"/>
+                                       FontSize="13"
+                                       Margin="5 4"/>
 
         <local:ComboBoxControl x:Name="taskComboBox" Grid.Row="1" 
                                        Label="Task" 
                                        ItemsSource="{Binding ElementName=projectComboBox, Path=SelectedItem.Activities}"
                                        SelectedItem="{Binding ElementName=this, Path=SelectedActivity, Mode=OneWayToSource}"
                                        EmptyText="[Select task]"
-                                       FontSize="16"
-                                       Margin="5">
+                                       FontSize="13"
+                                       Margin="5 4">
 
             <local:ComboBoxControl.Style>
                 <Style TargetType="local:ComboBoxControl">
@@ -47,9 +46,10 @@
 
         <local:TextControl Grid.Row="2"
                            Label="Comment" Text="{Binding ElementName=this, Path=Comment, Mode=TwoWay}" 
-                           Margin="5" FontSize="16" 
-                           TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="80" Height="80"
-                           Width="700"
+                           Margin="5 4" FontSize="13" 
+                           TextWrapping="Wrap" AcceptsReturn="True" 
+                           Width="468"
+                           Height="20"
                            HorizontalAlignment="Left"/>
 
         <StackPanel Grid.Row="3">
@@ -58,42 +58,39 @@
                            Grid.Row="3"
                            Label="Time" 
                            PreviewTextInput="timeTextBox_PreviewTextInput"
-                           Margin="5" FontSize="16"
+                           Margin="5 4" FontSize="13"
                            FontFamily="Corsiva" 
-                           Height="25"
-                           Width="200" 
+                           Width="468" 
+                            Height="20"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
                            VerticalTextAlignment="Center"
-                           FontWeight="Bold" 
                            TextAlignment="Center"/>
 
             <local:TextControl x:Name="timelimitTextBox"
                            Visibility="{Binding ElementName=this, Path=SelectedDay, Converter={StaticResource TodayToVisibilityConverter}, ConverterParameter=TimiLimit}"
                            Label="Limit"
                            PreviewTextInput="timelimitTextBox_PreviewTextInput"
-                           Margin="5" FontSize="16"
+                           Margin="5 4" FontSize="13"
                            FontFamily="Corsiva" 
-                           Height="25"
-                           Width="200" 
+                           Width="468" 
+                            Height="20"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
                            VerticalTextAlignment="Center"
-                           FontWeight="Bold" 
                            TextAlignment="Center"/>
 
         </StackPanel>
 
-        <StackPanel Grid.Row="3">
+        <StackPanel Grid.Row="4">
 
             <Button x:Name="startButton"
                 Click="CreateNewButton_Click" 
-                VerticalAlignment="Top"
                 ToolTipService.ShowOnDisabled="True"
                 ToolTip="{Binding ElementName=startButton, Path=IsEnabled, Converter={StaticResource StartButtonToolTipConverter}, ConverterParameter='Select task first.'}"
                 HorizontalAlignment="Center"
-                BorderThickness="0"
-                Margin="5 15 5 5">
+                    Margin="0 5 0 0"
+                BorderThickness="0">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Style.Triggers>
@@ -128,8 +125,8 @@
                                         </Grid.Style>
 
                                         <Image Grid.Column="0"
-                                               Height="35" 
-                                               Width="35" 
+                                               Height="20" 
+                                               Width="20" 
                                                Source="/Resources/Icons/stopwatch2.png"
                                                Margin="10 7 5 7"/>
 
@@ -138,7 +135,7 @@
                                                    Margin="5 5 10 5" 
                                                    VerticalAlignment="Center"
                                                    Foreground="#ffffff"
-                                                   FontSize="17"/>
+                                                   FontSize="13"/>
 
                                     </Grid>
                                 </ControlTemplate>
@@ -147,7 +144,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <TextBlock x:Name="errorMsg" Margin="5 5 5 5" Height="20" Foreground="Red" TextAlignment="Center"/>
+            <TextBlock x:Name="errorMsg" Height="10" Foreground="Red" TextAlignment="Center"/>
         </StackPanel>
     </Grid>
 </UserControl>

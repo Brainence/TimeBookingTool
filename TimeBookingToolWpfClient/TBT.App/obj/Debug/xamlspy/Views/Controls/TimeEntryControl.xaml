@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TBT.App.Views.Controls.TimeEntryControl" x:Name="this" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:TBT.App.Views.Controls" Loaded="this_Loaded" KeyDown="this_KeyDown" mc:Ignorable="d" d:DesignHeight="150" xmlns:spy="clr-namespace:FirstFloor.XamlSpy;assembly=XamlSpy" spy:XamlMetadata.XamlSpyServiceSettings="127.0.0.1|4530|18048" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|1">
+﻿<UserControl x:Class="TBT.App.Views.Controls.TimeEntryControl" x:Name="this" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:TBT.App.Views.Controls" Loaded="this_Loaded" KeyDown="this_KeyDown" mc:Ignorable="d" xmlns:spy="clr-namespace:FirstFloor.XamlSpy;assembly=XamlSpy" spy:XamlMetadata.XamlSpyServiceSettings="127.0.0.1|4530|18048" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|1">
 
 
 
@@ -9,155 +9,148 @@
 
 
 
+    <Grid Height="65" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|12">
+        <Grid Visibility="{Binding ElementName=this, Path=IsEditing, Converter={StaticResource BoolToNotVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|13">
+            <StackPanel Orientation="Horizontal" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|14">
+                <Image Source="../../Resources/Icons/Clock.png" Width="65" Height="65" Margin="0 0 10 0" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|15" />
 
-    <Grid spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|13">
-        <Grid.Style>
-            <Style TargetType="Grid">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="true">
-                        <Setter Property="Background" Value="{StaticResource TimeEntryIsRunningBackground}" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="false">
-                        <Setter Property="Background" Value="{StaticResource TimeEntryNotRunningBackground}" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding ElementName=this, Path=IsEditing}" Value="True">
-                        <Setter Property="Background" Value="{StaticResource TimeEntryIsEditingBackground}" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Grid.Style>
+                <StackPanel spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|17">
 
-        <Grid Visibility="{Binding ElementName=this, Path=IsEditing, Converter={StaticResource BoolToNotVisibilityConverter}}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|30">
-            <StackPanel Orientation="Horizontal" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|31">
-                <TextBlock x:Name="timerTextBlock" Margin="10 0 5 0" FontFamily="Corsiva" FontSize="36" Foreground="{StaticResource TimeEntryForeground}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|32" />
-
-
-
-
-
-
-
-
-                <Button x:Name="startStopButton" IsEnabled="False" Command="{Binding ElementName=this, Path=StartStopCommand, Mode=TwoWay}" Margin="2" Height="35" Visibility="{Binding ElementName=this, Path=TimeEntry.Date, Converter={StaticResource TodayToVisibilityConverter}}" Width="35" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|41">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="BorderBrush" Value="{StaticResource TimeEntryButtonBorderBrush}" />
-                            <Setter Property="Foreground" Value="{StaticResource TimeEntryButtonForeground}" />
-                            <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackground}" />
-                            <Setter Property="FontWeight" Value="Bold" />
-                            <Setter Property="BorderThickness" Value="2" />
-                            <Setter Property="Template" Value="{StaticResource RoundButtonTemplate}" />
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundMouseOverBrush}" />
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundDisabled}" />
-                                </Trigger>
-                                <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="true">
-                                    <Setter Property="Content">
-                                        <Setter.Value>
+                    <StackPanel Orientation="Horizontal" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|19">
+                        <Button x:Name="startStopButton" IsEnabled="False" Command="{Binding ElementName=this, Path=StartStopCommand, Mode=TwoWay}" Margin="0 0 2 0" Height="24" Visibility="{Binding ElementName=this, Path=TimeEntry.Date, Converter={StaticResource TodayToVisibilityConverter}}" Width="24" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|20">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="BorderBrush" Value="{StaticResource TimeEntryButtonBorderBrush}" />
+                                    <Setter Property="Foreground" Value="{StaticResource TimeEntryButtonForeground}" />
+                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackground}" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="BorderThickness" Value="1" />
+                                    <Setter Property="Template" Value="{StaticResource RoundButtonTemplate}" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundMouseOverBrush}" />
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundDisabled}" />
+                                        </Trigger>
+                                        <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="true">
+                                            <Setter Property="Content">
+                                                <Setter.Value>
 
 
 
 
 
 
-                                            <Image Source="/Resources/Icons/stop.png" Stretch="Fill" Height="20" Width="20" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|66" />
-                                        </Setter.Value>
-                                    </Setter>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="false">
-                                    <Setter Property="Content">
-                                        <Setter.Value>
-                                            <Image Source="/Resources/Icons/play.png" Stretch="Fill" Height="20" Width="20" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|73" />
-                                        </Setter.Value>
-                                    </Setter>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                                                    <Image Source="/Resources/Icons/stop.png" Stretch="Fill" Height="12" Width="12" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|45" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="false">
+                                            <Setter Property="Content">
+                                                <Setter.Value>
+                                                    <Image Source="/Resources/Icons/play.png" Stretch="Fill" Height="16" Width="16" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|52" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
 
-                <Button x:Name="editButton" IsEnabled="False" Command="{Binding ElementName=this, Path=EditCommand, Mode=TwoWay}" Margin="2" Visibility="{Binding ElementName=this, Path=TimeEntry.Date, Converter={StaticResource EditButtonToVisibilityConverter}}" Height="35" Width="35" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|82">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="BorderBrush" Value="{StaticResource TimeEntryButtonBorderBrush}" />
-                            <Setter Property="Foreground" Value="{StaticResource TimeEntryButtonForeground}" />
-                            <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackground}" />
-                            <Setter Property="FontWeight" Value="Bold" />
-                            <Setter Property="BorderThickness" Value="2" />
-                            <Setter Property="Template" Value="{StaticResource RoundButtonTemplate}" />
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundMouseOverBrush}" />
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundDisabled}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-
-
+                        <Button x:Name="editButton" IsEnabled="False" Command="{Binding ElementName=this, Path=EditCommand, Mode=TwoWay}" Margin="2 0" Visibility="{Binding ElementName=this, Path=TimeEntry.Date, Converter={StaticResource EditButtonToVisibilityConverter}}" Height="24" Width="24" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|61">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="BorderBrush" Value="{StaticResource TimeEntryButtonBorderBrush}" />
+                                    <Setter Property="Foreground" Value="{StaticResource TimeEntryButtonForeground}" />
+                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackground}" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="BorderThickness" Value="1" />
+                                    <Setter Property="Template" Value="{StaticResource RoundButtonTemplate}" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundMouseOverBrush}" />
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundDisabled}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
 
 
 
 
-                    <Image Source="/Resources/Icons/editing.png" Stretch="Fill" Height="20" Width="20" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|107" />
-                </Button>
-
-                <Button Command="{Binding ElementName=this, Path=RemoveCommand, Mode=TwoWay}" Margin="2" Height="35" Width="35" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|110">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="BorderBrush" Value="{StaticResource TimeEntryButtonBorderBrush}" />
-                            <Setter Property="Foreground" Value="{StaticResource TimeEntryButtonForeground}" />
-                            <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackground}" />
-                            <Setter Property="FontWeight" Value="Bold" />
-                            <Setter Property="BorderThickness" Value="2" />
-                            <Setter Property="Template" Value="{StaticResource RoundButtonTemplate}" />
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundMouseOverBrush}" />
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundDisabled}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
 
 
+                            <Image Source="/Resources/Icons/editing.png" Stretch="Fill" Height="12" Width="12" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|86" />
+                        </Button>
 
-                    <Image Source="/Resources/Icons/bin.png" Stretch="Fill" Height="20" Width="20" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|132" />
-                </Button>
+                        <Button Command="{Binding ElementName=this, Path=RemoveCommand, Mode=TwoWay}" Margin="2 0" Height="24" Width="24" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|89">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="BorderBrush" Value="{StaticResource TimeEntryButtonBorderBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource TimeEntryButtonForeground}" />
+                                <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackground}" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="Template" Value="{StaticResource RoundButtonTemplate}" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundMouseOverBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Background" Value="{StaticResource TimeEntryButtonBackgroundDisabled}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
 
-                <TextBlock Text="{Binding ElementName=this, Path=TimeEntry, Converter={StaticResource TimeEntryConverter}}" Margin="10 0 0 0" FontSize="18" VerticalAlignment="Center" Foreground="{StaticResource TimeEntryForeground}" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|135" />
 
-                <local:SpinnersApple Margin="10 0 0 0" VerticalAlignment="Center" Visibility="{Binding IsActive, Converter={StaticResource BoolToNotVisibilityConverter}}" />
 
+                            <Image Source="/Resources/Icons/bin.png" Stretch="Fill" Height="12" Width="12" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|111" />
+                        </Button>
+
+                        <TextBlock Text="{Binding ElementName=this, Path=TimeEntry, Converter={StaticResource TimeEntryConverter}}" Margin="10 0 0 0" FontSize="14" VerticalAlignment="Center" Foreground="{StaticResource TimeEntryForeground}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|114" />
+                    </StackPanel>
+
+
+
+                    <TextBlock x:Name="timerTextBlock" Margin="0 0 5 0" FontFamily="Corsiva" FontSize="20" Foreground="{StaticResource TimeEntryForeground}" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|119" />
+
+
+
+
+
+
+
+                    <TextBlock Text="{Binding ElementName=this, Path=TimeEntry, Converter={StaticResource CommentConverter}}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Foreground="{StaticResource TimeEntryForeground}" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|127" />
+
+                    <local:SpinnersApple Margin="10 0 0 0" VerticalAlignment="Center" Visibility="{Binding IsActive, Converter={StaticResource BoolToNotVisibilityConverter}}" />
+                </StackPanel>
             </StackPanel>
         </Grid>
 
 
 
 
-        <Grid x:Name="editingGrid" Visibility="{Binding ElementName=this, Path=IsEditing, Converter={StaticResource BoolToVisibilityConverter}}" Height="45" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|145">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|146">
 
-                <TextBox Text="{Binding ElementName=this, Path=Comment, Mode=TwoWay}" Margin="10 5 10 5" MaxWidth="500" Width="500" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|148" />
+        <Grid x:Name="editingGrid" Visibility="{Binding ElementName=this, Path=IsEditing, Converter={StaticResource BoolToVisibilityConverter}}" Height="65" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|138">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Top" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|139">
+
+                <TextBox Text="{Binding ElementName=this, Path=Comment, Mode=TwoWay}" Width="330" Height="65" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Stretch" VerticalAlignment="Top" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|141" />
 
 
 
 
-                <Grid VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|153">
-                    
+                <Grid VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|146">
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    
-                    <TextBox x:Name="timerTextBox" VerticalAlignment="Top" PreviewTextInput="timerTextBox_PreviewTextInput" Margin="10" Grid.Row="0" FontFamily="Corsiva" FontSize="30" Height="33" Width="150" Foreground="{StaticResource TimeEntryIsEditingForeground}" FontWeight="Bold" TextAlignment="Center" HorizontalContentAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|160" />
+
+                    <TextBox x:Name="timerTextBox" VerticalAlignment="Top" PreviewTextInput="timerTextBox_PreviewTextInput" Margin="10 0 0 2" Grid.Row="0" FontFamily="Corsiva" FontSize="20" Height="30" Width="115" Foreground="{StaticResource TimeEntryIsEditingForeground}" FontWeight="Bold" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|153" />
 
 
 
@@ -171,9 +164,10 @@
 
 
 
-                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10" Grid.Row="1" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|174">
-                        
-                        <Button VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="SaveTimeEntryButton_Click" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|176">
+
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10 5 0 0" Grid.Row="1" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|168">
+
+                        <Button VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="SaveTimeEntryButton_Click" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|170">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Template">
@@ -181,7 +175,7 @@
                                             <ControlTemplate TargetType="Button">
 
 
-                                                <Grid x:Name="thisButtonTemplate" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="65" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|184">
+                                                <Grid x:Name="thisButtonTemplate" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="55" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|178">
 
                                                     <Grid.Style>
                                                         <Style TargetType="Grid">
@@ -201,7 +195,7 @@
                                                     </Grid.Style>
 
 
-                                                    <TextBlock Text="Save" Margin="8" Foreground="#ffffff" HorizontalAlignment="Center" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|204" />
+                                                    <TextBlock Text="Save" Margin="8 6" Foreground="#ffffff" HorizontalAlignment="Center" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|198" />
 
                                                 </Grid>
                                             </ControlTemplate>
@@ -215,7 +209,7 @@
 
 
 
-                        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="CancelEditButton_Click" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|218">
+                        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="CancelEditButton_Click" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|212">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Template">
@@ -223,7 +217,7 @@
                                             <ControlTemplate TargetType="Button">
 
 
-                                                <Grid x:Name="thisButtonTemplate" HorizontalAlignment="Center" VerticalAlignment="Center" Width="65" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|226">
+                                                <Grid x:Name="thisButtonTemplate" HorizontalAlignment="Center" VerticalAlignment="Center" Width="55" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|220">
 
                                                     <Grid.Style>
                                                         <Style TargetType="Grid">
@@ -243,7 +237,7 @@
                                                     </Grid.Style>
 
 
-                                                    <TextBlock Text="Cancel" Margin="8" Foreground="#ffffff" HorizontalAlignment="Center" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|246" />
+                                                    <TextBlock Text="Cancel" Margin="8 6" Foreground="#ffffff" HorizontalAlignment="Center" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TimeEntryControl.xaml|240" />
 
                                                 </Grid>
                                             </ControlTemplate>

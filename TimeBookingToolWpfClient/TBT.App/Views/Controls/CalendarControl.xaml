@@ -6,8 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
              Loaded="this_Loaded"
-             mc:Ignorable="d" 
-             d:DesignHeight="500">
+             mc:Ignorable="d" >
 
     <Grid HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
@@ -20,7 +19,7 @@
         <Grid Grid.Row="0">
 
             <StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5">
 
                     <Button Template="{StaticResource HyperlinkButtonTemplate}" 
                             Content="Current week"
@@ -66,6 +65,7 @@
                                                     <Setter Property="Background" Value="{StaticResource ChangeWeekButtonBackground}"/>
                                                 </Trigger>
                                             </Style.Triggers>
+                                            <Setter Property="Margin" Value="0 2"></Setter>
                                         </Style>
                                     </Grid.Style>
                                 </Grid>
@@ -103,7 +103,7 @@
                                 </Style.Triggers>
                                 <Setter Property="Foreground" Value="{StaticResource CalendarItemForeground}"/>
                                 <Setter Property="Background" Value="{StaticResource CalendarItemBackground}" />
-                                <Setter Property="Margin" Value="1" />
+                                <Setter Property="Margin" Value="3 0" />
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListBoxItem">
@@ -121,7 +121,7 @@
 
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <local:DateTimeControl DateTime="{Binding}"
+                                <local:DateTimeControl DateTime="{Binding}" BorderBrush="{StaticResource CalendarItemBackground}" BorderThickness="1"
                                                        IsDateNameShort="{Binding Path=IsDateNameShort, RelativeSource={RelativeSource AncestorType=local:CalendarControl}, Mode=TwoWay}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -150,6 +150,7 @@
                                                     <Setter Property="Background" Value="{StaticResource ChangeWeekButtonBackground}"/>
                                                 </Trigger>
                                             </Style.Triggers>
+                                            <Setter Property="Margin" Value="0 2"></Setter>
                                         </Style>
                                     </Grid.Style>
                                 </Grid>
@@ -169,45 +170,44 @@
             </Grid.RowDefinitions>
 
             <local:EditTimeEntryControl Grid.Row="0"
-                                        Margin="20"
+                                        Margin="20 15 20 0"
                                         User="{Binding ElementName=this, Path=User, Mode=TwoWay}"
                                         RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries"
                                         SelectedDay="{Binding ElementName=this, Path=SelectedDay, Mode=TwoWay}"/>
 
-            <StackPanel Grid.Row="1" Margin="40 20 20 20">
-                <TextBlock Text="{Binding ElementName=this, 
-                                          Path=User.TimeEntries, 
-                                          Converter={StaticResource DurationConverter}, 
-                                          Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}Time entered for a day: {0}}"
-                           FontSize="16" Margin="5"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"/>
-
-                <TextBlock Text="{Binding ElementName=this, Path=WeekTime, StringFormat={}Time entered for a week: {0}}"
-                           FontSize="16" Margin="5"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"/>
-            </StackPanel>
-
-            <ScrollViewer Grid.Row="2"
-                              Margin="20" 
-                              MinHeight="100"
+            <ScrollViewer Grid.Row="1"
+                              Margin="20 10 20 0" 
+                              Height="175"
                               VerticalScrollBarVisibility="Auto"
                               VerticalAlignment="Top" 
                               HorizontalAlignment="Stretch"
                               Visibility="{Binding ElementName=this, Path=IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}">
-
                 <ItemsControl ItemsSource="{Binding ElementName=this, Path=User.TimeEntries, Mode=TwoWay}">
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="1">
-                                <local:TimeEntryControl TimeEntry="{Binding}" RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries"/>
+                                <local:TimeEntryControl TimeEntry="{Binding}" RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries" Margin="0 0 0 20"/>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
+
+            <StackPanel Grid.Row="2" Margin="20 10 20 5">
+                <TextBlock Text="{Binding ElementName=this, 
+                                          Path=User.TimeEntries, 
+                                          Converter={StaticResource DurationConverter}, 
+                                          Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}Time entered for a day: {0}}"
+                           FontSize="14" 
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"/>
+
+                <TextBlock Text="{Binding ElementName=this, Path=WeekTime, StringFormat={}Time entered for a week: {0}}"
+                           FontSize="14" 
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
 
             <StackPanel Grid.Row="1" Margin="20" VerticalAlignment="Top" HorizontalAlignment="Stretch"
                       Visibility="{Binding ElementName=this, Path=IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">

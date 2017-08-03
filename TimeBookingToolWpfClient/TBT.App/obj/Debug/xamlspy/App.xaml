@@ -14,6 +14,7 @@
             <tools:IntToShortMonthConverter x:Key="IntToShortMonthConverter" />
             <tools:IsDateTimeTodayConverter x:Key="IsDateTimeTodayConverter" />
             <tools:TimeEntryConverter x:Key="TimeEntryConverter" />
+            <tools:CommentConverter x:Key="CommentConverter" />
             <tools:DurationConverter x:Key="DurationConverter" />
             <tools:ProjectWithCustomerConverter x:Key="ProjectWithCustomerConverter" />
             <tools:StartButtonToolTipConverter x:Key="StartButtonToolTipConverter" />
@@ -31,24 +32,24 @@
                     <RotateTransform Angle="45" />
                 </LinearGradientBrush.Transform>
             </LinearGradientBrush>
-            <SolidColorBrush x:Key="CalendarItemIsTodayBrush" Color="#4d4d4d" />
+            <SolidColorBrush x:Key="CalendarItemIsTodayBrush" Color="#d45925" />
             <SolidColorBrush x:Key="CalendarItemForeground" Color="#ffffff" />
 
             <SolidColorBrush x:Key="TimeEntryIsEditingBackground" Color="#f2f2f2" />
             <SolidColorBrush x:Key="TimeEntryIsEditingForeground" Color="#404040" />
-            
-            <SolidColorBrush x:Key="TimeEntryIsRunningBackground" Color="#0082ba" />
-            <SolidColorBrush x:Key="TimeEntryNotRunningBackground" Color="#00245e" />
-            <SolidColorBrush x:Key="TimeEntryForeground" Color="#ffffff" />
-            <SolidColorBrush x:Key="TimeEntryButtonBorderBrush" Color="#bfbfbf" />
+
+            <SolidColorBrush x:Key="TimeEntryIsRunningBackground" Color="#f77f50" />
+            <SolidColorBrush x:Key="TimeEntryNotRunningBackground" Color="#c2422b" />
+            <SolidColorBrush x:Key="TimeEntryForeground" Color="#c2422b" />
+            <SolidColorBrush x:Key="TimeEntryButtonBorderBrush" Color="#c2422b" />
             <SolidColorBrush x:Key="TimeEntryButtonForeground" Color="#dddddd" />
-            <SolidColorBrush x:Key="TimeEntryButtonBackground" Color="#ffffff" />
-            <SolidColorBrush x:Key="TimeEntryButtonBackgroundMouseOverBrush" Color="#a6a6a6" />
+            <SolidColorBrush x:Key="TimeEntryButtonBackground" Color="Transparent" />
+            <SolidColorBrush x:Key="TimeEntryButtonBackgroundMouseOverBrush" Color="#f77f50" />
             <SolidColorBrush x:Key="TimeEntryButtonBackgroundDisabled" Color="#737373" />
 
             <SolidColorBrush x:Key="SpinnerForeground" Color="#404040" />
 
-            <SolidColorBrush x:Key="ItemsBackground" Color="#f2f2f2" />
+            <SolidColorBrush x:Key="ItemsBackground" Color="#ffffff" />
 
             <SolidColorBrush x:Key="StartButtonBackground" Color="#00245e" />
             <SolidColorBrush x:Key="StartButtonMouseOverBackground" Color="#f2f2f2" />

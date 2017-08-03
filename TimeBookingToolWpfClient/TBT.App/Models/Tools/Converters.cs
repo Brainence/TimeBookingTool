@@ -192,6 +192,22 @@ namespace TBT.App.Models.Tools
             return null;
         }
     }
+    
+    public class CommentConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            TimeEntry timeEntry = (TimeEntry)value;
+
+            if (timeEntry == null || timeEntry.Comment == null) return "";
+            return timeEntry.Comment;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
 
 
     public class DurationConverter : IValueConverter

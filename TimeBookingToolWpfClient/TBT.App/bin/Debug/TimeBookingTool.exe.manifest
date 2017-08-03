@@ -115,14 +115,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TimeBookingTool.exe" size="1518528">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TimeBookingTool.exe" size="1523136">
       <assemblyIdentity name="TimeBookingTool" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>dsbURiY/a5VXK+jXHsE2566Z/JPX51zuo/ySGccqd7k=</dsig:DigestValue>
+        <dsig:DigestValue>pQcKch8dmC73Yhb8o1tLpwD3A4A02wCjChKDXDRPAK4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

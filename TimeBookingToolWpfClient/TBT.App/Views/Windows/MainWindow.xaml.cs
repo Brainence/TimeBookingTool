@@ -52,7 +52,6 @@ namespace TBT.App.Views.Windows
             App.GlobalTimer = new GlobalTimer();
             _dateTimer = new DispatcherTimer();
             _dateTimer.Interval = new TimeSpan(0, 0, 1);
-            _dateTimer.Tick += _dateTimer_Tick;
 
             NewUser = new User();
             GetTimeEntriesCommand = new RelayCommand(async obj => await GetTimeEntries(obj), obj => CanGetTimeEntries());
@@ -140,12 +139,7 @@ namespace TBT.App.Views.Windows
 
             Application.Current.Shutdown();
         }
-
-        private void _dateTimer_Tick(object sender, EventArgs e)
-        {
-            dateTimeNowTextBox.Text = DateTime.Now.ToString("MM/dd/yy hh:mm:ss tt", CultureInfo.CurrentCulture);
-        }
-
+        
         public bool LoggedOut { get; set; }
         public bool HideWindow { get; set; }
 

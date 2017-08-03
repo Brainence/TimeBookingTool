@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TBT.App.Views.Controls.TextControl" x:Name="this" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:TBT.App.Views.Controls" mc:Ignorable="d" d:DesignHeight="50" xmlns:spy="clr-namespace:FirstFloor.XamlSpy;assembly=XamlSpy" spy:XamlMetadata.XamlSpyServiceSettings="127.0.0.1|4530|18048" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TextControl.xaml|1">
+﻿<UserControl x:Class="TBT.App.Views.Controls.TextControl" x:Name="this" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:TBT.App.Views.Controls" mc:Ignorable="d" xmlns:spy="clr-namespace:FirstFloor.XamlSpy;assembly=XamlSpy" spy:XamlMetadata.XamlSpyServiceSettings="127.0.0.1|4530|18048" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TextControl.xaml|1">
 
 
 
@@ -6,15 +6,14 @@
 
 
 
-
-    <Grid spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TextControl.xaml|10">
+    <Grid spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TextControl.xaml|9">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" SharedSizeGroup="TextContolLabel" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{Binding ElementName=this, Path=Label, Mode=TwoWay}" Margin="2 0 2 0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TextControl.xaml|16" />
-        <TextBox TextWrapping="{Binding ElementName=this, Path=TextWrapping, Mode=TwoWay}" Text="{Binding ElementName=this, Path=Text, Mode=TwoWay}" IsReadOnly="{Binding ElementName=this, Path=IsReadOnly, Mode=TwoWay}" AcceptsReturn="{Binding ElementName=this, Path=AcceptsReturn, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" TextAlignment="{Binding ElementName=this, Path=TextAlignment, Mode=TwoWay}" VerticalContentAlignment="{Binding ElementName=this, Path=VerticalTextAlignment, Mode=TwoWay}" Margin="2 0 0 0" Grid.Column="1" spy:XamlMetadata.SourceInfo="E:\Projects\TimeBookingToolWpfClient\TimeBookingToolWpfClient\TBT.App\Views\Controls\TextControl.xaml|17" />
+        <TextBlock Text="{Binding ElementName=this, Path=Label, Mode=TwoWay}" Margin="2 0 2 0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TextControl.xaml|15" />
+        <TextBox TextWrapping="{Binding ElementName=this, Path=TextWrapping, Mode=TwoWay}" Text="{Binding ElementName=this, Path=Text, Mode=TwoWay}" IsReadOnly="{Binding ElementName=this, Path=IsReadOnly, Mode=TwoWay}" AcceptsReturn="{Binding ElementName=this, Path=AcceptsReturn, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" TextAlignment="{Binding ElementName=this, Path=TextAlignment, Mode=TwoWay}" VerticalContentAlignment="{Binding ElementName=this, Path=VerticalTextAlignment, Mode=TwoWay}" Margin="2 0 0 0" Grid.Column="1" Foreground="#c2422b" FontWeight="Bold" spy:XamlMetadata.SourceInfo="E:\Projects\Wpf_TimeBookingTool\TimeBookingToolWpfClient\TBT.App\Views\Controls\TextControl.xaml|16" />
     </Grid>
 
 </UserControl>
