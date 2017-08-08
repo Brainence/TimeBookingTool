@@ -10,9 +10,8 @@
         BorderThickness="1" 
         BorderBrush="Black" 
         WindowStyle="None"
-        WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Height="250">
+        Height="200" Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -27,7 +26,7 @@
               Grid.Row="1"
               Visibility="{Binding ElementName=mainWindow, Path=IsEditing, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel>
-                <controls:EditUserControl User="{Binding ElementName=this, Path=User, Mode=TwoWay}" MaxWidth="600" Margin="20 10 20 10" 
+                <controls:EditUserControl User="{Binding ElementName=this, Path=User, Mode=TwoWay}" Margin="20 10" 
                                           SavingUserAction="EditUserControl_SavingUserAction"
                                           CancelCommand="{Binding ElementName=this, Path=CancelCommand, Mode=TwoWay}"
                                           ShowAdmin="True" ShowPassword="False" ForSaving="True"/>

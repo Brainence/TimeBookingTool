@@ -5,11 +5,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="300">
+             mc:Ignorable="d" >
     <Grid>
         <StackPanel Orientation="Vertical" Grid.IsSharedSizeScope="True">
-            <TextBlock Text="New user" FontSize="16" FontWeight="Bold" FontFamily="Sans-Serif Fonts" Margin="5"/>
+            <TextBlock Text="New user" Margin="5" FontSize="16" FontWeight="Bold" FontFamily="Sans-Serif Fonts"/>
             <local:EditUserControl User="{Binding ElementName=this, Path=User,Mode=TwoWay}" ShowAdmin="True" ShowPassword="True" ForSaving="False" />
         </StackPanel>
     </Grid>

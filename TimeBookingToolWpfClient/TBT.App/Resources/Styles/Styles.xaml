@@ -65,6 +65,7 @@
             <ContentPresenter/>
         </TextBlock>
     </ControlTemplate>
+
     
     <ControlTemplate x:Key="BottomHyperlinkButtonTemplate" TargetType="Button">
         <TextBlock HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 

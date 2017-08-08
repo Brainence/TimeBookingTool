@@ -10,9 +10,8 @@
         BorderThickness="1" 
         BorderBrush="Black" 
         WindowStyle="None"
-        WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Height="150">
+        Height="100" Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -27,14 +26,14 @@
               VerticalAlignment="Center"
               Grid.Row="1"
               Visibility="{Binding ElementName=mainWindow, Path=IsEditing, Converter={StaticResource BoolToVisibilityConverter}}">
-            <StackPanel Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
-                <controls:TextControl Width="350" Label="Customer name:" Text="{Binding ElementName=this, Path=CustomerName, Mode=TwoWay}"/>
+            <StackPanel Orientation="Horizontal" Margin="20 0" HorizontalAlignment="Center">
+                <controls:TextControl Width="450" Label="Customer name" Text="{Binding ElementName=this, Path=CustomerName, Mode=TwoWay}"/>
             </StackPanel>
         </Grid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Height="25" Margin="10 5 20 20" Content="Save" Click="SaveButton_Click" Template="{StaticResource HyperlinkButtonTemplate}"/>
-            <Button Height="25" Margin="10 5 20 20" Content="Cancel" Click="CloseButton_Click" Template="{StaticResource HyperlinkButtonTemplate}"/>
+            <Button Height="25" Margin="10 0 10 0" Content="Save" Click="SaveButton_Click" Template="{StaticResource HyperlinkButtonTemplate}"/>
+            <Button Height="25" Margin="10 0 20 0" Content="Cancel" Click="CloseButton_Click" Template="{StaticResource HyperlinkButtonTemplate}"/>
         </StackPanel>
     </Grid>
 

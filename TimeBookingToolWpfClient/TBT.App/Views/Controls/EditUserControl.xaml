@@ -10,19 +10,19 @@
 
     <Grid>
         <StackPanel Grid.IsSharedSizeScope="True">
-            <local:TextControl Margin="2" Label="First name" Text="{Binding ElementName=this, Path=User.FirstName, Mode=TwoWay}"/>
-            <local:TextControl Margin="2" Label="Last Name" Text="{Binding ElementName=this, Path=User.LastName, Mode=TwoWay}"/>
-            <local:TextControl Margin="2" Label="Username" Text="{Binding ElementName=this, Path=User.Username, Mode=TwoWay}"/>
-            <local:TextControl Margin="2" Label="Password" Text="{Binding ElementName=this, Path=User.Password, Mode=TwoWay}"
+            <local:TextControl Margin="0 0 0 5" Label="First name" Text="{Binding ElementName=this, Path=User.FirstName, Mode=TwoWay}"/>
+            <local:TextControl Margin="0 0 0 5" Label="Last Name" Text="{Binding ElementName=this, Path=User.LastName, Mode=TwoWay}"/>
+            <local:TextControl Margin="0 0 0 5" Label="Username" Text="{Binding ElementName=this, Path=User.Username, Mode=TwoWay}"/>
+            <local:TextControl Margin="0 0 0 5" Label="Password" Text="{Binding ElementName=this, Path=User.Password, Mode=TwoWay}"
                                Visibility="{Binding ElementName=this, Path=ShowPassword, Converter={StaticResource BoolToVisibilityConverter}}"/>
-            <local:TextControl Margin="2" Label="Time limit" Text="{Binding ElementName=this, Path=User.TimeLimit, Mode=TwoWay}"
+            <local:TextControl Margin="0 0 0 5" Label="Time limit" Text="{Binding ElementName=this, Path=User.TimeLimit, Mode=TwoWay}"
                                Visibility="{Binding ElementName=this, Path=ShowAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-            <local:CheckBoxControl Margin="2" Label="Admin" IsChecked="{Binding ElementName=this, Path=User.IsAdmin, Mode=TwoWay}" 
+            <local:CheckBoxControl Margin="0 0 0 5" Label="Admin" IsChecked="{Binding ElementName=this, Path=User.IsAdmin, Mode=TwoWay}" 
                                Visibility="{Binding ElementName=this, Path=ShowAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Height="25" Margin="10 5 10 5" Click="AddSaveUser_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}">
+                <Button Height="25" Margin="10 0" Click="AddSaveUser_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Style.Triggers>
@@ -38,7 +38,7 @@
                     </Button.Style>
                 </Button>
                 
-                <Button Height="25" Margin="10 5 10 5" Content="Cancel" 
+                <Button Height="25" Margin="10 0" Content="Cancel" 
                         Visibility="{Binding ElementName=this, Path=ForSaving, Converter={StaticResource BoolToVisibilityConverter}}"
                         Command="{Binding ElementName=this, Path=CancelCommand, Mode=TwoWay}" 
                         Template="{StaticResource HyperlinkButtonTemplate}"/>

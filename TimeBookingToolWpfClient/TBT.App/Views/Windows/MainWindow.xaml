@@ -77,16 +77,16 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Grid x:Name="newUserGrid" Grid.Row="0" Margin="10 10 10 0" Width="400"
+                    <Grid x:Name="newUserGrid" Grid.Row="0" Margin="20 20 20 0" 
                           Visibility="{Binding Path=CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
 
                         <controls:NewUserControl User="{Binding ElementName=mainWindow, Path=NewUser, Mode=TwoWay}" HorizontalAlignment="Stretch" />
                     </Grid>
 
-                    <Grid Grid.Row="1" Margin="10 10 10 0"
+                    <Grid Grid.Row="1" Margin="20 10 20 0"
                           Visibility="{Binding ElementName=mainWindow, Path=IsProfileEditing, Converter={StaticResource BoolToVisibilityConverter}}">
 
-                        <Grid HorizontalAlignment="Center" Width="400">
+                        <Grid HorizontalAlignment="Center" Width="495">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -108,18 +108,18 @@
                                                       Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
                                                       ShowAdmin="False" 
                                                       ShowPassword="False"
-                                                      ForSaving="True" />
+                                                      ForSaving="True" Width="Auto"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="Change password" Margin="5" FontWeight="Bold" FontFamily="Sans-Serif Fonts"/>
 
-                            <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Old password" HorizontalAlignment="Right" Margin="2" />
-                            <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="New password" HorizontalAlignment="Right" Margin="2"/>
-                            <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="Confirm password" HorizontalAlignment="Right" Margin="2"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Old password" HorizontalAlignment="Left" Margin="2 0 0 5" />
+                            <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="New password" HorizontalAlignment="Left" Margin="2 0 0 5"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="Confirm password" HorizontalAlignment="Left" Margin="2 0 0 5"/>
 
 
-                            <PasswordBox x:Name="oldPassword" Grid.Row="3" Grid.Column="1" Margin="2" Height="20"/>
-                            <PasswordBox x:Name="newPassword" Grid.Row="4" Grid.Column="1" Margin="2" Height="20"/>
-                            <PasswordBox x:Name="confirmPassword" Grid.Row="5" Grid.Column="1" Margin="2" Height="20"/>
+                            <PasswordBox x:Name="oldPassword" Grid.Row="3" Grid.Column="1" Margin="2 0 0 5" Height="20"/>
+                            <PasswordBox x:Name="newPassword" Grid.Row="4" Grid.Column="1" Margin="2 0 0 5" Height="20"/>
+                            <PasswordBox x:Name="confirmPassword" Grid.Row="5" Grid.Column="1" Margin="2 0 0 5" Height="20"/>
 
                             <Button Grid.Row="6" Grid.Column="1" Click="ChangePassword_ButtonClick" Content="Change" Template="{StaticResource HyperlinkButtonTemplate}"
                                     HorizontalAlignment="Right" Height="25" Margin="0 5 10 5"/>
@@ -128,14 +128,11 @@
                     </Grid>
 
                     <Grid Grid.Row="2">
-                        <StackPanel Margin="0 10 20 10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-
-                            <Button Content="Refresh" Margin="5"
-                                    Click="RefreshUsers_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}"/>
-
-                            <Button x:Name="editProfileButton" Margin="5" Content="Edit profile"
+                        <StackPanel Margin="0 5 20 10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                            <Button x:Name="editProfileButton" Margin="5" Content="Edit my profile"
                                     Click="EditProfile_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}"/>
-
+                            <Button Margin="5" Content="Refresh"
+                                    Click="RefreshUsers_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}"/>
                         </StackPanel>
                     </Grid>
 
@@ -172,61 +169,60 @@
 
                                             <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="6"/>
 
-                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="5">
+                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="0 5">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition SharedSizeGroup="FullName"/>
-                                                    <ColumnDefinition SharedSizeGroup="Username"/>
-                                                    <ColumnDefinition SharedSizeGroup="IsAdmin"/>
-                                                    <ColumnDefinition SharedSizeGroup="Project"/>
-                                                    <ColumnDefinition SharedSizeGroup="Remove"/>
-                                                    <ColumnDefinition SharedSizeGroup="Edit"/>
+                                                    <ColumnDefinition SharedSizeGroup="FullName" Width="125"/>
+                                                    <ColumnDefinition SharedSizeGroup="Username" Width="165"/>
+                                                    <ColumnDefinition SharedSizeGroup="IsAdmin" Width="70"/>
+                                                    <ColumnDefinition SharedSizeGroup="Project" Width="70"/>
+                                                    <ColumnDefinition SharedSizeGroup="Remove" Width="30"/>
+                                                    <ColumnDefinition SharedSizeGroup="Edit" Width="25"/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <TextBlock Height="20" Grid.Column="0" Margin="10 5 10 5" Text="{Binding FullName}">
+                                                <TextBlock Height="20" Grid.Column="0" Margin="5" Text="{Binding FullName}">
                                                     <TextBlock.Style>
                                                         <Style TargetType="TextBlock">
                                                             <Style.Triggers>
                                                                 <DataTrigger Binding="{Binding IsAdmin}" Value="True">
-                                                                    <Setter Property="Foreground" Value="Green"/>
+                                                                    <Setter Property="Foreground" Value="#c2422b"></Setter>
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
 
-                                                <TextBlock Height="20" Grid.Column="1" Margin="20 5 10 5" Text="{Binding Username}">
+                                                <TextBlock Height="20" Grid.Column="1" Margin="5" Text="{Binding Username}">
                                                     <TextBlock.Style>
                                                         <Style TargetType="TextBlock">
                                                             <Style.Triggers>
                                                                 <DataTrigger Binding="{Binding IsAdmin}" Value="True">
-                                                                    <Setter  Property="Foreground" Value="Green"/>
+                                                                    <Setter Property="Foreground" Value="#c2422b"></Setter>
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
 
-                                                <CheckBox Content="Admin" Height="20" Grid.Column="2" Margin="20 5 10 5" 
+                                                <CheckBox Content="Admin" Height="20" Grid.Column="2" Margin="5" 
                                                               IsChecked="{Binding IsAdmin, Mode=TwoWay}"
                                                               Checked="CheckBox_Checked"
                                                               Unchecked="CheckBox_Unchecked"
                                                               IsEnabled="False"/>
 
-                                                <controls:MultiSelectionComboBox Grid.Column="3" Margin="0 3 0 3"
+                                                <controls:MultiSelectionComboBox Grid.Column="3" Margin="5 3"
                                                                                  ItemsSourceMultiple="{Binding Projects}" 
-                                                                                 Width="250" Style="{StaticResource ComboBoxFlatStyle}"
+                                                                                 Width="Auto" Style="{StaticResource ComboBoxFlatStyle}"
                                                                                  Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                                                                                  User="{Binding}"/>
 
 
-                                                <Button Height="20" Grid.Column="4" Margin="10 5 10 5" Content="Remove" 
-                                                            Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                            Click="RemoveUser_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}"/>
+                                                <Image Height="20" Grid.Column="4" Margin="5" Source="../../Resources/Icons/editing.png" Width="20"
+                                                       Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                       MouseUp="EditUser_ImageClick" Cursor="Hand"/>
 
-
-                                                <Button Height="20" Grid.Column="5" Margin="10 5 10 5" Content="Edit" 
+                                                <Image Height="20" Grid.Column="5" Margin="0 5 5 5" Source="../../Resources/Icons/bin.png" Width="20"
                                                             Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                            Click="EditUser_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}"/>
+                                                            MouseUp="RemoveUser_ImageClick" Cursor="Hand"/>
                                             </Grid>
                                         </Grid>
                                     </DataTemplate>
@@ -245,23 +241,21 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-
-                    <Button Grid.Row="0" HorizontalAlignment="Right" Height="20" Width="100" Margin="10"
-                            Content="Refresh" Command="{Binding ElementName=mainWindow, Path=GetCustomersCommand}"
-                            Template="{StaticResource HyperlinkButtonTemplate}"/>
-
-                    <Grid Grid.Row="0" HorizontalAlignment="Center">
-
+                    <Grid Grid.Row="0" HorizontalAlignment="Center" Margin="0 20 0 0">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="textBox" Width="260"/>
                             <ColumnDefinition SharedSizeGroup="label"/>
-                            <ColumnDefinition SharedSizeGroup="textBox" MinWidth="150"/>
+                            <ColumnDefinition SharedSizeGroup="button"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Click="CreateNewCustomerButton_Click" Content="Create customer" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Grid.Column="0" Grid.Row="0"
+                        <Button Click="CreateNewCustomerButton_Click" Content="Create customer" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Grid.Column="1" Grid.Row="0"
                             HorizontalAlignment="Right">
                         </Button>
-                        <TextBox x:Name="NewCustomerTextBox" VerticalContentAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="0" Width="250"/>
+                        <TextBox x:Name="NewCustomerTextBox" VerticalContentAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="0" Width="250"/>
 
+                        <Button HorizontalAlignment="Right" Grid.Column="2" Height="20" Margin="10"
+                                Content="Refresh" Command="{Binding ElementName=mainWindow, Path=GetCustomersCommand}"
+                                Template="{StaticResource HyperlinkButtonTemplate}"/>
                     </Grid>
 
                     <Grid Grid.Row="1"
@@ -297,7 +291,7 @@
 
                                             <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="3" />
 
-                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="10">
+                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="0 10">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition SharedSizeGroup="column1"/>
                                                     <ColumnDefinition SharedSizeGroup="column2"/>
@@ -306,14 +300,14 @@
                                                 </Grid.ColumnDefinitions>
 
                                                 <TextBlock Grid.Column="0" 
-                                                           MaxWidth="350"
-                                                           Margin="20 5 20 5" 
+                                                           Width="100"
+                                                           Margin="0 5 5 5" 
                                                            Text="{Binding Path=Name}"
-                                                           FontWeight="Bold"/>
+                                                           FontWeight="Bold" Foreground="#c2422b"/>
 
                                                 <Expander Grid.Column="1" 
-                                                          MinWidth="300"
-                                                          Margin="20 5 20 5" 
+                                                          Width="310"
+                                                          Margin="5 5 15 5" 
                                                           Header="Projects"
                                                           Expanded="customerProjectsExpander_Expanded" 
                                                           Collapsed="customerProjectsExpander_Collapsed">
@@ -330,12 +324,12 @@
                                                     </ItemsControl>
                                                 </Expander>
 
-                                                <Button Height="20" Grid.Column="2" Margin="10 5 10 5" Content="Remove" VerticalAlignment="Top"
-                                                        Click="RemoveCustomer_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}"/>
+                                                <Image Height="20" Grid.Column="2" Margin="5" VerticalAlignment="Top" Source="../../Resources/Icons/editing.png" Width="20"
+                                                       Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                       MouseUp="EditCustomer_ImageClick" Cursor="Hand"/>
 
-                                                <Button Height="20" Grid.Column="3" Margin="10 5 10 5" Content="Edit" VerticalAlignment="Top"
-                                                            Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                            Click="EditCustomer_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}"/>
+                                                <Image Height="20" Grid.Column="3" Margin="0 5 5 5" VerticalAlignment="Top" Source="../../Resources/Icons/bin.png" Width="20"
+                                                        MouseUp="RemoveCustomer_ImageClick" Cursor="Hand"/>
                                             </Grid>
                                         </Grid>
                                     </DataTemplate>
@@ -355,20 +349,27 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Row="0" HorizontalAlignment="Right" Height="20" Width="100" Margin="10"
-                            Content="Refresh" Command="{Binding ElementName=mainWindow, Path=GetProjectsCommand}"
-                            Template="{StaticResource HyperlinkButtonTemplate}"/>
-
-                    <Grid Grid.Row="0" HorizontalAlignment="Center">
+                    <Grid Grid.Row="0" HorizontalAlignment="Center" Margin="20 20 20 0">
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition SharedSizeGroup="label"/>
                             <ColumnDefinition SharedSizeGroup="textBox" MinWidth="150"/>
                             <ColumnDefinition SharedSizeGroup="comboBox" MinWidth="150"/>
+                            <ColumnDefinition SharedSizeGroup="label"/>
+                            <ColumnDefinition SharedSizeGroup="button"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Click="CreateNewProjectButton_Click" Content="Create project" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Grid.Column="0" Grid.Row="0"
-                            HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20">
+                        <TextBox x:Name="NewProjectTextBox" VerticalContentAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="0" Height="20" VerticalAlignment="Center"/>
+
+                        <ComboBox x:Name="createProjectComboBox" Grid.Column="1" 
+                                    Style="{StaticResource ComboBoxFlatStyle}"
+                                    ItemsSource="{Binding ElementName=mainWindow, Path=CustomersComboBox}"
+                                    Text="[Select customer]"
+                                    Height="25"
+                                    Margin="5"/>
+
+
+                        <Button Click="CreateNewProjectButton_Click" Content="Create project" Template="{StaticResource HyperlinkButtonTemplate}" Margin="10 5" Grid.Column="2" Grid.Row="0"
+                                HorizontalAlignment="Right" VerticalAlignment="Center" Height="20">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Style.Triggers>
@@ -379,19 +380,10 @@
                                 </Style>
                             </Button.Style>
                         </Button>
-                        <TextBox x:Name="NewProjectTextBox" VerticalContentAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="0" Height="20" VerticalAlignment="Bottom"/>
 
-                        <StackPanel Grid.Column="2" Grid.Row="0">
-                            <TextBlock Text="Customer:" Margin="5 0 0 0" Height="25"/>
-                            <ComboBox x:Name="createProjectComboBox"
-                                      Style="{StaticResource ComboBoxFlatStyle}"
-                                      ItemsSource="{Binding ElementName=mainWindow, Path=CustomersComboBox}"
-                                      Text="[Select customer]"
-                                      Width="300"
-                                      Height="25"
-                                      Margin="5"/>
-                        </StackPanel>
-
+                        <Button Grid.Column="3" HorizontalAlignment="Right" Height="20"  Margin="10 5"
+                                Content="Refresh" Command="{Binding ElementName=mainWindow, Path=GetProjectsCommand}"
+                                Template="{StaticResource HyperlinkButtonTemplate}"/>
                     </Grid>
 
                     <Grid Grid.Row="1"
@@ -427,7 +419,7 @@
 
                                             <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="3" />
 
-                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="10">
+                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="0 10">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition SharedSizeGroup="column1"/>
                                                     <ColumnDefinition SharedSizeGroup="column2"/>
@@ -438,23 +430,22 @@
 
 
                                                 <TextBlock Grid.Column="0" 
-                                                           MaxWidth="350"
-                                                           Margin="20 5 5 5" 
+                                                           Width="100"
+                                                           Margin="0 5 5 5" 
                                                            Text="{Binding Path=Customer.Name}"
                                                            Foreground="#4d4d4d"
-                                                           TextAlignment="Right"/>
+                                                           TextAlignment="Left"/>
 
                                                 <TextBlock Grid.Column="1" 
-                                                           MaxWidth="350"
-                                                           Margin="5 5 20 5" 
+                                                           Width="130"
+                                                           Margin="5" 
                                                            Text="{Binding Path=Name}"
                                                            TextAlignment="Left"
                                                            FontWeight="Bold"/>
 
-
                                                 <Expander Grid.Column="2" 
-                                                          MinWidth="300"
-                                                          Margin="20 5 20 5" 
+                                                          Width="150"
+                                                          Margin="10 5 15 5" 
                                                           Header="Tasks">
 
                                                     <ItemsControl ItemsSource="{Binding Activities}">
@@ -469,12 +460,12 @@
                                                     </ItemsControl>
                                                 </Expander>
 
-                                                <Button Height="20" Grid.Column="3" Margin="10 5 10 5" Content="Remove" VerticalAlignment="Top"
-                                                        Click="RemoveProject_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}"/>
+                                                <Image Height="20" Grid.Column="3" Margin="5" VerticalAlignment="Top" Source="../../Resources/Icons/editing.png" Width="20"
+                                                       Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                       MouseUp="EditProject_ImageClick" Cursor="Hand"/>
 
-                                                <Button Height="20" Grid.Column="4" Margin="10 5 10 5" Content="Edit" VerticalAlignment="Top"
-                                                            Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                            Click="EditProject_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}"/>
+                                                <Image Height="20" Grid.Column="4" Margin="0 5 5 5" VerticalAlignment="Top" Source="../../Resources/Icons/bin.png" Width="20"
+                                                       MouseUp="RemoveProject_ImageClick" Cursor="Hand"/>
                                             </Grid>
                                         </Grid>
                                     </DataTemplate>
@@ -494,20 +485,27 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Row="0" HorizontalAlignment="Right" Height="20" Width="100" Margin="10"
-                            Content="Refresh" Command="{Binding ElementName=mainWindow, Path=GetActivitiesCommand}"
-                            Template="{StaticResource HyperlinkButtonTemplate}"/>
-
-                    <Grid Grid.Row="0" HorizontalAlignment="Center">
+                    <Grid Grid.Row="0" HorizontalAlignment="Center" Margin="20 20 20 0">
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition SharedSizeGroup="label"/>
                             <ColumnDefinition SharedSizeGroup="textBox" MinWidth="150"/>
                             <ColumnDefinition SharedSizeGroup="comboBox" MinWidth="150"/>
+                            <ColumnDefinition SharedSizeGroup="label"/>
+                            <ColumnDefinition SharedSizeGroup="button"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Click="CreateNewTaskButton_Click" Content="Create task" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Grid.Column="0" Grid.Row="2"
-                            HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20">
+                        <TextBox x:Name="NewTaskTextBox" VerticalContentAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="0" Height="20" VerticalAlignment="Center"/>
+
+                        <ComboBox x:Name="createTaskComboBox"
+                                      Grid.Column="1" 
+                                      Style="{StaticResource ComboBoxFlatStyle}"
+                                      ItemsSource="{Binding ElementName=mainWindow, Path=ProjectsComboBox}"
+                                      Text="[Select project]"
+                                      Height="25"
+                                      Margin="10 5"/>
+
+                        <Button Click="CreateNewTaskButton_Click" Content="Create task" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Grid.Column="2" Grid.Row="2"
+                                HorizontalAlignment="Right" VerticalAlignment="Center" Height="20">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Style.Triggers>
@@ -518,19 +516,9 @@
                                 </Style>
                             </Button.Style>
                         </Button>
-                        <TextBox x:Name="NewTaskTextBox" VerticalContentAlignment="Center" Margin="5" Grid.Column="1" Grid.Row="2" Height="20" VerticalAlignment="Bottom"/>
-
-                        <StackPanel Grid.Column="2" Grid.Row="2">
-                            <TextBlock Text="Project:" Margin="5 0 0 0" Height="25"/>
-                            <ComboBox x:Name="createTaskComboBox"
-                                      Grid.Column="2" Grid.Row="2"
-                                      Style="{StaticResource ComboBoxFlatStyle}"
-                                      ItemsSource="{Binding ElementName=mainWindow, Path=ProjectsComboBox}"
-                                      Text="[Select project]"
-                                      Width="300"
-                                      Height="25"
-                                      Margin="5"/>
-                        </StackPanel>
+                        <Button Grid.Column="3" Height="20" Margin="10 5"
+                                Content="Refresh" Command="{Binding ElementName=mainWindow, Path=GetActivitiesCommand}"
+                                Template="{StaticResource HyperlinkButtonTemplate}"/>
 
                     </Grid>
 
@@ -568,7 +556,7 @@
 
                                             <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="3" />
 
-                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="10">
+                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="0 10">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition SharedSizeGroup="column1"/>
                                                     <ColumnDefinition SharedSizeGroup="column2"/>
@@ -577,24 +565,24 @@
                                                 </Grid.ColumnDefinitions>
 
                                                 <TextBlock Grid.Column="0" 
-                                                           MaxWidth="350"
+                                                           Width="130"
                                                            Margin="20 5 5 5" 
                                                            Text="{Binding Path=Project.Name}"
                                                            Foreground="#4d4d4d"
                                                            TextAlignment="Right"/>
 
                                                 <TextBlock Grid.Column="1" 
-                                                           MaxWidth="350"
+                                                           Width="240"
                                                            Margin="5 5 20 5" 
                                                            Text="{Binding Path=Name}"
                                                            FontWeight="Bold"/>
 
-                                                <Button Height="20" Grid.Column="2" Margin="10 5 10 5" Content="Remove" 
-                                                        Click="RemoveActivity_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}"/>
+                                                <Image Height="20" Grid.Column="2" Margin="5" VerticalAlignment="Top" Source="../../Resources/Icons/editing.png" Width="20"
+                                                        Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                       MouseUp="EditActivity_ImageClick" Cursor="Hand"/>
 
-                                                <Button Height="20" Grid.Column="3" Margin="10 5 10 5" Content="Edit" VerticalAlignment="Top"
-                                                            Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                            Click="EditActivity_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}"/>
+                                                <Image Height="20" Grid.Column="3" Margin="0 5 5 5" VerticalAlignment="Top" Source="../../Resources/Icons/bin.png" Width="20"
+                                                       MouseUp="RemoveActivity_ImageClick" Cursor="Hand"/>
                                             </Grid>
                                         </Grid>
                                     </DataTemplate>
@@ -614,28 +602,26 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <GroupBox Header="Settings">
-                        <StackPanel Margin="10 20 10 10">
-                            <CheckBox x:Name="RunOnStartupCheckBox"
-                                      Margin="10"
+                    <StackPanel Margin="20 20">
+                        <CheckBox x:Name="RunOnStartupCheckBox"
+                                      Margin="10" FontSize="13"
                                       Content="Run on startup" 
                                       Checked="RunOnStartup_Checked"
                                       Unchecked="RunOnStartup_Unchecked"/>
 
-                            <CheckBox x:Name="EnableNotificationCheckBox"
-                                      Margin="10"
+                        <CheckBox x:Name="EnableNotificationCheckBox"
+                                      Margin="10" FontSize="13"
                                       Content="Enable notifications" 
                                       Checked="EnableNotification_Checked"
                                       Unchecked="EnableNotification_Unchecked"/>
 
-                            <CheckBox x:Name="EnableGreetingNotificationCheckBox"
-                                      Margin="10"
+                        <CheckBox x:Name="EnableGreetingNotificationCheckBox"
+                                      Margin="10" FontSize="13"
                                       Content="Enable greeting" 
                                       Checked="EnableGreetingNotificationCheckBox_Checked"
                                       Unchecked="EnableGreetingNotificationCheckBox_Unchecked"/>
-                            
-                        </StackPanel>
-                    </GroupBox>
+
+                    </StackPanel>
 
                 </Grid>
             </TabItem>

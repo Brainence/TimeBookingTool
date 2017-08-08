@@ -482,11 +482,11 @@ namespace TBT.App.Views.Windows
             await GetUsers();
         }
 
-        private async void RemoveUser_ButtonClick(object sender, RoutedEventArgs e)
+        private async void RemoveUser_ImageClick(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
-            var user = ((sender as Button).DataContext as User);
+            var user = ((sender as Image).DataContext as User);
 
             if (user == null) return;
 
@@ -523,7 +523,7 @@ namespace TBT.App.Views.Windows
         private void EditProfile_ButtonClick(object sender, RoutedEventArgs e)
         {
             IsProfileEditing = !IsProfileEditing;
-            editProfileButton.Content = IsProfileEditing ? "Finish edit" : "Edit profile";
+            editProfileButton.Content = IsProfileEditing ? "Finish edit" : "Edit my profile";
         }
 
         private async void ChangePassword_ButtonClick(object sender, RoutedEventArgs e)
@@ -578,9 +578,9 @@ namespace TBT.App.Views.Windows
             calendar.IsDateNameShort = ActualWidth < 1250;
         }
 
-        private void EditUser_ButtonClick(object sender, RoutedEventArgs e)
+        private void EditUser_ImageClick(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
+            var button = sender as Image;
             if (button == null) return;
 
             var user = button.DataContext as User;
@@ -588,6 +588,8 @@ namespace TBT.App.Views.Windows
 
             EditUserWindow euw = new EditUserWindow(user);
 
+            euw.Top = this.Top + (this.Height - euw.Height)/2;
+            euw.Left = this.Left + (this.Width - euw.Width) / 2;
             euw.CancelAction += Euw_CancelAction;
             euw.SaveAction += Euw_SaveAction;
             euw.ShowDialog();
@@ -742,11 +744,11 @@ namespace TBT.App.Views.Windows
             customer.Projects = null;
         }
 
-        private async void RemoveActivity_ButtonClick(object sender, RoutedEventArgs e)
+        private async void RemoveActivity_ImageClick(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
-            var activity = ((sender as Button).DataContext as Activity);
+            var activity = ((sender as Image).DataContext as Activity);
 
             if (activity == null) return;
 
@@ -757,11 +759,11 @@ namespace TBT.App.Views.Windows
             await GetAllActivities();
         }
 
-        private async void RemoveProject_ButtonClick(object sender, RoutedEventArgs e)
+        private async void RemoveProject_ImageClick(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
-            var project = ((sender as Button).DataContext as Project);
+            var project = ((sender as Image).DataContext as Project);
 
             if (project == null) return;
 
@@ -777,11 +779,11 @@ namespace TBT.App.Views.Windows
             await GetAllProjects();
         }
 
-        private async void RemoveCustomer_ButtonClick(object sender, RoutedEventArgs e)
+        private async void RemoveCustomer_ImageClick(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
-            var customer = ((sender as Button).DataContext as Customer);
+            var customer = ((sender as Image).DataContext as Customer);
 
             if (customer == null) return;
             customer.IsActive = false;
@@ -862,15 +864,17 @@ namespace TBT.App.Views.Windows
             App.EnableGreetingNotification = false;
         }
 
-        private async void EditActivity_ButtonClick(object sender, RoutedEventArgs e)
+        private async void EditActivity_ImageClick(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
+            var button = sender as Image;
             if (button == null) return;
 
             var activity = button.DataContext as Activity;
             if (activity == null) return;
 
             EditActivityWindow eaw = new EditActivityWindow(activity);
+            eaw.Top = this.Top + (this.Height - eaw.Height) / 2;
+            eaw.Left = this.Left + (this.Width - eaw.Width) / 2;
 
             eaw.ShowDialog();
             if (eaw.SaveProject)
@@ -884,15 +888,17 @@ namespace TBT.App.Views.Windows
         }
 
 
-        private async void EditProject_ButtonClick(object sender, RoutedEventArgs e)
+        private async void EditProject_ImageClick(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
+            var button = sender as Image;
             if (button == null) return;
 
             var project = button.DataContext as Project;
             if (project == null) return;
 
             EditProjectWindow epw = new EditProjectWindow(project);
+            epw.Top = this.Top + (this.Height - epw.Height) / 2;
+            epw.Left = this.Left + (this.Width - epw.Width) / 2;
 
             epw.ShowDialog();
             if (epw.SaveProject)
@@ -905,16 +911,18 @@ namespace TBT.App.Views.Windows
             }
         }
 
-        private async void EditCustomer_ButtonClick(object sender, RoutedEventArgs e)
+        private async void EditCustomer_ImageClick(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
+            var button = sender as Image;
             if (button == null) return;
 
             var customer = button.DataContext as Customer;
             if (customer == null) return;
 
             EditCustomerWindow ecw = new EditCustomerWindow(customer.Name);
-
+            
+            ecw.Top = this.Top + (this.Height - ecw.Height) / 2;
+            ecw.Left = this.Left + (this.Width - ecw.Width) / 2;
             ecw.ShowDialog();
             if (customer.Name != ecw.CustomerName && ecw.SaveCustomer)
             {

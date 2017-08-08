@@ -12,7 +12,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{Binding ElementName=this, Path=Label, Mode=TwoWay}" Margin="2 0 2 0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <TextBlock Text="{Binding ElementName=this, Path=Label, Mode=TwoWay}" Margin="2 0 2 0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="13"/>
         <TextBox TextWrapping="{Binding ElementName=this, Path=TextWrapping, Mode=TwoWay}" 
                  Text="{Binding ElementName=this, Path=Text, Mode=TwoWay}"
                  IsReadOnly="{Binding ElementName=this, Path=IsReadOnly, Mode=TwoWay}"
@@ -21,7 +21,7 @@
                  VerticalAlignment="Stretch"
                  TextAlignment="{Binding ElementName=this, Path=TextAlignment, Mode=TwoWay}"
                  VerticalContentAlignment="{Binding ElementName=this, Path=VerticalTextAlignment, Mode=TwoWay}"
-                 Margin="2 0 0 0" Grid.Column="1" Foreground="#c2422b" FontWeight="Bold"/>
+                 Margin="0 0 0 0" Grid.Column="1" Foreground="#c2422b" FontWeight="Bold" FontSize="13"/>
     </Grid>
 
 </UserControl>
