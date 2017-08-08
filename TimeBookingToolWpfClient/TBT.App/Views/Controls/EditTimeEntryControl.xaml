@@ -65,7 +65,7 @@
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
                            VerticalTextAlignment="Center"
-                           TextAlignment="Center"/>
+                           TextAlignment="Left"/>
 
             <local:TextControl x:Name="timelimitTextBox"
                            Visibility="{Binding ElementName=this, Path=SelectedDay, Converter={StaticResource TodayToVisibilityConverter}, ConverterParameter=TimiLimit}"
@@ -78,7 +78,7 @@
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
                            VerticalTextAlignment="Center"
-                           TextAlignment="Center"/>
+                           TextAlignment="Left"/>
 
         </StackPanel>
 

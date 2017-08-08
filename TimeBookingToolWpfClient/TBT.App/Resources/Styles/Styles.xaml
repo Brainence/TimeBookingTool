@@ -66,7 +66,14 @@
         </TextBlock>
     </ControlTemplate>
 
-    
+    <Style TargetType="{x:Type TextBox}"
+           x:Key="AddingTextBoxStyle">
+        <Setter Property="Foreground" Value="#c2422b" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+
     <ControlTemplate x:Key="BottomHyperlinkButtonTemplate" TargetType="Button">
         <TextBlock HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -488,69 +495,6 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style TargetType="Expander">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Expander">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Name="ContentRow" Height="0"/>
-                        </Grid.RowDefinitions>
-                        <Border 
-              Name="Border" 
-              Grid.Row="0" 
-              Background="{StaticResource LightBrush}"
-              BorderBrush="{StaticResource NormalBorderBrush}"
-              BorderThickness="1" 
-              CornerRadius="0 0 0 0" >
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="20" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <ToggleButton
-                  IsChecked="{Binding Path=IsExpanded,Mode=TwoWay,
-                                      RelativeSource={RelativeSource TemplatedParent}}"
-                  OverridesDefaultStyle="True" 
-                  Template="{StaticResource ExpanderToggleButton}" 
-                  Background="{StaticResource NormalBrush}" />
-                                <ContentPresenter 
-                  Grid.Column="1"
-                  Margin="4" 
-                  ContentSource="Header" 
-                  RecognizesAccessKey="True" />
-                            </Grid>
-                        </Border>
-                        <Border 
-              Name="Content" 
-              Grid.Row="1" 
-              Background="{StaticResource WindowBackgroundBrush}"
-              BorderBrush="{StaticResource SolidBorderBrush}" 
-              BorderThickness="1,0,1,1" 
-              CornerRadius="0 0 0 0" >
-                            <ContentPresenter/>
-                        </Border>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsExpanded" Value="True">
-                            <Setter TargetName="ContentRow" Property="Height"
-                      Value="{Binding ElementName=Content,Path=DesiredHeight}" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Border" Property="Background"
-                      Value="{StaticResource DisabledBackgroundBrush}" />
-                            <Setter TargetName="Border" Property="BorderBrush"
-                      Value="{StaticResource DisabledBorderBrush}" />
-                            <Setter Property="Foreground"
-                      Value="{StaticResource DisabledForegroundBrush}"/>
-                        </Trigger>
-
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
     <Style x:Key="WindowStyle" TargetType="Window">
         <Style.Resources>

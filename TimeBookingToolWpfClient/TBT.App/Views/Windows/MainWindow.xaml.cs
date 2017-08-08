@@ -22,7 +22,6 @@ namespace TBT.App.Views.Windows
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private bool _isEditing;
-        private bool _isProfileEditing;
         private User _newUser;
         private DateTime _from;
         private DateTime _to;
@@ -169,12 +168,6 @@ namespace TBT.App.Views.Windows
         {
             get { return _isEditing; }
             set { SetProperty(ref _isEditing, value); }
-        }
-
-        public bool IsProfileEditing
-        {
-            get { return _isProfileEditing; }
-            set { SetProperty(ref _isProfileEditing, value); }
         }
 
         public bool ItemsLoading
@@ -518,12 +511,6 @@ namespace TBT.App.Views.Windows
             var checkBox = (sender as CheckBox);
             var user = (checkBox.DataContext as User);
             user.IsAdmin = false;
-        }
-
-        private void EditProfile_ButtonClick(object sender, RoutedEventArgs e)
-        {
-            IsProfileEditing = !IsProfileEditing;
-            editProfileButton.Content = IsProfileEditing ? "Finish edit" : "Edit my profile";
         }
 
         private async void ChangePassword_ButtonClick(object sender, RoutedEventArgs e)

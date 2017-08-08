@@ -22,7 +22,7 @@
                                Visibility="{Binding ElementName=this, Path=ShowAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Height="25" Margin="10 0" Click="AddSaveUser_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}">
+                <Button Margin="10 0" Click="AddSaveUser_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Style.Triggers>
@@ -38,7 +38,7 @@
                     </Button.Style>
                 </Button>
                 
-                <Button Height="25" Margin="10 0" Content="Cancel" 
+                <Button Margin="0" Content="Cancel" 
                         Visibility="{Binding ElementName=this, Path=ForSaving, Converter={StaticResource BoolToVisibilityConverter}}"
                         Command="{Binding ElementName=this, Path=CancelCommand, Mode=TwoWay}" 
                         Template="{StaticResource HyperlinkButtonTemplate}"/>

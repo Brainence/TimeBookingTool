@@ -42,14 +42,14 @@
                                         <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="true">
                                             <Setter Property="Content" >
                                                 <Setter.Value>
-                                                    <Image Source="/Resources/Icons/stop.png" Stretch="Fill" Height="12" Width="12"/>
+                                                    <Image Source="/Resources/Icons/stop.png" Stretch="Fill" Height="12" Width="12" ToolTip="Stop"/>
                                                 </Setter.Value>
                                             </Setter>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="false">
                                             <Setter Property="Content" >
                                                 <Setter.Value>
-                                                    <Image Source="/Resources/Icons/play.png" Stretch="Fill" Height="16" Width="16"/>
+                                                    <Image Source="/Resources/Icons/play.png" Stretch="Fill" Height="16" Width="16" ToolTip="Start"/>
                                                 </Setter.Value>
                                             </Setter>
                                         </DataTrigger>
@@ -83,7 +83,7 @@
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
-                            <Image Source="/Resources/Icons/editing.png" Stretch="Fill" Height="12" Width="12"/>
+                            <Image Source="/Resources/Icons/editing.png" Stretch="Fill" Height="12" Width="12" ToolTip="Edit"/>
                         </Button>
 
                         <Button Command="{Binding ElementName=this, Path=RemoveCommand, Mode=TwoWay}" 
@@ -108,7 +108,7 @@
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
-                            <Image Source="/Resources/Icons/bin.png" Stretch="Fill" Height="12" Width="12"/>
+                            <Image Source="/Resources/Icons/bin.png" Stretch="Fill" Height="12" Width="12" ToolTip="Remove"/>
                         </Button>
 
                         <TextBlock Text="{Binding ElementName=this, Path=TimeEntry, Converter={StaticResource TimeEntryConverter}}" 
