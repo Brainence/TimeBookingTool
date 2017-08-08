@@ -114,7 +114,7 @@
                                                 <Grid Grid.Column="1" Grid.IsSharedSizeScope="True" Margin="10 5 10 5">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition SharedSizeGroup="column1" Width="104"/>
-                                                        <ColumnDefinition SharedSizeGroup="column2" Width="220"/>
+                                                        <ColumnDefinition SharedSizeGroup="column2" MaxWidth="220"/>
                                                     </Grid.ColumnDefinitions>
 
                                                     <TextBlock Grid.Column="0" Margin="0 2 0 2"

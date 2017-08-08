@@ -179,7 +179,7 @@
                                                     <ColumnDefinition SharedSizeGroup="Edit" Width="25"/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <Image Height="16" Grid.Column="0" Margin="0 5" Source="../../Resources/Icons/administrator.png">
+                                                <Image Height="16" Grid.Column="0" Margin="0 5" Source="../../Resources/Icons/administrator.png" ToolTip="Administrator">
                                                     <Image.Style>
                                                         <Style TargetType="Image">
                                                             <Style.Triggers>
@@ -194,7 +194,7 @@
                                                     </Image.Style>
                                                 </Image>
 
-                                                <TextBlock Height="20" Grid.Column="1" Margin="5" Text="{Binding FullName}" VerticalAlignment="Center">
+                                                <TextBlock Grid.Column="1" Margin="5 0" Text="{Binding FullName}" VerticalAlignment="Center">
                                                     <TextBlock.Style>
                                                         <Style TargetType="TextBlock">
                                                             <Style.Triggers>
@@ -206,7 +206,7 @@
                                                     </TextBlock.Style>
                                                 </TextBlock>
 
-                                                <TextBlock Height="20" Grid.Column="2" Margin="5" Text="{Binding Username}" VerticalAlignment="Center">
+                                                <TextBlock Grid.Column="2" Margin="5 0" Text="{Binding Username}" VerticalAlignment="Center">
                                                     <TextBlock.Style>
                                                         <Style TargetType="TextBlock">
                                                             <Style.Triggers>
@@ -217,14 +217,7 @@
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
-
-                                                <CheckBox Height="20" Grid.Column="3" Margin="5" 
-                                                              IsChecked="{Binding IsAdmin, Mode=TwoWay}"
-                                                              Checked="CheckBox_Checked"
-                                                              Unchecked="CheckBox_Unchecked"
-                                                              IsEnabled="False"/>
-
-                                                <controls:MultiSelectionComboBox Grid.Column="4" Margin="5 3"
+                                                <controls:MultiSelectionComboBox Grid.Column="4" Margin="5 3" Height="20"
                                                                                  ItemsSourceMultiple="{Binding Projects}" 
                                                                                  Width="Auto" Style="{StaticResource ComboBoxFlatStyle}"
                                                                                  Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -318,7 +311,7 @@
                                                            Width="100"
                                                            Margin="0 5 5 5" 
                                                            Text="{Binding Path=Name}"
-                                                           FontWeight="Bold" Foreground="#c2422b"/>
+                                                           Foreground="#c2422b"/>
 
                                                 <Expander Grid.Column="1" 
                                                           Width="310"
@@ -378,7 +371,7 @@
                                     Style="{StaticResource ComboBoxFlatStyle}"
                                     ItemsSource="{Binding ElementName=mainWindow, Path=CustomersComboBox}"
                                     Text="[Select customer]"
-                                    Height="25"
+                                    Height="20"
                                     Margin="5 5 0 5"/>
 
                             <Button Click="CreateNewProjectButton_Click" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Width="Auto" 
@@ -457,7 +450,7 @@
                                                            Margin="5" 
                                                            Text="{Binding Path=Name}"
                                                            TextAlignment="Left"
-                                                           FontWeight="Bold"/>
+                                                           Foreground="#c2422b"/>
 
                                                 <Expander Grid.Column="2" 
                                                           Width="150"
@@ -516,7 +509,7 @@
                                       Style="{StaticResource ComboBoxFlatStyle}"
                                       ItemsSource="{Binding ElementName=mainWindow, Path=ProjectsComboBox}"
                                       Text="[Select project]"
-                                      Height="25"
+                                      Height="20"
                                       Margin="5"/>
 
                             
@@ -591,7 +584,7 @@
                                                            Width="240"
                                                            Margin="5 5 20 5" 
                                                            Text="{Binding Path=Name}"
-                                                           FontWeight="Bold"/>
+                                                           Foreground="#c2422b"/>
 
                                                 <Image Height="20" Grid.Column="2" Margin="5" VerticalAlignment="Top" Source="../../Resources/Icons/editing.png" Width="20"
                                                         Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
