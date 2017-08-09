@@ -17,7 +17,6 @@
         Width="600" 
         ResizeMode="CanMinimize"
         Style="{StaticResource WindowStyle}">
-
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -36,7 +35,7 @@
                 <controls:CalendarControl x:Name="calendar" User="{Binding CurrentUser, Mode=TwoWay}" IsDateNameShort="False" Background="White"/>
             </TabItem>
 
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Reporting" Tag="../Icons/reporting.png">
+            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Reporting" Tag="../Icons/reporting_white.png">
                 <Grid Background="White">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -68,7 +67,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="People" Tag="../Icons/people.png">
+            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="People" Tag="../Icons/people_white.png">
                 <Grid Background="White">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -241,7 +240,7 @@
             </TabItem>
 
             <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Customers"
-                     Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Tag="../Icons/customers.png">
+                     Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Tag="../Icons/customers_white.png">
                 <Grid Background="White">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -350,7 +349,7 @@
             </TabItem>
 
             <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Projects"
-                     Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Tag="../Icons/projects.png">
+                     Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Tag="../Icons/projects_white.png">
                 <Grid Background="White">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -487,7 +486,7 @@
             </TabItem>
 
             <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Tasks"
-                     Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Tag="../Icons/tasks.png">
+                     Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Tag="../Icons/tasks_white.png">
                 <Grid Background="White">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -512,7 +511,7 @@
                                       Height="20"
                                       Margin="5"/>
 
-                            
+
                             <Button Click="CreateNewTaskButton_Click" Template="{StaticResource HyperlinkButtonTemplate}" Margin="0 5 5 5" VerticalAlignment="Center">
                                 <Button.Style>
                                     <Style TargetType="Button">
@@ -526,7 +525,7 @@
                                 <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="Create task" />
                             </Button>
                         </StackPanel>
-                        
+
                         <Button Grid.Column="1" Command="{Binding ElementName=mainWindow, Path=GetActivitiesCommand}" Template="{StaticResource HyperlinkButtonTemplate}" HorizontalAlignment="Right">
                             <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="Refresh" />
                         </Button>
@@ -603,7 +602,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Settings" Tag="../Icons/settings.png">
+            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Settings" Tag="../Icons/settings_white.png">
 
                 <Grid Background="White">
                     <Grid.RowDefinitions>

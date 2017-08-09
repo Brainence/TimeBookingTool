@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:TBT.App.Resources.Styles"
                     xmlns:controls="clr-namespace:TBT.App.Views.Controls"
-                    xmlns:tools="clr-namespace:TBT.App.Models.Tools">
+                    xmlns:tools="clr-namespace:TBT.App.Models.Tools"
+                    xmlns:app="clr-namespace:TBT.App">
 
     <Style TargetType="{x:Type Button}" x:Key="windowsButton">
         <Setter Property="Template">
@@ -521,16 +522,16 @@
         <Setter Property="TabStripPlacement" Value="Top"/>
     </Style>
 
-
     <Style TargetType="TabItem">
         <Style.Resources>
             <SolidColorBrush x:Key="TabItemBackground" Color="Transparent"/>
             <SolidColorBrush x:Key="TabItemForeground" Color="#ffffff"/>
-            <SolidColorBrush x:Key="TabItemIsSelectedBackground" Color="#ffffff"/>
+            <SolidColorBrush x:Key="TabItemIsSelectedBackground" Color="#00628c"/>
             <SolidColorBrush x:Key="TabItemIsSelectedForeground" Color="#444545"/>
             <SolidColorBrush x:Key="TabItemMouseOverBackground" Color="#e8711f"/>
             <SolidColorBrush x:Key="TabItemMouseOverForeground" Color="#ffffff"/>
         </Style.Resources>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
@@ -545,16 +546,16 @@
                                     <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem}}" Value="True">
                                         <Setter Property="Background" Value="{StaticResource TabItemIsSelectedBackground}" />
                                     </DataTrigger>
-
+                                    
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Cursor" Value="Hand" />
-                                        <Setter Property="Background" Value="{StaticResource TabItemMouseOverBackground}"/>
+                                        <Setter Property="Border.BorderBrush" Value="{StaticResource TabItemForeground}"/>
                                     </Trigger>
                                 </Style.Triggers>
+                                <Setter Property="Cursor" Value="Hand"/>
                             </Style>
                         </Grid.Style>
                         <StackPanel VerticalAlignment="Center">
-                            <Image Height="22" Width="22" Margin="0 0 0 2" Source="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+                            <Image Height="22" Width="22" Margin="0 0 0 2" Source="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}}" />
                             <TextBlock x:Name="tabTimeHeader"
                                    Text="{TemplateBinding Header}"
                                    VerticalAlignment="Center"
@@ -569,7 +570,6 @@
                                             </DataTrigger>
 
                                             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem}}" Value="True">
-                                                <Setter Property="Foreground" Value="{StaticResource TabItemIsSelectedForeground}" />
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem}}" Value="False">
                                             </DataTrigger>
@@ -579,6 +579,7 @@
                                             </DataTrigger>
 
                                         </Style.Triggers>
+                                        <Setter Property="Cursor" Value="Hand"/>
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
@@ -588,4 +589,5 @@
             </Setter.Value>
         </Setter>
     </Style>
+
 </ResourceDictionary>
