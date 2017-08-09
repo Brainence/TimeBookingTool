@@ -554,7 +554,7 @@
                             </Style>
                         </Grid.Style>
                         <StackPanel VerticalAlignment="Center">
-                            <Image Height="22" Width="22" Margin="0 0 0 2" Source="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Image Height="22" Width="22" Margin="0 0 0 2" Source="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
                             <TextBlock x:Name="tabTimeHeader"
                                    Text="{TemplateBinding Header}"
                                    VerticalAlignment="Center"

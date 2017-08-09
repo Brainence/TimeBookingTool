@@ -32,7 +32,7 @@
 
 
         <TabControl Grid.Row="0">
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Calendar" Tag="../Icons/calendar.png">
+            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Calendar" Tag="../Icons/calendar_white.png">
                 <controls:CalendarControl x:Name="calendar" User="{Binding CurrentUser, Mode=TwoWay}" IsDateNameShort="False" Background="White"/>
             </TabItem>
 
