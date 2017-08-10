@@ -531,7 +531,6 @@
             <SolidColorBrush x:Key="TabItemMouseOverBackground" Color="Transparent"/>
             <SolidColorBrush x:Key="TabItemMouseOverForeground" Color="#ffffff"/>
         </Style.Resources>
-        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
