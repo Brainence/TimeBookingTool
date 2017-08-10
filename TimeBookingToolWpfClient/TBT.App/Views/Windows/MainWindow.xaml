@@ -17,7 +17,6 @@
         Width="600" 
         ResizeMode="CanMinimize"
         Style="{StaticResource WindowStyle}">
-
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>

@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:TBT.App.Resources.Styles"
                     xmlns:controls="clr-namespace:TBT.App.Views.Controls"
-                    xmlns:tools="clr-namespace:TBT.App.Models.Tools">
+                    xmlns:tools="clr-namespace:TBT.App.Models.Tools"
+                    xmlns:app="clr-namespace:TBT.App">
 
     <Style TargetType="{x:Type Button}" x:Key="windowsButton">
         <Setter Property="Template">
@@ -521,7 +522,6 @@
         <Setter Property="TabStripPlacement" Value="Top"/>
     </Style>
 
-
     <Style TargetType="TabItem">
         <Style.Resources>
             <SolidColorBrush x:Key="TabItemBackground" Color="Transparent"/>
@@ -531,6 +531,7 @@
             <SolidColorBrush x:Key="TabItemMouseOverBackground" Color="Transparent"/>
             <SolidColorBrush x:Key="TabItemMouseOverForeground" Color="#ffffff"/>
         </Style.Resources>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
@@ -565,12 +566,13 @@
                                         <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem}}" Value="True">
                                             <Setter Property="Background" Value="{StaticResource TabItemIsSelectedBackground}" />
                                         </DataTrigger>
-
+                                    
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter Property="Cursor" Value="Hand" />
                                             <Setter Property="Background" Value="{StaticResource TabItemMouseOverBackground}"/>
                                         </Trigger>
                                     </Style.Triggers>
+                                <Setter Property="Cursor" Value="Hand"/>
                                 </Style>
                             </Grid.Style>
                             <StackPanel VerticalAlignment="Center">
@@ -593,6 +595,7 @@
                                                 </DataTrigger>
 
                                             </Style.Triggers>
+                                        <Setter Property="Cursor" Value="Hand"/>
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
@@ -603,4 +606,5 @@
             </Setter.Value>
         </Setter>
     </Style>
+
 </ResourceDictionary>

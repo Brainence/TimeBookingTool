@@ -324,7 +324,7 @@ namespace TBT.App.Models.Tools
         }
     }
 
-    public class StartButtonContentConverter : IValueConverter
+    public class  StartButtonContentConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -339,5 +339,5 @@ namespace TBT.App.Models.Tools
             return null;
         }
     }
-    
+
 }

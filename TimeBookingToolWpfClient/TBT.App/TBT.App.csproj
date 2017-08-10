@@ -397,9 +397,6 @@
     <Resource Include="Resources\Icons\stopwatch.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Icons\stopwatch2.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="calendar_clock.ico" />
   </ItemGroup>
   <ItemGroup>
