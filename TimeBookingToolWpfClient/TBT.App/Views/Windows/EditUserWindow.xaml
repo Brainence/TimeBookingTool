@@ -18,8 +18,10 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Button Content="r" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 7 7 0" Style="{StaticResource windowsButton}"
-                Click="CloseButton_Click"/>
+        <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 7 7 0" Style="{StaticResource windowsButton}"
+                Click="CloseButton_Click">
+            <Image Source="../../Resources/Icons/close.png" Width="12"></Image>
+        </Button>
         
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Center"

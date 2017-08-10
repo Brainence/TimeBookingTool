@@ -109,7 +109,6 @@ namespace TBT.App.Views.Controls
             _startDate = DateTime.UtcNow;
 
             IsEditing = !IsEditing;
-            editingGrid.Height = IsEditing ? 120 : 45;
 
             timerTextBox.Text = $"{TimeEntry.Duration.Hours:00}:{TimeEntry.Duration.Minutes:00}";
             Comment = TimeEntry.Comment;
@@ -265,7 +264,6 @@ namespace TBT.App.Views.Controls
                 await App.CommunicationService.PutAsJson(clientDuration ? "TimeEntry/ClientDuration" : "TimeEntry/ServerDuration", TimeEntry);
 
                 IsEditing = !IsEditing;
-                editingGrid.Height = IsEditing ? 120 : 45;
 
                 RefreshTimeEntries?.Invoke();
             }
@@ -278,7 +276,6 @@ namespace TBT.App.Views.Controls
         private void CancelEditButton_Click(object sender, RoutedEventArgs e)
         {
             IsEditing = !IsEditing;
-            editingGrid.Height = IsEditing ? 120 : 45;
 
             Comment = string.Empty;
         }
@@ -310,7 +307,6 @@ namespace TBT.App.Views.Controls
             if (e.Key == Key.Escape)
             {
                 IsEditing = false;
-                editingGrid.Height = 45;
             }
         }
     }

@@ -181,8 +181,7 @@ namespace TBT.App.Views.Windows
             get { return _usersLoading; }
             set { SetProperty(ref _usersLoading, value); }
         }
-
-
+        
         public User ReportingUser
         {
             get { return _reportingUser; }
@@ -927,5 +926,6 @@ namespace TBT.App.Views.Windows
         {
             ExpanderNewUser.IsExpanded = false;
         }
+        
     }
 }

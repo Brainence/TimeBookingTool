@@ -71,3 +71,15 @@ TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/Comb
 TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/ComboBoxControl.baml
 TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/App.g.i.cs
 TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/App.g.cs
+TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Controls/DateTimeControl.xaml
+TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Controls/CalendarControl.xaml
+TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Authentication/Authentication.xaml
+TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/DateTimeControl.g.i.cs
+TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/DateTimeControl.g.cs
+TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/DateTimeControl.baml
+TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/CalendarControl.g.i.cs
+TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/CalendarControl.g.cs
+TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/CalendarControl.baml
+TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Authentication/Authentication.g.i.cs
+TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Authentication/Authentication.g.cs
+TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Authentication/Authentication.baml

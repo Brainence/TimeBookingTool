@@ -44,13 +44,13 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0"
-                                Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Margin="30 20 20 0">
+                                Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Margin="20 20 20 0">
                         <TextBlock Text="User" Width="50"
                                    Foreground="#4d4d4d" FontSize="13"
                                    VerticalAlignment="Center"
                                    TextAlignment="Left"/>
                         <ComboBox 
-                                  Width="438" FontSize="13" FontWeight="Bold" Foreground="#c2422b"
+                                  Width="448" FontSize="13" FontWeight="Bold" Foreground="#c2422b"
                                   VerticalAlignment="Center"
                                   Style="{StaticResource ComboBoxFlatStyle}"
                                   ItemsSource="{Binding ElementName=mainWindow, Path=Users}" 
@@ -58,7 +58,7 @@
                     </StackPanel>
 
 
-                    <controls:ReportingControl Grid.Row="1" Margin="30 20 20 20"
+                    <controls:ReportingControl Grid.Row="1" Margin="20 20 20 20"
                                                TimeEntries="{Binding ElementName=mainWindow, Path=TimeEntries, Mode=TwoWay}" 
                                                ItemsLoading="{Binding ElementName=mainWindow, Path=ItemsLoading, Mode=TwoWay}"
                                                From="{Binding ElementName=mainWindow, Path=From, Mode=TwoWay}"
@@ -70,176 +70,177 @@
 
             <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="People" Tag="../Icons/people_white.png">
                 <Grid Background="White">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                    <Grid Margin="20 20 20 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                    <Grid x:Name="newUserGrid" Grid.Row="0" Margin="20 20 20 0" 
+                        <Grid x:Name="newUserGrid" Grid.Row="0"  
                           Visibility="{Binding Path=CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
 
-                        <Expander Header="New User" Height="Auto" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" x:Name="ExpanderNewUser" Expanded="ExpanderNewUser_OnExpanded">
-                            <controls:NewUserControl User="{Binding ElementName=mainWindow, Path=NewUser, Mode=TwoWay}" HorizontalAlignment="Stretch" FontSize="13" FontWeight="Normal" 
+                            <Expander Header="New User" Height="Auto" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" x:Name="ExpanderNewUser" Expanded="ExpanderNewUser_OnExpanded">
+                                <controls:NewUserControl User="{Binding ElementName=mainWindow, Path=NewUser, Mode=TwoWay}" HorizontalAlignment="Stretch" FontSize="13" FontWeight="Normal" 
                                                      Margin="10"/>
-                        </Expander>
-                    </Grid>
+                            </Expander>
+                        </Grid>
 
-                    <Grid Grid.Row="1" Margin="20 10 20 0">
+                        <Grid Grid.Row="1" Margin="0 10 0 0">
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                            <Expander Header="Edit my profile" Height="Auto" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" Width="475" x:Name="ExpanderEditProfile" Expanded="ExpanderEditProfile_OnExpanded">
-                                <Grid HorizontalAlignment="Center" Width="475">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                <Expander Header="Edit my profile" Height="Auto" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" Width="475" x:Name="ExpanderEditProfile" Expanded="ExpanderEditProfile_OnExpanded">
+                                    <Grid HorizontalAlignment="Center" Width="475">
 
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <controls:EditUserControl User="{Binding Path=CurrentUser, Mode=TwoWay}" 
+                                        <controls:EditUserControl User="{Binding Path=CurrentUser, Mode=TwoWay}" 
                                                               Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
                                                               ShowAdmin="False" 
                                                               ShowPassword="False"
                                                               ForSaving="True" Width="Auto" FontSize="13" FontWeight="Normal" Margin="10"/>
 
-                                    <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Old password" HorizontalAlignment="Left" Margin="10 0 0 5"  FontSize="13" FontWeight="Normal"/>
-                                    <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="New password" HorizontalAlignment="Left" Margin="10 0 0 5" FontSize="13" FontWeight="Normal"/>
-                                    <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="Confirm password" HorizontalAlignment="Left" Margin="10 0 0 5" FontSize="13" FontWeight="Normal"/>
+                                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Old password" HorizontalAlignment="Left" Margin="10 0 0 5"  FontSize="13" FontWeight="Normal"/>
+                                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="New password" HorizontalAlignment="Left" Margin="10 0 0 5" FontSize="13" FontWeight="Normal"/>
+                                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="Confirm password" HorizontalAlignment="Left" Margin="10 0 0 5" FontSize="13" FontWeight="Normal"/>
 
 
-                                    <PasswordBox x:Name="oldPassword" Grid.Row="3" Grid.Column="1" Margin="2 0 10 5" Height="20" FontSize="13" FontWeight="Normal"/>
-                                    <PasswordBox x:Name="newPassword" Grid.Row="4" Grid.Column="1" Margin="2 0 10 5" Height="20" FontSize="13" FontWeight="Normal"/>
-                                    <PasswordBox x:Name="confirmPassword" Grid.Row="5" Grid.Column="1" Margin="2 0 10 5" Height="20" FontSize="13" FontWeight="Normal"/>
+                                        <PasswordBox x:Name="oldPassword" Grid.Row="3" Grid.Column="1" Margin="2 0 10 5" Height="20" FontSize="13" FontWeight="Normal"/>
+                                        <PasswordBox x:Name="newPassword" Grid.Row="4" Grid.Column="1" Margin="2 0 10 5" Height="20" FontSize="13" FontWeight="Normal"/>
+                                        <PasswordBox x:Name="confirmPassword" Grid.Row="5" Grid.Column="1" Margin="2 0 10 5" Height="20" FontSize="13" FontWeight="Normal"/>
 
-                                    <Button Grid.Row="6" Grid.Column="1" Click="ChangePassword_ButtonClick" Content="Change" Template="{StaticResource HyperlinkButtonTemplate}"
-                                            HorizontalAlignment="Right" Height="25" Margin="0 5 10 5" FontSize="13" FontWeight="Normal"/>
+                                        <Button Grid.Row="6" Grid.Column="1" Click="ChangePassword_ButtonClick" Content="Change" Template="{StaticResource HyperlinkButtonTemplate}"
+                                            HorizontalAlignment="Right" Height="25" Margin="0 0 10 5" FontSize="13" FontWeight="Normal"/>
 
-                                </Grid>
-                            </Expander>
-                            <Button Click="RefreshUsers_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" Margin="0" VerticalAlignment="Top">
-                                <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="Refresh" />
-                            </Button>
-                        </StackPanel>
-                        
-                    </Grid>
+                                    </Grid>
+                                </Expander>
+                                <Button Click="RefreshUsers_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}" Margin="0" VerticalAlignment="Top">
+                                    <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="Refresh" />
+                                </Button>
+                            </StackPanel>
 
-                    <Grid Grid.Row="2">
-                        <StackPanel Margin="0 10 20 10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                            
-                        </StackPanel>
-                    </Grid>
+                        </Grid>
 
-                    <Grid Grid.Row="3"
-                          Margin="20" 
+                        <Grid Grid.Row="2">
+                            <StackPanel Margin="0 10 0 10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Grid.Row="3"
+                          Margin="0 20" 
                           Height="50"
                           Width="50"
                           Visibility="{Binding ElementName=mainWindow, Path=UsersLoading, Converter={StaticResource BoolToVisibilityConverter}}"
                           HorizontalAlignment="Center" 
                           VerticalAlignment="Center">
 
-                        <controls:SpinnersCogs/>
-                    </Grid>
+                            <controls:SpinnersCogs/>
+                        </Grid>
 
-                    <Grid Grid.Row="3"
+                        <Grid Grid.Row="3"
                           Visibility="{Binding ElementName=mainWindow, Path=UsersLoading, Converter={StaticResource BoolToNotVisibilityConverter}}">
-                        <ScrollViewer 
-                              Margin="20 5 20 20" 
+                            <ScrollViewer 
+                              Margin="0 5 0 20" 
                               MinHeight="100"
                               VerticalScrollBarVisibility="Auto"
                               VerticalAlignment="Top" 
                               HorizontalAlignment="Stretch">
 
-                            <ItemsControl ItemsSource="{Binding ElementName=mainWindow, Path=Users, Mode=TwoWay}" Grid.IsSharedSizeScope="True">
+                                <ItemsControl ItemsSource="{Binding ElementName=mainWindow, Path=Users, Mode=TwoWay}" Grid.IsSharedSizeScope="True">
 
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid HorizontalAlignment="Stretch"
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid HorizontalAlignment="Stretch"
                                                       Visibility="{Binding ElementName=mainWindow, Path=IsEditing, Converter={StaticResource BoolToNotVisibilityConverter}}">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition/>
-                                            </Grid.RowDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
 
-                                            <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="6"/>
+                                                <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="6"/>
 
-                                            <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="0 5">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition SharedSizeGroup="Admin" Width="20"/>
-                                                    <ColumnDefinition SharedSizeGroup="FullName" Width="130"/>
-                                                    <ColumnDefinition SharedSizeGroup="Username" Width="180"/>
-                                                    <ColumnDefinition SharedSizeGroup="IsAdmin" Width="30"/>
-                                                    <ColumnDefinition SharedSizeGroup="Project" Width="70"/>
-                                                    <ColumnDefinition SharedSizeGroup="Remove" Width="30"/>
-                                                    <ColumnDefinition SharedSizeGroup="Edit" Width="25"/>
-                                                </Grid.ColumnDefinitions>
+                                                <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="0 5">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition SharedSizeGroup="Admin" Width="20"/>
+                                                        <ColumnDefinition SharedSizeGroup="FullName" Width="155"/>
+                                                        <ColumnDefinition SharedSizeGroup="Username" Width="215"/>
+                                                        <ColumnDefinition SharedSizeGroup="Project" Width="40"/>
+                                                        <ColumnDefinition SharedSizeGroup="Remove" Width="30"/>
+                                                        <ColumnDefinition SharedSizeGroup="Edit" Width="25"/>
+                                                    </Grid.ColumnDefinitions>
 
-                                                <Image Height="16" Grid.Column="0" Margin="0 5" Source="../../Resources/Icons/administrator.png" ToolTip="Administrator">
-                                                    <Image.Style>
-                                                        <Style TargetType="Image">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsAdmin}" Value="True">
-                                                                    <Setter Property="Visibility" Value="Visible"></Setter>
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding IsAdmin}" Value="False">
-                                                                    <Setter Property="Visibility" Value="Hidden"></Setter>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Image.Style>
-                                                </Image>
+                                                    <Image Height="16" Grid.Column="0" Margin="0 5" Source="../../Resources/Icons/administrator.png" ToolTip="Administrator">
+                                                        <Image.Style>
+                                                            <Style TargetType="Image">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsAdmin}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsAdmin}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Hidden"></Setter>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Image.Style>
+                                                    </Image>
 
-                                                <TextBlock Grid.Column="1" Margin="5 0" Text="{Binding FullName}" VerticalAlignment="Center">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsAdmin}" Value="True">
-                                                                    <Setter Property="Foreground" Value="#c2422b"></Setter>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
+                                                    <TextBlock Grid.Column="1" Margin="5 0" Text="{Binding FullName}" VerticalAlignment="Center">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsAdmin}" Value="True">
+                                                                        <Setter Property="Foreground" Value="#c2422b"></Setter>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
 
-                                                <TextBlock Grid.Column="2" Margin="5 0" Text="{Binding Username}" VerticalAlignment="Center">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsAdmin}" Value="True">
-                                                                    <Setter Property="Foreground" Value="#c2422b"></Setter>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
-                                                <controls:MultiSelectionComboBox Grid.Column="4" Margin="0 3 25 3" Height="20"
+                                                    <TextBlock Grid.Column="2" Margin="5 0" Text="{Binding Username}" VerticalAlignment="Center">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsAdmin}" Value="True">
+                                                                        <Setter Property="Foreground" Value="#c2422b"></Setter>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                    <controls:MultiSelectionComboBox Grid.Column="3" Margin="0 3 10 3" Height="20"
                                                                                  ItemsSourceMultiple="{Binding Projects}" 
                                                                                  Width="Auto" Style="{StaticResource ComboBoxFlatStyle}"
                                                                                  Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                                                                                  User="{Binding}"/>
 
-                                                <Image Height="20" Grid.Column="5" Margin="5" Source="../../Resources/Icons/editing.png" Width="20"
+                                                    <Image Height="20" Grid.Column="4" Margin="5" Source="../../Resources/Icons/editing.png" Width="20"
                                                        Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                                                        MouseUp="EditUser_ImageClick" Cursor="Hand"/>
 
-                                                <Image Height="20" Grid.Column="6" Margin="0 5 5 5" Source="../../Resources/Icons/bin.png" Width="20"
+                                                    <Image Height="20" Grid.Column="5" Margin="0 5 5 5" Source="../../Resources/Icons/bin.png" Width="20"
                                                             Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                                                             MouseUp="RemoveUser_ImageClick" Cursor="Hand"/>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -313,9 +314,9 @@
 
                                                 <TextBlock Grid.Column="0" 
                                                            Width="100"
-                                                           Margin="0 5 5 5" 
+                                                           Margin="0 10 5 5" 
                                                            Text="{Binding Path=Name}"
-                                                           Foreground="#c2422b" VerticalAlignment="Center"/>
+                                                           Foreground="#c2422b"/>
 
                                                 <Expander Grid.Column="1" 
                                                           Width="310"
@@ -328,7 +329,7 @@
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
                                                                 <StackPanel Background="{StaticResource ItemsBackground}">
-                                                                    <TextBlock Text="{Binding Name}" Margin="20 5 20 5" VerticalAlignment="Center"/>
+                                                                    <TextBlock Text="{Binding Name}" Margin="25 5 20 5" VerticalAlignment="Center"/>
                                                                     <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="6"/>
                                                                 </StackPanel>
                                                             </DataTemplate>
@@ -376,7 +377,7 @@
                                     ItemsSource="{Binding ElementName=mainWindow, Path=CustomersComboBox}"
                                     Text="[Select customer]"
                                     Height="20"
-                                    Margin="5 5 0 5"/>
+                                    Margin="5 5 0 5" Foreground="#c2422b" FontWeight="Bold" />
 
                             <Button Click="CreateNewProjectButton_Click" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Width="Auto" 
                                 HorizontalAlignment="Right" VerticalAlignment="Center" Height="20">
@@ -444,17 +445,17 @@
 
                                                 <TextBlock Grid.Column="0" 
                                                            Width="100"
-                                                           Margin="0 5 5 5" 
+                                                           Margin="0 10 5 5" 
                                                            Text="{Binding Path=Customer.Name}"
                                                            Foreground="#4d4d4d"
-                                                           TextAlignment="Left" VerticalAlignment="Center"/>
+                                                           TextAlignment="Left"/>
 
                                                 <TextBlock Grid.Column="1" 
                                                            Width="130"
-                                                           Margin="5" 
+                                                           Margin="5 10 5 5" 
                                                            Text="{Binding Path=Name}"
                                                            TextAlignment="Left"
-                                                           Foreground="#c2422b" VerticalAlignment="Center"/>
+                                                           Foreground="#c2422b"/>
 
                                                 <Expander Grid.Column="2" 
                                                           Width="150"
@@ -465,7 +466,7 @@
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
                                                                 <StackPanel Background="{StaticResource ItemsBackground}">
-                                                                    <TextBlock Text="{Binding Name}" Margin="20 5 20 5" VerticalAlignment="Center"/>
+                                                                    <TextBlock Text="{Binding Name}" Margin="25 5 20 5" VerticalAlignment="Center"/>
                                                                     <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="6"/>
                                                                 </StackPanel>
                                                             </DataTemplate>
@@ -514,9 +515,9 @@
                                       ItemsSource="{Binding ElementName=mainWindow, Path=ProjectsComboBox}"
                                       Text="[Select project]"
                                       Height="20"
-                                      Margin="5"/>
+                                      Margin="5" Foreground="#c2422b" FontWeight="Bold" />
 
-                            
+
                             <Button Click="CreateNewTaskButton_Click" Template="{StaticResource HyperlinkButtonTemplate}" Margin="0 5 5 5" VerticalAlignment="Center">
                                 <Button.Style>
                                     <Style TargetType="Button">
@@ -530,7 +531,7 @@
                                 <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="Create task" />
                             </Button>
                         </StackPanel>
-                        
+
                         <Button Grid.Column="1" Command="{Binding ElementName=mainWindow, Path=GetActivitiesCommand}" Template="{StaticResource HyperlinkButtonTemplate}" HorizontalAlignment="Right">
                             <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="Refresh" />
                         </Button>
@@ -641,7 +642,7 @@
         </TabControl>
 
         <Grid Grid.Row="1">
-            <StackPanel HorizontalAlignment="Right" Margin="10 5 0 10" Orientation="Horizontal">
+            <StackPanel HorizontalAlignment="Right" Margin="10 5 3 10" Orientation="Horizontal">
                 <Image Source="../../Resources/Icons/refresh.png" MouseUp="RefreshAll_Click" Height="18" Margin="0 5 5 5" Cursor="Hand" ToolTip="Refresh"/>
                 <Image Source="../../Resources/Icons/exit.png" MouseUp="SignOutButton_Click" Height="18" Margin="5 5 0 5" Cursor="Hand" ToolTip="Sign Out"/>
             </StackPanel>

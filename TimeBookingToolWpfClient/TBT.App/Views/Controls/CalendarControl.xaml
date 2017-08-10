@@ -47,8 +47,20 @@
                         <Button.Template>
                             <ControlTemplate>
                                 <Grid>
-                                    <Path Fill="{StaticResource ChangeWeekButtonForeground}" Data="M 0 8 L 16 8 L 8 0 Z" 
+                                    <Path Data="M 0 8 L 16 8 L 8 0 Z" 
                                           VerticalAlignment="Center" Margin="5">
+                                        <Path.Style>
+                                            <Style TargetType="Path">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Grid,AncestorLevel=1}, Path=IsMouseOver}" Value="False">
+                                                        <Setter Property="Fill" Value="{StaticResource ChangeWeekButtonForeground}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Grid,AncestorLevel=1}, Path=IsMouseOver}" Value="True">
+                                                        <Setter Property="Fill" Value="#ffffff"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Path.Style>
                                         <Path.LayoutTransform>
                                             <RotateTransform Angle="-90"/>
                                         </Path.LayoutTransform>
@@ -132,8 +144,20 @@
 
                             <ControlTemplate>
                                 <Grid>
-                                    <Path Fill="{StaticResource ChangeWeekButtonForeground}" Data="M 0 8 L 16 8 L 8 0 Z" 
+                                    <Path Data="M 0 8 L 16 8 L 8 0 Z" 
                                                   VerticalAlignment="Center" Margin="5">
+                                        <Path.Style>
+                                            <Style TargetType="Path">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Grid,AncestorLevel=1}, Path=IsMouseOver}" Value="False">
+                                                        <Setter Property="Fill" Value="{StaticResource ChangeWeekButtonForeground}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Grid,AncestorLevel=1}, Path=IsMouseOver}" Value="True">
+                                                        <Setter Property="Fill" Value="#ffffff"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Path.Style>
                                         <Path.LayoutTransform>
                                             <RotateTransform Angle="90"/>
                                         </Path.LayoutTransform>
@@ -187,7 +211,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="1">
-                                <local:TimeEntryControl TimeEntry="{Binding}" RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries" Margin="0 0 0 15"/>
+                                <local:TimeEntryControl TimeEntry="{Binding}" RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries" Margin="0 0 0 10"/>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

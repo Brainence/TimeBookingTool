@@ -29,7 +29,7 @@
             <tools:StartButtonContentConverter x:Key="StartButtonContentConverter"/>
 
             <SolidColorBrush x:Key="CalendarItemBackground" Color="#c2422b"/>
-            <SolidColorBrush x:Key="CalendarItemMouseOverBrush" Color="#00628c"/>
+            <SolidColorBrush x:Key="CalendarItemMouseOverBrush" Color="#f77f50"/>
             <LinearGradientBrush x:Key="CalendarItemIsSelectedBrush">
                 <GradientStop Color="#f77f50" Offset="0" />
                 <GradientStop Color="#d45925" Offset="1" />
@@ -41,7 +41,7 @@
             <SolidColorBrush x:Key="CalendarItemForeground" Color="#ffffff"/>
 
             <SolidColorBrush x:Key="TimeEntryIsEditingBackground" Color="#f2f2f2"/>
-            <SolidColorBrush x:Key="TimeEntryIsEditingForeground" Color="#404040"/>
+            <SolidColorBrush x:Key="TimeEntryIsEditingForeground" Color="#c2422b"/>
 
             <SolidColorBrush x:Key="TimeEntryIsRunningBackground" Color="#f77f50"/>
             <SolidColorBrush x:Key="TimeEntryNotRunningBackground" Color="#c2422b"/>
@@ -61,7 +61,7 @@
 
 
             <SolidColorBrush x:Key="ChangeWeekButtonBackground" Color="Transparent"/>
-            <SolidColorBrush x:Key="ChangeWeekButtonMouseOverBackground" Color="#00628c"/>
+            <SolidColorBrush x:Key="ChangeWeekButtonMouseOverBackground" Color="#c2422b"/>
             <SolidColorBrush x:Key="ChangeWeekButtonForeground" Color="#c2422b"/>
 
         </ResourceDictionary>

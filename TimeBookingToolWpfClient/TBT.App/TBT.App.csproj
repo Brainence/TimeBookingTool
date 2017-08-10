@@ -410,7 +410,6 @@
     <Resource Include="Resources\Icons\Clock.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Icons\calendar_white.png" />
     <Resource Include="Resources\Icons\customers_white.png" />
     <Resource Include="Resources\Icons\people_white.png" />
     <Resource Include="Resources\Icons\projects_white.png" />
@@ -439,6 +438,12 @@
     <Resource Include="Resources\Icons\current_week.png" />
     <Resource Include="Resources\Icons\selected_week.png" />
     <Resource Include="Resources\Icons\today.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\calendar_white.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\XamlSpy.3.0.5\build\XamlSpy.targets" Condition="Exists('..\packages\XamlSpy.3.0.5\build\XamlSpy.targets')" />
