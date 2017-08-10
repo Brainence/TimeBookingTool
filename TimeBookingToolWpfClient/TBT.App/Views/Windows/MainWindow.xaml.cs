@@ -632,7 +632,7 @@ namespace TBT.App.Views.Windows
             try
             {
                 var name = NewProjectTextBox.Text;
-
+                //TODO: Move validation to backend
                 var project = JsonConvert.DeserializeObject<Project>(
                     await App.CommunicationService.GetAsJson($"Project/GetByName/{Uri.EscapeUriString(name)}"));
 
@@ -641,7 +641,7 @@ namespace TBT.App.Views.Windows
                     MessageBox.Show($"Project with name '{name}' already exists.");
                     return;
                 }
-
+                //TODO: Create project without customer
                 var customer = createProjectComboBox.SelectedItem as Customer;
                 if (customer == null)
                 {
