@@ -1,85 +1,288 @@
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Windows/MainWindow.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Windows/EditUserWindow.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Windows/EditProjectWindow.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Windows/EditCustomerWindow.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Windows/EditActivityWindow.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Controls/TimeEntryControl.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Controls/TextControl.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Controls/ReportingControl.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Controls/NewUserControl.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Controls/EditUserControl.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Controls/EditTimeEntryControl.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Controls/CheckBoxControl.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Resources/Styles/Styles.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/MainWindow.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/MainWindow.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/MainWindow.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/EditUserWindow.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/EditUserWindow.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/EditUserWindow.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/EditProjectWindow.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/EditProjectWindow.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/EditProjectWindow.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/EditCustomerWindow.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/EditCustomerWindow.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/EditCustomerWindow.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/EditActivityWindow.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/EditActivityWindow.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Windows/EditActivityWindow.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/TimeEntryControl.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/TimeEntryControl.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/TimeEntryControl.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/TextControl.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/TextControl.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/TextControl.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/ReportingControl.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/ReportingControl.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/ReportingControl.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/NewUserControl.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/NewUserControl.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/NewUserControl.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/EditUserControl.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/EditUserControl.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/EditUserControl.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/EditTimeEntryControl.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/EditTimeEntryControl.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/EditTimeEntryControl.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/CheckBoxControl.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/CheckBoxControl.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/CheckBoxControl.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Resources/Styles/Styles.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/TimeBookingTool_Content.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/TimeBookingTool.pdb
-TimeBookingToolWpfClient/TBT.App/obj/Debug/TimeBookingTool.g.resources
-TimeBookingToolWpfClient/TBT.App/obj/Debug/TimeBookingTool.exe.manifest
-TimeBookingToolWpfClient/TBT.App/obj/Debug/TimeBookingTool.exe
-TimeBookingToolWpfClient/TBT.App/obj/Debug/TimeBookingTool.application
-TimeBookingToolWpfClient/TBT.App/bin/Debug/app.publish/TimeBookingTool.exe
-TimeBookingToolWpfClient/TBT.App/bin/Debug/TimeBookingTool.vshost.exe.manifest
-TimeBookingToolWpfClient/TBT.App/bin/Debug/TimeBookingTool.vshost.exe.config
-TimeBookingToolWpfClient/TBT.App/bin/Debug/TimeBookingTool.vshost.application
-TimeBookingToolWpfClient/TBT.App/bin/Debug/TimeBookingTool.pdb
-TimeBookingToolWpfClient/TBT.App/bin/Debug/TimeBookingTool.exe.manifest
-TimeBookingToolWpfClient/TBT.App/bin/Debug/TimeBookingTool.exe.config
-TimeBookingToolWpfClient/TBT.App/bin/Debug/TimeBookingTool.exe
-TimeBookingToolWpfClient/TBT.App/bin/Debug/TimeBookingTool.application
-TimeBookingToolWpfClient/.vs/TimeBookingToolWpfClient/v14/.suo
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Controls/ComboBoxControl.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/App.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/ComboBoxControl.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/ComboBoxControl.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/ComboBoxControl.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/App.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/App.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Controls/DateTimeControl.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Controls/CalendarControl.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/xamlspy/Views/Authentication/Authentication.xaml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/DateTimeControl.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/DateTimeControl.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/DateTimeControl.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/CalendarControl.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/CalendarControl.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Controls/CalendarControl.baml
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Authentication/Authentication.g.i.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Authentication/Authentication.g.cs
-TimeBookingToolWpfClient/TBT.App/obj/Debug/obj/Debug/xamlspy/Views/Authentication/Authentication.baml
+## Ignore Visual Studio temporary files, build results, and
+## files generated by popular Visual Studio add-ons.
+##
+## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio 2015 cache/options directory
+.vs/
+# Uncomment if you have tasks that create the project's static files in wwwroot
+#wwwroot/
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# NUNIT
+*.VisualState.xml
+TestResult.xml
+
+# Build Results of an ATL Project
+[Dd]ebugPS/
+[Rr]eleasePS/
+dlldata.c
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+
+*_i.c
+*_p.c
+*_i.h
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Chutzpah Test files
+_Chutzpah*
+
+# Visual C++ cache files
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.VC.opendb
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# TFS 2012 Local Workspace
+$tf/
+
+# Guidance Automation Toolkit
+*.gpState
+
+# ReSharper is a .NET coding add-in
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# JustCode is a .NET coding add-in
+.JustCode
+
+# TeamCity is a build add-in
+_TeamCity*
+
+# DotCover is a Code Coverage Tool
+*.dotCover
+
+# Visual Studio code coverage results
+*.coverage
+*.coveragexml
+
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+# MightyMoose
+*.mm.*
+AutoTest.Net/
+
+# Web workbench (sass)
+.sass-cache/
+
+# Installshield output folder
+[Ee]xpress/
+
+# DocProject is a documentation generator add-in
+DocProject/buildhelp/
+DocProject/Help/*.HxT
+DocProject/Help/*.HxC
+DocProject/Help/*.hhc
+DocProject/Help/*.hhk
+DocProject/Help/*.hhp
+DocProject/Help/Html2
+DocProject/Help/html
+
+# Click-Once directory
+publish/
+
+# Publish Web Output
+*.[Pp]ublish.xml
+*.azurePubxml
+# TODO: Comment the next line if you want to checkin your web deploy settings
+# but database connection strings (with potential passwords) will be unencrypted
+*.pubxml
+*.publishproj
+
+# Microsoft Azure Web App publish settings. Comment the next line if you want to
+# checkin your Azure Web App publish settings, but sensitive information contained
+# in these scripts will be unencrypted
+PublishScripts/
+
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+# except build/, which is used as an MSBuild target.
+!**/packages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/packages/repositories.config
+# NuGet v3's project.json files produces more ignorable files
+*.nuget.props
+*.nuget.targets
+
+# Microsoft Azure Build Output
+csx/
+*.build.csdef
+
+# Microsoft Azure Emulator
+ecf/
+rcf/
+
+# Windows Store app package directories and files
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+
+# Visual Studio cache files
+# files ending in .cache can be ignored
+*.[Cc]ache
+# but keep track of directories ending in .cache
+!*.[Cc]ache/
+
+# Others
+ClientBin/
+~$*
+*~
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pfx
+*.publishsettings
+orleans.codegen.cs
+
+# Since there are multiple workflows, uncomment next line to ignore bower_components
+# (https://github.com/github/gitignore/pull/1529#issuecomment-104372622)
+#bower_components/
+
+# RIA/Silverlight projects
+Generated_Code/
+
+# Backup & report files from converting an old project file
+# to a newer Visual Studio version. Backup files are not needed,
+# because we have git ;-)
+_UpgradeReport_Files/
+Backup*/
+UpgradeLog*.XML
+UpgradeLog*.htm
+
+# SQL Server files
+*.mdf
+*.ldf
+*.ndf
+
+# Business Intelligence projects
+*.rdl.data
+*.bim.layout
+*.bim_*.settings
+
+# Microsoft Fakes
+FakesAssemblies/
+
+# GhostDoc plugin setting file
+*.GhostDoc.xml
+
+# Node.js Tools for Visual Studio
+.ntvs_analysis.dat
+node_modules/
+
+# Typescript v1 declaration files
+typings/
+
+# Visual Studio 6 build log
+*.plg
+
+# Visual Studio 6 workspace options file
+*.opt
+
+# Visual Studio 6 auto-generated workspace file (contains which files were open etc.)
+*.vbw
+
+# Visual Studio LightSwitch build output
+**/*.HTMLClient/GeneratedArtifacts
+**/*.DesktopClient/GeneratedArtifacts
+**/*.DesktopClient/ModelManifest.xml
+**/*.Server/GeneratedArtifacts
+**/*.Server/ModelManifest.xml
+_Pvt_Extensions
+
+# Paket dependency manager
+.paket/paket.exe
+paket-files/
+
+# FAKE - F# Make
+.fake/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# CodeRush
+.cr/
+
+# Python Tools for Visual Studio (PTVS)
+__pycache__/
+*.pyc
+
+# Cake - Uncomment if you are using it
+# tools/**
+# !tools/packages.config
+
+# Telerik's JustMock configuration file
+*.jmconfig
+
+# BizTalk build output
+*.btp.cs
+*.btm.cs
+*.odx.cs
+*.xsd.cs

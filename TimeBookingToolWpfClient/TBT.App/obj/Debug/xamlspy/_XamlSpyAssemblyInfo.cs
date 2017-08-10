@@ -1,1 +1,0 @@
-[assembly: FirstFloor.XamlSpy.PoweredByXamlSpy]
