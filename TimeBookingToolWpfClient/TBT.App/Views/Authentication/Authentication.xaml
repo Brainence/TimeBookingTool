@@ -140,7 +140,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Reset password" Margin="2 5 2 10" FontWeight="Bold" FontFamily="Sans-Serif Fonts"/>
+                <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Reset password" Margin="2 5 2 10" FontWeight="Bold"/>
 
                 <TextBlock Grid.Row="1" Text="Token" HorizontalAlignment="Right" Margin="2"/>
                 <TextBlock Grid.Row="2" Text="New password" HorizontalAlignment="Right" Margin="2"/>

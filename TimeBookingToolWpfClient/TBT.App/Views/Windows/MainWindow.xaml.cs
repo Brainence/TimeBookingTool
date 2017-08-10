@@ -917,5 +917,15 @@ namespace TBT.App.Views.Windows
                 customer = JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.PutAsJson("Customer", customer));
             }
         }
+
+        private void ExpanderNewUser_OnExpanded(object sender, RoutedEventArgs e)
+        {
+            ExpanderEditProfile.IsExpanded = false;
+        }
+
+        private void ExpanderEditProfile_OnExpanded(object sender, RoutedEventArgs e)
+        {
+            ExpanderNewUser.IsExpanded = false;
+        }
     }
 }

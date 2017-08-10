@@ -9,10 +9,19 @@
              KeyDown="this_KeyDown"
              mc:Ignorable="d" >
 
-    <Grid Height="65">
-        <Grid Visibility="{Binding ElementName=this, Path=IsEditing, Converter={StaticResource BoolToNotVisibilityConverter}}">
+    <Grid MinHeight="75">
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="true">
+                        <Setter Property="Background" Value="#fff4f4"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+        <Grid Visibility="{Binding ElementName=this, Path=IsEditing, Converter={StaticResource BoolToNotVisibilityConverter}}" Margin="5">
             <StackPanel Orientation="Horizontal">
-                <Image Source="../../Resources/Icons/Clock.png" Width="65" Height="65" Margin="0 0 10 0"/>
+                <Image Source="../../Resources/Icons/Clock.png" Width="65" Height="65" Margin="0 0 10 0" VerticalAlignment="Top"/>
 
                 <StackPanel>
 
@@ -118,7 +127,6 @@
                     </StackPanel>
                     <TextBlock x:Name="timerTextBlock"
                            Margin="0 0 5 0"
-                           FontFamily="Corsiva" 
                            FontSize="20" 
                            Foreground="{StaticResource TimeEntryForeground}"
                            FontWeight="Bold" 
@@ -128,18 +136,18 @@
                                FontSize="12" 
                                FontWeight="Bold" 
                                VerticalAlignment="Center" 
-                               Foreground="{StaticResource TimeEntryForeground}"/>
+                               Foreground="{StaticResource TimeEntryForeground}" Width="370" TextTrimming="WordEllipsis"/>
 
                     <local:SpinnersApple Margin="10 0 0 0" VerticalAlignment="Center" Visibility="{Binding IsActive, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
 
-        <Grid x:Name="editingGrid" Visibility="{Binding ElementName=this, Path=IsEditing, Converter={StaticResource BoolToVisibilityConverter}}" Height="65">
+        <Grid x:Name="editingGrid" Visibility="{Binding ElementName=this, Path=IsEditing, Converter={StaticResource BoolToVisibilityConverter}}" Height="65" Margin="5">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Top">
 
                 <TextBox Text="{Binding ElementName=this, Path=Comment, Mode=TwoWay}" 
-                         Width="330" Height="65"
+                         Width="320" Height="65"
                          TextWrapping="Wrap" AcceptsReturn="True"
                          HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
 
@@ -155,7 +163,6 @@
                              PreviewTextInput="timerTextBox_PreviewTextInput"
                              Margin="10 0 0 2"
                              Grid.Row="0"
-                             FontFamily="Corsiva" 
                              FontSize="20" 
                              Height="30"
                              Width="115"

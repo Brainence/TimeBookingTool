@@ -29,8 +29,7 @@
         <TextBlock 
             Foreground="{Binding ElementName=This, Path=Foreground, Mode=TwoWay}" 
             FontSize="32" 
-            FontWeight="Bold" 
-            FontFamily="Corsiva" 
+            FontWeight="Bold"  
             TextAlignment="Center" 
             VerticalAlignment="Center"
             Text="{Binding ElementName=This, Path=DateTime.Day, StringFormat=\{0:00\}}"/>
@@ -41,7 +40,7 @@
 
             <TextBlock 
                 Foreground="#c2422b" Padding="5"
-                FontFamily="Corsiva" TextAlignment="Center">
+                TextAlignment="Center">
 
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">

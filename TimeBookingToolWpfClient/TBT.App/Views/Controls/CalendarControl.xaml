@@ -187,7 +187,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="1">
-                                <local:TimeEntryControl TimeEntry="{Binding}" RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries" Margin="0 0 0 20"/>
+                                <local:TimeEntryControl TimeEntry="{Binding}" RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries" Margin="0 0 0 15"/>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

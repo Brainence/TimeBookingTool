@@ -396,7 +396,6 @@ namespace TBT.App.Views.Controls
                     To = DateTime.MaxValue;
                     break;
                 default:
-                    datePickerRadioButton.IsChecked = true;
                     break;
             }
             if (GetTimeEntriesCommand != null && User != null)
@@ -406,6 +405,12 @@ namespace TBT.App.Views.Controls
         private void comboRadioButton_Checked(object sender, RoutedEventArgs e)
         {
             DateComboBox_SelectionChanged(DateComboBox, null);
+        }
+
+        private void DatePicker_OnSelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (GetTimeEntriesCommand != null && User != null)
+                GetTimeEntriesCommand.Execute(User.Id);
         }
     }
 }

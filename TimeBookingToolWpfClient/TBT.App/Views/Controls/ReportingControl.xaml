@@ -14,21 +14,24 @@
 
 
         <Grid Grid.Row="0" HorizontalAlignment="Left">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="472"/>
+                <ColumnDefinition Width="245"/>
+                <ColumnDefinition Width="143"/>
+                <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
 
-            <RadioButton x:Name="comboRadioButton" GroupName="dateRadioButtons" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Checked="comboRadioButton_Checked"/>
-            <RadioButton x:Name="datePickerRadioButton" GroupName="dateRadioButtons" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" IsChecked="True"/>
+            <StackPanel Orientation="Horizontal" Grid.Column="0"  Margin="0 0 0 0">
+                <DatePicker SelectedDate="{Binding From, Mode=TwoWay}" 
+                            VerticalAlignment="Center" Foreground="#c2422b" FontWeight="Bold" FontSize="13" Width="110" SelectedDateChanged="DatePicker_OnSelectedDateChanged"/>
 
-            <ComboBox x:Name="DateComboBox" Grid.Row="0" Grid.Column="1" Style="{StaticResource ComboBoxFlatStyle}" Margin="10 5 0 5" SelectionChanged="DateComboBox_SelectionChanged" 
-                      IsEnabled="{Binding ElementName=comboRadioButton, Path=IsChecked}" SelectedIndex="0" Foreground="#c2422b" FontWeight="Bold" FontSize="13" >
+                <TextBlock Text="→" Margin="5 0" TextAlignment="Center" VerticalAlignment="Center"/>
+
+                <DatePicker SelectedDate="{Binding To, Mode=TwoWay}"
+                                    VerticalAlignment="Center" Foreground="#c2422b" FontWeight="Bold" FontSize="13"  Width="110" SelectedDateChanged="DatePicker_OnSelectedDateChanged"/>
+            </StackPanel>
+
+            <ComboBox x:Name="DateComboBox" Grid.Column="1" Style="{StaticResource ComboBoxFlatStyle}" Margin="20 0 0 0" SelectionChanged="DateComboBox_SelectionChanged" 
+                       SelectedIndex="0" Foreground="#c2422b" FontWeight="Bold" FontSize="13" Height="25">
                 <ComboBoxItem Content="This week"/>
                 <ComboBoxItem Content="Last week"/>
                 <ComboBoxItem Content="This month"/>
@@ -37,18 +40,9 @@
                 <ComboBoxItem Content="Last year"/>
                 <ComboBoxItem Content="All time"/>
             </ComboBox>
-
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=datePickerRadioButton, Path=IsChecked}" Margin="10 5 10 10">
-                <DatePicker SelectedDate="{Binding From, Mode=TwoWay}" 
-                            VerticalAlignment="Center"  Foreground="#c2422b" FontWeight="Bold" FontSize="13" Width="100"/>
-
-                <TextBlock Text="→" Margin="10 0 10 0" TextAlignment="Center" VerticalAlignment="Center"/>
-
-                <DatePicker SelectedDate="{Binding To, Mode=TwoWay}"
-                                    VerticalAlignment="Center" Foreground="#c2422b" FontWeight="Bold" FontSize="13"  Width="100"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="0" Orientation="Horizontal" VerticalAlignment="Bottom">
+            
+            
+            <StackPanel Grid.Column="2" HorizontalAlignment="Right" Margin="0 0 0 0" Orientation="Horizontal" VerticalAlignment="Center">
                 <Button Height="20" Margin="0 0 0 0"
                         Click="CompanyReportButton_Click"
                         Visibility="{Binding IsAdmin, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -56,13 +50,13 @@
                     <Image Source="../../Resources/Icons/company_report.png" Height="18" ToolTip="Company Report" />
                 </Button>
 
-                <Button Height="20" Margin="10 0 0 0"
+                <Button Height="20" Margin="8 0 0 0"
                         Click="UserReportButton_Click"
                         Template="{StaticResource HyperlinkButtonTemplate}">
                     <Image Source="../../Resources/Icons/user_report.png" Height="18" ToolTip="User Report" />
                 </Button>
 
-                <Button Command="{Binding GetTimeEntriesCommand}" CommandParameter="{Binding User.Id}" Template="{StaticResource HyperlinkButtonTemplate}" Margin="10 0 0 0">
+                <Button Command="{Binding GetTimeEntriesCommand}" CommandParameter="{Binding User.Id}" Template="{StaticResource HyperlinkButtonTemplate}" Margin="8 0 0 0">
                     <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="Refresh" />
                 </Button>
             </StackPanel>
