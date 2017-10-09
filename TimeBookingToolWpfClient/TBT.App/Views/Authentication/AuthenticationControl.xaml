@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="TBT.App.Views.Authentication.AuthenticationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TBT.App.Views.Authentication"
+             mc:Ignorable="d" 
+             xmlns:controls="clr-namespace:TBT.App.Views.Controls"
+             Height="200" 
+             Width="350" 
+             BorderThickness="1" 
+             BorderBrush="Black">
+    <Grid>
+        <Grid x:Name="login" 
+              Visibility="{Binding ElementName=this, Path=LoginVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+              HorizontalAlignment="Center" 
+              VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Username:" Height="20" Margin="4" HorizontalAlignment="Right"/>
+                    <TextBlock Text="Password:" Height="20" Margin="4" HorizontalAlignment="Right"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Width="220">
+                    <TextBox x:Name="TextBox" Text="{Binding ElementName=this, Path=Username, Mode=TwoWay}"  
+                             Height="20" HorizontalAlignment="Stretch"
+                             Margin="4"/>
+                    <PasswordBox x:Name="passwordBox" Height="20" PasswordChar="*" 
+                                 HorizontalAlignment="Stretch"
+                                 Margin="4"/>
+                    <Grid Height="30">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="signInButton" Content="Sign in" Margin="4" 
+                                Click="{Binding Path=LoginClick}" Template="{StaticResource HyperlinkButtonTemplate}"
+                                HorizontalAlignment="Left"/>
+
+                        <controls:SpinnersApple HorizontalAlignment="Right"
+                                                Margin="4" 
+                                                Visibility="{Binding ElementName=signInButton, Path=IsEnabled, Converter={StaticResource BoolToNotVisibilityConverter}}"
+                                                />
+
+                        <Button x:Name="forgotPasswordButton" Content="Forgot your password?" Margin="4" Grid.Column="1" 
+                                Click="{Binding Path=ForgotPasswordClick}" Template="{StaticResource HyperlinkButtonTemplate}"
+                                HorizontalAlignment="Right"/>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+
+
+        </Grid>
+
+    </Grid>
+</UserControl>

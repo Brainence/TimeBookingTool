@@ -14,6 +14,7 @@ using System.Windows.Threading;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Commands;
 using TBT.App.ViewModels;
+using TBT.App.ViewModels.Authentication;
 using TBT.App.Views.Controls;
 
 namespace TBT.App.Views.Windows
@@ -60,6 +61,19 @@ namespace TBT.App.Views.Windows
 
             InitializeComponent();
         }
+
+        //public MainWindow(bool authorized)
+        //{
+        //    if(!authorized)
+        //    {
+        //        var dataContext = new AuthenticationWindowViewModel();
+        //        var authWindow = new Authentication.Authentication() { DataContext = dataContext};
+        //        Hide();
+        //        authWindow.ShowDialog();
+        //        Show();
+        //        Focus();
+        //    }
+        //}
 
         public void InitNotifyIcon()
         {

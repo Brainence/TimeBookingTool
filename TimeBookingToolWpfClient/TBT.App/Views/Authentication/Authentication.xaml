@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:System.Security.Authentication;assembly=System"
+        xmlns:asd="clr-namespace:TBT.App.Views.Authentication"
         xmlns:controls="clr-namespace:TBT.App.Views.Controls"
         Height="200" 
         Width="350" 
@@ -14,156 +15,14 @@
         WindowStyle="None" 
         Title="Time Booking Tool Login Window" 
         ResizeMode="NoResize" 
-        Closing="this_Closing"
         KeyDown="authentication_KeyDown">
 
     <Grid>
-        <Button Content="r" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="7" Style="{StaticResource windowsButton}"
+        <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="7" Style="{StaticResource windowsButton}"
                 Click="CloseButton_Click"/>
-
-        <Grid x:Name="login" 
-              Visibility="{Binding ElementName=this, Path=LoginVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-              HorizontalAlignment="Center" 
-              VerticalAlignment="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <UserControl Visibility="{Binding ASD, Converter="Login"}">
             
-            <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Username:" Height="20" Margin="4" HorizontalAlignment="Right"/>
-                    <TextBlock Text="Password:" Height="20" Margin="4" HorizontalAlignment="Right"/>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" Width="220">
-                    <TextBox x:Name="TextBox" Text="{Binding ElementName=this, Path=Username, Mode=TwoWay}" 
-                             GotFocus="TextBox_GotFocus" KeyDown="TextBox_KeyDown" 
-                             Height="20" HorizontalAlignment="Stretch"
-                             Margin="4"/>
-                    <PasswordBox x:Name="PasswordBox" GotFocus="PasswordBox_GotFocus" KeyDown="TextBox_KeyDown" 
-                                 Height="20" PasswordChar="*" 
-                                 HorizontalAlignment="Stretch"
-                                 Margin="4"/>
-                    <Grid Height="30">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Button x:Name="signInButton" Content="Sign in" Margin="4" 
-                                Click="Login_Click" Template="{StaticResource HyperlinkButtonTemplate}"
-                                HorizontalAlignment="Left"/>
-
-                        <controls:SpinnersApple HorizontalAlignment="Right"
-                                                Margin="4" 
-                                                Visibility="{Binding ElementName=signInButton, Path=IsEnabled, Converter={StaticResource BoolToNotVisibilityConverter}}"
-                                                />
-                        
-                        <Button x:Name="forgotPasswordButton" Content="Forgot your password?" Margin="4" Grid.Column="1" 
-                                Click="ForgotPassword_Click" Template="{StaticResource HyperlinkButtonTemplate}"
-                                HorizontalAlignment="Right"/>
-                    </Grid>
-                </StackPanel>
-            </StackPanel>
-
-            <TextBlock Grid.Row="1" Text="{Binding ElementName=this, Path=ErrorMsg, Mode=TwoWay}" HorizontalAlignment="Center" Margin="4"  Height="20" Foreground="Red"/>
-
-
-        </Grid>
-
-
-        <Grid
-            Visibility="{Binding ElementName=this, Path=InputtingUsername, Converter={StaticResource BoolToVisibilityConverter}}"
-            VerticalAlignment="Center">
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="250" Margin="20">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                
-                <TextBlock Grid.Column="0" Text="Username" HorizontalAlignment="Right" Margin="2"/>
-                <TextBox x:Name="usernameTextBox" Grid.Column="1" Margin="2" KeyDown="usernameTextBox_KeyDown"/>
-
-                <CheckBox Grid.Column="1" Grid.Row="1" Content="Already have token" Margin="2"
-                         IsChecked="{Binding ElementName=this, Path=AlreadyHaveToken, Mode=TwoWay}"/>
-            </Grid>
-
-            <Button x:Name="nextCancelButton" Content="Cancel" Margin="80 0 0 20" Grid.Row="1"
-                    Click="CancelChangePassword_Click" Template="{StaticResource HyperlinkButtonTemplate}"
-                    HorizontalAlignment="Left"/>
-
-
-            <Button x:Name="nextButton" Content="Next" Margin="0 0 80 20" Grid.Row="1"
-                    Click="NextButton_Click" Template="{StaticResource HyperlinkButtonTemplate}"
-                    HorizontalAlignment="Right"/>
-
-            <TextBlock Grid.Row="2" Text="{Binding ElementName=this, Path=ErrorMsg, Mode=TwoWay}" HorizontalAlignment="Center" Margin="4"  Height="20" Foreground="Red"/>
-
-            <controls:SpinnersApple Visibility="{Binding ElementName=nextButton, Path=IsEnabled, Converter={StaticResource BoolToNotVisibilityConverter}}"
-                                    Grid.Row="2" Height="20" Width="20"/>
-
-        </Grid>
-
-        <Grid
-            VerticalAlignment="Center"
-            Visibility="{Binding ElementName=this, Path=ResettingPassword, Converter={StaticResource BoolToVisibilityConverter}}">
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="350">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Reset password" Margin="2 5 2 10" FontWeight="Bold"/>
-
-                <TextBlock Grid.Row="1" Text="Token" HorizontalAlignment="Right" Margin="2"/>
-                <TextBlock Grid.Row="2" Text="New password" HorizontalAlignment="Right" Margin="2"/>
-                <TextBlock Grid.Row="3" Text="Confirm password" HorizontalAlignment="Right" Margin="2"/>
-
-                <PasswordBox x:Name="tokenPasswordBox" Grid.Row="1" Grid.Column="1" Margin="2" Height="20"/>
-                <PasswordBox x:Name="newPasswordBox" Grid.Row="2" Grid.Column="1" Margin="2" Height="20"/>
-                <PasswordBox x:Name="confirmPasswordBox" Grid.Row="3" Grid.Column="1" Margin="2" Height="20"/>
-            </Grid>
-
-            <Button x:Name="changeCancelButton" Content="Cancel" Margin="50 10 0 10" Grid.Row="1"
-                    Click="CancelChangePassword_Click" Template="{StaticResource HyperlinkButtonTemplate}"
-                    HorizontalAlignment="Left"/>
-
-
-            <Button x:Name="changeButton" Content="Change" Margin="0 10 50 10" Grid.Row="1"
-                    Click="ChangePassword_Click" Template="{StaticResource HyperlinkButtonTemplate}"
-                    HorizontalAlignment="Right"/>
-
-            <TextBlock Grid.Row="2" Text="{Binding ElementName=this, Path=ErrorMsg, Mode=TwoWay}" HorizontalAlignment="Center" Margin="4"  Height="20" Foreground="Red"/>
-
-            <controls:SpinnersApple Visibility="{Binding ElementName=changeButton, Path=IsEnabled, Converter={StaticResource BoolToNotVisibilityConverter}}" 
-                                    Grid.Row="2" Height="20" Width="20"/>
-        </Grid>
+        </UserControl>
+        <TextBlock Grid.Row="1" Text="{Binding ElementName=this, Path=ErrorMsg, Mode=TwoWay}" HorizontalAlignment="Center" Margin="4"  Height="20" Foreground="Red"/>
     </Grid>
 </Window>

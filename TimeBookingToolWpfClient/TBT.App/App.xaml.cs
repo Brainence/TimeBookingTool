@@ -18,6 +18,7 @@ using TBT.App.Views.Windows;
 using WF = System.Windows.Forms;
 using System.ComponentModel;
 using TBT.App.ViewModels;
+using TBT.App.ViewModels.Authentication;
 
 namespace TBT.App
 {
@@ -344,14 +345,14 @@ namespace TBT.App
                 }
                 else
                 {
-                    Authentication auth = new Authentication();
+                    Authentication auth = new Authentication() { DataContext = new AuthenticationWindowViewModel() };
                     ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
                     auth.ShowDialog();
                 }
             }
             else
             {
-                Authentication auth = new Authentication();
+                Authentication auth = new Authentication() { DataContext = new AuthenticationWindowViewModel() };
                 ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
                 auth.ShowDialog();
             }
