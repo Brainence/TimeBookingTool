@@ -7,6 +7,7 @@ using TBT.App.Models.AppModels;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Controls;
 
 namespace TBT.App.Models.Tools
 {
@@ -340,4 +341,16 @@ namespace TBT.App.Models.Tools
         }
     }
 
+    public class ResetPasswordMultiConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            return values.ToList();
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
 }

@@ -21,9 +21,9 @@ namespace TBT.App.ViewModels.Authentication
         private bool _changeButtonIsEnabled;
         private bool _changeCancelButtonIsEnabled;
         private string _username;
-        private PasswordBox _tokenPasswordBox;
-        private PasswordBox _newPasswordBox;
-        private PasswordBox _confirmPasswordBox;
+        //private PasswordBox _tokenPasswordBox;
+        //private PasswordBox _newPasswordBox;
+        //private PasswordBox _confirmPasswordBox;
 
         #endregion
 
@@ -47,25 +47,6 @@ namespace TBT.App.ViewModels.Authentication
             set { SetProperty(ref _username, value); }
         }
 
-        public PasswordBox TokenPasswordBox
-        {
-            get { return _tokenPasswordBox; }
-            set { SetProperty(ref _tokenPasswordBox, value); }
-        }
-
-        public PasswordBox NewPasswordBox
-        {
-            get { return _newPasswordBox; }
-            set { SetProperty(ref _newPasswordBox, value); }
-        }
-
-
-        public PasswordBox ConfirmPasswordBox
-        {
-            get { return _confirmPasswordBox; }
-            set { SetProperty(ref _confirmPasswordBox, value); }
-        }
-
 
         public ICommand ChangePasswordClick { get; private set; }
         public ICommand CancelChangePasswordClick { get; private set; }
@@ -77,58 +58,36 @@ namespace TBT.App.ViewModels.Authentication
         public ResetPasswordControlViewModel(AuthenticationWindowViewModel mainVM)
         {
             _mainVM = mainVM;
-            ChangePasswordClick = new RelayCommand(obj => ChangePassword_Click(), obj => true);
-            CancelChangePasswordClick = new RelayCommand(obj => CancelChangePassword_Click(), obj => true);
-            InitPasswordBoxes();
+            ChangePasswordClick = new RelayCommand(obj => ChangePassword_Click(obj as List<object>), null);
+            CancelChangePasswordClick = new RelayCommand(obj => CancelChangePassword_Click(), null);
         }
         
         #endregion
 
         #region Methods
 
-        private void InitPasswordBoxes()
-        {
-            TokenPasswordBox = new PasswordBox();
-            Grid.SetRow(TokenPasswordBox, 1);
-            Grid.SetColumn(TokenPasswordBox, 1);
-            TokenPasswordBox.Height = 20;
-            TokenPasswordBox.Margin = new System.Windows.Thickness(2);
-
-            NewPasswordBox = new PasswordBox();
-            Grid.SetRow(NewPasswordBox, 2);
-            Grid.SetColumn(NewPasswordBox, 1);
-            NewPasswordBox.Height = 20;
-            NewPasswordBox.Margin = new System.Windows.Thickness(2);
-
-            ConfirmPasswordBox = new PasswordBox();
-            Grid.SetRow(ConfirmPasswordBox, 3);
-            Grid.SetColumn(ConfirmPasswordBox, 1);
-            ConfirmPasswordBox.Height = 20;
-            ConfirmPasswordBox.Margin = new System.Windows.Thickness(2);
-
-        }
-
         private void CancelChangePassword_Click()
         {
-            //tokenPasswordBox.Password = string.Empty;
-            //newPasswordBox.Password = string.Empty;
-            //confirmPasswordBox.Password = string.Empty;
             _mainVM.ErrorMsg = string.Empty;
 
-            _mainVM.CurrentControl = new AuthenticationControl() { DataContext = new AuthenticationControlViewModel(_mainVM) };
+            _mainVM.CurrentControl = new AuthenticationControlViewModel(_mainVM);
 
             //Left += Width == 450 ? 50 : 0;
 
             //Width = 350;
         }
 
-        private async void ChangePassword_Click()
+        private async void ChangePassword_Click(List<object> args)
         {
+            if (args == null) { return; }
+            if (args.Count < 3) { return; }
             ChangeButtonIsEnabled = false;
             ChangeCancelButtonIsEnabled = false;
             _mainVM.ErrorMsg = string.Empty;
-
-            if (string.IsNullOrEmpty(TokenPasswordBox.Password) || string.IsNullOrEmpty(NewPasswordBox.Password) || string.IsNullOrEmpty(ConfirmPasswordBox.Password))
+            var tokenPassword = args[0]?.ToString();
+            var newPasswordBox = args[1]?.ToString();
+            var confirmPasswordBox = args[2]?.ToString();
+            if (string.IsNullOrEmpty(tokenPassword) || string.IsNullOrEmpty(newPasswordBox) || string.IsNullOrEmpty(confirmPasswordBox))
             {
                 _mainVM.ErrorMsg = "All fields are required.";
                 ChangeButtonIsEnabled = true;
@@ -136,7 +95,7 @@ namespace TBT.App.ViewModels.Authentication
                 return;
             }
 
-            if (NewPasswordBox.Password != ConfirmPasswordBox.Password)
+            if (newPasswordBox != confirmPasswordBox)
             {
                 _mainVM.ErrorMsg = "Please confirm your password.";
                 ChangeButtonIsEnabled = true;
@@ -161,7 +120,7 @@ namespace TBT.App.ViewModels.Authentication
 
                 var result = JsonConvert.DeserializeObject<bool?>(
                     await App.CommunicationService.GetAsJson(
-                        $"ResetTicket/ChangePassword/{user.Id}/{NewPasswordBox.Password}/{TokenPasswordBox.Password}",
+                        $"ResetTicket/ChangePassword/{user.Id}/{newPasswordBox}/{tokenPassword}",
                         allowAnonymous: true));
 
                 if (result == null || (result.HasValue && !result.Value))
@@ -185,7 +144,7 @@ namespace TBT.App.ViewModels.Authentication
 
                 //Width = 350;
 
-                _mainVM.CurrentControl = new AuthenticationControl() { DataContext = new AuthenticationControlViewModel(_mainVM) };
+                _mainVM.CurrentControl = new AuthenticationControlViewModel(_mainVM);
             }
             catch
             {

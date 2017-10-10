@@ -52,7 +52,7 @@ namespace TBT.App.ViewModels.Authentication
 
         public ICommand NextButtonClick { get; private set; }
         public ICommand CancelChangePasswordClick { get; private set; }
-        public ICommand EnterKeyDown { get; private set; }
+        public ICommand ReverseAlreadyHaveToken { get; set; }
 
         #endregion
 
@@ -61,8 +61,9 @@ namespace TBT.App.ViewModels.Authentication
         public ForgotPasswordControlViewModel(AuthenticationWindowViewModel mainVM)
         {
             _mainVM = mainVM;
-            NextButtonClick = new RelayCommand(obj => NextButton_Click(), obj => true);
-            CancelChangePasswordClick = new RelayCommand(obj => CancelChangePassword_Click(), obj => true);
+            NextButtonClick = new RelayCommand(obj => NextButton_Click(), null);
+            CancelChangePasswordClick = new RelayCommand(obj => CancelChangePassword_Click(), null);
+            ReverseAlreadyHaveToken = new RelayCommand(obj => AlreadyHaveToken = !AlreadyHaveToken, null);
         }
 
         #endregion
@@ -122,7 +123,7 @@ namespace TBT.App.ViewModels.Authentication
 
             //Width = 450;
             //Left -= 50;
-            _mainVM.CurrentControl = new ResetPasswordControl() { DataContext = new ResetPasswordControlViewModel(_mainVM) { Username = Username} };
+            _mainVM.CurrentControl = new ResetPasswordControlViewModel(_mainVM) { Username = Username};
         }
 
         private void CancelChangePassword_Click()
@@ -133,7 +134,7 @@ namespace TBT.App.ViewModels.Authentication
             Username = string.Empty;
             _mainVM.ErrorMsg = string.Empty;
 
-            _mainVM.CurrentControl = new AuthenticationControl() { DataContext = new AuthenticationControlViewModel(_mainVM) };
+            _mainVM.CurrentControl = new AuthenticationControlViewModel(_mainVM);
 
             //Left += Width == 450 ? 50 : 0;
 

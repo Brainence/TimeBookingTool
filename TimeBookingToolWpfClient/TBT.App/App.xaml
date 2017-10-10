@@ -9,6 +9,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources\Styles\Styles.xaml"/>
+                <ResourceDictionary Source="Views\Authentication\AuthenticationWindowResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <tools:BoolToNotVisibilityConverter x:Key="BoolToNotVisibilityConverter"/>
@@ -27,6 +28,7 @@
             <tools:EditButtonToVisibilityConverter x:Key="EditButtonToVisibilityConverter"/>
             <tools:TodayToVisibilityConverter x:Key="TodayToVisibilityConverter"/>
             <tools:StartButtonContentConverter x:Key="StartButtonContentConverter"/>
+            <tools:ResetPasswordMultiConverter x:Key="ResetPasswordMultiConverter"/>
 
             <SolidColorBrush x:Key="CalendarItemBackground" Color="#c2422b"/>
             <SolidColorBrush x:Key="CalendarItemMouseOverBrush" Color="#f77f50"/>

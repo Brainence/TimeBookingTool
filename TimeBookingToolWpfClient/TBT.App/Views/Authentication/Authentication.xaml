@@ -14,15 +14,21 @@
         BorderBrush="Black" 
         WindowStyle="None" 
         Title="Time Booking Tool Login Window" 
-        ResizeMode="NoResize" 
-        KeyDown="authentication_KeyDown">
-
+        ResizeMode="NoResize"
+        Visibility="{Binding Path=ShowingWindow, Converter={StaticResource BoolToVisibilityConverter}}"
+        Focusable="{Binding Path=FocusingWindow}"
+        >
+    <!--KeyDown="authentication_KeyDown"
+        Closing="{Binding Path=CloseWindowCommand}"-->
+    <Window.InputBindings>
+        <KeyBinding
+            Key="Esc"
+            Command="{Binding Path=CloseButtonClick}"/>
+    </Window.InputBindings>
     <Grid>
         <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="7" Style="{StaticResource windowsButton}"
-                Click="CloseButton_Click"/>
-        <UserControl Visibility="{Binding ASD, Converter="Login"}">
-            
-        </UserControl>
-        <TextBlock Grid.Row="1" Text="{Binding ElementName=this, Path=ErrorMsg, Mode=TwoWay}" HorizontalAlignment="Center" Margin="4"  Height="20" Foreground="Red"/>
+                Command="{Binding Path=CloseButtonClick}"/>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Path=ErrorMsg, Mode=TwoWay}" Margin="4"  Height="20" Foreground="Red"/>
+        <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=CurrentControl}"></ContentControl>
     </Grid>
 </Window>

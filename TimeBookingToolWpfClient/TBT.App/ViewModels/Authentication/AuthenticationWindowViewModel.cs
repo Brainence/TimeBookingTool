@@ -25,11 +25,11 @@ namespace TBT.App.ViewModels.Authentication
 
         private string _errorMsg;
         private MainWindow _mainWindow;
-        private UserControl _currentControl;
+        private BaseViewModel _currentControl;
         private string _username;
         private bool _showingWindow;
         private bool _focusingWindow;
-        private UserControl _newControl;
+        private object _dataContext;
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace TBT.App.ViewModels.Authentication
             set { SetProperty(ref _errorMsg, value); }
         }
 
-        public UserControl CurrentControl
+        public BaseViewModel CurrentControl
         {
             get { return _currentControl; }
             set { SetProperty(ref _currentControl, value); }
@@ -71,23 +71,31 @@ namespace TBT.App.ViewModels.Authentication
         }
 
         public ICommand CloseWindowCommand { get; private set; }
+        public ICommand CloseButtonClick { get; private set; }
 
         #endregion
 
         #region Constructors
 
-        public AuthenticationWindowViewModel()
+        public AuthenticationWindowViewModel(object dataContext)
         {
             InitNotifyIcon();
             Username = App.AuthenticationUsername;
             ShowingWindow = true;
-            CurrentControl = new AuthenticationControl() { DataContext = new AuthenticationControlViewModel(this) };
-            CloseWindowCommand = new RelayCommand(obj => CloseWindow(obj), obj => true);
+            _dataContext = dataContext;
+            CurrentControl = new AuthenticationControlViewModel(this);
+            //CloseWindowCommand = new RelayCommand(null, null);
+            CloseButtonClick = new RelayCommand(obj => CloseButton_Click(), null);
         }
 
         #endregion
 
         #region Methods
+
+        private void CloseButton_Click()
+        {
+            ExitApplication();
+        }
 
         private void InitNotifyIcon()
         {
@@ -154,7 +162,7 @@ namespace TBT.App.ViewModels.Authentication
 
                 _mainWindow.ShowDialog();
 
-                CheckClosing();
+                //CheckClosing();
             }
         }
 
@@ -201,44 +209,7 @@ namespace TBT.App.ViewModels.Authentication
             App.ShowBalloon(App.Farewell, " ", 30000, App.EnableGreetingNotification);
         }
 
-        private async Task RunClient(string password)
-        {
-            try
-            {
-                _mainWindow = new MainWindow();
-
-                var dataContext = (_mainWindow.DataContext as MainWindowViewModel);
-                if (dataContext == null) throw new Exception("Error occurred while trying to load data.");
-
-                var user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={Username}"));
-                if (user == null) throw new Exception("Error occurred while trying to load user data.");
-
-                user.CurrentTimeZone = DateTimeOffset.Now.Offset;
-                user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", user));
-
-                dataContext.CurrentUser = user;
-
-                ShowingWindow = true;
-                ErrorMsg = string.Empty;
-                password = string.Empty;
-
-                App.AuthenticationUsername = Username;
-                App.Username = Username;
-                App.Greeting = dataContext.CurrentUser.FirstName;
-                App.Farewell = dataContext.CurrentUser.FirstName;
-                App.AppSettings.Save();
-
-                _mainWindow.ShowDialog();
-
-                CheckClosing();
-            }
-            catch (Exception ex)
-            {
-                ErrorMsg = ex.InnerException?.Message ?? ex.Message;
-            }
-        }
-
-        public async Task Login(string password)
+        public async Task Login(string username, string password, Window currentWindow)
         {
             try
             {
@@ -252,7 +223,7 @@ namespace TBT.App.ViewModels.Authentication
                             new Dictionary<string, string>()
                             {
                             {"grant_type","password" },
-                            {"UserName", Username },
+                            {"UserName", username },
                             {"Password", password }
                             }
                             ));
@@ -263,8 +234,9 @@ namespace TBT.App.ViewModels.Authentication
                         App.AccessToken = x["access_token"];
                         App.RefreshToken = x["refresh_token"];
                         App.RememberMe = true;
-
-                        await RunClient(password);
+                        App.Username = username;
+                        currentWindow.Close();
+                        //await RunClient(username, password, currentWindow);
                     }
                     else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
                     {

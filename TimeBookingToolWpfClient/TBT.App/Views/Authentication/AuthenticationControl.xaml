@@ -6,9 +6,10 @@
              xmlns:local="clr-namespace:TBT.App.Views.Authentication"
              mc:Ignorable="d" 
              xmlns:controls="clr-namespace:TBT.App.Views.Controls"
+             xmlns:helpers="clr-namespace:TBT.App.Helpers"
              Height="200" 
              Width="350" 
-             BorderThickness="1" 
+             BorderThickness="0" 
              BorderBrush="Black">
     <Grid>
         <Grid x:Name="login" 
@@ -26,20 +27,56 @@
                     <TextBlock Text="Password:" Height="20" Margin="4" HorizontalAlignment="Right"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Width="220">
-                    <TextBox x:Name="TextBox" Text="{Binding ElementName=this, Path=Username, Mode=TwoWay}"  
+                    <TextBox x:Name="TextBox" Text="{Binding Path=Username, Mode=TwoWay}"  
                              Height="20" HorizontalAlignment="Stretch"
-                             Margin="4"/>
-                    <PasswordBox x:Name="passwordBox" Height="20" PasswordChar="*" 
+                             Margin="4">
+                        <TextBox.InputBindings>
+                            <KeyBinding
+                                Key="Return"
+                                Command="{Binding Path=LoginClick}">
+                                <KeyBinding.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource ResetPasswordMultiConverter}">
+                                        <Binding ElementName="passwordBox" Path="(helpers:PasswordHelper.Password)"/>
+                                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
+                                    </MultiBinding>
+                                </KeyBinding.CommandParameter>
+                            </KeyBinding>
+                        </TextBox.InputBindings>
+                    </TextBox>
+                    <PasswordBox x:Name="passwordBox"
+                                 Height="20" PasswordChar="*" 
                                  HorizontalAlignment="Stretch"
-                                 Margin="4"/>
+                                 Margin="4"
+                                 helpers:PasswordHelper.Attach="True">
+                        <PasswordBox.InputBindings>
+                            <KeyBinding
+                                Key="Return"
+                                Command="{Binding Path=LoginClick}">
+                                <KeyBinding.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource ResetPasswordMultiConverter}">
+                                        <Binding ElementName="passwordBox" Path="(helpers:PasswordHelper.Password)"/>
+                                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
+                                    </MultiBinding>
+                                </KeyBinding.CommandParameter>
+                            </KeyBinding>
+                        </PasswordBox.InputBindings>
+                    </PasswordBox>
                     <Grid Height="30">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Button x:Name="signInButton" Content="Sign in" Margin="4" 
-                                Click="{Binding Path=LoginClick}" Template="{StaticResource HyperlinkButtonTemplate}"
-                                HorizontalAlignment="Left"/>
+                                Command="{Binding Path=LoginClick}" 
+                                Template="{StaticResource HyperlinkButtonTemplate}"
+                                HorizontalAlignment="Left">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource ResetPasswordMultiConverter}">
+                                    <Binding ElementName="passwordBox" Path="(helpers:PasswordHelper.Password)"/>
+                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
 
                         <controls:SpinnersApple HorizontalAlignment="Right"
                                                 Margin="4" 
@@ -47,7 +84,7 @@
                                                 />
 
                         <Button x:Name="forgotPasswordButton" Content="Forgot your password?" Margin="4" Grid.Column="1" 
-                                Click="{Binding Path=ForgotPasswordClick}" Template="{StaticResource HyperlinkButtonTemplate}"
+                                Command="{Binding Path=ForgotPasswordClick}" Template="{StaticResource HyperlinkButtonTemplate}"
                                 HorizontalAlignment="Right"/>
                     </Grid>
                 </StackPanel>

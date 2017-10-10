@@ -168,17 +168,17 @@ namespace TBT.App.Views.Authentication
         //    }
         //}
 
-        //private void ExitApplication()
-        //{
-        //    App.ShowBalloon(App.Farewell, " ", 30000, App.EnableGreetingNotification);
+        private void ExitApplication()
+        {
+            App.ShowBalloon(App.Farewell, " ", 30000, App.EnableGreetingNotification);
 
-        //    if (App.GlobalNotification != null)
-        //    {
-        //        App.GlobalNotification.Dispose();
-        //    }
+            if (App.GlobalNotification != null)
+            {
+                App.GlobalNotification.Dispose();
+            }
 
-        //    Application.Current.Shutdown();
-        //}
+            Application.Current.Shutdown();
+        }
 
         ////private async Task RunClient()
         ////{
@@ -288,13 +288,13 @@ namespace TBT.App.Views.Authentication
         ////    forgotPasswordButton.IsEnabled = true;
         ////}
 
-        //private void authentication_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    if (e.Key == Key.Escape)
-        //    {
-        //        ExitApplication();
-        //    }
-        //}
+        private void authentication_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                ExitApplication();
+            }
+        }
 
         //private async void TextBox_KeyDown(object sender, KeyEventArgs e)
         //{

@@ -19,6 +19,7 @@ using WF = System.Windows.Forms;
 using System.ComponentModel;
 using TBT.App.ViewModels;
 using TBT.App.ViewModels.Authentication;
+using System.Linq;
 
 namespace TBT.App
 {
@@ -202,17 +203,14 @@ namespace TBT.App
             catch { }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public bool IsProcessOpen(string name)
         {
-            foreach (Process clsProcess in Process.GetProcesses())
-            {
-                if (clsProcess.ProcessName.Contains(name))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return Process.GetProcessesByName(name).Any();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -304,58 +302,64 @@ namespace TBT.App
 
         private async void Application_Startup(object sender, StartupEventArgs e)
         {
+            bool authorized = false;
             if (RememberMe)
             {
                 var res = await UpdateTokens();
-                if (res && !string.IsNullOrEmpty(Username))
-                {
-                    try
-                    {
-                        MainWindow mainWindow = new MainWindow();
-                        mainWindow.InitNotifyIcon();
-
-                        var dataContext = (mainWindow.DataContext as MainWindowViewModel);
-                        if (dataContext == null) throw new Exception("Error occurred while trying to load data.");
-
-                        var user = JsonConvert.DeserializeObject<User>(await CommunicationService.GetAsJson($"User?email={Username}"));
-                        if (user == null) throw new Exception("Error occurred while trying to load user data.");
-
-                        user.CurrentTimeZone = DateTimeOffset.Now.Offset;
-                        user = JsonConvert.DeserializeObject<User>(await CommunicationService.PutAsJson("User", user));
-
-                        dataContext.CurrentUser = user;
-
-                        ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
-                        mainWindow.ShowDialog();
-
-                        if (mainWindow.LoggedOut)
-                        {
-                            Username = string.Empty;
-                            Application_Startup(sender, e);
-                        }
-                        else if (!mainWindow.HideWindow)
-                        {
-                            Current.Shutdown();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
-                    }
-                }
-                else
-                {
-                    Authentication auth = new Authentication() { DataContext = new AuthenticationWindowViewModel() };
-                    ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
-                    auth.ShowDialog();
-                }
+                authorized = res && !string.IsNullOrEmpty(Username);
             }
-            else
+            //if (authorized /*res && !string.IsNullOrEmpty(Username)*/)
+            //{
+            try
             {
-                Authentication auth = new Authentication() { DataContext = new AuthenticationWindowViewModel() };
+                MainWindow mainWindow = new MainWindow(authorized && RememberMe);
+
+                var user = JsonConvert.DeserializeObject<User>(await CommunicationService.GetAsJson($"User?email={Username}"));
+                if (user == null) throw new Exception("Error occurred while trying to load user data.");
+
+                user.CurrentTimeZone = DateTimeOffset.Now.Offset;
+                user = JsonConvert.DeserializeObject<User>(await CommunicationService.PutAsJson("User", user));
+
+                MainWindowViewModel dataContext;
+                mainWindow.DataContext = dataContext = new MainWindowViewModel() { CurrentUser = user };
+
+                AuthenticationUsername = Username;
+                Username = Username;
+                Greeting = dataContext.CurrentUser.FirstName;
+                Farewell = dataContext.CurrentUser.FirstName;
+                AppSettings.Save();
+
                 ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
-                auth.ShowDialog();
+                mainWindow.ShowDialog();
+
+                if (mainWindow.LoggedOut)
+                {
+                    Username = string.Empty;
+                    Application_Startup(sender, e);
+                }
+                else if (mainWindow.HideWindow)
+                {
+                    Current.Shutdown();
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
+            }
+            //}
+            //else
+            //{
+            //    Authentication auth = new Authentication() { DataContext = new AuthenticationWindowViewModel() };
+            //    ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
+            //    auth.ShowDialog();
+            //}
+            //}
+            //else
+            //{
+            //    Authentication auth = new Authentication() { DataContext = new AuthenticationWindowViewModel() };
+            //    ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
+            //    auth.ShowDialog();
+            //}
         }
 
         static void InitNotifyIcon()

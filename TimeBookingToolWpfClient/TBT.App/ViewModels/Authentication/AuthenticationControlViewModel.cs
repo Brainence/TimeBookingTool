@@ -58,8 +58,8 @@ namespace TBT.App.ViewModels.Authentication
         public AuthenticationControlViewModel(AuthenticationWindowViewModel mainVm)
         {
             _mainVM = mainVm;
-            LoginClick = new RelayCommand(obj => Login_Click(obj as PasswordBox), obj => true);
-            ForgotPasswordClick = new RelayCommand(obj => ForgotPassword_Click(), obj => true);
+            LoginClick = new RelayCommand(obj => Login_Click(obj as List<object>), null);
+            ForgotPasswordClick = new RelayCommand(obj => ForgotPassword_Click(), null);
         }
 
         //public AuthenticationControlViewModel(Views.Authentication.Authentication window)
@@ -72,22 +72,23 @@ namespace TBT.App.ViewModels.Authentication
         #region Methods
 
 
-        private async void Login_Click(PasswordBox passwordBox)
+        private async void Login_Click(List<object> closeParameters)
         {
-            if (passwordBox != null)
-            {
-                EnableForgotPasswordButton = false;
-                EnableSignInButton = false;
-                await _mainVM.Login(passwordBox.Password);
-                EnableSignInButton = true;
-                EnableForgotPasswordButton = true;
-            }
+            if (closeParameters == null) { return; }
+            if (closeParameters.Count < 2) { return; }
+            var password = closeParameters[0]?.ToString();
+            var currentWindow = (closeParameters[1] as Window);
+            EnableForgotPasswordButton = false;
+            EnableSignInButton = false;
+            await _mainVM.Login(Username, password, currentWindow);
+            EnableSignInButton = true;
+            EnableForgotPasswordButton = true;
         }
 
         private void ForgotPassword_Click()
         {
             _mainVM.ErrorMsg = string.Empty;
-            _mainVM.CurrentControl = new ForgotPasswordControl() { DataContext = new ForgotPasswordControlViewModel(_mainVM) };
+            _mainVM.CurrentControl = new ForgotPasswordControlViewModel(_mainVM);
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)

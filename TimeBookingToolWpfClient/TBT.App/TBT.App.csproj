@@ -67,7 +67,7 @@
     <StartupObject>TBT.App.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>false</SignManifests>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>6B79CC2D22C6645FE06543D38795D7572CECB3B1</ManifestCertificateThumbprint>
@@ -164,6 +164,7 @@
     <Compile Include="App\AppSettings.cs" />
     <Compile Include="App\GlobalTimer.cs" />
     <Compile Include="Common\Constants.cs" />
+    <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Models\AppModels\Customer.cs" />
     <Compile Include="Models\AppModels\Project.cs" />
     <Compile Include="Models\AppModels\Activity.cs" />
@@ -297,6 +298,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Resources\Styles\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Authentication\AuthenticationWindowResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

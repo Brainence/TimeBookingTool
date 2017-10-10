@@ -44,22 +44,33 @@ namespace TBT.App.Views.Windows
         public ICommand GetProjectsCommand { get; set; }
         public ICommand GetActivitiesCommand { get; set; }
 
-        public MainWindow()
+        public MainWindow(bool nonAuthorized)
         {
-            From = DateTime.Now.StartOfWeek(DayOfWeek.Wednesday);
-            To = DateTime.Now;
-
-            App.GlobalTimer = new GlobalTimer();
-            _dateTimer = new DispatcherTimer();
-            _dateTimer.Interval = new TimeSpan(0, 0, 1);
-
-            NewUser = new User();
-            GetTimeEntriesCommand = new RelayCommand(async obj => await GetTimeEntries(obj), obj => CanGetTimeEntries());
-            GetCustomersCommand = new RelayCommand(async obj => await GetCustomers(), obj => CanGetCustomers());
-            GetProjectsCommand = new RelayCommand(async obj => await GetProjects(), obj => CanGetProjects());
-            GetActivitiesCommand = new RelayCommand(async obj => await GetActivities(), obj => CanGetActivities());
-
             InitializeComponent();
+
+            InitNotifyIcon();
+
+            if (!nonAuthorized)
+            {
+                Authentication.Authentication auth = new Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel(DataContext) };
+                App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
+                auth.ShowDialog();
+            }
+            if (!IsShuttingDown())
+            {
+                From = DateTime.Now.StartOfWeek(DayOfWeek.Wednesday);
+                To = DateTime.Now;
+
+                App.GlobalTimer = new GlobalTimer();
+                _dateTimer = new DispatcherTimer();
+                _dateTimer.Interval = new TimeSpan(0, 0, 1);
+
+                NewUser = new User();
+                GetTimeEntriesCommand = new RelayCommand(async obj => await GetTimeEntries(obj), obj => CanGetTimeEntries());
+                GetCustomersCommand = new RelayCommand(async obj => await GetCustomers(), obj => CanGetCustomers());
+                GetProjectsCommand = new RelayCommand(async obj => await GetProjects(), obj => CanGetProjects());
+                GetActivitiesCommand = new RelayCommand(async obj => await GetActivities(), obj => CanGetActivities());
+            }
         }
 
         //public MainWindow(bool authorized)
@@ -74,6 +85,19 @@ namespace TBT.App.Views.Windows
         //        Focus();
         //    }
         //}
+
+        public static bool IsShuttingDown()
+        {
+            try
+            {
+                Application.Current.ShutdownMode = Application.Current.ShutdownMode;
+                return false;
+            }
+            catch (Exception)
+            {
+                return true;
+            }
+        }
 
         public void InitNotifyIcon()
         {
@@ -152,7 +176,7 @@ namespace TBT.App.Views.Windows
 
             Application.Current.Shutdown();
         }
-        
+
         public bool LoggedOut { get; set; }
         public bool HideWindow { get; set; }
 
@@ -195,7 +219,7 @@ namespace TBT.App.Views.Windows
             get { return _usersLoading; }
             set { SetProperty(ref _usersLoading, value); }
         }
-        
+
         public User ReportingUser
         {
             get { return _reportingUser; }
@@ -588,7 +612,7 @@ namespace TBT.App.Views.Windows
 
             EditUserWindow euw = new EditUserWindow(user);
 
-            euw.Top = this.Top + (this.Height - euw.Height)/2;
+            euw.Top = this.Top + (this.Height - euw.Height) / 2;
             euw.Left = this.Left + (this.Width - euw.Width) / 2;
             euw.CancelAction += Euw_CancelAction;
             euw.SaveAction += Euw_SaveAction;
@@ -920,7 +944,7 @@ namespace TBT.App.Views.Windows
             if (customer == null) return;
 
             EditCustomerWindow ecw = new EditCustomerWindow(customer.Name);
-            
+
             ecw.Top = this.Top + (this.Height - ecw.Height) / 2;
             ecw.Left = this.Left + (this.Width - ecw.Width) / 2;
             ecw.ShowDialog();
@@ -940,6 +964,6 @@ namespace TBT.App.Views.Windows
         {
             ExpanderNewUser.IsExpanded = false;
         }
-        
+
     }
 }
