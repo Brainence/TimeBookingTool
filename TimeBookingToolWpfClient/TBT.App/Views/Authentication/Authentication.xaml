@@ -2,6 +2,7 @@
         x:Name="this"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:System.Security.Authentication;assembly=System"
@@ -14,21 +15,18 @@
         BorderBrush="Black" 
         WindowStyle="None" 
         Title="Time Booking Tool Login Window" 
-        ResizeMode="NoResize"
-        Visibility="{Binding Path=ShowingWindow, Converter={StaticResource BoolToVisibilityConverter}}"
-        Focusable="{Binding Path=FocusingWindow}"
-        >
-    <!--KeyDown="authentication_KeyDown"
-        Closing="{Binding Path=CloseWindowCommand}"-->
-    <Window.InputBindings>
-        <KeyBinding
-            Key="Esc"
-            Command="{Binding Path=CloseButtonClick}"/>
-    </Window.InputBindings>
+        ResizeMode="NoResize">
+        <Window.InputBindings>
+            <KeyBinding
+                Modifiers="Alt"
+                Key="F4"
+                Command="{Binding Path=CloseButtonClick}"/>
+        </Window.InputBindings>
     <Grid>
         <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="7" Style="{StaticResource windowsButton}"
-                Command="{Binding Path=CloseButtonClick}"/>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Path=ErrorMsg, Mode=TwoWay}" Margin="4"  Height="20" Foreground="Red"/>
-        <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=CurrentControl}"></ContentControl>
+                Command="{Binding Path=CloseButtonClick}">
+        </Button>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Path=ErrorMsg, Mode=TwoWay}" Margin="4"  Height="20" Foreground="Red"/>
+        <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=CurrentViewModel}"></ContentControl>
     </Grid>
 </Window>

@@ -308,8 +308,6 @@ namespace TBT.App
                 var res = await UpdateTokens();
                 authorized = res && !string.IsNullOrEmpty(Username);
             }
-            //if (authorized /*res && !string.IsNullOrEmpty(Username)*/)
-            //{
             try
             {
                 MainWindow mainWindow = new MainWindow(authorized && RememberMe);
@@ -346,20 +344,6 @@ namespace TBT.App
             {
                 MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
             }
-            //}
-            //else
-            //{
-            //    Authentication auth = new Authentication() { DataContext = new AuthenticationWindowViewModel() };
-            //    ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
-            //    auth.ShowDialog();
-            //}
-            //}
-            //else
-            //{
-            //    Authentication auth = new Authentication() { DataContext = new AuthenticationWindowViewModel() };
-            //    ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
-            //    auth.ShowDialog();
-            //}
         }
 
         static void InitNotifyIcon()

@@ -35,7 +35,7 @@
                                 Key="Return"
                                 Command="{Binding Path=LoginClick}">
                                 <KeyBinding.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource ResetPasswordMultiConverter}">
+                                    <MultiBinding Converter="{StaticResource AuthenticationControlMultiConverter}">
                                         <Binding ElementName="passwordBox" Path="(helpers:PasswordHelper.Password)"/>
                                         <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
                                     </MultiBinding>
@@ -53,7 +53,7 @@
                                 Key="Return"
                                 Command="{Binding Path=LoginClick}">
                                 <KeyBinding.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource ResetPasswordMultiConverter}">
+                                    <MultiBinding Converter="{StaticResource AuthenticationControlMultiConverter}">
                                         <Binding ElementName="passwordBox" Path="(helpers:PasswordHelper.Password)"/>
                                         <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
                                     </MultiBinding>
@@ -71,7 +71,7 @@
                                 Template="{StaticResource HyperlinkButtonTemplate}"
                                 HorizontalAlignment="Left">
                             <Button.CommandParameter>
-                                <MultiBinding Converter="{StaticResource ResetPasswordMultiConverter}">
+                                <MultiBinding Converter="{StaticResource AuthenticationControlMultiConverter}">
                                     <Binding ElementName="passwordBox" Path="(helpers:PasswordHelper.Password)"/>
                                     <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
                                 </MultiBinding>
@@ -89,9 +89,6 @@
                     </Grid>
                 </StackPanel>
             </StackPanel>
-
-
         </Grid>
-
     </Grid>
 </UserControl>

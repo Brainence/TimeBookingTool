@@ -29,6 +29,7 @@
             <tools:TodayToVisibilityConverter x:Key="TodayToVisibilityConverter"/>
             <tools:StartButtonContentConverter x:Key="StartButtonContentConverter"/>
             <tools:ResetPasswordMultiConverter x:Key="ResetPasswordMultiConverter"/>
+            <tools:AuthenticationControlMultiConverter x:Key = "AuthenticationControlMultiConverter"/>
 
             <SolidColorBrush x:Key="CalendarItemBackground" Color="#c2422b"/>
             <SolidColorBrush x:Key="CalendarItemMouseOverBrush" Color="#f77f50"/>

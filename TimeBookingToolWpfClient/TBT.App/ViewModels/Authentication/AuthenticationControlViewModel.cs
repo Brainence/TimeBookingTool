@@ -4,16 +4,13 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using TBT.App.Models.AppModels;
+using TBT.App.Common;
+using TBT.App.Helpers;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
-using TBT.App.Views.Authentication;
-using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.Authentication
 {
@@ -58,60 +55,78 @@ namespace TBT.App.ViewModels.Authentication
         public AuthenticationControlViewModel(AuthenticationWindowViewModel mainVm)
         {
             _mainVM = mainVm;
-            LoginClick = new RelayCommand(obj => Login_Click(obj as List<object>), null);
-            ForgotPasswordClick = new RelayCommand(obj => ForgotPassword_Click(), null);
+            LoginClick = new RelayCommand(obj => LoginMe(obj as AuthenticationControlClosePararmeters), null);
+            ForgotPasswordClick = new RelayCommand(obj => GoToForgotPasswordControl(), null);
         }
-
-        //public AuthenticationControlViewModel(Views.Authentication.Authentication window)
-        //{
-        //    _window = window;
-        //}
 
         #endregion
 
         #region Methods
 
 
-        private async void Login_Click(List<object> closeParameters)
+        private async void LoginMe(AuthenticationControlClosePararmeters closeParameters)
         {
-            if (closeParameters == null) { return; }
-            if (closeParameters.Count < 2) { return; }
-            var password = closeParameters[0]?.ToString();
-            var currentWindow = (closeParameters[1] as Window);
+            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(closeParameters?.Password))
+            {
+                _mainVM.ErrorMsg = "Username or password is empty.";
+                return;
+            }
             EnableForgotPasswordButton = false;
             EnableSignInButton = false;
-            await _mainVM.Login(Username, password, currentWindow);
+            await Login(Username, closeParameters.Password, closeParameters.CurrentWindow);
             EnableSignInButton = true;
             EnableForgotPasswordButton = true;
         }
 
-        private void ForgotPassword_Click()
+        public async Task Login(string username, string password, Window currentWindow)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+
+                    var response = await client.PostAsync(ConfigurationManager.AppSettings[Constants.LoginUrl],
+                        new FormUrlEncodedContent(
+                            new Dictionary<string, string>()
+                            {
+                            {"grant_type","password" },
+                            {"UserName", username },
+                            {"Password", password }
+                            }
+                            ));
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        var x = JsonConvert.DeserializeObject((await response.Content.ReadAsAsync<dynamic>()).ToString());
+                        App.AccessToken = x["access_token"];
+                        App.RefreshToken = x["refresh_token"];
+                        App.RememberMe = true;
+                        App.Username = username;
+                        currentWindow.Close();
+                    }
+                    else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    {
+                        if (response.Headers.Contains("BadRequestHeader"))
+                            _mainVM.ErrorMsg = response.Headers.GetValues("BadRequestHeader").FirstOrDefault();
+                    }
+                    else
+                    {
+                        _mainVM.ErrorMsg = response.ReasonPhrase;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _mainVM.ErrorMsg = ex.InnerException?.Message ?? ex.Message;
+            }
+        }
+
+        private void GoToForgotPasswordControl()
         {
             _mainVM.ErrorMsg = string.Empty;
-            _mainVM.CurrentControl = new ForgotPasswordControlViewModel(_mainVM);
-        }
-
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            //TextBox.SelectAll();
-        }
-
-        private async void TextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            //if (e.Key == Key.Enter)
-            //{
-            //    ErrorMsg = string.Empty;
-            //    signInButton.IsEnabled = false;
-            //    forgotPasswordButton.IsEnabled = false;
-            //    await Login();
-            //    signInButton.IsEnabled = true;
-            //    forgotPasswordButton.IsEnabled = true;
-            //}
-        }
-
-        private void PasswordBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            //PasswordBox.SelectAll();
+            _mainVM.CurrentViewModel = new ForgotPasswordControlViewModel(_mainVM);
         }
     }
 

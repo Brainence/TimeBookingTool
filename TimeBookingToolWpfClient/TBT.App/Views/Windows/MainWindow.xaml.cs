@@ -52,7 +52,7 @@ namespace TBT.App.Views.Windows
 
             if (!nonAuthorized)
             {
-                Authentication.Authentication auth = new Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel(DataContext) };
+                Authentication.Authentication auth = new Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel() };
                 App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
                 auth.ShowDialog();
             }
@@ -72,19 +72,6 @@ namespace TBT.App.Views.Windows
                 GetActivitiesCommand = new RelayCommand(async obj => await GetActivities(), obj => CanGetActivities());
             }
         }
-
-        //public MainWindow(bool authorized)
-        //{
-        //    if(!authorized)
-        //    {
-        //        var dataContext = new AuthenticationWindowViewModel();
-        //        var authWindow = new Authentication.Authentication() { DataContext = dataContext};
-        //        Hide();
-        //        authWindow.ShowDialog();
-        //        Show();
-        //        Focus();
-        //    }
-        //}
 
         public static bool IsShuttingDown()
         {
@@ -436,7 +423,7 @@ namespace TBT.App.Views.Windows
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            _dateTimer.Stop();
+            _dateTimer?.Stop();
 
             if (LoggedOut)
             {

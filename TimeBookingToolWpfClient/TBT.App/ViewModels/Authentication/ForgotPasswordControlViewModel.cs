@@ -1,14 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
-using TBT.App.Views.Authentication;
 
 namespace TBT.App.ViewModels.Authentication
 {
@@ -61,8 +55,8 @@ namespace TBT.App.ViewModels.Authentication
         public ForgotPasswordControlViewModel(AuthenticationWindowViewModel mainVM)
         {
             _mainVM = mainVM;
-            NextButtonClick = new RelayCommand(obj => NextButton_Click(), null);
-            CancelChangePasswordClick = new RelayCommand(obj => CancelChangePassword_Click(), null);
+            NextButtonClick = new RelayCommand(obj => GoToResetPassword(), null);
+            CancelChangePasswordClick = new RelayCommand(obj => CancelChangePassword(), null);
             ReverseAlreadyHaveToken = new RelayCommand(obj => AlreadyHaveToken = !AlreadyHaveToken, null);
         }
 
@@ -70,7 +64,7 @@ namespace TBT.App.ViewModels.Authentication
 
         #region Methods
 
-        private async void NextButton_Click()
+        private async void GoToResetPassword()
         {
             _mainVM.ErrorMsg = string.Empty;
             NextButtonIsEnabled = false;
@@ -113,40 +107,13 @@ namespace TBT.App.ViewModels.Authentication
             {
                 _mainVM.ErrorMsg = string.Empty;
             }
-
-            //ResettingPassword = true;
-            //InputtingUsername = false;
-
-            //tokenPasswordBox.Password = string.Empty;
-            //newPasswordBox.Password = string.Empty;
-            //confirmPasswordBox.Password = string.Empty;
-
-            //Width = 450;
-            //Left -= 50;
-            _mainVM.CurrentControl = new ResetPasswordControlViewModel(_mainVM) { Username = Username};
+            _mainVM.CurrentViewModel = new ResetPasswordControlViewModel(_mainVM) { UserId = user.Id};
         }
 
-        private void CancelChangePassword_Click()
+        private void CancelChangePassword()
         {
-            //tokenPasswordBox.Password = string.Empty;
-            //newPasswordBox.Password = string.Empty;
-            //confirmPasswordBox.Password = string.Empty;
-            Username = string.Empty;
             _mainVM.ErrorMsg = string.Empty;
-
-            _mainVM.CurrentControl = new AuthenticationControlViewModel(_mainVM);
-
-            //Left += Width == 450 ? 50 : 0;
-
-            //Width = 350;
-        }
-
-        private void usernameTextBox_KeyDown(KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                NextButton_Click();
-            }
+            _mainVM.CurrentViewModel = new AuthenticationControlViewModel(_mainVM);
         }
 
         #endregion

@@ -164,6 +164,8 @@
     <Compile Include="App\AppSettings.cs" />
     <Compile Include="App\GlobalTimer.cs" />
     <Compile Include="Common\Constants.cs" />
+    <Compile Include="Helpers\AuthenticationControlClosePararmeters.cs" />
+    <Compile Include="Helpers\ResetPasswordParameters.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Models\AppModels\Customer.cs" />
     <Compile Include="Models\AppModels\Project.cs" />

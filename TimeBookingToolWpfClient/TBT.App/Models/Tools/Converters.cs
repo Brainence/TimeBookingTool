@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls;
+using TBT.App.Helpers;
 
 namespace TBT.App.Models.Tools
 {
@@ -345,7 +346,22 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            return values.ToList();
+            if(values.Count() < 3) { return null; }
+            return new ResetPasswordParameters() { TokenPassword = values[0]?.ToString(), NewPassword = values[1]?.ToString(), ConfirmPassword = values[2]?.ToString() };
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class AuthenticationControlMultiConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(values.Count() < 2) { return null; }
+            return new AuthenticationControlClosePararmeters() { Password = values[0]?.ToString(), CurrentWindow = values[1] as Window };
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
