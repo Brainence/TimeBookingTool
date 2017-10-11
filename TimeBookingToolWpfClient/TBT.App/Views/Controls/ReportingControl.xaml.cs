@@ -206,11 +206,15 @@ namespace TBT.App.Views.Controls
             try
             {
                 TimeEntryItemsControl.UpdateLayout();
-                fixedPage.Height = TimeEntryItemsControl.ActualHeight + 300;
+                fixedPage.Height = control.TimeEntryItemsControl.DesiredSize.Height + control.TimeEntryItemsControl.Margin.Top
+                                                                                    + control.TimeEntryItemsControl.Margin.Bottom
+                                                                                    + control.Header.DesiredSize.Height
+                                                                                    + control.Header.Margin.Top
+                                                                                    + control.Header.Margin.Bottom;
                 fixedPage.Width = 1100;
 
-                control.Height = TimeEntryItemsControl.ActualHeight + 300;
-                control.Width = 1100;
+                control.Height = fixedPage.Height;
+                control.Width = fixedPage.Width;
 
                 fixedPage.Children.Add(control);
                 ((IAddChild)pageContent).AddChild(fixedPage);

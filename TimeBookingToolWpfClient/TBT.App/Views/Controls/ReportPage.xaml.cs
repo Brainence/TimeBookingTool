@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace TBT.App.Views.Controls
 {
@@ -8,6 +9,8 @@ namespace TBT.App.Views.Controls
         {
             InitializeComponent();
             DataContext = this;
+            Measure(new Size(int.MaxValue, int.MaxValue));
+            //Arrange(new Rect(0, 0, DesiredWidth, DesiredHeight));
         }
     }
 }

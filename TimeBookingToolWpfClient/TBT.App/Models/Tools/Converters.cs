@@ -346,7 +346,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if(values.Count() < 3) { return null; }
+            if(!values.Any()) { return null; }
             return new ResetPasswordParameters() { TokenPassword = values[0]?.ToString(), NewPassword = values[1]?.ToString(), ConfirmPassword = values[2]?.ToString() };
         }
 
@@ -360,7 +360,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if(values.Count() < 2) { return null; }
+            if(!values.Any()) { return null; }
             return new AuthenticationControlClosePararmeters() { Password = values[0]?.ToString(), CurrentWindow = values[1] as Window };
         }
 
