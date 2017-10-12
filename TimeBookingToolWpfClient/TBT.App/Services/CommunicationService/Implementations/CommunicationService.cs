@@ -24,6 +24,11 @@ namespace TBT.App.Services.CommunicationService.Implementations
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All };
         }
 
+        public async Task<bool> CheckConnection()
+        {
+            return (await _client.GetAsync("user")).StatusCode != HttpStatusCode.NotFound;
+        }
+
         public async Task<string> GetAsJson(string url, bool allowAnonymous = false)
         {
             var client = allowAnonymous ? new HttpClient() { BaseAddress = new Uri(baseUrl) } : _client;

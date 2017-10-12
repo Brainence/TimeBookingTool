@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -13,13 +15,9 @@ using TBT.App.Common;
 using TBT.App.Models.AppModels;
 using TBT.App.Services.CommunicationService.Implementations;
 using TBT.App.Services.Encryption.Implementations;
-using TBT.App.Views.Authentication;
+using TBT.App.ViewModels;
 using TBT.App.Views.Windows;
 using WF = System.Windows.Forms;
-using System.ComponentModel;
-using TBT.App.ViewModels;
-using TBT.App.ViewModels.Authentication;
-using System.Linq;
 
 namespace TBT.App
 {
@@ -302,6 +300,12 @@ namespace TBT.App
 
         private async void Application_Startup(object sender, StartupEventArgs e)
         {
+            if (!(await CommunicationService.CheckConnection()))
+            {
+                MessageBox.Show("Server is offline, try later.");
+                Current.Shutdown();
+                return;
+            }
             bool authorized = false;
             if (RememberMe)
             {
