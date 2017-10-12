@@ -38,25 +38,20 @@ namespace TBT.App.Views.Windows
         private bool _usersLoading;
         private User _reportingUser;
         private DispatcherTimer _dateTimer;
+        private Window _auth;
 
         public ICommand GetTimeEntriesCommand { get; set; }
         public ICommand GetCustomersCommand { get; set; }
         public ICommand GetProjectsCommand { get; set; }
         public ICommand GetActivitiesCommand { get; set; }
 
-        public MainWindow(bool Authorized)
+        public MainWindow(bool authorized)
         {
             InitializeComponent();
 
             InitNotifyIcon();
 
-            if (!Authorized)
-            {
-                Authentication.Authentication auth = new Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel() };
-                App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
-                auth.ShowDialog();
-            }
-            if (!IsShuttingDown())
+            if (!OpenAuthenticationWindow(authorized))
             {
                 From = DateTime.Now.StartOfWeek(DayOfWeek.Wednesday);
                 To = DateTime.Now;
@@ -84,6 +79,17 @@ namespace TBT.App.Views.Windows
             {
                 return true;
             }
+        }
+
+        public bool OpenAuthenticationWindow(bool authorized)
+        {
+            if (!authorized)
+            {
+                _auth = new Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel() };
+                App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
+                _auth.ShowDialog();
+            }
+            return IsShuttingDown();
         }
 
         public void InitNotifyIcon()
@@ -141,14 +147,16 @@ namespace TBT.App.Views.Windows
             //        Close();
             //        return;
             //    }
-                Show();
-
-                if (LoggedOut)
+            if (LoggedOut)
+            {
+                if(!OpenAuthenticationWindow(false))
                 {
-                    Authentication.Authentication auth = new Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel() };
-                    App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
-                    auth.ShowDialog();
+                    Show();
+                    return;
                 }
+                return;
+            }
+            Show();
             //}
         }
 
@@ -419,6 +427,10 @@ namespace TBT.App.Views.Windows
             App.Username = string.Empty;
 
             Close();
+            if (!OpenAuthenticationWindow(false))
+            {
+                Show();
+            }
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -432,8 +444,6 @@ namespace TBT.App.Views.Windows
             }
 
             SayBye();
-
-            LoggedOut = false;
             HideWindow = true;
             e.Cancel = true;
             Hide();

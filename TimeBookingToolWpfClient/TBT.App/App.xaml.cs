@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -245,16 +246,16 @@ namespace TBT.App
 
         public static void AddShortcutToStartup()
         {
-            var startupPath = GetStartupShortcutPath();
-            if (File.Exists(startupPath)) return;
-
-            File.Copy(GetShortcutPath(), startupPath);
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey
+                ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            rk.SetValue(System.Reflection.Assembly.GetEntryAssembly().FullName, System.Reflection.Assembly.GetEntryAssembly().Location);
         }
 
         public static void RemoveShortcutFromStartup()
         {
-            var startupPath = GetStartupShortcutPath();
-            if (File.Exists(startupPath)) File.Delete(startupPath);
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey
+                ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            rk.DeleteValue(System.Reflection.Assembly.GetEntryAssembly().FullName, false);
         }
 
         public static string UrlSafeDateToString(DateTime date)
@@ -334,11 +335,11 @@ namespace TBT.App
                 ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
                 mainWindow.ShowDialog();
 
-                if (mainWindow.LoggedOut)
-                {
-                    Username = string.Empty;
-                    Application_Startup(sender, e);
-                }
+                //if (mainWindow.LoggedOut)
+                //{
+                //    Username = string.Empty;
+                //    Application_Startup(sender, e);
+                //}
                 //else if (mainWindow.HideWindow)
                 //{
                 //    Current.Shutdown();
