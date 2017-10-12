@@ -55,7 +55,7 @@ namespace TBT.App.ViewModels.Authentication
         public ForgotPasswordControlViewModel(AuthenticationWindowViewModel mainVM)
         {
             _mainVM = mainVM;
-            NextButtonClick = new RelayCommand(obj => GoToResetPassword(), null);
+            NextButtonClick = new RelayCommand(obj => GoToResetPasswordControl(), null);
             CancelChangePasswordClick = new RelayCommand(obj => CancelChangePassword(), null);
             ReverseAlreadyHaveToken = new RelayCommand(obj => AlreadyHaveToken = !AlreadyHaveToken, null);
         }
@@ -64,7 +64,7 @@ namespace TBT.App.ViewModels.Authentication
 
         #region Methods
 
-        private async void GoToResetPassword()
+        private async void GoToResetPasswordControl()
         {
             _mainVM.ErrorMsg = string.Empty;
             NextButtonIsEnabled = false;
