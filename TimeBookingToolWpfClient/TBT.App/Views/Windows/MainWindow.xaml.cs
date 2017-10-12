@@ -44,13 +44,13 @@ namespace TBT.App.Views.Windows
         public ICommand GetProjectsCommand { get; set; }
         public ICommand GetActivitiesCommand { get; set; }
 
-        public MainWindow(bool nonAuthorized)
+        public MainWindow(bool Authorized)
         {
             InitializeComponent();
 
             InitNotifyIcon();
 
-            if (!nonAuthorized)
+            if (!Authorized)
             {
                 Authentication.Authentication auth = new Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel() };
                 App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
@@ -126,30 +126,30 @@ namespace TBT.App.Views.Windows
 
         private void ShowMainWindow()
         {
-            if (IsVisible)
-            {
-                if (WindowState == WindowState.Minimized)
-                {
-                    WindowState = WindowState.Normal;
-                }
-                Activate();
-            }
-            else
-            {
-                if (!IsLoaded)
-                {
-                    Close();
-                    return;
-                }
-                ShowDialog();
+            //if (IsVisible)
+            //{
+            //    if (WindowState == WindowState.Minimized)
+            //    {
+            //        WindowState = WindowState.Normal;
+            //    }
+            //    Activate();
+            //}
+            //else
+            //{
+            //    if (!IsLoaded)
+            //    {
+            //        Close();
+            //        return;
+            //    }
+                Show();
 
                 if (LoggedOut)
                 {
-                    Authentication.Authentication auth = new Authentication.Authentication();
+                    Authentication.Authentication auth = new Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel() };
                     App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
                     auth.ShowDialog();
                 }
-            }
+            //}
         }
 
         private void ExitApplication()
@@ -428,8 +428,7 @@ namespace TBT.App.Views.Windows
             if (LoggedOut)
             {
                 App.RememberMe = false;
-                App.Username = string.Empty;
-                return;
+                App.Username = string.Empty;   
             }
 
             SayBye();

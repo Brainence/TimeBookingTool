@@ -136,11 +136,16 @@
 
         </Grid>
 
-        <TextBlock Grid.Row="2" Text="{Binding ElementName=TimeEntryItemsControl, 
+        <StackPanel Grid.Row="2" Margin="0 10 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
+
+            <TextBlock Text="{Binding ElementName=TimeEntryItemsControl, 
                                       Path=ItemsSource, 
                                       Converter={StaticResource DurationConverter}, 
                                       Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}Total time: {0}}"
-                   FontSize="14" FontWeight="Bold" Margin="0 10 0 0"
-                   VerticalAlignment="Center"/>
+                   FontSize="14" FontWeight="Bold" />
+            <Button Name="SaveTotalToClipboardButton" Click="SaveTotalToClipboardButton_Click">
+                <Image Source="../../Resources/Icons/reporting_white.png" Height="18" ToolTip="Copy"  />
+            </Button>
+        </StackPanel>
     </Grid>
 </UserControl>

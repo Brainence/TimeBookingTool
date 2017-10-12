@@ -339,10 +339,10 @@ namespace TBT.App
                     Username = string.Empty;
                     Application_Startup(sender, e);
                 }
-                else if (mainWindow.HideWindow)
-                {
-                    Current.Shutdown();
-                }
+                //else if (mainWindow.HideWindow)
+                //{
+                //    Current.Shutdown();
+                //}
             }
             catch (Exception ex)
             {

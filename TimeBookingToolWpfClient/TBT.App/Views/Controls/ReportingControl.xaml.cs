@@ -416,5 +416,19 @@ namespace TBT.App.Views.Controls
             if (GetTimeEntriesCommand != null && User != null)
                 GetTimeEntriesCommand.Execute(User.Id);
         }
+
+        private void SaveTotalToClipboardButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (TimeEntries?.Any() != true)
+            {
+                Clipboard.SetText("0");
+                return;
+            }
+
+            var timeEntries = TimeEntries.Where(t => !t.IsRunning).ToList();
+
+            var sum = timeEntries.Any() ? timeEntries.Select(t => t.Duration).Aggregate((t1, t2) => t1.Add(t2)) : new TimeSpan();
+            Clipboard.SetText(sum.TotalHours.ToString());
+        }
     }
 }
