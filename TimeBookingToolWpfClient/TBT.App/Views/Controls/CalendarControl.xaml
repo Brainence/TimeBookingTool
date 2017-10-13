@@ -198,20 +198,25 @@
                                         User="{Binding ElementName=this, Path=User, Mode=TwoWay}"
                                         RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries"
                                         SelectedDay="{Binding ElementName=this, Path=SelectedDay, Mode=TwoWay}"/>
-
             <ScrollViewer Grid.Row="1"
+                              Name="TimeEntriesScrollView"
                               Margin="20 10 20 0" 
                               Height="175"
                               VerticalScrollBarVisibility="Auto"
                               VerticalAlignment="Top" 
                               HorizontalAlignment="Stretch"
                               Visibility="{Binding ElementName=this, Path=IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}">
-                <ItemsControl ItemsSource="{Binding ElementName=this, Path=User.TimeEntries, Mode=TwoWay}">
+                <ItemsControl Name="TimeEntriesItems" ItemsSource="{Binding ElementName=this, Path=User.TimeEntries, Mode=TwoWay}" AlternationCount="100">
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="1">
-                                <local:TimeEntryControl TimeEntry="{Binding}" RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries" Margin="0 0 0 10"/>
+                                <local:TimeEntryControl TimeEntry="{Binding}" 
+                                                        ScrollToEdited="RefreshScrollView"  
+                                                        RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries" 
+                                                        Id="{Binding Path=(ItemsControl.AlternationIndex), 
+                                                        RelativeSource={RelativeSource TemplatedParent}}"
+                                                        Margin="0 0 0 10"/>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

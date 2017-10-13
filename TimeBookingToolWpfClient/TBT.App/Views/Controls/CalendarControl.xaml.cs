@@ -31,16 +31,20 @@ namespace TBT.App.Views.Controls
         public ICommand BackTodayCommand { get; set; }
         public ICommand GoToSelectedDayCommand { get; set; }
         public ICommand GoToCurrentWeekCommand { get; set; }
+        private double _timeEntryControlHeight;
 
         public CalendarControl()
         {
+            InitializeComponent();
             BackTodayCommand = new RelayCommand(obj => BackToday(), obj => SelectedDay.HasValue && SelectedDay.Value.Date != DateTime.Now.Date);
             GoToSelectedDayCommand = new RelayCommand(obj => GoToSelectedDay(), obj => true);
             GoToCurrentWeekCommand = new RelayCommand(obj => GoToCurrentWeek(), obj => SelectedDay.HasValue && !Week.Contains(DateTime.Now.Date));
+            var tempControl = new TimeEntryControl();
+            tempControl.Measure(new Size(int.MaxValue, int.MaxValue));
+            _timeEntryControlHeight = tempControl.DesiredSize.Height - 10;
 
             SelectedDay = DateTime.Now.Date;
             Week = GetWeekOfDay(DateTime.Now);
-            InitializeComponent();
         }
 
         public static readonly DependencyProperty WeekTimeProperty = DependencyProperty
@@ -236,6 +240,11 @@ namespace TBT.App.Views.Controls
             }
             if (week != null && week.Any())
                 await GetTimeEnteredForWeek(week);
+        }
+
+        private void RefreshScrollView(int id)
+        {
+            TimeEntriesScrollView.ScrollToVerticalOffset(_timeEntryControlHeight * id);
         }
 
         private void TimeEntryControl_RefreshTimeEntries()

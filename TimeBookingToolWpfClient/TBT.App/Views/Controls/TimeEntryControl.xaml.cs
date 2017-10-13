@@ -58,7 +58,17 @@ namespace TBT.App.Views.Controls
             set { SetValue(IsEditingProperty, value); }
         }
 
+        public static readonly DependencyProperty IdProperty = DependencyProperty
+            .Register(nameof(Id), typeof(int), typeof(TimeEntryControl));
+
+        public int Id
+        {
+            get { return (int)GetValue(IdProperty); }
+            set { SetValue(IdProperty, value); }
+        }
+
         public event Action RefreshTimeEntries;
+        public event Action<int> ScrollToEdited;
 
         private async Task StartStop()
         {
@@ -113,6 +123,7 @@ namespace TBT.App.Views.Controls
             timerTextBox.Text = $"{TimeEntry.Duration.Hours:00}:{TimeEntry.Duration.Minutes:00}";
             Comment = TimeEntry.Comment;
             _editingTime = timerTextBox.Text;
+            ScrollToEdited?.Invoke(Id);
         }
 
         private async Task Remove()
