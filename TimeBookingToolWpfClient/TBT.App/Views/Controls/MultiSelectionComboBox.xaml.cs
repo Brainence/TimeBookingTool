@@ -84,21 +84,28 @@ namespace TBT.App.Views.Controls
 
             var list = new List<object>();
 
-            var allProjects = JsonConvert.DeserializeObject<List<Project>>(await App.CommunicationService.GetAsJson("Project"));
-            var userProjects = (ObservableCollection<Project>)e.NewValue;
-
-            foreach (var elem in allProjects)
+            try
             {
-                var item = new CheckableObject(x.PropertyPath);
-                item.Obj = elem;
-                item.IsChecked = userProjects == null ? false : userProjects.Select(t => t.Id).Contains(elem.Id);
-                item.IsCheckedPropertyChanged += () =>
+                var allProjects = JsonConvert.DeserializeObject<List<Project>>(await App.CommunicationService.GetAsJson("Project"));
+                var userProjects = (ObservableCollection<Project>)e.NewValue;
+
+                foreach (var elem in allProjects)
                 {
-                    x.ItemChecked();
-                };
-                list.Add(item);
+                    var item = new CheckableObject(x.PropertyPath);
+                    item.Obj = elem;
+                    item.IsChecked = userProjects == null ? false : userProjects.Select(t => t.Id).Contains(elem.Id);
+                    item.IsCheckedPropertyChanged += () =>
+                    {
+                        x.ItemChecked();
+                    };
+                    list.Add(item);
+                }
+                x.ItemsSource = list;
             }
-            x.ItemsSource = list;
+                            catch (Exception ex)
+                {
+                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                }
         }
 
         public event Action Checked;
@@ -134,9 +141,9 @@ namespace TBT.App.Views.Controls
                     await App.CommunicationService.PostAsJson($"UserProject/Add/{user.Id}/{project.Id}", null);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred while assigning user to project.");
+                MessageBox.Show($"Error occurred while assigning user to project. {ex.Message} {ex.InnerException?.Message}");
             }
         }
 
@@ -153,9 +160,9 @@ namespace TBT.App.Views.Controls
                     await App.CommunicationService.Delete($"UserProject/Remove/{user.Id}/{project.Id}");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred while dissociating user from project.");
+                MessageBox.Show($"Error occurred while assigning user to project. {ex.Message} {ex.InnerException?.Message}");
             }
         }
 

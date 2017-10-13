@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -110,11 +109,7 @@ namespace TBT.App.Views.Windows
 
         private void NotifyIcon_SignOut()
         {
-            LoggedOut = true;
-            HideWindow = false;
-            App.Username = string.Empty;
-
-            Close();
+            SignOutButton_Click(null, null);
         }
 
         private void NotifyIcon_Quit()
@@ -167,10 +162,16 @@ namespace TBT.App.Views.Windows
 
         private async void RefreshUser()
         {
-            var dataContext = (DataContext as MainWindowViewModel);
-            var user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={App.Username}"));
-
-            dataContext.CurrentUser = user;
+            try
+            {
+                var dataContext = (DataContext as MainWindowViewModel);
+                var user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={App.Username}"));
+                dataContext.CurrentUser = user;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private void ExitApplication()
@@ -283,28 +284,56 @@ namespace TBT.App.Views.Windows
 
         private async Task GetUsers()
         {
-            UsersLoading = true;
-            Users = JsonConvert.DeserializeObject<ObservableCollection<User>>(await App.CommunicationService.GetAsJson("User"));
+            try
+            {
+                UsersLoading = true;
+                Users = JsonConvert.DeserializeObject<ObservableCollection<User>>(await App.CommunicationService.GetAsJson("User"));
 
-            var viewModel = DataContext as MainWindowViewModel;
-            if (viewModel != null && viewModel.CurrentUser != null)
-                ReportingUser = Users.FirstOrDefault(u => u.Id == viewModel.CurrentUser.Id);
+                var viewModel = DataContext as MainWindowViewModel;
+                if (viewModel != null && viewModel.CurrentUser != null)
+                    ReportingUser = Users.FirstOrDefault(u => u.Id == viewModel.CurrentUser.Id);
 
-            UsersLoading = false;
+                UsersLoading = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
         private async Task GetAllCustomers()
         {
-            Customers = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(await App.CommunicationService.GetAsJson("Customer"));
+            try
+            {
+                Customers = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(await App.CommunicationService.GetAsJson("Customer"));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
         private async Task GetAllProjects()
         {
-            Projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(await App.CommunicationService.GetAsJson("Project"));
+            try
+            {
+                Projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(await App.CommunicationService.GetAsJson("Project"));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
         private async Task GetAllActivities()
         {
-            Activities = new ObservableCollection<Activity>(JsonConvert.DeserializeObject<List<Activity>>(
-                            await App.CommunicationService.GetAsJson($"Activity"))
-                                .OrderBy(a => a.Project.Name).ThenBy(a => a.Name));
+            try
+            {
+                Activities = new ObservableCollection<Activity>(JsonConvert.DeserializeObject<List<Activity>>(
+                                await App.CommunicationService.GetAsJson($"Activity"))
+                                    .OrderBy(a => a.Project.Name).ThenBy(a => a.Name));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private async Task GetTimeEntries(object userId)
@@ -331,79 +360,96 @@ namespace TBT.App.Views.Windows
 
 
             var result = new List<TimeEntry>();
-
-            if (From == DateTime.MinValue && To == DateTime.MaxValue)
+            try
             {
-                var timeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{id}"));
-
-                foreach (var timeEntry in timeEntries)
+                if (From == DateTime.MinValue && To == DateTime.MaxValue)
                 {
-                    timeEntry.Date = timeEntry.Date.ToLocalTime();
-                }
+                    var timeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
+                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{id}"));
 
-                result = timeEntries.ToList();
+                    foreach (var timeEntry in timeEntries)
+                    {
+                        timeEntry.Date = timeEntry.Date.ToLocalTime();
+                    }
+
+                    result = timeEntries.ToList();
+                }
+                else if (From == DateTime.MinValue)
+                {
+                    var timeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
+                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserFrom/{id}/{App.UrlSafeDateToString(From)}"));
+
+                    foreach (var timeEntry in timeEntries)
+                    {
+                        timeEntry.Date = timeEntry.Date.ToLocalTime();
+                    }
+
+                    result = timeEntries.ToList();
+                }
+                else if (To == DateTime.MaxValue)
+                {
+                    var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(
+                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserTo/{id}/{App.UrlSafeDateToString(To)}"));
+
+                    foreach (var timeEntry in timeEntries)
+                    {
+                        timeEntry.Date = timeEntry.Date.ToLocalTime();
+                    }
+
+                    result = timeEntries.ToList();
+                }
+                else
+                {
+                    var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(
+                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{id}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}"));
+
+                    foreach (var timeEntry in timeEntries)
+                    {
+                        timeEntry.Date = timeEntry.Date.ToLocalTime();
+                    }
+
+                    result = timeEntries.ToList();
+                    TimeEntries = new ObservableCollection<TimeEntry>(result.Where(t => !t.IsRunning));
+
+                    ItemsLoading = false;
+                }
             }
-            else if (From == DateTime.MinValue)
+            catch (Exception ex)
             {
-                var timeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserFrom/{id}/{App.UrlSafeDateToString(From)}"));
-
-                foreach (var timeEntry in timeEntries)
-                {
-                    timeEntry.Date = timeEntry.Date.ToLocalTime();
-                }
-
-                result = timeEntries.ToList();
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
-            else if (To == DateTime.MaxValue)
-            {
-                var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(
-                    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserTo/{id}/{App.UrlSafeDateToString(To)}"));
-
-                foreach (var timeEntry in timeEntries)
-                {
-                    timeEntry.Date = timeEntry.Date.ToLocalTime();
-                }
-
-                result = timeEntries.ToList();
-            }
-            else
-            {
-                var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(
-                    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{id}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}"));
-
-                foreach (var timeEntry in timeEntries)
-                {
-                    timeEntry.Date = timeEntry.Date.ToLocalTime();
-                }
-
-                result = timeEntries.ToList();
-            }
-
-            TimeEntries = new ObservableCollection<TimeEntry>(result.Where(t => !t.IsRunning));
-
-            ItemsLoading = false;
         }
 
         private async Task GetCustomers()
         {
             ItemsLoading = true;
+            try
+            {
+                Customers = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(
+                    await App.CommunicationService.GetAsJson($"Customer"));
 
-            Customers = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(
-                await App.CommunicationService.GetAsJson($"Customer"));
-
-            ItemsLoading = false;
+                ItemsLoading = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private async Task GetProjects()
         {
             ItemsLoading = true;
+            try
+            {
+                Projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(
+                    await App.CommunicationService.GetAsJson($"Project"));
 
-            Projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(
-                await App.CommunicationService.GetAsJson($"Project"));
-
-            ItemsLoading = false;
+                ItemsLoading = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private async Task GetActivities()
@@ -517,7 +563,10 @@ namespace TBT.App.Views.Windows
 
                 _dateTimer.Start();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private async void RefreshUsers_ButtonClick(object sender, RoutedEventArgs e)
@@ -527,17 +576,24 @@ namespace TBT.App.Views.Windows
 
         private async void RemoveUser_ImageClick(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+            try
+            {
+                if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
-            var user = ((sender as Image).DataContext as User);
+                var user = ((sender as Image).DataContext as User);
 
-            if (user == null) return;
+                if (user == null) return;
 
-            user.IsActive = false;
+                user.IsActive = false;
 
-            var x = await App.CommunicationService.PutAsJson("User", user);
+                var x = await App.CommunicationService.PutAsJson("User", user);
 
-            await GetUsers();
+                await GetUsers();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private async void BlockUser_ButtonClick(object sender, RoutedEventArgs e)
@@ -598,9 +654,9 @@ namespace TBT.App.Views.Windows
                     MessageBox.Show("Password has been changed successfully.");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred.");
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
             finally
             {
@@ -638,12 +694,18 @@ namespace TBT.App.Views.Windows
         {
             await GetUsers();
 
-            var dataContext = (this.DataContext as MainWindowViewModel);
+            var dataContext = (DataContext as MainWindowViewModel);
             if (dataContext == null) return;
+            try
+            {
+                var user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={dataContext.CurrentUser.Username}"));
 
-            var user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={dataContext.CurrentUser.Username}"));
-
-            dataContext.CurrentUser = user;
+                dataContext.CurrentUser = user;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private async void Euw_CancelAction()
@@ -672,9 +734,9 @@ namespace TBT.App.Views.Windows
 
                 await GetCustomers();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred while creating new customer.");
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
         }
 
@@ -711,9 +773,9 @@ namespace TBT.App.Views.Windows
 
                 await GetProjects();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred while creating new customer.");
+                MessageBox.Show($"Error occurred while creating new customer. {ex.Message} {ex.InnerException?.Message}");
             }
         }
 
@@ -749,9 +811,9 @@ namespace TBT.App.Views.Windows
 
                 await GetActivities();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred while creating new task.");
+                MessageBox.Show($"Error occurred while creating new task. {ex.Message} {ex.InnerException?.Message}");
             }
         }
 
@@ -762,12 +824,18 @@ namespace TBT.App.Views.Windows
 
             var customer = expander.DataContext as Customer;
             if (customer == null) return;
+            try
+            {
+                var projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(
+                    await App.CommunicationService.GetAsJson($"Project/GetByCustomer/{customer.Id}"));
+                if (projects == null) return;
 
-            var projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(
-                await App.CommunicationService.GetAsJson($"Project/GetByCustomer/{customer.Id}"));
-            if (projects == null) return;
-
-            customer.Projects = projects;
+                customer.Projects = projects;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private void customerProjectsExpander_Collapsed(object sender, RoutedEventArgs e)
@@ -790,10 +858,16 @@ namespace TBT.App.Views.Windows
             if (activity == null) return;
 
             activity.IsActive = false;
+            try
+            {
+                var x = await App.CommunicationService.PutAsJson("Activity", activity);
 
-            var x = await App.CommunicationService.PutAsJson("Activity", activity);
-
-            await GetAllActivities();
+                await GetAllActivities();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private async void RemoveProject_ImageClick(object sender, RoutedEventArgs e)
@@ -804,16 +878,23 @@ namespace TBT.App.Views.Windows
 
             if (project == null) return;
 
-            foreach (var activity in project.Activities)
+            try
             {
-                activity.IsActive = false;
-                await App.CommunicationService.PutAsJson("Activity", activity);
+                foreach (var activity in project.Activities)
+                {
+                    activity.IsActive = false;
+                    await App.CommunicationService.PutAsJson("Activity", activity);
+                }
+
+                project.IsActive = false;
+                var x = await App.CommunicationService.PutAsJson("Project", project);
+
+                await GetAllProjects();
             }
-
-            project.IsActive = false;
-            var x = await App.CommunicationService.PutAsJson("Project", project);
-
-            await GetAllProjects();
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private async void RemoveCustomer_ImageClick(object sender, RoutedEventArgs e)
@@ -824,24 +905,31 @@ namespace TBT.App.Views.Windows
 
             if (customer == null) return;
             customer.IsActive = false;
-            foreach (var project in customer.Projects)
+            try
             {
-                foreach (var activity in project.Activities)
+                foreach (var project in customer.Projects)
                 {
-                    activity.IsActive = false;
-                    await App.CommunicationService.PutAsJson("Activity", activity);
+                    foreach (var activity in project.Activities)
+                    {
+                        activity.IsActive = false;
+                        await App.CommunicationService.PutAsJson("Activity", activity);
+                    }
+
+                    project.IsActive = false;
+                    await App.CommunicationService.PutAsJson("Project", project);
                 }
 
-                project.IsActive = false;
-                await App.CommunicationService.PutAsJson("Project", project);
+                customer.IsActive = false;
+                var x = await App.CommunicationService.PutAsJson("Customer", customer);
+
+                await GetAllActivities();
+                await GetAllProjects();
+                await GetAllCustomers();
             }
-
-            customer.IsActive = false;
-            var x = await App.CommunicationService.PutAsJson("Customer", customer);
-
-            await GetAllActivities();
-            await GetAllProjects();
-            await GetAllCustomers();
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private async void RefreshAll_Click(object sender, RoutedEventArgs e)
@@ -866,7 +954,10 @@ namespace TBT.App.Views.Windows
                 CustomersComboBox = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(await App.CommunicationService.GetAsJson("Customer"));
                 ProjectsComboBox = JsonConvert.DeserializeObject<ObservableCollection<Project>>(await App.CommunicationService.GetAsJson("Project"));
             }
-            catch { }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private void RunOnStartup_Checked(object sender, RoutedEventArgs e)
@@ -918,9 +1009,16 @@ namespace TBT.App.Views.Windows
             {
                 activity = eaw.Activity;
                 activity.Project = eaw.SelectedProject ?? activity.Project;
-                activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.PutAsJson("Activity", activity));
+                try
+                {
+                    activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.PutAsJson("Activity", activity));
 
-                await GetActivities();
+                    await GetActivities();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                }
             }
         }
 
@@ -942,9 +1040,16 @@ namespace TBT.App.Views.Windows
             {
                 project = epw.Project;
                 project.Customer = epw.SelectedCustomer ?? project.Customer;
-                project = JsonConvert.DeserializeObject<Project>(await App.CommunicationService.PutAsJson("Project", project));
+                try
+                {
+                    project = JsonConvert.DeserializeObject<Project>(await App.CommunicationService.PutAsJson("Project", project));
 
-                await GetProjects();
+                    await GetProjects();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                }
             }
         }
 
@@ -964,7 +1069,14 @@ namespace TBT.App.Views.Windows
             if (customer.Name != ecw.CustomerName && ecw.SaveCustomer)
             {
                 customer.Name = ecw.CustomerName;
-                customer = JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.PutAsJson("Customer", customer));
+                try
+                {
+                    customer = JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.PutAsJson("Customer", customer));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                }
             }
         }
 

@@ -334,20 +334,10 @@ namespace TBT.App
 
                 ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
                 mainWindow.ShowDialog();
-
-                //if (mainWindow.LoggedOut)
-                //{
-                //    Username = string.Empty;
-                //    Application_Startup(sender, e);
-                //}
-                //else if (mainWindow.HideWindow)
-                //{
-                //    Current.Shutdown();
-                //}
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
         }
 
@@ -526,8 +516,9 @@ namespace TBT.App
                 else
                     return await Task.FromResult(true);
             }
-            catch
+            catch (Exception ex)
             {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
                 return await Task.FromResult(false);
             }
         }

@@ -109,32 +109,48 @@ namespace TBT.App.Views.Controls
         {
             if (TimeEntry == null) return;
 
-            var timeEntry = JsonConvert.DeserializeObject<TimeEntry>(
-               await App.CommunicationService.GetAsJson($"TimeEntry/{TimeEntry.Id}"));
+            try
+            {
+                var timeEntry = JsonConvert.DeserializeObject<TimeEntry>(
+                   await App.CommunicationService.GetAsJson($"TimeEntry/{TimeEntry.Id}"));
 
-            timeEntry.Date = timeEntry.Date.ToLocalTime();
+                timeEntry.Date = timeEntry.Date.ToLocalTime();
 
-            TimeEntry = timeEntry;
-            if (TimeEntry == null) return;
-            _startDate = DateTime.UtcNow;
+                TimeEntry = timeEntry;
+                if (TimeEntry == null) return;
+                _startDate = DateTime.UtcNow;
 
-            IsEditing = !IsEditing;
+                IsEditing = !IsEditing;
 
-            timerTextBox.Text = $"{TimeEntry.Duration.Hours:00}:{TimeEntry.Duration.Minutes:00}";
-            Comment = TimeEntry.Comment;
-            _editingTime = timerTextBox.Text;
-            ScrollToEdited?.Invoke(Id);
+                timerTextBox.Text = $"{TimeEntry.Duration.Hours:00}:{TimeEntry.Duration.Minutes:00}";
+                Comment = TimeEntry.Comment;
+                _editingTime = timerTextBox.Text;
+                ScrollToEdited?.Invoke(Id);
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private async Task Remove()
         {
             if (TimeEntry == null) return;
 
-            var result = JsonConvert.DeserializeObject<bool>(
-                await App.CommunicationService.GetAsJson($"TimeEntry/Remove/{TimeEntry.Id}"));
+            try
+            {
+                var result = JsonConvert.DeserializeObject<bool>(
+                    await App.CommunicationService.GetAsJson($"TimeEntry/Remove/{TimeEntry.Id}"));
 
-            if (result)
-                RefreshTimeEntries?.Invoke();
+                if (result)
+                    RefreshTimeEntries?.Invoke();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private async Task<bool> CanStartOrEditTimeEntry(TimeSpan? duration = null)
@@ -280,7 +296,7 @@ namespace TBT.App.Views.Controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
         }
 
@@ -299,18 +315,24 @@ namespace TBT.App.Views.Controls
                 App.GlobalTimer.StopTimer();
                 await Stop();
             }
-
-            if (TimeEntry != null
-                && TimeEntry.TimeLimit != null
-                && TimeEntry.TimeLimit.HasValue
-                && TimeEntry.Date.AddHours(currentDuration.TotalHours + 0.5) > TimeEntry.TimeLimit.Value.ToLocalTime())
+            try
             {
-                App.ShowBalloon("Attention!", "According to your estimation you have 30 minutes to complete the task.", 30000, App.EnableNotification);
-                TimeEntry.TimeLimit = null;
-                await App.CommunicationService.PutAsJson("TimeEntry/ServerDuration", TimeEntry);
-            }
+                if (TimeEntry != null
+                    && TimeEntry.TimeLimit != null
+                    && TimeEntry.TimeLimit.HasValue
+                    && TimeEntry.Date.AddHours(currentDuration.TotalHours + 0.5) > TimeEntry.TimeLimit.Value.ToLocalTime())
+                {
+                    App.ShowBalloon("Attention!", "According to your estimation you have 30 minutes to complete the task.", 30000, App.EnableNotification);
+                    TimeEntry.TimeLimit = null;
+                    await App.CommunicationService.PutAsJson("TimeEntry/ServerDuration", TimeEntry);
+                }
 
-            timerTextBlock.Text = currentDuration.ToString(@"hh\h\ mm\m\ ss\s");
+                timerTextBlock.Text = currentDuration.ToString(@"hh\h\ mm\m\ ss\s");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private void this_KeyDown(object sender, KeyEventArgs e)

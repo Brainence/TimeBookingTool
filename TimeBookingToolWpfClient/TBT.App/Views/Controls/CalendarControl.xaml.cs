@@ -131,7 +131,7 @@ namespace TBT.App.Views.Controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
             finally
             {
@@ -191,13 +191,20 @@ namespace TBT.App.Views.Controls
 
             if (mon != null && sun != null && User != null && User.Id > 0)
             {
-                var sum = JsonConvert.DeserializeObject<TimeSpan?>(
-                    await App.CommunicationService.GetAsJson($"TimeEntry/GetDuration/{User.Id}/{App.UrlSafeDateToString(mon)}/{App.UrlSafeDateToString(sun)}"));
+                try
+                {
+                    var sum = JsonConvert.DeserializeObject<TimeSpan?>(
+                        await App.CommunicationService.GetAsJson($"TimeEntry/GetDuration/{User.Id}/{App.UrlSafeDateToString(mon)}/{App.UrlSafeDateToString(sun)}"));
 
-                if (sum != null && sum.HasValue)
-                    WeekTime = $"{(sum.Value.Hours + sum.Value.Days * 24):00}:{sum.Value.Minutes:00} ({sum.Value.TotalHours:00.00})";
-                else
-                    WeekTime = "00:00 (00.00)";
+                    if (sum != null && sum.HasValue)
+                        WeekTime = $"{(sum.Value.Hours + sum.Value.Days * 24):00}:{sum.Value.Minutes:00} ({sum.Value.TotalHours:00.00})";
+                    else
+                        WeekTime = "00:00 (00.00)";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                }
             }
             else WeekTime = "00:00 (00.00)";
         }

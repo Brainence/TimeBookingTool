@@ -241,7 +241,7 @@ namespace TBT.App.Views.Controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
         }
 

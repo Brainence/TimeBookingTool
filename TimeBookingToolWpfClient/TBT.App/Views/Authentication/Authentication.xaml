@@ -15,7 +15,8 @@
         BorderBrush="Black" 
         WindowStyle="None" 
         Title="Time Booking Tool Login Window" 
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Style="{StaticResource WindowStyle}">
     <Window.InputBindings>
         <KeyBinding
                 Modifiers="Alt"

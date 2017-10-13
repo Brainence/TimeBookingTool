@@ -76,7 +76,7 @@ namespace TBT.App.Views.Controls
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
+                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
                 }
                 finally
                 {
@@ -101,8 +101,7 @@ namespace TBT.App.Views.Controls
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
-
+                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
                 }
             }
         }

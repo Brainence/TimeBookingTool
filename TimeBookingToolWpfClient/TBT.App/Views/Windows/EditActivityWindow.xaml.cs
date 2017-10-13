@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -21,12 +22,19 @@ namespace TBT.App.Views.Windows
 
         private async void InitProjects(int projectId)
         {
-            var projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(await App.CommunicationService.GetAsJson("Project"));
-            if (projects == null) return;
-            Projects = projects;
+            try
+            {
+                var projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(await App.CommunicationService.GetAsJson("Project"));
+                if (projects == null) return;
+                Projects = projects;
 
-            if (Projects != null && Projects.Any())
-                SelectedProject = Projects.FirstOrDefault(c => c.Id == projectId);
+                if (Projects != null && Projects.Any())
+                    SelectedProject = Projects.FirstOrDefault(c => c.Id == projectId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         public static readonly DependencyProperty ActivityProperty = DependencyProperty

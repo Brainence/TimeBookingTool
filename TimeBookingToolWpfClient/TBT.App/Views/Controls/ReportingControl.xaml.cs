@@ -125,58 +125,64 @@ namespace TBT.App.Views.Controls
             ItemsLoading = true;
 
             var result = new List<TimeEntry>();
-
-            if (From == DateTime.MinValue && To == DateTime.MaxValue)
+            try
             {
-                var timeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{id}"));
-
-                foreach (var timeEntry in timeEntries)
+                if (From == DateTime.MinValue && To == DateTime.MaxValue)
                 {
-                    timeEntry.Date = timeEntry.Date.ToLocalTime();
+                    var timeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
+                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{id}"));
+
+                    foreach (var timeEntry in timeEntries)
+                    {
+                        timeEntry.Date = timeEntry.Date.ToLocalTime();
+                    }
+
+                    result = timeEntries.ToList();
+                }
+                else if (From == DateTime.MinValue)
+                {
+                    var timeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
+                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserFrom/{id}/{App.UrlSafeDateToString(From)}"));
+
+                    foreach (var timeEntry in timeEntries)
+                    {
+                        timeEntry.Date = timeEntry.Date.ToLocalTime();
+                    }
+
+                    result = timeEntries.ToList();
+                }
+                else if (To == DateTime.MaxValue)
+                {
+                    var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(
+                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserTo/{id}/{App.UrlSafeDateToString(To)}"));
+
+                    foreach (var timeEntry in timeEntries)
+                    {
+                        timeEntry.Date = timeEntry.Date.ToLocalTime();
+                    }
+
+                    result = timeEntries.ToList();
+                }
+                else
+                {
+                    var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(
+                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{id}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}"));
+
+                    foreach (var timeEntry in timeEntries)
+                    {
+                        timeEntry.Date = timeEntry.Date.ToLocalTime();
+                    }
+
+                    result = timeEntries.ToList();
                 }
 
-                result = timeEntries.ToList();
+                TimeEntries = new ObservableCollection<TimeEntry>(result.Where(t => !t.IsRunning));
+                ItemsLoading = false;
             }
-            else if (From == DateTime.MinValue)
+            catch (Exception ex)
             {
-                var timeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserFrom/{id}/{App.UrlSafeDateToString(From)}"));
-
-                foreach (var timeEntry in timeEntries)
-                {
-                    timeEntry.Date = timeEntry.Date.ToLocalTime();
-                }
-
-                result = timeEntries.ToList();
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
-            else if (To == DateTime.MaxValue)
-            {
-                var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(
-                    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserTo/{id}/{App.UrlSafeDateToString(To)}"));
-
-                foreach (var timeEntry in timeEntries)
-                {
-                    timeEntry.Date = timeEntry.Date.ToLocalTime();
-                }
-
-                result = timeEntries.ToList();
-            }
-            else
-            {
-                var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(
-                    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{id}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}"));
-
-                foreach (var timeEntry in timeEntries)
-                {
-                    timeEntry.Date = timeEntry.Date.ToLocalTime();
-                }
-
-                result = timeEntries.ToList();
-            }
-
-            TimeEntries = new ObservableCollection<TimeEntry>(result.Where(t => !t.IsRunning));
-            ItemsLoading = false;
         }
 
         private async void UserReportButton_Click(object sender, RoutedEventArgs e)
@@ -304,59 +310,66 @@ namespace TBT.App.Views.Controls
 
             Models.Tools.DurationConverter dc = new Models.Tools.DurationConverter();
 
-            var users = JsonConvert.DeserializeObject<List<User>>(await App.CommunicationService.GetAsJson("User"));
-
-            Dictionary<int, ObservableCollection<TimeEntry>> timeEntries = new Dictionary<int, ObservableCollection<TimeEntry>>();
-
-            var result = new ObservableCollection<TimeEntry>();
-            foreach (var u in users)
+            try
             {
-                if (From == DateTime.MinValue && To == DateTime.MaxValue)
-                {
-                    result = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{u.Id}"));
-                }
-                else if (From == DateTime.MinValue)
-                {
-                    result = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserFrom/{u.Id}/{App.UrlSafeDateToString(From)}"));
-                }
-                else if (To == DateTime.MaxValue)
-                {
-                    result = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserTo/{u.Id}/{App.UrlSafeDateToString(To)}"));
-                }
-                else
-                {
-                    result = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{u.Id}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}"));
-                }
+                var users = JsonConvert.DeserializeObject<List<User>>(await App.CommunicationService.GetAsJson("User"));
 
-                timeEntries.Add(u.Id, new ObservableCollection<TimeEntry>(result.Where(t => !t.IsRunning)));
-                result.Clear();
+                Dictionary<int, ObservableCollection<TimeEntry>> timeEntries = new Dictionary<int, ObservableCollection<TimeEntry>>();
+
+                var result = new ObservableCollection<TimeEntry>();
+                foreach (var u in users)
+                {
+                    if (From == DateTime.MinValue && To == DateTime.MaxValue)
+                    {
+                        result = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
+                            await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{u.Id}"));
+                    }
+                    else if (From == DateTime.MinValue)
+                    {
+                        result = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
+                            await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserFrom/{u.Id}/{App.UrlSafeDateToString(From)}"));
+                    }
+                    else if (To == DateTime.MaxValue)
+                    {
+                        result = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
+                            await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserTo/{u.Id}/{App.UrlSafeDateToString(To)}"));
+                    }
+                    else
+                    {
+                        result = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
+                            await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{u.Id}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}"));
+                    }
+
+                    timeEntries.Add(u.Id, new ObservableCollection<TimeEntry>(result.Where(t => !t.IsRunning)));
+                    result.Clear();
+                }
+                Dictionary<int, string> durations = new Dictionary<int, string>();
+
+                foreach (var t in timeEntries)
+                    durations.Add(t.Key, dc.Convert(t.Value, typeof(TimeSpan), null, CultureInfo.InvariantCulture).ToString());
+
+                var Users = users.Select(u => new
+                {
+                    u.FullName,
+                    u.Username,
+                    Duration = durations.FirstOrDefault(d => d.Key == u.Id).Value
+                }).ToList();
+
+                AllUsersReportPage AllUsersReportPage = new AllUsersReportPage();
+
+                AllUsersReportPage.DataContext = new
+                {
+                    Users = Users,
+                    From = From,
+                    To = To
+                };
+
+                SaveXPSDocument(CreateCompanyReport(AllUsersReportPage), isUserReport: false);
             }
-            Dictionary<int, string> durations = new Dictionary<int, string>();
-
-            foreach (var t in timeEntries)
-                durations.Add(t.Key, dc.Convert(t.Value, typeof(TimeSpan), null, CultureInfo.InvariantCulture).ToString());
-
-            var Users = users.Select(u => new
+            catch (Exception ex)
             {
-                u.FullName,
-                u.Username,
-                Duration = durations.FirstOrDefault(d => d.Key == u.Id).Value
-            }).ToList();
-
-            AllUsersReportPage AllUsersReportPage = new AllUsersReportPage();
-
-            AllUsersReportPage.DataContext = new
-            {
-                Users = Users,
-                From = From,
-                To = To
-            };
-
-            SaveXPSDocument(CreateCompanyReport(AllUsersReportPage), isUserReport: false);
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         private void DateComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -428,7 +441,7 @@ namespace TBT.App.Views.Controls
             var timeEntries = TimeEntries.Where(t => !t.IsRunning).ToList();
 
             var sum = timeEntries.Any() ? timeEntries.Select(t => t.Duration).Aggregate((t1, t2) => t1.Add(t2)) : new TimeSpan();
-            Clipboard.SetText(sum.TotalHours.ToString());
+            Clipboard.SetText($"Total hours: {sum.TotalHours.ToString("N2")}");
         }
     }
 }

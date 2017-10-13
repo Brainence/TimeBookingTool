@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http;
 using TBT.App.Common;
 using TBT.App.Services.CommunicationService.Interfaces;
 
@@ -55,10 +56,21 @@ namespace TBT.App.Services.CommunicationService.Implementations
                 if (allowAnonymous) { client.Dispose(); }
                 return responseString;
             }
-            catch
+            catch(HttpResponseException httpException)
+            {
+                throw new Exception("HttpResonseException:", httpException);
+            }
+            catch(HttpRequestException httpException)
+            {
+                throw new Exception("HttpResonseException:", httpException);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Unknown exception:", ex);
+            }
+            finally
             {
                 if (allowAnonymous) { client?.Dispose(); }
-                return string.Empty;
             }
         }
 
@@ -91,10 +103,21 @@ namespace TBT.App.Services.CommunicationService.Implementations
                 if (allowAnonymous) { client?.Dispose(); }
                 return responseString;
             }
-            catch
+            catch (HttpResponseException httpException)
+            {
+                throw new Exception("HttpResonseException:", httpException);
+            }
+            catch (HttpRequestException httpException)
+            {
+                throw new Exception("HttpResonseException:", httpException);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Unknown exception:", ex);
+            }
+            finally
             {
                 if (allowAnonymous) { client?.Dispose(); }
-                return string.Empty;
             }
         }
 
@@ -127,10 +150,21 @@ namespace TBT.App.Services.CommunicationService.Implementations
                 if (allowAnonymous) { client?.Dispose(); }
                 return responseString;
             }
-            catch
+            catch (HttpResponseException httpException)
+            {
+                throw new Exception("HttpResonseException:", httpException);
+            }
+            catch (HttpRequestException httpException)
+            {
+                throw new Exception("HttpResonseException:", httpException);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Unknown exception:", ex);
+            }
+            finally
             {
                 if (allowAnonymous) { client?.Dispose(); }
-                return string.Empty;
             }
         }
 
@@ -160,10 +194,21 @@ namespace TBT.App.Services.CommunicationService.Implementations
                 if (allowAnonymous) { client?.Dispose(); }
                 return responseString;
             }
-            catch
+            catch (HttpResponseException httpException)
+            {
+                throw new Exception("HttpResonseException:", httpException);
+            }
+            catch (HttpRequestException httpException)
+            {
+                throw new Exception("HttpResonseException:", httpException);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Unknown exception:", ex);
+            }
+            finally
             {
                 if (allowAnonymous) { client?.Dispose(); }
-                return string.Empty;
             }
         }
     }
