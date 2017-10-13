@@ -65,6 +65,8 @@ namespace TBT.App.Views.Windows
                 GetCustomersCommand = new RelayCommand(async obj => await GetCustomers(), obj => CanGetCustomers());
                 GetProjectsCommand = new RelayCommand(async obj => await GetProjects(), obj => CanGetProjects());
                 GetActivitiesCommand = new RelayCommand(async obj => await GetActivities(), obj => CanGetActivities());
+                LoggedOut = false;
+                RefreshUser();
             }
         }
 
@@ -151,13 +153,24 @@ namespace TBT.App.Views.Windows
             {
                 if(!OpenAuthenticationWindow(false))
                 {
+                    LoggedOut = false;
+                    RefreshUser();
                     Show();
                     return;
                 }
                 return;
             }
+            RefreshUser();
             Show();
             //}
+        }
+
+        private async void RefreshUser()
+        {
+            var dataContext = (DataContext as MainWindowViewModel);
+            var user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={App.Username}"));
+
+            dataContext.CurrentUser = user;
         }
 
         private void ExitApplication()
@@ -429,9 +442,13 @@ namespace TBT.App.Views.Windows
             Close();
             if (!OpenAuthenticationWindow(false))
             {
+                LoggedOut = false;
+                RefreshUser();
                 Show();
             }
         }
+
+
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
