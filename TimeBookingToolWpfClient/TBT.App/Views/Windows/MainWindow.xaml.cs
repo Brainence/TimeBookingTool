@@ -38,6 +38,7 @@ namespace TBT.App.Views.Windows
         private User _reportingUser;
         private DispatcherTimer _dateTimer;
         private Window _auth;
+        private int _selectedIndex;
 
         public ICommand GetTimeEntriesCommand { get; set; }
         public ICommand GetCustomersCommand { get; set; }
@@ -215,6 +216,16 @@ namespace TBT.App.Views.Windows
         {
             get { return _isEditing; }
             set { SetProperty(ref _isEditing, value); }
+        }
+
+        public int SelectedIndex
+        {
+            get { return _selectedIndex; }
+            set
+            {
+                ReportControl.GetTimeEntriesCommand.Execute(ReportingUser.Id);
+                SetProperty(ref _selectedIndex, value);
+            }
         }
 
         public bool ItemsLoading

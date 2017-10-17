@@ -30,7 +30,7 @@
         </Grid.ColumnDefinitions>
 
 
-        <TabControl Grid.Row="0">
+        <TabControl Grid.Row="0" SelectedIndex="{Binding ElementName=mainWindow, Path=SelectedIndex, Mode=TwoWay}">
             <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Calendar" Tag="../Icons/calendar_white.png">
                 <controls:CalendarControl x:Name="calendar" User="{Binding CurrentUser, Mode=TwoWay}" IsDateNameShort="False" Background="White"/>
             </TabItem>
@@ -56,8 +56,9 @@
                                   SelectedValue="{Binding ElementName=mainWindow, Path=ReportingUser, Mode=TwoWay}"/>
                     </StackPanel>
 
-
-                    <controls:ReportingControl Grid.Row="1" Margin="20 20 20 20"
+                    <!--<ContentControl Grid.Row="1"  Margin="20 20 20 20" Content="{Binding ElementName=mainWindow, Path=ReportControl, Mode=TwoWay}"></ContentControl>-->
+                    <controls:ReportingControl x:Name="ReportControl"
+                                               Grid.Row="1" Margin="20 20 20 20"
                                                TimeEntries="{Binding ElementName=mainWindow, Path=TimeEntries, Mode=TwoWay}" 
                                                ItemsLoading="{Binding ElementName=mainWindow, Path=ItemsLoading, Mode=TwoWay}"
                                                From="{Binding ElementName=mainWindow, Path=From, Mode=TwoWay}"

@@ -1,11 +1,12 @@
-﻿using TBT.App.Models.AppModels;
+﻿using System.Windows.Controls;
+using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 
 namespace TBT.App.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
-        private User _user;
+        private User _user;        
 
         public MainWindowViewModel()
         {
