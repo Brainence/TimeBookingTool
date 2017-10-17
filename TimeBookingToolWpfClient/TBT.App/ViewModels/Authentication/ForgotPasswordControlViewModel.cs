@@ -93,7 +93,7 @@ namespace TBT.App.ViewModels.Authentication
                 var result = JsonConvert.DeserializeObject<bool?>(
                     await App.CommunicationService.GetAsJson($"ResetTicket/CreateResetTicket/{user.Id}", allowAnonymous: true));
 
-                if (result == null || (result.HasValue && !result.Value))
+                if (result == null || !result.Value)
                 {
                     _mainVM.ErrorMsg = "Error occurred, try again.";
                     NextButtonIsEnabled = true;
@@ -101,7 +101,7 @@ namespace TBT.App.ViewModels.Authentication
                     return;
                 }
 
-                _mainVM.ErrorMsg = "An email with token has been sent to the address you supplied.";
+                _mainVM.ErrorMsg = "An email with token has been sent to your email.";
             }
             else
             {

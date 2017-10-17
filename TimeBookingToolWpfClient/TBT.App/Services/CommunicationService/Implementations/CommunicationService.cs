@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.ComponentModel;
 using System.Configuration;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -21,6 +23,7 @@ namespace TBT.App.Services.CommunicationService.Implementations
         {
             baseUrl = ConfigurationManager.AppSettings[Constants.ServerBaseUrl];
             _client = new HttpClient() { BaseAddress = new Uri(baseUrl) };
+            App.StaticPropertyChanged += ListenAccessToken;
 
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All };
         }
@@ -30,15 +33,33 @@ namespace TBT.App.Services.CommunicationService.Implementations
             return (await _client.GetAsync("user")).StatusCode != HttpStatusCode.NotFound;
         }
 
-        public async Task<string> GetAsJson(string url, bool allowAnonymous = false)
+        public static void ListenAccessToken(object sender, PropertyChangedEventArgs e)
         {
-            var client = allowAnonymous ? new HttpClient() { BaseAddress = new Uri(baseUrl) } : _client;
+            if (e.PropertyName == "AccessToken")
+            {
+                if (string.IsNullOrEmpty(Type.GetType((sender as Type)?.FullName)?.GetProperty(e.PropertyName).GetValue(null).ToString()))
+                {
+                    _client.DefaultRequestHeaders.Clear();
+                }
+                else
+                {
+                    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", App.AccessToken);
+                }
+            }
+        }
+
+        public async Task<string> SendRequest(Func<string, object, Task<HttpResponseMessage>> serverResponse, string url, object data)
+        {
             try
             {
-                if (!allowAnonymous)
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", App.AccessToken);
+                StringContent content = null;
+                if (data != null)
+                {
+                    var json = JsonConvert.SerializeObject(data);
+                    content = new StringContent(data == null ? "" : json, Encoding.UTF8, "application/json");
+                }
 
-                HttpResponseMessage response = await client.GetAsync(url);
+                HttpResponseMessage response = await serverResponse(url, content);
 
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -46,170 +67,47 @@ namespace TBT.App.Services.CommunicationService.Implementations
 
                     if (updated)
                     {
-                        if (allowAnonymous) { client?.Dispose(); }
-                        return await GetAsJson(url, allowAnonymous);
+                        return await (await serverResponse(url, data)).Content.ReadAsStringAsync();
                     }
                 }
                 else response.EnsureSuccessStatusCode();
 
                 var responseString = await response.Content.ReadAsStringAsync();
-                if (allowAnonymous) { client.Dispose(); }
                 return responseString;
             }
-            catch(HttpResponseException httpException)
+            catch (HttpResponseException httpException)
             {
                 throw new Exception("HttpResonseException:", httpException);
             }
-            catch(HttpRequestException httpException)
+            catch (HttpRequestException httpException)
             {
                 throw new Exception("HttpResonseException:", httpException);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception("Unknown exception:", ex);
             }
-            finally
-            {
-                if (allowAnonymous) { client?.Dispose(); }
-            }
+        }
+
+
+        public async Task<string> GetAsJson(string url, bool allowAnonymous = false)
+        {
+            return await SendRequest((x, y) => _client.GetAsync(x), url, null);
         }
 
         public async Task<string> PostAsJson(string url, object data, bool allowAnonymous = false)
         {
-            var client = allowAnonymous ? new HttpClient() { BaseAddress = new Uri(baseUrl) } : _client;
-            try
-            {
-                if (!allowAnonymous)
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", App.AccessToken);
-
-                var json = JsonConvert.SerializeObject(data);
-                StringContent content = new StringContent(data == null ? "" : json, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await client.PostAsync(url, content);
-
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    var updated = await App.UpdateTokens();
-
-                    if (updated)
-                    {
-                        if (allowAnonymous) { client?.Dispose(); }
-                        return await PostAsJson(url, data, allowAnonymous);
-                    }
-                }
-                else response.EnsureSuccessStatusCode();
-
-                var responseString = await response.Content.ReadAsStringAsync();
-                if (allowAnonymous) { client?.Dispose(); }
-                return responseString;
-            }
-            catch (HttpResponseException httpException)
-            {
-                throw new Exception("HttpResonseException:", httpException);
-            }
-            catch (HttpRequestException httpException)
-            {
-                throw new Exception("HttpResonseException:", httpException);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Unknown exception:", ex);
-            }
-            finally
-            {
-                if (allowAnonymous) { client?.Dispose(); }
-            }
+            return await SendRequest((x, y) => _client.PostAsync(x, y as StringContent), url, data);
         }
 
         public async Task<string> PutAsJson(string url, object data, bool allowAnonymous = false)
         {
-            var client = allowAnonymous ? new HttpClient() { BaseAddress = new Uri(baseUrl) } : _client;
-            try
-            {
-                if (!allowAnonymous)
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", App.AccessToken);
-
-                var json = JsonConvert.SerializeObject(data);
-                StringContent content = new StringContent(data == null ? "" : json, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await client.PutAsync(url, content);
-
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    var updated = await App.UpdateTokens();
-
-                    if (updated)
-                    {
-                        if (allowAnonymous) { client?.Dispose(); }
-                        return await PutAsJson(url, data, allowAnonymous);
-                    }
-                }
-                else response.EnsureSuccessStatusCode();
-
-                var responseString = await response.Content.ReadAsStringAsync();
-                if (allowAnonymous) { client?.Dispose(); }
-                return responseString;
-            }
-            catch (HttpResponseException httpException)
-            {
-                throw new Exception("HttpResonseException:", httpException);
-            }
-            catch (HttpRequestException httpException)
-            {
-                throw new Exception("HttpResonseException:", httpException);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Unknown exception:", ex);
-            }
-            finally
-            {
-                if (allowAnonymous) { client?.Dispose(); }
-            }
+            return await SendRequest((x, y) => _client.PutAsync(x, y as StringContent), url, data);
         }
 
         public async Task<string> Delete(string url, bool allowAnonymous = false)
         {
-            var client = allowAnonymous ? new HttpClient() { BaseAddress = new Uri(baseUrl) } : _client;
-            try
-            {
-                if (!allowAnonymous)
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", App.AccessToken);
-
-                HttpResponseMessage response = await client.DeleteAsync(url);
-
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    var updated = await App.UpdateTokens();
-
-                    if (updated)
-                    {
-                        if (allowAnonymous) { client?.Dispose(); }
-                        return await Delete(url, allowAnonymous);
-                    }
-                }
-                else response.EnsureSuccessStatusCode();
-
-                var responseString = await response.Content.ReadAsStringAsync();
-                if (allowAnonymous) { client?.Dispose(); }
-                return responseString;
-            }
-            catch (HttpResponseException httpException)
-            {
-                throw new Exception("HttpResonseException:", httpException);
-            }
-            catch (HttpRequestException httpException)
-            {
-                throw new Exception("HttpResonseException:", httpException);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Unknown exception:", ex);
-            }
-            finally
-            {
-                if (allowAnonymous) { client?.Dispose(); }
-            }
+            return await SendRequest((x, y) => _client.DeleteAsync(x), url, null);
         }
     }
 }

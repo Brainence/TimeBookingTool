@@ -46,6 +46,7 @@ namespace TBT.App
             {
                 AppSettings[Constants.AccessToken] = EncryptionService.Encrypt(value);
                 AppSettings.Save();
+                OnStaticPropertyChanged("AccessToken");
             }
         }
         public static string RefreshToken
@@ -521,6 +522,14 @@ namespace TBT.App
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
                 return await Task.FromResult(false);
             }
+        }
+
+        public static event PropertyChangedEventHandler StaticPropertyChanged;
+
+        protected static void OnStaticPropertyChanged(string propertyName)
+        {
+            var e = new PropertyChangedEventArgs(propertyName);
+            StaticPropertyChanged?.Invoke(typeof(App), e);
         }
     }
 }
