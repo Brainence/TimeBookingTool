@@ -18,16 +18,16 @@
 
         <local:ComboBoxControl x:Name="projectComboBox"  Grid.Row="0" 
                                        Label="Project" 
-                                       ItemsSource="{Binding ElementName=this, Path=User.Projects}"
-                                       SelectedItem="{Binding ElementName=this, Path=SelectedProject, Mode=OneWayToSource}"
+                                       ItemsSource="{Binding Path=User.Projects}"
+                                       SelectedItem="{Binding Path=SelectedProject, Mode=TwoWay}"
                                        EmptyText="[Select project]"
                                        FontSize="13"
                                        Margin="5 4"/>
 
         <local:ComboBoxControl x:Name="taskComboBox" Grid.Row="1" 
                                        Label="Task" 
-                                       ItemsSource="{Binding ElementName=projectComboBox, Path=SelectedItem.Activities}"
-                                       SelectedItem="{Binding ElementName=this, Path=SelectedActivity, Mode=OneWayToSource}"
+                                       ItemsSource="{Binding Path=SelectedProject.Activities}"
+                                       SelectedItem="{Binding SelectedActivity, Mode=TwoWay}"
                                        EmptyText="[Select task]"
                                        FontSize="13"
                                        Margin="5 4">
@@ -35,7 +35,7 @@
             <local:ComboBoxControl.Style>
                 <Style TargetType="local:ComboBoxControl">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=projectComboBox, Path=SelectedItem}" Value="{x:Null}">
+                        <DataTrigger Binding="{Binding Path=SelectedProject}" Value="{x:Null}">
                             <Setter Property="IsEnabled" Value="False"/>
                         </DataTrigger>
                     </Style.Triggers>
@@ -45,7 +45,7 @@
 
 
         <local:TextControl Grid.Row="2"
-                           Label="Comment" Text="{Binding ElementName=this, Path=Comment, Mode=TwoWay}" 
+                           Label="Comment" Text="{Binding Path=Comment, Mode=TwoWay}" 
                            Margin="5 4" FontSize="13" 
                            TextWrapping="Wrap" AcceptsReturn="True" 
                            Width="468"
@@ -64,10 +64,12 @@
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
                            VerticalTextAlignment="Center"
-                           TextAlignment="Left"/>
+                           TextAlignment="Left"
+                           Text="{Binding TimeText}"/>
 
             <local:TextControl x:Name="timelimitTextBox"
-                           Visibility="{Binding ElementName=this, Path=SelectedDay, Converter={StaticResource TodayToVisibilityConverter}, ConverterParameter=TimiLimit}"
+                           Text="{Binding TimeLimit}"
+                           Visibility="{Binding IsLimitVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                            Label="Limit"
                            PreviewTextInput="timelimitTextBox_PreviewTextInput"
                            Margin="5 4" FontSize="13"
@@ -142,7 +144,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <TextBlock x:Name="errorMsg" Height="10" Foreground="Red" TextAlignment="Center"/>
+            <TextBlock x:Name="errorMsg" Text="{Binding ErrorMessage}" Height="10" Foreground="Red" TextAlignment="Center"/>
         </StackPanel>
     </Grid>
 </UserControl>

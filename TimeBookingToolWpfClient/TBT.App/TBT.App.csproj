@@ -135,6 +135,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -165,6 +166,7 @@
     <Compile Include="App\GlobalTimer.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Helpers\AuthenticationControlClosePararmeters.cs" />
+    <Compile Include="Helpers\MainWindowTabItem.cs" />
     <Compile Include="Helpers\ResetPasswordParameters.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Models\AppModels\Customer.cs" />
@@ -185,7 +187,16 @@
     <Compile Include="ViewModels\Authentication\AuthenticationWindowViewModel.cs" />
     <Compile Include="ViewModels\Authentication\ForgotPasswordControlViewModel.cs" />
     <Compile Include="ViewModels\Authentication\ResetPasswordControlViewModel.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\CalendarTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\CustomerTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\EditTimeEntryViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\PeopleTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ProjectsTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ReportingTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\SettingsTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\TasksTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\TimeEntryViewModel.cs" />
     <Compile Include="Views\Authentication\AuthenticationControl.xaml.cs">
       <DependentUpon>AuthenticationControl.xaml</DependentUpon>
     </Compile>
@@ -234,8 +245,8 @@
     <Compile Include="Views\Controls\ReportPage.xaml.cs">
       <DependentUpon>ReportPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\ReportPageTestWindow.xaml.cs">
-      <DependentUpon>ReportPageTestWindow.xaml</DependentUpon>
+    <Compile Include="Views\Controls\SettingsControl.xaml.cs">
+      <DependentUpon>SettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\SpinnersApple.xaml.cs">
       <DependentUpon>SpinnersApple.xaml</DependentUpon>
@@ -374,7 +385,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\ReportPageTestWindow.xaml">
+    <Page Include="Views\Controls\SettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -411,6 +422,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Windows\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Windows\MainWindowResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,0 +1,40 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TBT.App.Views.Controls"
+                    xmlns:vm="clr-namespace:TBT.App.ViewModels.MainWindow">
+    <DataTemplate DataType="{x:Type vm:CalendarTabViewModel}">
+        <local:CalendarControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:EditTimeEntryViewModel}">
+        <local:EditTimeEntryControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:TimeEntryViewModel}">
+        <local:TimeEntryControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ReportingTabViewModel}">
+        <local:SpinnersApple/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:PeopleTabViewModel}">
+        <local:SpinnersApple/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:CustomerTabViewModel}">
+        <local:SpinnersApple/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ProjectsTabViewModel}">
+        <local:SpinnersApple/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:TasksTabViewModel}">
+        <local:SpinnersApple/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:SettingsTabViewModel}">
+        <local:SettingsControl/>
+    </DataTemplate>
+</ResourceDictionary>

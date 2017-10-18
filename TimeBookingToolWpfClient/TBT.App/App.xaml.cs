@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
@@ -16,7 +17,7 @@ using TBT.App.Common;
 using TBT.App.Models.AppModels;
 using TBT.App.Services.CommunicationService.Implementations;
 using TBT.App.Services.Encryption.Implementations;
-using TBT.App.ViewModels;
+using TBT.App.ViewModels.MainWindow;
 using TBT.App.Views.Windows;
 using WF = System.Windows.Forms;
 
@@ -109,6 +110,7 @@ namespace TBT.App
             {
                 AppSettings[Constants.RunOnStartup] = value;
                 AppSettings.Save();
+                OnStaticPropertyChanged("RunOnStartup");
             }
         }
         public static string Greeting
@@ -302,45 +304,74 @@ namespace TBT.App
 
         private async void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (!(await CommunicationService.CheckConnection()))
-            {
-                MessageBox.Show("Server is offline, try later.");
-                Current.Shutdown();
-                return;
-            }
             bool authorized = false;
             if (RememberMe)
             {
                 var res = await UpdateTokens();
                 authorized = res && !string.IsNullOrEmpty(Username);
             }
-            try
+            var mainWindow = new MainWindow(authorized && RememberMe);
+
+            var user = JsonConvert.DeserializeObject<User>(await CommunicationService.GetAsJson($"User?email={Username}"));
+            if (user == null) throw new Exception("Error occurred while trying to load user data.");
+
+            user.CurrentTimeZone = DateTimeOffset.Now.Offset;
+            user = JsonConvert.DeserializeObject<User>(await CommunicationService.PutAsJson("User", user));
+
+            var collection = new ObservableCollection<Helpers.MainWindowTabItem>();
+            collection.Add(new Helpers.MainWindowTabItem() { Control = new CalendarTabViewModel(user), Title = "Calendar", Tag = "../Icons/calendar_white.png" });
+            collection.Add(new Helpers.MainWindowTabItem() { Control = new ReportingTabViewModel(), Title = "Reporting", Tag = "../Icons/reporting_white.png" });
+            collection.Add(new Helpers.MainWindowTabItem() { Control = new PeopleTabViewModel(), Title = "People", Tag = "../Icons/people_white.png" });
+            collection.Add(new Helpers.MainWindowTabItem() { Control = new CustomerTabViewModel(), Title = "Customers", Tag = "../Icons/customers_white.png" });
+            collection.Add(new Helpers.MainWindowTabItem() { Control = new ProjectsTabViewModel(), Title = "Projects", Tag = "../Icons/projects_white.png" });
+            collection.Add(new Helpers.MainWindowTabItem() { Control = new TasksTabViewModel(), Title = "Tasks", Tag = "../Icons/tasks_white.png" });
+            collection.Add(new Helpers.MainWindowTabItem() { Control = new SettingsTabViewModel(), Title = "Settings", Tag = "../Icons/settings_white.png" });
+            mainWindow.DataContext = new MainWindowViewModel()
             {
-                MainWindow mainWindow = new MainWindow(authorized && RememberMe);
-
-                var user = JsonConvert.DeserializeObject<User>(await CommunicationService.GetAsJson($"User?email={Username}"));
-                if (user == null) throw new Exception("Error occurred while trying to load user data.");
-
-                user.CurrentTimeZone = DateTimeOffset.Now.Offset;
-                user = JsonConvert.DeserializeObject<User>(await CommunicationService.PutAsJson("User", user));
-
-                MainWindowViewModel dataContext;
-                mainWindow.DataContext = dataContext = new MainWindowViewModel() { CurrentUser = user };
-
-                AuthenticationUsername = Username;
-                Username = Username;
-                Greeting = dataContext.CurrentUser.FirstName;
-                Farewell = dataContext.CurrentUser.FirstName;
-                AppSettings.Save();
-
-                ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
-                mainWindow.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+                Tabs = collection,
+                CurrentUser = user
+            };
+            mainWindow.ShowDialog();
         }
+        //    if (!(await CommunicationService.CheckConnection()))
+        //    {
+        //        MessageBox.Show("Server is offline, try later.");
+        //        Current.Shutdown();
+        //        return;
+        //    }
+        //    bool authorized = false;
+        //    if (RememberMe)
+        //    {
+        //        var res = await UpdateTokens();
+        //        authorized = res && !string.IsNullOrEmpty(Username);
+        //    }
+        //    try
+        //    {
+        //        MainWindow mainWindow = new MainWindow(authorized && RememberMe);
+
+        //        var user = JsonConvert.DeserializeObject<User>(await CommunicationService.GetAsJson($"User?email={Username}"));
+        //        if (user == null) throw new Exception("Error occurred while trying to load user data.");
+
+        //        user.CurrentTimeZone = DateTimeOffset.Now.Offset;
+        //        user = JsonConvert.DeserializeObject<User>(await CommunicationService.PutAsJson("User", user));
+
+        //        MainWindowViewModel dataContext;
+        //        mainWindow.DataContext = dataContext = new MainWindowViewModel() { CurrentUser = user };
+
+        //        AuthenticationUsername = Username;
+        //        Username = Username;
+        //        Greeting = dataContext.CurrentUser.FirstName;
+        //        Farewell = dataContext.CurrentUser.FirstName;
+        //        AppSettings.Save();
+
+        //        ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
+        //        mainWindow.ShowDialog();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+        //    }
+        //}
 
         static void InitNotifyIcon()
         {

@@ -5,9 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
-             Loaded="this_Loaded"
              mc:Ignorable="d" >
-
+<!--Loaded="this_Loaded"-->
     <Grid HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -23,19 +22,19 @@
 
                     <Button Template="{StaticResource HyperlinkButtonTemplate}" 
                             Content="Current week"
-                            Command="{Binding ElementName=this, Path=GoToCurrentWeekCommand}"
+                            Command="{Binding GoToCurrentWeekCommand}"
                             VerticalContentAlignment="Center"
                             Margin="15 4 15 4"/>
 
                     <Button Template="{StaticResource HyperlinkButtonTemplate}" 
                             Content="Back to today"
-                            Command="{Binding ElementName=this, Path=BackTodayCommand}"
+                            Command="{Binding BackTodayCommand}"
                             VerticalContentAlignment="Center"
                             Margin="15 4 15 4"/>
 
                     <Button Template="{StaticResource HyperlinkButtonTemplate}" 
                             Content="Selected week"
-                            Command="{Binding ElementName=this, Path=GoToSelectedDayCommand}"
+                            Command="{Binding GoToSelectedDayCommand}"
                             VerticalContentAlignment="Center"
                             Margin="15 4 15 4"/>
 
@@ -43,7 +42,7 @@
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
 
-                    <Button Click="ButtonUp_Click">
+                    <Button Command="{Binding ChangeWeekCommand}" CommandParameter="-7">
                         <Button.Template>
                             <ControlTemplate>
                                 <Grid>
@@ -86,10 +85,13 @@
                     </Button>
 
                     <ListBox x:Name="WeekListBox"
-                         ItemsSource="{Binding ElementName=this, Path=Week, Mode=TwoWay}" 
+                         ItemsSource="{Binding Path=Week, Mode=TwoWay}" 
                          HorizontalContentAlignment="Stretch"
                          HorizontalAlignment="Stretch"
-                         SelectedItem="{Binding ElementName=this, Path=SelectedDay, Mode=OneWay}" BorderBrush="Transparent">
+                         SelectedIndex="{Binding SelectedIndex}"
+                         SelectedItem="{Binding SelectedDay}"
+                         BorderBrush="Transparent"
+                         Background="Transparent">
 
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -134,12 +136,12 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <local:DateTimeControl DateTime="{Binding}" BorderBrush="{StaticResource CalendarItemBackground}" BorderThickness="1"
-                                                       IsDateNameShort="{Binding Path=IsDateNameShort, RelativeSource={RelativeSource AncestorType=local:CalendarControl}, Mode=TwoWay}" />
+                                                       IsDateNameShort="{Binding ElementName=WeekListBox, Path=DataContext.IsDateNameShort, Mode=TwoWay}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <Button Click="ButtonDown_Click">
+                    <Button Command="{Binding ChangeWeekCommand}" CommandParameter="7">
                         <Button.Template>
 
                             <ControlTemplate>
@@ -193,11 +195,14 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <local:EditTimeEntryControl Grid.Row="0"
+            <ContentControl Grid.Row="0" Margin="20 15 20 0" Content="{Binding EditTimeEntryViewModel}"/>
+
+
+            <!--<local:EditTimeEntryControl Grid.Row="0"
                                         Margin="20 15 20 0"
-                                        User="{Binding ElementName=this, Path=User, Mode=TwoWay}"
+                                        User="{Path=User, Mode=TwoWay}"
                                         RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries"
-                                        SelectedDay="{Binding ElementName=this, Path=SelectedDay, Mode=TwoWay}"/>
+                                        SelectedDay="{Binding ElementName=this, Path=SelectedDay, Mode=TwoWay}"/>-->
             <ScrollViewer Grid.Row="1"
                               Name="TimeEntriesScrollView"
                               Margin="20 10 20 0" 
@@ -206,11 +211,12 @@
                               VerticalAlignment="Top" 
                               HorizontalAlignment="Stretch"
                               Visibility="{Binding ElementName=this, Path=IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}">
-                <ItemsControl Name="TimeEntriesItems" ItemsSource="{Binding ElementName=this, Path=User.TimeEntries, Mode=TwoWay}" AlternationCount="100">
+                <ItemsControl Name="TimeEntriesItems" ItemsSource="{Binding Path=TimeEntriesItems, Mode=TwoWay}" AlternationCount="100">
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="1">
+                                <ContentControl Content="{Binding}"></ContentControl>
                                 <local:TimeEntryControl TimeEntry="{Binding}" 
                                                         ScrollToEdited="RefreshScrollView"  
                                                         RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries" 
@@ -232,7 +238,7 @@
                            FontWeight="Bold"
                            VerticalAlignment="Center"/>
 
-                <TextBlock Text="{Binding ElementName=this, Path=WeekTime, StringFormat={}Time entered for a week: {0}}"
+                <TextBlock Text="{Binding Path=WeekTime, StringFormat={}Time entered for a week: {0}}"
                            FontSize="14" 
                            FontWeight="Bold"
                            VerticalAlignment="Center"/>

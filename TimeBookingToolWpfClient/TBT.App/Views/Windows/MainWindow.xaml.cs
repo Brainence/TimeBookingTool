@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Commands;
-using TBT.App.ViewModels;
+using TBT.App.ViewModels.MainWindow;
 using TBT.App.ViewModels.Authentication;
 using TBT.App.Views.Controls;
 
@@ -39,6 +39,7 @@ namespace TBT.App.Views.Windows
         private DispatcherTimer _dateTimer;
         private Window _auth;
         private int _selectedIndex;
+        private MainWindowViewModel _myDataContext;
 
         public ICommand GetTimeEntriesCommand { get; set; }
         public ICommand GetCustomersCommand { get; set; }
@@ -61,39 +62,17 @@ namespace TBT.App.Views.Windows
                 _dateTimer.Interval = new TimeSpan(0, 0, 1);
 
                 NewUser = new User();
-                GetTimeEntriesCommand = new RelayCommand(async obj => await GetTimeEntries(obj), obj => CanGetTimeEntries());
-                GetCustomersCommand = new RelayCommand(async obj => await GetCustomers(), obj => CanGetCustomers());
-                GetProjectsCommand = new RelayCommand(async obj => await GetProjects(), obj => CanGetProjects());
-                GetActivitiesCommand = new RelayCommand(async obj => await GetActivities(), obj => CanGetActivities());
+                GetTimeEntriesCommand = new RelayCommand(async obj => await GetTimeEntries(obj), obj => From != null && To != null);
+                GetCustomersCommand = new RelayCommand(async obj => await GetCustomers(), null);
+                GetProjectsCommand = new RelayCommand(async obj => await GetProjects(), null);
+                GetActivitiesCommand = new RelayCommand(async obj => await GetActivities(), null);
                 LoggedOut = false;
+                MyDataContext = (DataContext as MainWindowViewModel);
                 RefreshUser();
             }
         }
 
-        public static bool IsShuttingDown()
-        {
-            try
-            {
-                Application.Current.ShutdownMode = Application.Current.ShutdownMode;
-                return false;
-            }
-            catch (Exception)
-            {
-                return true;
-            }
-        }
-
-        public bool OpenAuthenticationWindow(bool authorized)
-        {
-            if (!authorized)
-            {
-                _auth = new Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel() };
-                App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
-                _auth.ShowDialog();
-            }
-            return IsShuttingDown();
-        }
-
+        #region NotifyIcon
         public void InitNotifyIcon()
         {
             App.ContextMenuStripOpening += NotifyIcon_ContextMenuStripOpening;
@@ -128,23 +107,44 @@ namespace TBT.App.Views.Windows
             App.GlobalNotification.ContextMenuStrip.Items[5].Enabled = !LoggedOut;
         }
 
+        #endregion
+
+        #region helpers
+        private void SayBye()
+        {
+            var userfirstname = (DataContext as MainWindowViewModel)?.CurrentUser?.FirstName ?? "";
+
+            App.ShowBalloon($"I'm watching you", " ", 30000, App.EnableGreetingNotification);
+        }
+
+        public static bool IsShuttingDown()
+        {
+            try
+            {
+                Application.Current.ShutdownMode = Application.Current.ShutdownMode;
+                return false;
+            }
+            catch (Exception)
+            {
+                return true;
+            }
+        }
+
+        public bool OpenAuthenticationWindow(bool authorized)
+        {
+            if (!authorized)
+            {
+                _auth = new Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel() };
+                App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
+                _auth.ShowDialog();
+            }
+            return IsShuttingDown();
+        }
+
+
+
         private void ShowMainWindow()
         {
-            //if (IsVisible)
-            //{
-            //    if (WindowState == WindowState.Minimized)
-            //    {
-            //        WindowState = WindowState.Normal;
-            //    }
-            //    Activate();
-            //}
-            //else
-            //{
-            //    if (!IsLoaded)
-            //    {
-            //        Close();
-            //        return;
-            //    }
             if (LoggedOut)
             {
                 if(!OpenAuthenticationWindow(false))
@@ -158,21 +158,19 @@ namespace TBT.App.Views.Windows
             }
             RefreshUser();
             Show();
-            //}
         }
 
         private async void RefreshUser()
         {
-            try
-            {
-                var dataContext = (DataContext as MainWindowViewModel);
-                var user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={App.Username}"));
-                dataContext.CurrentUser = user;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+            //try
+            //{
+            //    var user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={App.Username}"));
+            //    MyDataContext.CurrentUser = user;
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //}
         }
 
         private void ExitApplication()
@@ -187,8 +185,17 @@ namespace TBT.App.Views.Windows
             Application.Current.Shutdown();
         }
 
+
         public bool LoggedOut { get; set; }
         public bool HideWindow { get; set; }
+        #endregion
+
+        #region notified properties
+        public MainWindowViewModel MyDataContext
+        {
+            get { return _myDataContext; }
+            set { SetProperty(ref _myDataContext, value); }
+        }
 
         public User NewUser
         {
@@ -223,7 +230,7 @@ namespace TBT.App.Views.Windows
             get { return _selectedIndex; }
             set
             {
-                ReportControl.GetTimeEntriesCommand.Execute(ReportingUser.Id);
+                //ReportControl.GetTimeEntriesCommand.Execute(ReportingUser.Id);
                 SetProperty(ref _selectedIndex, value);
             }
         }
@@ -292,7 +299,9 @@ namespace TBT.App.Views.Windows
             get { return _to; }
             set { SetProperty(ref _to, value); }
         }
+        #endregion
 
+        #region getSomething
         private async Task GetUsers()
         {
             try
@@ -469,27 +478,9 @@ namespace TBT.App.Views.Windows
             await GetAllActivities();
             ItemsLoading = false;
         }
+        #endregion
 
-        private bool CanGetTimeEntries()
-        {
-            return From != null && To != null;
-        }
-
-        private bool CanGetCustomers()
-        {
-            return true;
-        }
-
-        private bool CanGetProjects()
-        {
-            return true;
-        }
-
-        private bool CanGetActivities()
-        {
-            return true;
-        }
-
+        #region ControlsEventMethods
         private void SignOutButton_Click(object sender, RoutedEventArgs e)
         {
             LoggedOut = true;
@@ -523,61 +514,29 @@ namespace TBT.App.Views.Windows
             Hide();
         }
 
-        private void SayBye()
-        {
-            var userfirstname = (DataContext as MainWindowViewModel)?.CurrentUser?.FirstName ?? "";
-
-            App.ShowBalloon($"I'm watching you", " ", 30000, App.EnableGreetingNotification);
-        }
-
-        #region INPC
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void RaisePropertyChanged(string propertyName)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected bool SetProperty<T>(ref T backingField, T value, [CallerMemberName] string propertyName = null)
-        {
-            var changed = !EqualityComparer<T>.Default.Equals(backingField, value);
-
-            if (changed)
-            {
-                backingField = value;
-                RaisePropertyChanged(propertyName);
-            }
-
-            return changed;
-        }
-
-        #endregion
-
         private async void this_Loaded(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                await GetAllActivities();
-                await GetAllProjects();
-                await GetAllCustomers();
-                await GetUsers();
+            //try
+            //{
+            //    await GetAllActivities();
+            //    await GetAllProjects();
+            //    await GetAllCustomers();
+            //    await GetUsers();
 
-                CustomersComboBox = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(await App.CommunicationService.GetAsJson("Customer"));
-                ProjectsComboBox = JsonConvert.DeserializeObject<ObservableCollection<Project>>(await App.CommunicationService.GetAsJson("Project"));
+            //    CustomersComboBox = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(await App.CommunicationService.GetAsJson("Customer"));
+            //    ProjectsComboBox = JsonConvert.DeserializeObject<ObservableCollection<Project>>(await App.CommunicationService.GetAsJson("Project"));
 
 
-                RunOnStartupCheckBox.IsChecked = App.RunOnStartup;
-                EnableNotificationCheckBox.IsChecked = App.EnableNotification;
-                EnableGreetingNotificationCheckBox.IsChecked = App.EnableGreetingNotification;
+            //    RunOnStartupCheckBox.IsChecked = App.RunOnStartup;
+            //    EnableNotificationCheckBox.IsChecked = App.EnableNotification;
+            //    EnableGreetingNotificationCheckBox.IsChecked = App.EnableGreetingNotification;
 
-                _dateTimer.Start();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+            //    _dateTimer.Start();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //}
         }
 
         private async void RefreshUsers_ButtonClick(object sender, RoutedEventArgs e)
@@ -632,54 +591,54 @@ namespace TBT.App.Views.Windows
 
         private async void ChangePassword_ButtonClick(object sender, RoutedEventArgs e)
         {
-            if (confirmPassword.Password != newPassword.Password)
-            {
-                MessageBox.Show("Please confirm your password.");
-                return;
-            }
+            //if (confirmPassword.Password != newPassword.Password)
+            //{
+            //    MessageBox.Show("Please confirm your password.");
+            //    return;
+            //}
 
-            var window = (this as MainWindow);
-            if (window == null) return;
+            //var window = (this as MainWindow);
+            //if (window == null) return;
 
-            var dataContext = (window.DataContext as MainWindowViewModel);
-            if (dataContext == null) return;
+            //var dataContext = (window.DataContext as MainWindowViewModel);
+            //if (dataContext == null) return;
 
-            var user = (dataContext.CurrentUser as User);
-            if (user == null) return;
+            //var user = (dataContext.CurrentUser as User);
+            //if (user == null) return;
 
-            try
-            {
-                var isValid = JsonConvert.DeserializeObject<bool>(
-                    await App.CommunicationService.GetAsJson($"User/ValidatePassword/{user.Id}/{Uri.EscapeUriString(oldPassword.Password)}"));
+            //try
+            //{
+            //    var isValid = JsonConvert.DeserializeObject<bool>(
+            //        await App.CommunicationService.GetAsJson($"User/ValidatePassword/{user.Id}/{Uri.EscapeUriString(oldPassword.Password)}"));
 
-                if (!isValid)
-                {
-                    MessageBox.Show("Incorrect password entered.");
-                    return;
-                }
-                else
-                {
-                    await App.CommunicationService.GetAsJson(
-                        $"User/ChangePassword/{user.Id}/{Uri.EscapeUriString(oldPassword.Password)}/{Uri.EscapeUriString(newPassword.Password)}");
+            //    if (!isValid)
+            //    {
+            //        MessageBox.Show("Incorrect password entered.");
+            //        return;
+            //    }
+            //    else
+            //    {
+            //        await App.CommunicationService.GetAsJson(
+            //            $"User/ChangePassword/{user.Id}/{Uri.EscapeUriString(oldPassword.Password)}/{Uri.EscapeUriString(newPassword.Password)}");
 
-                    MessageBox.Show("Password has been changed successfully.");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
-            finally
-            {
-                oldPassword.Password = string.Empty;
-                newPassword.Password = string.Empty;
-                confirmPassword.Password = string.Empty;
-            }
+            //        MessageBox.Show("Password has been changed successfully.");
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //}
+            //finally
+            //{
+            //    oldPassword.Password = string.Empty;
+            //    newPassword.Password = string.Empty;
+            //    confirmPassword.Password = string.Empty;
+            //}
         }
 
         private void this_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            calendar.IsDateNameShort = ActualWidth < 1250;
+            //calendar.IsDateNameShort = ActualWidth < 1250;
         }
 
         private void EditUser_ImageClick(object sender, RoutedEventArgs e)
@@ -703,20 +662,20 @@ namespace TBT.App.Views.Windows
 
         private async void Euw_SaveAction()
         {
-            await GetUsers();
+            //await GetUsers();
 
-            var dataContext = (DataContext as MainWindowViewModel);
-            if (dataContext == null) return;
-            try
-            {
-                var user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={dataContext.CurrentUser.Username}"));
+            //var dataContext = (DataContext as MainWindowViewModel);
+            //if (dataContext == null) return;
+            //try
+            //{
+            //    var user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={dataContext.CurrentUser.Username}"));
 
-                dataContext.CurrentUser = user;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+            //    dataContext.CurrentUser = user;
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //}
         }
 
         private async void Euw_CancelAction()
@@ -726,127 +685,127 @@ namespace TBT.App.Views.Windows
 
         private async void CreateNewCustomerButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                var name = NewCustomerTextBox.Text;
+            //try
+            //{
+            //    var name = NewCustomerTextBox.Text;
 
-                var customer = JsonConvert.DeserializeObject<Customer>(
-                    await App.CommunicationService.GetAsJson($"Customer/GetByName/{Uri.EscapeUriString(name)}"));
+            //    var customer = JsonConvert.DeserializeObject<Customer>(
+            //        await App.CommunicationService.GetAsJson($"Customer/GetByName/{Uri.EscapeUriString(name)}"));
 
-                if (customer != null)
-                {
-                    MessageBox.Show($"Customer with name '{name}' already exists.");
-                    return;
-                }
+            //    if (customer != null)
+            //    {
+            //        MessageBox.Show($"Customer with name '{name}' already exists.");
+            //        return;
+            //    }
 
-                customer = new Customer() { Name = name, IsActive = true };
+            //    customer = new Customer() { Name = name, IsActive = true };
 
-                await App.CommunicationService.PostAsJson("Customer", customer);
+            //    await App.CommunicationService.PostAsJson("Customer", customer);
 
-                await GetCustomers();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+            //    await GetCustomers();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //}
         }
 
         private async void CreateNewProjectButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                var name = NewProjectTextBox.Text;
-                //TODO: Move validation to backend
-                var project = JsonConvert.DeserializeObject<Project>(
-                    await App.CommunicationService.GetAsJson($"Project/GetByName/{Uri.EscapeUriString(name)}"));
+            //try
+            //{
+            //    var name = NewProjectTextBox.Text;
+            //    //TODO: Move validation to backend
+            //    var project = JsonConvert.DeserializeObject<Project>(
+            //        await App.CommunicationService.GetAsJson($"Project/GetByName/{Uri.EscapeUriString(name)}"));
 
-                if (project != null)
-                {
-                    MessageBox.Show($"Project with name '{name}' already exists.");
-                    return;
-                }
-                //TODO: Create project without customer
-                var customer = createProjectComboBox.SelectedItem as Customer;
-                if (customer == null)
-                {
-                    MessageBox.Show($"Cannot create project without customer.");
-                    return;
-                }
+            //    if (project != null)
+            //    {
+            //        MessageBox.Show($"Project with name '{name}' already exists.");
+            //        return;
+            //    }
+            //    //TODO: Create project without customer
+            //    var customer = createProjectComboBox.SelectedItem as Customer;
+            //    if (customer == null)
+            //    {
+            //        MessageBox.Show($"Cannot create project without customer.");
+            //        return;
+            //    }
 
-                project = new Project()
-                {
-                    Name = name,
-                    Customer = new Customer() { Id = customer.Id },
-                    IsActive = true
-                };
+            //    project = new Project()
+            //    {
+            //        Name = name,
+            //        Customer = new Customer() { Id = customer.Id },
+            //        IsActive = true
+            //    };
 
-                await App.CommunicationService.PostAsJson("Project", project);
+            //    await App.CommunicationService.PostAsJson("Project", project);
 
-                await GetProjects();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error occurred while creating new customer. {ex.Message} {ex.InnerException?.Message}");
-            }
+            //    await GetProjects();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Error occurred while creating new customer. {ex.Message} {ex.InnerException?.Message}");
+            //}
         }
 
         private async void CreateNewTaskButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                var project = createTaskComboBox.SelectedItem as Project;
-                if (project == null)
-                {
-                    MessageBox.Show($"Cannot create task without project.");
-                    return;
-                }
+            //try
+            //{
+            //    var project = createTaskComboBox.SelectedItem as Project;
+            //    if (project == null)
+            //    {
+            //        MessageBox.Show($"Cannot create task without project.");
+            //        return;
+            //    }
 
-                var name = NewTaskTextBox.Text;
+            //    var name = NewTaskTextBox.Text;
 
-                var activity = JsonConvert.DeserializeObject<Activity>(
-                    await App.CommunicationService.GetAsJson($"Activity/GetByName/{Uri.EscapeUriString(name)}/{project.Id}"));
+            //    var activity = JsonConvert.DeserializeObject<Activity>(
+            //        await App.CommunicationService.GetAsJson($"Activity/GetByName/{Uri.EscapeUriString(name)}/{project.Id}"));
 
-                if (activity != null)
-                {
-                    MessageBox.Show($"Activity with name '{name}' already exists.");
-                    return;
-                }
-                activity = new Activity()
-                {
-                    Name = name,
-                    Project = new Project() { Id = project.Id },
-                    IsActive = true
-                };
+            //    if (activity != null)
+            //    {
+            //        MessageBox.Show($"Activity with name '{name}' already exists.");
+            //        return;
+            //    }
+            //    activity = new Activity()
+            //    {
+            //        Name = name,
+            //        Project = new Project() { Id = project.Id },
+            //        IsActive = true
+            //    };
 
-                await App.CommunicationService.PostAsJson("Activity", activity);
+            //    await App.CommunicationService.PostAsJson("Activity", activity);
 
-                await GetActivities();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error occurred while creating new task. {ex.Message} {ex.InnerException?.Message}");
-            }
+            //    await GetActivities();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Error occurred while creating new task. {ex.Message} {ex.InnerException?.Message}");
+            //}
         }
 
         private async void customerProjectsExpander_Expanded(object sender, RoutedEventArgs e)
         {
-            var expander = sender as Expander;
-            if (expander == null) return;
+            //var expander = sender as Expander;
+            //if (expander == null) return;
 
-            var customer = expander.DataContext as Customer;
-            if (customer == null) return;
-            try
-            {
-                var projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(
-                    await App.CommunicationService.GetAsJson($"Project/GetByCustomer/{customer.Id}"));
-                if (projects == null) return;
+            //var customer = expander.DataContext as Customer;
+            //if (customer == null) return;
+            //try
+            //{
+            //    var projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(
+            //        await App.CommunicationService.GetAsJson($"Project/GetByCustomer/{customer.Id}"));
+            //    if (projects == null) return;
 
-                customer.Projects = projects;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+            //    customer.Projects = projects;
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //}
         }
 
         private void customerProjectsExpander_Collapsed(object sender, RoutedEventArgs e)
@@ -862,244 +821,271 @@ namespace TBT.App.Views.Windows
 
         private async void RemoveActivity_ImageClick(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+            //    if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
-            var activity = ((sender as Image).DataContext as Activity);
+            //    var activity = ((sender as Image).DataContext as Activity);
 
-            if (activity == null) return;
+            //    if (activity == null) return;
 
-            activity.IsActive = false;
-            try
-            {
-                var x = await App.CommunicationService.PutAsJson("Activity", activity);
+            //    activity.IsActive = false;
+            //    try
+            //    {
+            //        var x = await App.CommunicationService.PutAsJson("Activity", activity);
 
-                await GetAllActivities();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+            //        await GetAllActivities();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //    }
         }
 
         private async void RemoveProject_ImageClick(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+            //if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
-            var project = ((sender as Image).DataContext as Project);
+            //var project = ((sender as Image).DataContext as Project);
 
-            if (project == null) return;
+            //if (project == null) return;
 
-            try
-            {
-                foreach (var activity in project.Activities)
-                {
-                    activity.IsActive = false;
-                    await App.CommunicationService.PutAsJson("Activity", activity);
-                }
+            //try
+            //{
+            //    foreach (var activity in project.Activities)
+            //    {
+            //        activity.IsActive = false;
+            //        await App.CommunicationService.PutAsJson("Activity", activity);
+            //    }
 
-                project.IsActive = false;
-                var x = await App.CommunicationService.PutAsJson("Project", project);
+            //    project.IsActive = false;
+            //    var x = await App.CommunicationService.PutAsJson("Project", project);
 
-                await GetAllProjects();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+            //    await GetAllProjects();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //}
         }
 
         private async void RemoveCustomer_ImageClick(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+            //if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
-            var customer = ((sender as Image).DataContext as Customer);
+            //var customer = ((sender as Image).DataContext as Customer);
 
-            if (customer == null) return;
-            customer.IsActive = false;
-            try
-            {
-                foreach (var project in customer.Projects)
-                {
-                    foreach (var activity in project.Activities)
-                    {
-                        activity.IsActive = false;
-                        await App.CommunicationService.PutAsJson("Activity", activity);
-                    }
+            //if (customer == null) return;
+            //customer.IsActive = false;
+            //try
+            //{
+            //    foreach (var project in customer.Projects)
+            //    {
+            //        foreach (var activity in project.Activities)
+            //        {
+            //            activity.IsActive = false;
+            //            await App.CommunicationService.PutAsJson("Activity", activity);
+            //        }
 
-                    project.IsActive = false;
-                    await App.CommunicationService.PutAsJson("Project", project);
-                }
+            //        project.IsActive = false;
+            //        await App.CommunicationService.PutAsJson("Project", project);
+            //    }
 
-                customer.IsActive = false;
-                var x = await App.CommunicationService.PutAsJson("Customer", customer);
+            //    customer.IsActive = false;
+            //    var x = await App.CommunicationService.PutAsJson("Customer", customer);
 
-                await GetAllActivities();
-                await GetAllProjects();
-                await GetAllCustomers();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+            //    await GetAllActivities();
+            //    await GetAllProjects();
+            //    await GetAllCustomers();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //}
         }
 
         private async void RefreshAll_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                var user = DataContext as MainWindowViewModel;
-                user.CurrentUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={user.CurrentUser.Username}"));
-                var id = ReportingUser == null ? 0 : ReportingUser.Id;
+            //try
+            //{
+            //    var user = DataContext as MainWindowViewModel;
+            //    user.CurrentUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={user.CurrentUser.Username}"));
+            //    var id = ReportingUser == null ? 0 : ReportingUser.Id;
 
-                await GetAllActivities();
-                await GetAllProjects();
-                await GetAllCustomers();
-                await GetUsers();
-                ReportingUser = Users.FirstOrDefault(u => u.Id == id);
-                await GetTimeEntries(id);
+            //    await GetAllActivities();
+            //    await GetAllProjects();
+            //    await GetAllCustomers();
+            //    await GetUsers();
+            //    ReportingUser = Users.FirstOrDefault(u => u.Id == id);
+            //    await GetTimeEntries(id);
 
-                EnableNotificationCheckBox.IsChecked = App.EnableNotification;
-                RunOnStartupCheckBox.IsChecked = App.RunOnStartup;
-                EnableGreetingNotificationCheckBox.IsChecked = App.EnableGreetingNotification;
+            //    EnableNotificationCheckBox.IsChecked = App.EnableNotification;
+            //    RunOnStartupCheckBox.IsChecked = App.RunOnStartup;
+            //    EnableGreetingNotificationCheckBox.IsChecked = App.EnableGreetingNotification;
 
-                CustomersComboBox = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(await App.CommunicationService.GetAsJson("Customer"));
-                ProjectsComboBox = JsonConvert.DeserializeObject<ObservableCollection<Project>>(await App.CommunicationService.GetAsJson("Project"));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+            //    CustomersComboBox = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(await App.CommunicationService.GetAsJson("Customer"));
+            //    ProjectsComboBox = JsonConvert.DeserializeObject<ObservableCollection<Project>>(await App.CommunicationService.GetAsJson("Project"));
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //}
         }
 
-        private void RunOnStartup_Checked(object sender, RoutedEventArgs e)
-        {
-            App.AddShortcutToStartup();
-            App.RunOnStartup = true;
-        }
+        //private void RunOnStartup_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    App.AddShortcutToStartup();
+        //    App.RunOnStartup = true;
+        //}
 
-        private void RunOnStartup_Unchecked(object sender, RoutedEventArgs e)
-        {
-            App.RemoveShortcutFromStartup();
-            App.RunOnStartup = false;
-        }
+        //private void RunOnStartup_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    //App.RemoveShortcutFromStartup();
+        //    //App.RunOnStartup = false;
+        //}
 
-        private void EnableNotification_Checked(object sender, RoutedEventArgs e)
-        {
-            App.EnableNotification = true;
-        }
+        //private void EnableNotification_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    //App.EnableNotification = true;
+        //}
 
-        private void EnableNotification_Unchecked(object sender, RoutedEventArgs e)
-        {
-            App.EnableNotification = false;
-        }
+        //private void EnableNotification_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    //App.EnableNotification = false;
+        //}
 
-        private void EnableGreetingNotificationCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            App.EnableGreetingNotification = true;
-        }
+        //private void EnableGreetingNotificationCheckBox_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    //App.EnableGreetingNotification = true;
+        //}
 
-        private void EnableGreetingNotificationCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            App.EnableGreetingNotification = false;
-        }
+        //private void EnableGreetingNotificationCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    //App.EnableGreetingNotification = false;
+        //}
 
         private async void EditActivity_ImageClick(object sender, RoutedEventArgs e)
         {
-            var button = sender as Image;
-            if (button == null) return;
+            //var button = sender as Image;
+            //if (button == null) return;
 
-            var activity = button.DataContext as Activity;
-            if (activity == null) return;
+            //var activity = button.DataContext as Activity;
+            //if (activity == null) return;
 
-            EditActivityWindow eaw = new EditActivityWindow(activity);
-            eaw.Top = this.Top + (this.Height - eaw.Height) / 2;
-            eaw.Left = this.Left + (this.Width - eaw.Width) / 2;
+            //EditActivityWindow eaw = new EditActivityWindow(activity);
+            //eaw.Top = this.Top + (this.Height - eaw.Height) / 2;
+            //eaw.Left = this.Left + (this.Width - eaw.Width) / 2;
 
-            eaw.ShowDialog();
-            if (eaw.SaveProject)
-            {
-                activity = eaw.Activity;
-                activity.Project = eaw.SelectedProject ?? activity.Project;
-                try
-                {
-                    activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.PutAsJson("Activity", activity));
+            //eaw.ShowDialog();
+            //if (eaw.SaveProject)
+            //{
+            //    activity = eaw.Activity;
+            //    activity.Project = eaw.SelectedProject ?? activity.Project;
+            //    try
+            //    {
+            //        activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.PutAsJson("Activity", activity));
 
-                    await GetActivities();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-                }
-            }
+            //        await GetActivities();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //    }
+            //}
         }
 
 
         private async void EditProject_ImageClick(object sender, RoutedEventArgs e)
         {
-            var button = sender as Image;
-            if (button == null) return;
+            //var button = sender as Image;
+            //if (button == null) return;
 
-            var project = button.DataContext as Project;
-            if (project == null) return;
+            //var project = button.DataContext as Project;
+            //if (project == null) return;
 
-            EditProjectWindow epw = new EditProjectWindow(project);
-            epw.Top = this.Top + (this.Height - epw.Height) / 2;
-            epw.Left = this.Left + (this.Width - epw.Width) / 2;
+            //EditProjectWindow epw = new EditProjectWindow(project);
+            //epw.Top = this.Top + (this.Height - epw.Height) / 2;
+            //epw.Left = this.Left + (this.Width - epw.Width) / 2;
 
-            epw.ShowDialog();
-            if (epw.SaveProject)
-            {
-                project = epw.Project;
-                project.Customer = epw.SelectedCustomer ?? project.Customer;
-                try
-                {
-                    project = JsonConvert.DeserializeObject<Project>(await App.CommunicationService.PutAsJson("Project", project));
+            //epw.ShowDialog();
+            //if (epw.SaveProject)
+            //{
+            //    project = epw.Project;
+            //    project.Customer = epw.SelectedCustomer ?? project.Customer;
+            //    try
+            //    {
+            //        project = JsonConvert.DeserializeObject<Project>(await App.CommunicationService.PutAsJson("Project", project));
 
-                    await GetProjects();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-                }
-            }
+            //        await GetProjects();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //    }
+            //}
         }
 
         private async void EditCustomer_ImageClick(object sender, RoutedEventArgs e)
         {
-            var button = sender as Image;
-            if (button == null) return;
+            //var button = sender as Image;
+            //if (button == null) return;
 
-            var customer = button.DataContext as Customer;
-            if (customer == null) return;
+            //var customer = button.DataContext as Customer;
+            //if (customer == null) return;
 
-            EditCustomerWindow ecw = new EditCustomerWindow(customer.Name);
+            //EditCustomerWindow ecw = new EditCustomerWindow(customer.Name);
 
-            ecw.Top = this.Top + (this.Height - ecw.Height) / 2;
-            ecw.Left = this.Left + (this.Width - ecw.Width) / 2;
-            ecw.ShowDialog();
-            if (customer.Name != ecw.CustomerName && ecw.SaveCustomer)
-            {
-                customer.Name = ecw.CustomerName;
-                try
-                {
-                    customer = JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.PutAsJson("Customer", customer));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-                }
-            }
+            //ecw.Top = this.Top + (this.Height - ecw.Height) / 2;
+            //ecw.Left = this.Left + (this.Width - ecw.Width) / 2;
+            //ecw.ShowDialog();
+            //if (customer.Name != ecw.CustomerName && ecw.SaveCustomer)
+            //{
+            //    customer.Name = ecw.CustomerName;
+            //    try
+            //    {
+            //        customer = JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.PutAsJson("Customer", customer));
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //    }
+            //}
         }
 
         private void ExpanderNewUser_OnExpanded(object sender, RoutedEventArgs e)
         {
-            ExpanderEditProfile.IsExpanded = false;
+            //ExpanderEditProfile.IsExpanded = false;
         }
 
         private void ExpanderEditProfile_OnExpanded(object sender, RoutedEventArgs e)
         {
-            ExpanderNewUser.IsExpanded = false;
+            //ExpanderNewUser.IsExpanded = false;
         }
+
+        #endregion
+
+        #region INPC
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetProperty<T>(ref T backingField, T value, [CallerMemberName] string propertyName = null)
+        {
+            var changed = !EqualityComparer<T>.Default.Equals(backingField, value);
+
+            if (changed)
+            {
+                backingField = value;
+                RaisePropertyChanged(propertyName);
+            }
+
+            return changed;
+        }
+
+        #endregion
 
     }
 }

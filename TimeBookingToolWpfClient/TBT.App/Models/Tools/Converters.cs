@@ -331,7 +331,7 @@ namespace TBT.App.Models.Tools
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             DateTime dateTime;
-            var res = DateTime.TryParse(value.ToString(), out dateTime);
+            var res = DateTime.TryParse(value?.ToString(), out dateTime);
 
             return res ? dateTime.Date == DateTime.Now.Date ? "START" : "CREATE" : "CREATE";
         }

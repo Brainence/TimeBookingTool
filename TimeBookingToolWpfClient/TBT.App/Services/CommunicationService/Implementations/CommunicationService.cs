@@ -89,7 +89,6 @@ namespace TBT.App.Services.CommunicationService.Implementations
             }
         }
 
-
         public async Task<string> GetAsJson(string url, bool allowAnonymous = false)
         {
             return await SendRequest((x, y) => _client.GetAsync(x), url, null);

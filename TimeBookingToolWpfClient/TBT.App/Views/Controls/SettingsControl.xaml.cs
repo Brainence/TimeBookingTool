@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace TBT.App.Views.Controls
 {
     /// <summary>
-    /// Interaction logic for ReportPageTestWindow.xaml
+    /// Interaction logic for SettingsControl.xaml
     /// </summary>
-    public partial class ReportPageTestWindow : Window
+    public partial class SettingsControl : UserControl
     {
-        public ReportPageTestWindow()
+        public SettingsControl()
         {
             InitializeComponent();
         }

@@ -5,8 +5,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TBT.App.Views.Windows"
-        xmlns:vm="clr-namespace:TBT.App.ViewModels"
+        xmlns:vm="clr-namespace:TBT.App.ViewModels.MainWindow"
         xmlns:controls="clr-namespace:TBT.App.Views.Controls"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         Closing="Window_Closing"
         mc:Ignorable="d"
         Loaded="this_Loaded"
@@ -17,9 +18,17 @@
         Width="600" 
         ResizeMode="CanMinimize"
         Style="{StaticResource WindowStyle}">
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <vm:MainWindowViewModel/>
-    </Window.DataContext>
+    </Window.DataContext>-->
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadCommand}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Drop">
+            <i:InvokeCommandAction Command="{Binding CloseCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid Margin="20 20 20 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -29,8 +38,23 @@
 
         </Grid.ColumnDefinitions>
 
+        <TabControl Grid.Row="0" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" ItemsSource="{Binding Tabs}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Title}"/>
+                        <Image Source="{Binding Tag}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ContentControl HorizontalAlignment="Stretch"  Content="{Binding Control}"></ContentControl>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
 
-        <TabControl Grid.Row="0" SelectedIndex="{Binding ElementName=mainWindow, Path=SelectedIndex, Mode=TwoWay}">
+        <!--<TabControl Grid.Row="0" SelectedIndex="{Binding ElementName=mainWindow, Path=SelectedIndex, Mode=TwoWay}">
             <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Calendar" Tag="../Icons/calendar_white.png">
                 <controls:CalendarControl x:Name="calendar" User="{Binding CurrentUser, Mode=TwoWay}" IsDateNameShort="False" Background="White"/>
             </TabItem>
@@ -56,7 +80,7 @@
                                   SelectedValue="{Binding ElementName=mainWindow, Path=ReportingUser, Mode=TwoWay}"/>
                     </StackPanel>
 
-                    <!--<ContentControl Grid.Row="1"  Margin="20 20 20 20" Content="{Binding ElementName=mainWindow, Path=ReportControl, Mode=TwoWay}"></ContentControl>-->
+                    --><!--<ContentControl Grid.Row="1"  Margin="20 20 20 20" Content="{Binding ElementName=mainWindow, Path=ReportControl, Mode=TwoWay}"></ContentControl>--><!--
                     <controls:ReportingControl x:Name="ReportControl"
                                                Grid.Row="1" Margin="20 20 20 20"
                                                TimeEntries="{Binding ElementName=mainWindow, Path=TimeEntries, Mode=TwoWay}" 
@@ -639,12 +663,20 @@
 
                 </Grid>
             </TabItem>
-        </TabControl>
+        </TabControl>-->
 
         <Grid Grid.Row="1">
             <StackPanel HorizontalAlignment="Right" Margin="10 5 3 10" Orientation="Horizontal">
-                <Image Source="../../Resources/Icons/refresh.png" MouseUp="RefreshAll_Click" Height="18" Margin="0 5 5 5" Cursor="Hand" ToolTip="Refresh"/>
-                <Image Source="../../Resources/Icons/exit.png" MouseUp="SignOutButton_Click" Height="18" Margin="5 5 0 5" Cursor="Hand" ToolTip="Sign Out"/>
+                <Image Source="../../Resources/Icons/refresh.png" Height="18" Margin="0 5 5 5" Cursor="Hand" ToolTip="Refresh">
+                    <Image.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding RefreshAllCommand}"/>
+                    </Image.InputBindings>
+                </Image>
+                <Image Source="../../Resources/Icons/exit.png" Height="18" Margin="5 5 0 5" Cursor="Hand" ToolTip="Sign Out">
+                    <Image.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding SignOutCommand}"/>
+                    </Image.InputBindings>
+                </Image>
             </StackPanel>
         </Grid>
 

@@ -522,6 +522,40 @@
         <Setter Property="TabStripPlacement" Value="Top"/>
     </Style>
 
+    <Style TargetType="StackPanel" x:Key="TabHeaderStyle">
+        <Style.Resources>
+            <SolidColorBrush x:Key="TabItemBackground" Color="Transparent"/>
+            <SolidColorBrush x:Key="TabItemForeground" Color="#ffffff"/>
+            <SolidColorBrush x:Key="TabItemIsSelectedBackground" Color="Transparent"/>
+            <SolidColorBrush x:Key="TabItemIsSelectedForeground" Color="#444545"/>
+            <SolidColorBrush x:Key="TabItemMouseOverBackground" Color="Transparent"/>
+            <SolidColorBrush x:Key="TabItemMouseOverForeground" Color="#ffffff"/>
+            <Style TargetType="TextBlock">
+
+            </Style>
+            <Style TargetType="Image">
+
+            </Style>
+            <Style TargetType="Border">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem}}" Value="True">
+                        <Setter Property="BorderBrush" Value="{StaticResource TabItemForeground}"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Width" Value="73"/>
+                        <Setter Property="Height" Value="53"/>
+                    </DataTrigger>
+
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="{StaticResource TabItemForeground}"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Width" Value="73"/>
+                        <Setter Property="Height" Value="53"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Style.Resources>
+    </Style>
+    
     <Style TargetType="TabItem">
         <Style.Resources>
             <SolidColorBrush x:Key="TabItemBackground" Color="Transparent"/>
@@ -554,7 +588,7 @@
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
-                        <Grid x:Name="tabItemTemplate">
+                        <!--<Grid x:Name="tabItemTemplate">
                             <Grid.Style>
                                 <Style TargetType="Grid">
                                     <Style.Triggers>
@@ -573,33 +607,53 @@
                                     </Style.Triggers>
                                 <Setter Property="Cursor" Value="Hand"/>
                                 </Style>
-                            </Grid.Style>
-                            <StackPanel VerticalAlignment="Center">
-                                <Image Height="22" Width="22" Margin="0 0 0 2" Source="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
-                                <TextBlock x:Name="tabTimeHeader"
-                                   Text="{TemplateBinding Header}"
+                            </Grid.Style>-->
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter Property="Background" Value="{StaticResource TabItemBackground}"/>
+                                        </Trigger>
+
+                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem}}" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource TabItemIsSelectedBackground}" />
+                                        </DataTrigger>
+
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Cursor" Value="Hand" />
+                                            <Setter Property="Background" Value="{StaticResource TabItemMouseOverBackground}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                </Style>
+                            </StackPanel.Style>
+                            <Image Height="22" Width="22" Margin="0 0 0 2" Source="{Binding Tag, Mode=TwoWay}" />
+                            <TextBlock x:Name="tabTimeHeader"
+                                   Text="{Binding Title}"
                                    VerticalAlignment="Center"
                                    FontSize="12" 
                                    FontWeight="Bold"
-                                   HorizontalAlignment="Center">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=tabItemTemplate, Path=IsMouseOver}" Value="False">
-                                                    <Setter Property="Foreground" Value="{StaticResource TabItemForeground}" />
-                                                </DataTrigger>
+                                   HorizontalAlignment="Center"
+                                   Foreground="White">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=tabItemTemplate, Path=IsMouseOver}" Value="False">
+                                                <Setter Property="Foreground" Value="{StaticResource TabItemForeground}" />
+                                            </DataTrigger>
 
-                                                <DataTrigger Binding="{Binding ElementName=tabItemTemplate, Path=IsMouseOver}" Value="True">
-                                                    <Setter Property="Foreground" Value="{StaticResource TabItemMouseOverForeground}" />
-                                                </DataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=tabItemTemplate, Path=IsMouseOver}" Value="True">
+                                                <Setter Property="Foreground" Value="{StaticResource TabItemMouseOverForeground}" />
+                                            </DataTrigger>
 
-                                            </Style.Triggers>
+                                        </Style.Triggers>
                                         <Setter Property="Cursor" Value="Hand"/>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </StackPanel>
-                        </Grid>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                        <!--</Grid>-->
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
