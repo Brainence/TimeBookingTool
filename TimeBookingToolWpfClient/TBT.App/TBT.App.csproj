@@ -196,6 +196,7 @@
     <Compile Include="ViewModels\MainWindow\ReportingTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SettingsTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TasksTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\TimeEntryItemsViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TimeEntryViewModel.cs" />
     <Compile Include="Views\Authentication\AuthenticationControl.xaml.cs">
       <DependentUpon>AuthenticationControl.xaml</DependentUpon>
@@ -259,6 +260,9 @@
     </Compile>
     <Compile Include="Views\Controls\TimeEntryControl.xaml.cs">
       <DependentUpon>TimeEntryControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\TimeEntryItemsControl.xaml.cs">
+      <DependentUpon>TimeEntryItemsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Windows\EditActivityWindow.xaml.cs">
       <DependentUpon>EditActivityWindow.xaml</DependentUpon>
@@ -402,6 +406,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\TimeEntryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\TimeEntryItemsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

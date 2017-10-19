@@ -14,6 +14,10 @@
         <local:TimeEntryControl/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:TimeEntryItemsViewModel}">
+        <local:TimeEntryItemsControl/>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vm:ReportingTabViewModel}">
         <local:SpinnersApple/>
     </DataTemplate>

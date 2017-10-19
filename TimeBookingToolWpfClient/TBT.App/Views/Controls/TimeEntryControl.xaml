@@ -5,19 +5,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
-             Loaded="this_Loaded"
-             KeyDown="this_KeyDown"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" >
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding InitCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <Border>
         <Border.Style>
             <Style TargetType="Border">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="true">
+                    <DataTrigger Binding="{Binding Path=TimeEntry.IsRunning}" Value="true">
                         <Setter Property="BorderBrush" Value="#e8711f"/>
                         <Setter Property="BorderThickness" Value="1"/>
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="false">
+                    <DataTrigger Binding="{Binding Path=TimeEntry.IsRunning}" Value="false">
                         <Setter Property="BorderBrush" Value="Transparent"/>
                         <Setter Property="BorderThickness" Value="1"/>
                     </DataTrigger>
@@ -25,28 +29,28 @@
             </Style>
         </Border.Style>
     <Grid MinHeight="75">
-        <!--<Grid.Style>
+        <Grid.Style>
             <Style TargetType="Grid">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding ElementName=this, Path=TimeEntry.IsRunning}" Value="true">
+                    <DataTrigger Binding="{Binding Path=TimeEntry.IsRunning}" Value="true">
                         <Setter Property="Background" Value="#fff2e0"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-        </Grid.Style>-->
-        <Grid Margin="5">
-            <StackPanel Orientation="Horizontal">
+        </Grid.Style>
+            <Grid Margin="5">
+                <StackPanel Orientation="Horizontal">
                 <Image Source="../../Resources/Icons/Clock.png" Width="65" Height="65" Margin="0 0 10 0" VerticalAlignment="Top"/>
 
                 <StackPanel>
 
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="startStopButton"
-                                IsEnabled="False"
-                                Command="{Binding ElementName=this, Path=StartStopCommand, Mode=TwoWay}" 
+                                Command="{Binding Path=StartStopCommand, Mode=TwoWay}" 
+                                IsEnabled="{Binding Path=CanStart}"
                                 Margin="0 0 2 0"
                                 Height="24"
-                                Visibility="{Binding ElementName=this, Path=TimeEntry.Date, Converter={StaticResource TodayToVisibilityConverter}}"
+                                Visibility="{Binding Path=TimeEntry.Date, Converter={StaticResource TodayToVisibilityConverter}}"
                                 Width="24">
                             <Button.Style>
                                     <Style TargetType="Button">
@@ -82,8 +86,8 @@
                         </Button>
 
                         <Button x:Name="editButton" 
-                                IsEnabled="False"
-                                Command="{Binding ElementName=this, Path=EditCommand, Mode=TwoWay}" 
+                                IsEnabled="{Binding Path=CanEdit}"
+                                Command="{Binding Path=EditCommand, Mode=TwoWay}" 
                                 Margin="2 0"
                                 Visibility="{Binding ElementName=this, Path=TimeEntry.Date, Converter={StaticResource EditButtonToVisibilityConverter}}"
                                 Height="24"
@@ -108,7 +112,7 @@
                             <Image Source="/Resources/Icons/editing.png" Stretch="Fill" Height="12" Width="12" ToolTip="Edit"/>
                         </Button>
 
-                        <Button Command="{Binding ElementName=this, Path=RemoveCommand, Mode=TwoWay}" 
+                        <Button Command="{Binding Path=RemoveCommand, Mode=TwoWay}" 
                             Margin="2 0"
                             Height="24"
                             Width="24">
@@ -132,7 +136,7 @@
                             <Image Source="/Resources/Icons/bin.png" Stretch="Fill" Height="12" Width="12" ToolTip="Remove"/>
                         </Button>
 
-                        <TextBlock Text="{Binding ElementName=this, Path=TimeEntry, Converter={StaticResource TimeEntryConverter}}" 
+                        <TextBlock Text="{Binding Path=TimeEntry, Converter={StaticResource TimeEntryConverter}}" 
                                    Margin="10 0 0 0" FontSize="14" 
                                    VerticalAlignment="Center" />
                     </StackPanel>
@@ -142,13 +146,14 @@
                            FontWeight="Bold" 
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
-                           Visibility="{Binding ElementName=this, Path=IsEditing, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
-                    <TextBlock Text="{Binding ElementName=this, Path=TimeEntry, Converter={StaticResource CommentConverter}}" 
+                           Text="{Binding TimerTextBlock}"
+                           Visibility="{Binding Path=IsEditing, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
+                    <TextBlock Text="{Binding Path=TimeEntry.Comment}" 
                                FontSize="12"  
                                VerticalAlignment="Center" Width="370" TextTrimming="WordEllipsis"
-                               Visibility="{Binding ElementName=this, Path=IsEditing, Converter={StaticResource BoolToNotVisibilityConverter}}" />
+                               Visibility="{Binding Path=IsEditing, Converter={StaticResource BoolToNotVisibilityConverter}}" />
 
-                    <StackPanel Visibility="{Binding ElementName=this, Path=IsEditing, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel Visibility="{Binding Path=IsEditing, Converter={StaticResource BoolToVisibilityConverter}}">
                         <TextBox x:Name="timerTextBox" 
                                  VerticalAlignment="Top" HorizontalAlignment="Left"
                                  PreviewTextInput="timerTextBox_PreviewTextInput"
@@ -158,8 +163,9 @@
                                  Height="22"
                                  Width="115"
                                  FontWeight="Bold" 
-                                 VerticalContentAlignment="Center" />
-                        <TextBox Text="{Binding ElementName=this, Path=Comment, Mode=TwoWay}" 
+                                 VerticalContentAlignment="Center"
+                                 Text="{Binding TimerTextBox}"/>
+                        <TextBox Text="{Binding Path=Comment, Mode=TwoWay}" 
                                  Width="370" Height="32"
                                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                                  HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -167,7 +173,7 @@
 
                             <Button VerticalAlignment="Bottom"
                                     HorizontalAlignment="Left"
-                                    Click="SaveTimeEntryButton_Click" Margin="0 0 2 0">
+                                    Command="{Binding SaveTimeEntryCommand}" Margin="0 0 2 0">
                                 <Button.Style>
                                     <Style TargetType="Button">
                                         <Setter Property="Template">
@@ -209,7 +215,7 @@
 
                             <Button VerticalAlignment="Bottom"
                                     HorizontalAlignment="Right"
-                                    Click="CancelEditButton_Click">
+                                    Command="{Binding CancelEditTimeEntryCommand}">
                                 <Button.Style>
                                     <Style TargetType="Button">
                                         <Setter Property="Template">
@@ -251,7 +257,7 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <local:SpinnersApple Margin="10 0 0 0" VerticalAlignment="Center" Visibility="{Binding IsActive, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
+                    <local:SpinnersApple Margin="10 0 0 0" VerticalAlignment="Center" Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

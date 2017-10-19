@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -22,9 +24,10 @@ namespace TBT.App.ViewModels.MainWindow
         private string _comment;
         private string _timeText;
         private string _timeLimit;
-        //private DateTime? _selectedDay;
+        private DateTime? _selectedDay;
         private string _errorMessage;
         private bool _isLimitVisible;
+        private string _emptyText;
 
         #endregion
 
@@ -66,11 +69,11 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _timeLimit, value); }
         }
 
-        //public DateTime? SelectedDay
-        //{
-        //    get { return _selectedDay; }
-        //    set { SetProperty(ref _selectedDay, value); }
-        //}
+        public DateTime? SelectedDay
+        {
+            get { return _selectedDay; }
+            set { SetProperty(ref _selectedDay, value); }
+        }
 
         public string ErrorMessage
         {
@@ -84,7 +87,15 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _isLimitVisible, value); }
         }
 
+        public string EmptyText
+        {
+            get { return _emptyText; }
+            set { SetProperty(ref _emptyText, value); }
+        }
+
         public ICommand CreateStartCommand { get; set; }
+
+        public event Action RefreshTimeEntries;
 
         #endregion
 
@@ -93,6 +104,7 @@ namespace TBT.App.ViewModels.MainWindow
         public EditTimeEntryViewModel()
         {
             //CreateStartCommand = new RelayCommand(obj => );
+            //EmptyText = "[Select project]";
         }
 
         #endregion
@@ -114,161 +126,189 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public void ClearCurrentValues(object sender, PropertyChangedEventArgs e)
+        public void ChangeButtonName(object sender, PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == "SelectedIndex")
+            if (e.PropertyName == "SelectedDay")
             {
-                SelectedProject = null;
-                SelectedActivity = null;
-                Comment = "";
-                TimeLimit = "";
-                TimeText = "";
+                SelectedDay = (sender as CalendarTabViewModel)?.SelectedDay?.Date;
             }
         }
 
+        public void ClearCurrentValues(object sender, PropertyChangedEventArgs e)
+        {
+            //if(e.PropertyName == "SelectedIndex")
+            //{
+            //    SelectedProject = null;
+            //    EmptyText = "[Select project]";
+            //    SelectedActivity = null;
+            //    Comment = "";
+            //    TimeLimit = "";
+            //    TimeText = "";
+            //}
+        }
 
-        //private async void CreateNewButton_Click()
-        //{
-        //    try
-        //    {
-        //        errorMsg.Text = string.Empty;
 
-        //        if (User == null) return;
+        private async void CreateNewButton_Click()
+        {
+            try
+            {
+                ErrorMessage = string.Empty;
 
-        //        if (Comment != null && Comment.Length >= 2048)
-        //        {
-        //            MessageBox.Show("Comment length cannot be greater then 2048.");
-        //            return;
-        //        }
+                if (User == null) return;
 
-        //        double hours = 0;
-        //        TimeSpan duration;
-        //        DateTime? timeLimit;
-        //        var input = timeTextBox.Text;
-        //        var limit = timelimitTextBox.Text;
-        //        var notToday = SelectedDay.HasValue && SelectedDay.Value != DateTime.Today;
+                if (Comment != null && Comment.Length >= 2048)
+                {
+                    MessageBox.Show("Comment length cannot be greater then 2048.");
+                    return;
+                }
 
-        //        if (string.IsNullOrEmpty(input))
-        //        {
-        //            if (notToday)
-        //            {
-        //                errorMsg.Text = $"You have to input the time.";
-        //                return;
-        //            }
-        //            else
-        //            {
-        //                duration = new TimeSpan();
-        //            }
-        //        }
-        //        else if (input.Contains(":"))
-        //        {
-        //            var hour = input.Substring(0, input.IndexOf(":"));
-        //            var min = input.Substring(input.IndexOf(":") + 1);
+                double hours = 0;
+                TimeSpan duration;
+                DateTime? timeLimit;
+                var input = TimeText;
+                var limit = TimeLimit;
+                var notToday = SelectedDay.HasValue && SelectedDay.Value != DateTime.Today;
 
-        //            int h;
-        //            int m;
+                if (string.IsNullOrEmpty(input))
+                {
+                    if (notToday)
+                    {
+                        ErrorMessage = $"You have to input the time.";
+                        return;
+                    }
+                    else
+                    {
+                        duration = new TimeSpan();
+                    }
+                }
+                else if (input.Contains(":"))
+                {
+                    var hour = input.Substring(0, input.IndexOf(":"));
+                    var min = input.Substring(input.IndexOf(":") + 1);
 
-        //            var res = int.TryParse(hour, out h) & int.TryParse(min, out m);
+                    int h;
+                    int m;
 
-        //            if (!res || h < 0 || m < 0 || m > 59)
-        //            {
-        //                MessageBox.Show("Incorrect time input format.");
-        //                return;
-        //            }
+                    var res = int.TryParse(hour, out h) & int.TryParse(min, out m);
 
-        //            duration = new TimeSpan(h, m, 0);
-        //            if (duration.TotalHours >= 24)
-        //            {
-        //                MessageBox.Show("Time entered for day must be less then 24 hours.");
-        //                return;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            var res = double.TryParse(input, out hours);
+                    if (!res || h < 0 || m < 0 || m > 59)
+                    {
+                        MessageBox.Show("Incorrect time input format.");
+                        return;
+                    }
 
-        //            if (!res || hours < 0)
-        //            {
-        //                MessageBox.Show("Incorrect time input format.");
-        //                return;
-        //            }
+                    duration = new TimeSpan(h, m, 0);
+                    if (duration.TotalHours >= 24)
+                    {
+                        MessageBox.Show("Time entered for day must be less then 24 hours.");
+                        return;
+                    }
+                }
+                else
+                {
+                    var res = double.TryParse(input, out hours);
 
-        //            duration = TimeSpan.FromHours(hours);
-        //            if (duration.TotalHours > 24)
-        //            {
-        //                MessageBox.Show("Time entered for day must be less then 24 hours.");
-        //                return;
-        //            }
-        //            else if (duration.TotalHours == 24.0)
-        //            {
-        //                duration = TimeSpan.FromHours(23.9999);
-        //            }
-        //        }
+                    if (!res || hours < 0)
+                    {
+                        MessageBox.Show("Incorrect time input format.");
+                        return;
+                    }
 
-        //        if (string.IsNullOrEmpty(limit))
-        //        {
-        //            timeLimit = null;
-        //        }
-        //        else
-        //        {
-        //            double lim;
-        //            var res = double.TryParse(limit, out lim);
+                    duration = TimeSpan.FromHours(hours);
+                    if (duration.TotalHours > 24)
+                    {
+                        MessageBox.Show("Time entered for day must be less then 24 hours.");
+                        return;
+                    }
+                    else if (duration.TotalHours == 24.0)
+                    {
+                        duration = TimeSpan.FromHours(23.9999);
+                    }
+                }
 
-        //            if (res)
-        //            {
-        //                if (lim < 0.5)
-        //                {
-        //                    MessageBox.Show("Time limit should be greater then 30 minutes.");
-        //                    return;
-        //                }
-        //                else timeLimit = DateTime.UtcNow.AddHours(lim);
-        //            }
-        //            else
-        //            {
-        //                MessageBox.Show("Incorrect time limit input format.");
-        //                return;
-        //            }
-        //        }
+                if (string.IsNullOrEmpty(limit))
+                {
+                    timeLimit = null;
+                }
+                else
+                {
+                    double lim;
+                    var res = double.TryParse(limit, out lim);
 
-        //        if (!await CanStartOrEditTimeEntry(string.IsNullOrEmpty(input) && !notToday ? duration : (TimeSpan?)null) && User != null && User.TimeLimit.HasValue)
-        //        {
-        //            errorMsg.Text = $"You have reached your monthly {User.TimeLimit.Value}-hour limit.";
-        //            return;
-        //        }
+                    if (res)
+                    {
+                        if (lim < 0.5)
+                        {
+                            MessageBox.Show("Time limit should be greater then 30 minutes.");
+                            return;
+                        }
+                        else timeLimit = DateTime.UtcNow.AddHours(lim);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Incorrect time limit input format.");
+                        return;
+                    }
+                }
 
-        //        var timeEntry = new TimeEntry()
-        //        {
-        //            User = new User() { Id = User.Id },
-        //            Activity = new Activity() { Id = SelectedActivity.Id },
-        //            Date = SelectedDay.HasValue && SelectedDay.Value != DateTime.Now.Date ? SelectedDay.Value.ToUniversalTime() : DateTime.UtcNow,
-        //            Comment = Comment,
-        //            IsActive = true,
-        //            Duration = duration,
-        //            TimeLimit = timeLimit
-        //        };
+                if (!await CanStartOrEditTimeEntry(string.IsNullOrEmpty(input) && !notToday ? duration : (TimeSpan?)null) && User != null && User.TimeLimit.HasValue)
+                {
+                    ErrorMessage = $"You have reached your monthly {User.TimeLimit.Value}-hour limit.";
+                    return;
+                }
 
-        //        Comment = string.Empty;
+                var timeEntry = new TimeEntry()
+                {
+                    User = new User() { Id = User.Id },
+                    Activity = new Activity() { Id = SelectedActivity.Id },
+                    Date = SelectedDay.HasValue && SelectedDay.Value != DateTime.Now.Date ? SelectedDay.Value.ToUniversalTime() : DateTime.UtcNow,
+                    Comment = Comment,
+                    IsActive = true,
+                    Duration = duration,
+                    TimeLimit = timeLimit
+                };
 
-        //        timeEntry = JsonConvert.DeserializeObject<TimeEntry>(await App.CommunicationService.PostAsJson("TimeEntry", timeEntry));
+                Comment = string.Empty;
 
-        //        if (string.IsNullOrEmpty(input) && !notToday)
-        //        {
-        //            await App.GlobalTimer.Start(timeEntry.Id);
-        //        }
+                timeEntry = JsonConvert.DeserializeObject<TimeEntry>(await App.CommunicationService.PostAsJson("TimeEntry", timeEntry));
 
-        //        timeTextBox.Text = string.Empty;
-        //        timelimitTextBox.Text = string.Empty;
+                if (string.IsNullOrEmpty(input) && !notToday)
+                {
+                    await App.GlobalTimer.Start(timeEntry.Id);
+                }
 
-        //        User.TimeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-        //            await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{User.Id}/{App.UrlSafeDateToString(SelectedDay.Value.ToUniversalTime())}/{App.UrlSafeDateToString(SelectedDay.Value.ToUniversalTime())}"));
+                TimeText = string.Empty;
+                TimeLimit = string.Empty;
 
-        //        RefreshTimeEntries?.Invoke();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-        //    }
-        //}
+                User.TimeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
+                    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{User.Id}/{App.UrlSafeDateToString(SelectedDay.Value.ToUniversalTime())}/{App.UrlSafeDateToString(SelectedDay.Value.ToUniversalTime())}"));
+
+                RefreshTimeEntries?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
+        }
+
+        private async Task<bool> CanStartOrEditTimeEntry(TimeSpan? duration)
+        {
+            try
+            {
+                if (User == null || User.TimeLimit == null) return await Task.FromResult(false);
+
+                var now = DateTime.Now;
+
+                var from = new DateTime(now.Year, now.Month, 1);
+                var to = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
+
+                return await App.CanStartOrEditTimeEntry(User.Id, User.TimeLimit.Value, from, to, duration);
+            }
+            catch
+            {
+                return await Task.FromResult(false);
+            }
+        }
 
         #endregion
     }

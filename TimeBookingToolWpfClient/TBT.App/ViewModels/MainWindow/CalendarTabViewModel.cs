@@ -25,7 +25,8 @@ namespace TBT.App.ViewModels.MainWindow
         private string _weekTime;
         private int _selectedIndex;
         private BaseViewModel _editTimeEntryViewModel;
-        private ObservableCollection<BaseViewModel> _timeEntriesItems;
+        private BaseViewModel _timeEntryItems;
+        private bool _isLoading;
 
         #endregion
 
@@ -52,7 +53,14 @@ namespace TBT.App.ViewModels.MainWindow
         public DateTime? SelectedDay
         {
             get { return _selectedDay; }
-            set { if (value != null) SetProperty(ref _selectedDay, value); }
+            set
+            {
+                if (value != null)
+                {
+                    SetProperty(ref _selectedDay, value);
+                    SelectedDayChanged();
+                }
+            }
         }
 
         public User User
@@ -73,16 +81,23 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _editTimeEntryViewModel, value); }
         }
 
-        public ObservableCollection<BaseViewModel> TimeEntriesItems
+        public BaseViewModel TimeEntryItems
         {
-            get { return _timeEntriesItems; }
-            set { SetProperty(ref _timeEntriesItems, value); }
+            get { return _timeEntryItems; }
+            set { SetProperty(ref _timeEntryItems, value); }
+        }
+
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set { SetProperty(ref _isLoading, value); }
         }
 
         public ICommand BackTodayCommand { get; set; }
         public ICommand GoToSelectedDayCommand { get; set; }
         public ICommand GoToCurrentWeekCommand { get; set; }
         public ICommand ChangeWeekCommand { get; set; }
+        public event Action RefreshTimeEntriesEvent;
 
         #endregion
 
@@ -90,13 +105,18 @@ namespace TBT.App.ViewModels.MainWindow
 
         public CalendarTabViewModel(User user)
         {
+            User = user;
             Week = GetWeekOfDay(DateTime.Now);
             SelectedDay = DateTime.Now.Date;
             IsDateNameShort = true;
-            User = user;
-            EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, IsLimitVisible = true };
-            PropertyChanged += ((EditTimeEntryViewModel)EditTimeEntryViewModel).ShowLimit;
-            PropertyChanged += ((EditTimeEntryViewModel)EditTimeEntryViewModel).ClearCurrentValues;
+            TimeEntryItems = new TimeEntryItemsViewModel() { TimeEntries = User.TimeEntries, };
+            ((TimeEntryItemsViewModel)TimeEntryItems).RefreshTimeEntries += (() => RefreshTimeEntries(Week));
+            EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, IsLimitVisible = true, SelectedDay = SelectedDay };
+            EditTimeEntryViewModel tempVM = (EditTimeEntryViewModel)_editTimeEntryViewModel;
+            PropertyChanged += tempVM.ShowLimit;
+            PropertyChanged += tempVM.ClearCurrentValues;
+            PropertyChanged += tempVM.ChangeButtonName;
+            tempVM.RefreshTimeEntries += () => RefreshTimeEntries(Week);
             ChangeWeekCommand = new RelayCommand(obj => ChangeWeek(Convert.ToInt32(obj)), null);
             GoToSelectedDayCommand = new RelayCommand(obj => GoToDefaultWeek(true, false), obj => SelectedDay.HasValue && SelectedDay.Value.StartOfWeek(DayOfWeek.Monday) != Week.FirstOrDefault());
             BackTodayCommand = new RelayCommand(obj => GoToDefaultWeek(false, true), obj => SelectedDay.HasValue && SelectedDay.Value.Date != DateTime.Now.Date);
@@ -121,6 +141,46 @@ namespace TBT.App.ViewModels.MainWindow
             _selectedDay = changeDay ? DateTime.Now.Date : _selectedDay;
             RaisePropertyChanged("SelectedDay");
             await GetTimeEnteredForWeek(Week);
+        }
+
+        private async void RefreshTimeEntries(ObservableCollection<DateTime> week)
+        {
+            if (User != null && User.Id != 0)
+            {
+                SelectedDayChanged(false);
+            }
+            if (week != null && week.Any())
+                await GetTimeEnteredForWeek(week);
+        }
+
+        public async void SelectedDayChanged(bool showLoading = true)
+        {
+            if (User == null) return;
+            if (User.Id == 0) return;
+
+            try
+            {
+                if (showLoading) IsLoading = true;
+
+                var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(
+                    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{User.Id}/{App.UrlSafeDateToString(SelectedDay.Value)}/{App.UrlSafeDateToString(SelectedDay.Value)}"));
+
+                foreach (var timeEntry in timeEntries)
+                {
+                    timeEntry.Date = timeEntry.Date.ToLocalTime();
+                }
+
+                User.TimeEntries = new ObservableCollection<TimeEntry>(timeEntries);
+                ((TimeEntryItemsViewModel)TimeEntryItems).TimeEntries = User.TimeEntries;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         private async Task GetTimeEnteredForWeek(ObservableCollection<DateTime> week)

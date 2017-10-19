@@ -9,6 +9,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls;
 using TBT.App.Helpers;
+using TBT.App.ViewModels.MainWindow;
+using TBT.App.Views.Controls;
 
 namespace TBT.App.Models.Tools
 {
@@ -201,7 +203,7 @@ namespace TBT.App.Models.Tools
         {
             TimeEntry timeEntry = (TimeEntry)value;
 
-            if (timeEntry == null || timeEntry.Comment == null) return "";
+            if (string.IsNullOrEmpty(timeEntry?.Comment)) return "";
             return timeEntry.Comment;
         }
 
@@ -367,6 +369,23 @@ namespace TBT.App.Models.Tools
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             return null;
+        }
+    }
+
+    public class NewTimeEntryParamsConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(values?.Count() < 3) { return null; }
+            var temp = new TimeEntryViewModel((int)values[1]) { TimeEntry = (values[0] as TimeEntry) };
+            temp.ScrollToEdited += (values[2] as TimeEntryItemsControl).RefreshScrollView;
+            temp.RefreshTimeEntries += ((values[2] as TimeEntryItemsControl).DataContext as TimeEntryItemsViewModel).RefreshTimeEntriesHandler;
+            return temp;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

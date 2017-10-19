@@ -20,15 +20,16 @@
                                        Label="Project" 
                                        ItemsSource="{Binding Path=User.Projects}"
                                        SelectedItem="{Binding Path=SelectedProject, Mode=TwoWay}"
-                                       EmptyText="[Select project]"
+                                       
                                        FontSize="13"
                                        Margin="5 4"/>
-
+        <!--EmptyText="[Select project]"-->
+        <!--EmptyText="[Select task]"-->
         <local:ComboBoxControl x:Name="taskComboBox" Grid.Row="1" 
                                        Label="Task" 
                                        ItemsSource="{Binding Path=SelectedProject.Activities}"
                                        SelectedItem="{Binding SelectedActivity, Mode=TwoWay}"
-                                       EmptyText="[Select task]"
+                                       
                                        FontSize="13"
                                        Margin="5 4">
 
@@ -57,7 +58,6 @@
             <local:TextControl x:Name="timeTextBox"
                            Grid.Row="3"
                            Label="Time" 
-                           PreviewTextInput="timeTextBox_PreviewTextInput"
                            Margin="5 4" FontSize="13"
                            Width="468" 
                             Height="20"
@@ -71,7 +71,6 @@
                            Text="{Binding TimeLimit}"
                            Visibility="{Binding IsLimitVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                            Label="Limit"
-                           PreviewTextInput="timelimitTextBox_PreviewTextInput"
                            Margin="5 4" FontSize="13"
                            Width="468" 
                             Height="20"
@@ -127,10 +126,10 @@
                                         <Image Grid.Column="0"
                                                Height="20" 
                                                Width="20" 
-                                               Source="/Resources/Icons/stopwatch2.png"
+                                               Source="/Resources/Icons/stopwatch.png"
                                                Margin="10 7 5 7"/>
 
-                                        <TextBlock Text="{Binding ElementName=this, Path=SelectedDay, Converter={StaticResource StartButtonContentConverter}}" 
+                                        <TextBlock Text="{Binding SelectedDay, Converter={StaticResource StartButtonContentConverter}}" 
                                                    Grid.Column="1"
                                                    Margin="5 5 10 5" 
                                                    VerticalAlignment="Center"

@@ -5,7 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
-             mc:Ignorable="d" >
+             mc:Ignorable="d" 
+             Background="White">
 <!--Loaded="this_Loaded"-->
     <Grid HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
@@ -203,31 +204,39 @@
                                         User="{Path=User, Mode=TwoWay}"
                                         RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries"
                                         SelectedDay="{Binding ElementName=this, Path=SelectedDay, Mode=TwoWay}"/>-->
-            <ScrollViewer Grid.Row="1"
+            <ContentControl Grid.Row="1"
+                            Content="{Binding TimeEntryItems}"
+                            Margin="20 10 20 0" 
+                            Height="175"
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Stretch"
+                            Visibility="{Binding IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
+            <!--<ScrollViewer Grid.Row="1"
                               Name="TimeEntriesScrollView"
                               Margin="20 10 20 0" 
                               Height="175"
                               VerticalScrollBarVisibility="Auto"
                               VerticalAlignment="Top" 
                               HorizontalAlignment="Stretch"
-                              Visibility="{Binding ElementName=this, Path=IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}">
+                              Visibility="{Binding IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}">
+                --><!--<ContentControl Content="{Binding TimeEntriesItems}"/>--><!--
                 <ItemsControl Name="TimeEntriesItems" ItemsSource="{Binding Path=TimeEntriesItems, Mode=TwoWay}" AlternationCount="100">
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="1">
                                 <ContentControl Content="{Binding}"></ContentControl>
-                                <local:TimeEntryControl TimeEntry="{Binding}" 
+                                --><!--<local:TimeEntryControl TimeEntry="{Binding}" 
                                                         ScrollToEdited="RefreshScrollView"  
                                                         RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries" 
                                                         Id="{Binding Path=(ItemsControl.AlternationIndex), 
                                                         RelativeSource={RelativeSource TemplatedParent}}"
-                                                        Margin="0 0 0 10"/>
+                                                        Margin="0 0 0 10"/>--><!--
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </ScrollViewer>
+            </ScrollViewer>-->
 
             <StackPanel Grid.Row="2" Margin="20 10 20 5">
                 <TextBlock Text="{Binding ElementName=this, 
@@ -245,7 +254,7 @@
             </StackPanel>
 
             <StackPanel Grid.Row="1" Margin="20" VerticalAlignment="Top" HorizontalAlignment="Stretch"
-                      Visibility="{Binding ElementName=this, Path=IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                      Visibility="{Binding Path=IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
 
                 <local:SpinnersCogs Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </StackPanel>
