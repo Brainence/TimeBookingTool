@@ -148,7 +148,7 @@ namespace TBT.App.Views.Windows
         {
             if (LoggedOut)
             {
-                if(!OpenAuthenticationWindow(false))
+                if (!OpenAuthenticationWindow(false))
                 {
                     LoggedOut = false;
                     RefreshUser();
@@ -506,7 +506,7 @@ namespace TBT.App.Views.Windows
             if (LoggedOut)
             {
                 App.RememberMe = false;
-                App.Username = string.Empty;   
+                App.Username = string.Empty;
             }
 
             SayBye();

@@ -318,19 +318,19 @@ namespace TBT.App
             user.CurrentTimeZone = DateTimeOffset.Now.Offset;
             user = JsonConvert.DeserializeObject<User>(await CommunicationService.PutAsJson("User", user));
 
+            mainWindow.DataContext = new MainWindowViewModel() { CurrentUser = user };
+            var tempContext = mainWindow.DataContext as MainWindowViewModel;
             var collection = new ObservableCollection<Helpers.MainWindowTabItem>();
-            collection.Add(new Helpers.MainWindowTabItem() { Control = new CalendarTabViewModel(user), Title = "Calendar", Tag = "../Icons/calendar_white.png" });
-            collection.Add(new Helpers.MainWindowTabItem() { Control = new ReportingTabViewModel(), Title = "Reporting", Tag = "../Icons/reporting_white.png" });
+            collection.Add(new Helpers.MainWindowTabItem() { Control = new CalendarTabViewModel(tempContext.CurrentUser), Title = "Calendar", Tag = "../Icons/calendar_white.png" });
+            tempContext.CurrentUserChanged += ((CalendarTabViewModel)collection[0].Control).ChangeCurrentUser;
+            collection.Add(new Helpers.MainWindowTabItem() { Control = new ReportingTabViewModel(tempContext.CurrentUser), Title = "Reporting", Tag = "../Icons/reporting_white.png" });
+            tempContext.UsersListChanged += ((ReportingTabViewModel)collection[1].Control).RefreshUsersList;
             collection.Add(new Helpers.MainWindowTabItem() { Control = new PeopleTabViewModel(), Title = "People", Tag = "../Icons/people_white.png" });
             collection.Add(new Helpers.MainWindowTabItem() { Control = new CustomerTabViewModel(), Title = "Customers", Tag = "../Icons/customers_white.png" });
             collection.Add(new Helpers.MainWindowTabItem() { Control = new ProjectsTabViewModel(), Title = "Projects", Tag = "../Icons/projects_white.png" });
             collection.Add(new Helpers.MainWindowTabItem() { Control = new TasksTabViewModel(), Title = "Tasks", Tag = "../Icons/tasks_white.png" });
             collection.Add(new Helpers.MainWindowTabItem() { Control = new SettingsTabViewModel(), Title = "Settings", Tag = "../Icons/settings_white.png" });
-            mainWindow.DataContext = new MainWindowViewModel()
-            {
-                Tabs = collection,
-                CurrentUser = user
-            };
+            tempContext.Tabs = collection;
             mainWindow.ShowDialog();
         }
         //    if (!(await CommunicationService.CheckConnection()))

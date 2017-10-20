@@ -191,10 +191,12 @@
     <Compile Include="ViewModels\MainWindow\CalendarTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\CustomerTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\EditTimeEntryViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\EditUserViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\PeopleTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ProjectsTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ReportingTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ReportPageViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SettingsTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TasksTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TimeEntryItemsViewModel.cs" />
@@ -241,6 +243,9 @@
     <Compile Include="Views\Controls\NewUserControl.xaml.cs">
       <DependentUpon>NewUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\PeopleTabControl.xaml.cs">
+      <DependentUpon>PeopleTabControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\ReportingControl.xaml.cs">
       <DependentUpon>ReportingControl.xaml</DependentUpon>
     </Compile>
@@ -279,6 +284,9 @@
     </Compile>
     <Compile Include="Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Windows\ReportWindow.xaml.cs">
+      <DependentUpon>ReportWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -382,6 +390,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controls\PeopleTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controls\ReportingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -435,6 +447,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Windows\MainWindowResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Windows\ReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -17,7 +17,8 @@
         Height="700" 
         Width="600" 
         ResizeMode="CanMinimize"
-        Style="{StaticResource WindowStyle}">
+        Style="{StaticResource WindowStyle}"
+        Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}">
     <!--<Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>-->
@@ -55,42 +56,6 @@
         </TabControl>
 
         <!--<TabControl Grid.Row="0" SelectedIndex="{Binding ElementName=mainWindow, Path=SelectedIndex, Mode=TwoWay}">
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Calendar" Tag="../Icons/calendar_white.png">
-                <controls:CalendarControl x:Name="calendar" User="{Binding CurrentUser, Mode=TwoWay}" IsDateNameShort="False" Background="White"/>
-            </TabItem>
-
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Reporting" Tag="../Icons/reporting_white.png">
-                <Grid Background="White">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0"
-                                Visibility="{Binding CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Margin="20 20 20 0">
-                        <TextBlock Text="User" Width="50"
-                                   Foreground="#4d4d4d" FontSize="13"
-                                   VerticalAlignment="Center"
-                                   TextAlignment="Left"/>
-                        <ComboBox 
-                                  Width="448" FontSize="13" FontWeight="Bold" Foreground="#c2422b"
-                                  VerticalAlignment="Center"
-                                  Style="{StaticResource ComboBoxFlatStyle}"
-                                  ItemsSource="{Binding ElementName=mainWindow, Path=Users}" 
-                                  SelectedValue="{Binding ElementName=mainWindow, Path=ReportingUser, Mode=TwoWay}"/>
-                    </StackPanel>
-
-                    --><!--<ContentControl Grid.Row="1"  Margin="20 20 20 20" Content="{Binding ElementName=mainWindow, Path=ReportControl, Mode=TwoWay}"></ContentControl>--><!--
-                    <controls:ReportingControl x:Name="ReportControl"
-                                               Grid.Row="1" Margin="20 20 20 20"
-                                               TimeEntries="{Binding ElementName=mainWindow, Path=TimeEntries, Mode=TwoWay}" 
-                                               ItemsLoading="{Binding ElementName=mainWindow, Path=ItemsLoading, Mode=TwoWay}"
-                                               From="{Binding ElementName=mainWindow, Path=From, Mode=TwoWay}"
-                                               To="{Binding ElementName=mainWindow, Path=To, Mode=TwoWay}"
-                                               IsAdmin="{Binding DataContext.CurrentUser.IsAdmin, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                                               User="{Binding ElementName=mainWindow, Path=ReportingUser}"/>
-                </Grid>
-            </TabItem>
 
             <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="People" Tag="../Icons/people_white.png">
                 <Grid Background="White">
@@ -630,9 +595,9 @@
 
                     </Grid>
                 </Grid>
-            </TabItem>
+            </TabItem>-->
 
-            <TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Settings" Tag="../Icons/settings_white.png">
+            <!--<TabItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Settings" Tag="../Icons/settings_white.png">
 
                 <Grid Background="White">
                     <Grid.RowDefinitions>

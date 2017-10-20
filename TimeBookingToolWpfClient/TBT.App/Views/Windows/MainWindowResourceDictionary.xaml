@@ -19,11 +19,15 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:ReportingTabViewModel}">
-        <local:SpinnersApple/>
+        <local:ReportingControl/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:PeopleTabViewModel}">
         <local:SpinnersApple/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:CreateNewUserViewModel}">
+        <local:EditUserControl/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:CustomerTabViewModel}">

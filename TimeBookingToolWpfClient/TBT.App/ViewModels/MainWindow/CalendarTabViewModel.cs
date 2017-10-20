@@ -229,6 +229,12 @@ namespace TBT.App.ViewModels.MainWindow
             return temp;
         }
 
+        public async void ChangeCurrentUser(User newUser)
+        {
+            User = newUser;
+            await RefreshTimeEntries(Week);
+        }
+
         #endregion
     }
 }

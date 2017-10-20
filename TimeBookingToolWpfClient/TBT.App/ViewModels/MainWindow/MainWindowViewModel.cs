@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
+using TBT.App.Models.Commands;
 using TBT.App.ViewModels.Authentication;
 
 namespace TBT.App.ViewModels.MainWindow
@@ -18,7 +20,12 @@ namespace TBT.App.ViewModels.MainWindow
         private User _user;
         private ObservableCollection<MainWindowTabItem> _tabs;
         private int _selectedIndex;
-        private bool _isShown;        
+        private bool _isShown;
+        private ObservableCollection<User> _users;
+        private bool _usersLoading;
+        private bool _loggedOut;
+        private bool _hideWindow;
+        private bool _isVisible;
        
 
         #endregion
@@ -28,7 +35,13 @@ namespace TBT.App.ViewModels.MainWindow
         public User CurrentUser
         {
             get { return _user; }
-            set { SetProperty(ref _user, value); }
+            set
+            {
+                if (SetProperty(ref _user, value))
+                {
+                    CurrentUserChanged?.Invoke(_user);
+                }
+            }
         }
 
         public ObservableCollection<MainWindowTabItem> Tabs
@@ -49,28 +62,51 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _isShown, value); }
         }
 
+        public ObservableCollection<User> Users
+        {
+            get { return _users; }
+            set
+            {
+                if (SetProperty(ref _users, value))
+                {
+                    UsersListChanged?.Invoke(_users);
+                }
+            }
+        }
+
+        public bool UsersLoading
+        {
+            get { return _usersLoading; }
+            set { SetProperty(ref _usersLoading, value); }
+        }
+
+        public bool LoggedOut
+        {
+            get { return _loggedOut; }
+            set { SetProperty(ref _loggedOut, value); }
+        }
+
+        public bool HideWindow
+        {
+            get { return _hideWindow; }
+            set { SetProperty(ref _hideWindow, value); }
+        }
+
+        public bool IsVisible
+        {
+            get { return _isVisible; }
+            set { SetProperty(ref _isVisible, value); }
+        }
+
         public ICommand RefreshAllCommand { get; set; }
         public ICommand SignOutCommand { get; set; }
         public ICommand SizeChengeCommand { get; set; }
         public ICommand LoadCommand { get; set; }
         public ICommand CloseCommand { get; set; }
 
-
-        //public DateTime From
-        //{
-        //    get { return _from; }
-        //    set { SetProperty(ref _from, value); }
-        //}
-
-        //public DateTime To
-        //{
-        //    get { return _to; }
-        //    set { SetProperty(ref _to, value); }
-        //}
-
-        //???????????????????????
-        public bool LoggedOut { get; set; }
-
+        public event Action<ObservableCollection<User>> UsersListChanged;
+        public event Action<User> CurrentUserChanged;
+        
         #endregion
 
         #region Constructor
@@ -78,8 +114,10 @@ namespace TBT.App.ViewModels.MainWindow
         public MainWindowViewModel()
         {
             //CurrentUser = null;
+            GetUsers();
             InitNotifyIcon();
-
+            IsVisible = true;
+            SignOutCommand = new RelayCommand(obj => SignOut(), null);
         }
 
         #endregion
@@ -130,7 +168,7 @@ namespace TBT.App.ViewModels.MainWindow
             App.ShowBalloon($"I'm watching you", " ", 30000, App.EnableGreetingNotification);
         }
 
-        public static bool IsShuttingDown()
+        private static bool IsShuttingDown()
         {
             try
             {
@@ -143,7 +181,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public bool OpenAuthenticationWindow(bool authorized)
+        private bool OpenAuthenticationWindow(bool authorized)
         {
             if (!authorized)
             {
@@ -184,6 +222,20 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
+        private async Task GetUsers()
+        {
+            try
+            {
+                UsersLoading = true;
+                Users = JsonConvert.DeserializeObject<ObservableCollection<User>>(await App.CommunicationService.GetAsJson("User"));
+                UsersLoading = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
+        }
+
         private void ExitApplication()
         {
             App.ShowBalloon(App.Farewell, " ", 30000, App.EnableGreetingNotification);
@@ -195,6 +247,22 @@ namespace TBT.App.ViewModels.MainWindow
 
             Application.Current.Shutdown();
         }
+
+        private void SignOut()
+        {
+            LoggedOut = true;
+            HideWindow = false;
+            App.Username = string.Empty;
+
+            IsVisible = false;
+            if (!OpenAuthenticationWindow(false))
+            {
+                LoggedOut = false;
+                RefreshUser();
+                IsVisible = true;
+            }
+        }
+
         #endregion
 
         #endregion
