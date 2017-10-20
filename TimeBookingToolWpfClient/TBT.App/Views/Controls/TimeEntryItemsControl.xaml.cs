@@ -26,17 +26,15 @@ namespace TBT.App.Views.Controls
         {
             var tempControl = new TimeEntryControl();
             tempControl.Measure(new Size(int.MaxValue, int.MaxValue));
-            _timeEntryControlHeight = tempControl.DesiredSize.Height;
+            _timeEntryControlHeight = tempControl.DesiredSize.Height - 
+                tempControl.timerTextBlock.DesiredSize.Height - tempControl.commentArea.DesiredSize.Height
+                - tempControl.saveButton.DesiredSize.Height - tempControl.spinnerControl.DesiredSize.Height;
             InitializeComponent();
         }
 
         public void RefreshScrollView(int id)
         {
-            if(id == 1)
-            {
-                TimeEntriesScrollView.ScrollToVerticalOffset(_timeEntryControlHeight * id + 20);
-            }
-            TimeEntriesScrollView.ScrollToVerticalOffset(_timeEntryControlHeight * (id - 1));
+            TimeEntriesScrollView.ScrollToVerticalOffset(_timeEntryControlHeight * id);
         }
     }
 }

@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Commands;
 

@@ -103,7 +103,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         public EditTimeEntryViewModel()
         {
-            //CreateStartCommand = new RelayCommand(obj => );
+            CreateStartCommand = new RelayCommand(obj => CreateNewActivity(), null);
             //EmptyText = "[Select project]";
         }
 
@@ -148,7 +148,7 @@ namespace TBT.App.ViewModels.MainWindow
         }
 
 
-        private async void CreateNewButton_Click()
+        private async void CreateNewActivity()
         {
             try
             {

@@ -16,24 +16,5 @@ namespace TBT.App.Views.Controls
         {
             InitializeComponent();
         }
-
-        //private void timerTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        //{
-        //    e.Handled = IsTextAllowed(e.Text);
-        //}
-
-        //private bool IsTextAllowed(string text)
-        //{
-        //    Regex regex = new Regex("[^0-9.-:]+");
-        //    return regex.IsMatch(text);
-        //}
-
-        //private void this_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    if (e.Key == Key.Escape)
-        //    {
-                //IsEditing = false;
-        //    }
-        //}
     }
 }

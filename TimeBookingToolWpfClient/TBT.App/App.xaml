@@ -31,7 +31,6 @@
             <tools:StartButtonContentConverter x:Key="StartButtonContentConverter"/>
             <tools:ResetPasswordMultiConverter x:Key="ResetPasswordMultiConverter"/>
             <tools:AuthenticationControlMultiConverter x:Key = "AuthenticationControlMultiConverter"/>
-            <!--<tools:TimeEntryToViewModelConverter x:Key="TimeEntryToViewModelConverter"/>-->
             <tools:NewTimeEntryParamsConverter x:Key="NewTimeEntryParamsConverter"/>
 
             <SolidColorBrush x:Key="CalendarItemBackground" Color="#c2422b"/>

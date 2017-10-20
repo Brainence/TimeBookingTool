@@ -380,6 +380,7 @@ namespace TBT.App.Models.Tools
             var temp = new TimeEntryViewModel((int)values[1]) { TimeEntry = (values[0] as TimeEntry) };
             temp.ScrollToEdited += (values[2] as TimeEntryItemsControl).RefreshScrollView;
             temp.RefreshTimeEntries += ((values[2] as TimeEntryItemsControl).DataContext as TimeEntryItemsViewModel).RefreshTimeEntriesHandler;
+            temp.EditingTimeEntry += ((values[2] as TimeEntryItemsControl).DataContext as TimeEntryItemsViewModel).ChangeEditingTimeEntry;
             return temp;
         }
 

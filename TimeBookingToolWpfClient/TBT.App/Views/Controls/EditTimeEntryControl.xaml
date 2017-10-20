@@ -84,7 +84,7 @@
         <StackPanel Grid.Row="4">
 
             <Button x:Name="startButton"
-                Click="CreateNewButton_Click" 
+                Command="{Binding CreateStartCommand}" 
                 ToolTipService.ShowOnDisabled="True"
                 ToolTip="{Binding ElementName=startButton, Path=IsEnabled, Converter={StaticResource StartButtonToolTipConverter}, ConverterParameter='Select task first.'}"
                 HorizontalAlignment="Center"

@@ -15,6 +15,7 @@ using TBT.App.Models.Commands;
 using TBT.App.ViewModels.MainWindow;
 using TBT.App.ViewModels.Authentication;
 using TBT.App.Views.Controls;
+using TBT.App.Helpers;
 
 namespace TBT.App.Views.Windows
 {

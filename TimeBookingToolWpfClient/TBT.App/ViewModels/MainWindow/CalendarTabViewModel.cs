@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
@@ -97,7 +98,6 @@ namespace TBT.App.ViewModels.MainWindow
         public ICommand GoToSelectedDayCommand { get; set; }
         public ICommand GoToCurrentWeekCommand { get; set; }
         public ICommand ChangeWeekCommand { get; set; }
-        public event Action RefreshTimeEntriesEvent;
 
         #endregion
 
@@ -110,13 +110,13 @@ namespace TBT.App.ViewModels.MainWindow
             SelectedDay = DateTime.Now.Date;
             IsDateNameShort = true;
             TimeEntryItems = new TimeEntryItemsViewModel() { TimeEntries = User.TimeEntries, };
-            ((TimeEntryItemsViewModel)TimeEntryItems).RefreshTimeEntries += (() => RefreshTimeEntries(Week));
+            ((TimeEntryItemsViewModel)TimeEntryItems).RefreshTimeEntries += (async () => await RefreshTimeEntries(Week));
             EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, IsLimitVisible = true, SelectedDay = SelectedDay };
             EditTimeEntryViewModel tempVM = (EditTimeEntryViewModel)_editTimeEntryViewModel;
             PropertyChanged += tempVM.ShowLimit;
             PropertyChanged += tempVM.ClearCurrentValues;
             PropertyChanged += tempVM.ChangeButtonName;
-            tempVM.RefreshTimeEntries += () => RefreshTimeEntries(Week);
+            tempVM.RefreshTimeEntries += async () => await RefreshTimeEntries(Week);
             ChangeWeekCommand = new RelayCommand(obj => ChangeWeek(Convert.ToInt32(obj)), null);
             GoToSelectedDayCommand = new RelayCommand(obj => GoToDefaultWeek(true, false), obj => SelectedDay.HasValue && SelectedDay.Value.StartOfWeek(DayOfWeek.Monday) != Week.FirstOrDefault());
             BackTodayCommand = new RelayCommand(obj => GoToDefaultWeek(false, true), obj => SelectedDay.HasValue && SelectedDay.Value.Date != DateTime.Now.Date);
@@ -132,7 +132,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             Week = WeekOffset(Week, offset);
             RaisePropertyChanged("SelectedDay");
-            await GetTimeEnteredForWeek(Week);
+            await RefreshTimeEntries(Week);
         }
 
         private async void GoToDefaultWeek(bool toSelectedDay, bool changeDay)
@@ -140,10 +140,10 @@ namespace TBT.App.ViewModels.MainWindow
             Week = GetWeekOfDay(toSelectedDay ? SelectedDay.Value : DateTime.Now);
             _selectedDay = changeDay ? DateTime.Now.Date : _selectedDay;
             RaisePropertyChanged("SelectedDay");
-            await GetTimeEnteredForWeek(Week);
+            await RefreshTimeEntries(Week);
         }
 
-        private async void RefreshTimeEntries(ObservableCollection<DateTime> week)
+        private async Task RefreshTimeEntries(ObservableCollection<DateTime> week)
         {
             if (User != null && User.Id != 0)
             {

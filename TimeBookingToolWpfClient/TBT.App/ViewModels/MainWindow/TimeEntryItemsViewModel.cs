@@ -14,6 +14,7 @@ namespace TBT.App.ViewModels.MainWindow
         #region Fields
 
         private ObservableCollection<TimeEntry> _timeEntries;
+        private TimeEntryViewModel _editingTimeEntry;
         private bool _isLoading;
 
         #endregion
@@ -46,6 +47,15 @@ namespace TBT.App.ViewModels.MainWindow
         #endregion
 
         #region Methods
+
+        public void ChangeEditingTimeEntry(TimeEntryViewModel timeEntry)
+        {
+            if(_editingTimeEntry != null && _editingTimeEntry != timeEntry)
+            {
+                _editingTimeEntry.IsEditing = false;
+            }
+            _editingTimeEntry = timeEntry;
+        }
 
         public void RefreshTimeEntriesHandler()
         {

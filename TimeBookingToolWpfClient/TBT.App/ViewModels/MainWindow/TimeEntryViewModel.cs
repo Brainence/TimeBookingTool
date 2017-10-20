@@ -89,6 +89,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         public event Action RefreshTimeEntries;
         public event Action<int> ScrollToEdited;
+        public event Action<TimeEntryViewModel> EditingTimeEntry;
 
         #endregion
 
@@ -180,6 +181,7 @@ namespace TBT.App.ViewModels.MainWindow
                 _startDate = DateTime.UtcNow;
 
                 IsEditing = !IsEditing;
+                EditingTimeEntry?.Invoke(this);
 
                 TimerTextBox = $"{TimeEntry.Duration.Hours:00}:{TimeEntry.Duration.Minutes:00}";
                 Comment = TimeEntry.Comment;

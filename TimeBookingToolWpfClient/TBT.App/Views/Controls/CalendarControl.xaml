@@ -4,10 +4,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
              mc:Ignorable="d" 
              Background="White">
-<!--Loaded="this_Loaded"-->
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}"/>
+
+
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -122,10 +129,7 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListBoxItem">
-                                            <StackPanel Background="{TemplateBinding Background}" Orientation="Horizontal"
-                                                MouseDown="StackPanel_MouseDown" 
-                                                MouseWheel="WeekListBox_MouseWheel">
-
+                                            <StackPanel Background="{TemplateBinding Background}" Orientation="Horizontal" >
                                                 <ContentPresenter/>
                                             </StackPanel>
                                         </ControlTemplate>
@@ -198,12 +202,6 @@
 
             <ContentControl Grid.Row="0" Margin="20 15 20 0" Content="{Binding EditTimeEntryViewModel}"/>
 
-
-            <!--<local:EditTimeEntryControl Grid.Row="0"
-                                        Margin="20 15 20 0"
-                                        User="{Path=User, Mode=TwoWay}"
-                                        RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries"
-                                        SelectedDay="{Binding ElementName=this, Path=SelectedDay, Mode=TwoWay}"/>-->
             <ContentControl Grid.Row="1"
                             Content="{Binding TimeEntryItems}"
                             Margin="20 10 20 0" 
@@ -211,36 +209,8 @@
                             VerticalAlignment="Top" 
                             HorizontalAlignment="Stretch"
                             Visibility="{Binding IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
-            <!--<ScrollViewer Grid.Row="1"
-                              Name="TimeEntriesScrollView"
-                              Margin="20 10 20 0" 
-                              Height="175"
-                              VerticalScrollBarVisibility="Auto"
-                              VerticalAlignment="Top" 
-                              HorizontalAlignment="Stretch"
-                              Visibility="{Binding IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}">
-                --><!--<ContentControl Content="{Binding TimeEntriesItems}"/>--><!--
-                <ItemsControl Name="TimeEntriesItems" ItemsSource="{Binding Path=TimeEntriesItems, Mode=TwoWay}" AlternationCount="100">
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Margin="1">
-                                <ContentControl Content="{Binding}"></ContentControl>
-                                --><!--<local:TimeEntryControl TimeEntry="{Binding}" 
-                                                        ScrollToEdited="RefreshScrollView"  
-                                                        RefreshTimeEntries="TimeEntryControl_RefreshTimeEntries" 
-                                                        Id="{Binding Path=(ItemsControl.AlternationIndex), 
-                                                        RelativeSource={RelativeSource TemplatedParent}}"
-                                                        Margin="0 0 0 10"/>--><!--
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>-->
-
             <StackPanel Grid.Row="2" Margin="20 10 20 5">
-                <TextBlock Text="{Binding ElementName=this, 
-                                          Path=User.TimeEntries, 
+                <TextBlock Text="{Binding Path=User.TimeEntries, 
                                           Converter={StaticResource DurationConverter}, 
                                           Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}Time entered for a day: {0}}"
                            FontSize="14" 
