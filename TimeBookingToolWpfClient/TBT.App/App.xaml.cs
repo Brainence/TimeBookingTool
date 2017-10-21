@@ -324,8 +324,14 @@ namespace TBT.App
             collection.Add(new Helpers.MainWindowTabItem() { Control = new CalendarTabViewModel(tempContext.CurrentUser), Title = "Calendar", Tag = "../Icons/calendar_white.png" });
             tempContext.CurrentUserChanged += ((CalendarTabViewModel)collection[0].Control).ChangeCurrentUser;
             collection.Add(new Helpers.MainWindowTabItem() { Control = new ReportingTabViewModel(tempContext.CurrentUser), Title = "Reporting", Tag = "../Icons/reporting_white.png" });
+            tempContext.CurrentUserChanged += ((ReportingTabViewModel)collection[1].Control).RefreshCurrentUser;
             tempContext.UsersListChanged += ((ReportingTabViewModel)collection[1].Control).RefreshUsersList;
-            collection.Add(new Helpers.MainWindowTabItem() { Control = new PeopleTabViewModel(), Title = "People", Tag = "../Icons/people_white.png" });
+            //tempContext.CurrentUserChanged += (x) => { ((ReportingTabViewModel)collection[1].Control).User = x; }; ???
+            collection.Add(new Helpers.MainWindowTabItem() { Control = new PeopleTabViewModel(tempContext.CurrentUser, tempContext.Users), Title = "People", Tag = "../Icons/people_white.png" });
+            tempContext.CurrentUserChanged += ((PeopleTabViewModel)collection[2].Control).ChangeCurrentUser;
+            tempContext.UsersListChanged += ((PeopleTabViewModel)collection[2].Control).RefreshUsersList;
+            ((PeopleTabViewModel)collection[2].Control).UserChanged += tempContext.RefreshUser;
+            ((PeopleTabViewModel)collection[2].Control).UsersListChanged += tempContext.GetUsers;
             collection.Add(new Helpers.MainWindowTabItem() { Control = new CustomerTabViewModel(), Title = "Customers", Tag = "../Icons/customers_white.png" });
             collection.Add(new Helpers.MainWindowTabItem() { Control = new ProjectsTabViewModel(), Title = "Projects", Tag = "../Icons/projects_white.png" });
             collection.Add(new Helpers.MainWindowTabItem() { Control = new TasksTabViewModel(), Title = "Tasks", Tag = "../Icons/tasks_white.png" });

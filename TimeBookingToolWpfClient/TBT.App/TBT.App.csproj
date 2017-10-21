@@ -188,6 +188,7 @@
     <Compile Include="ViewModels\Authentication\AuthenticationWindowViewModel.cs" />
     <Compile Include="ViewModels\Authentication\ForgotPasswordControlViewModel.cs" />
     <Compile Include="ViewModels\Authentication\ResetPasswordControlViewModel.cs" />
+    <Compile Include="ViewModels\EditWindowsViewModels\EditWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\CalendarTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\CustomerTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\EditTimeEntryViewModel.cs" />
@@ -279,8 +280,8 @@
     <Compile Include="Views\Windows\EditProjectWindow.xaml.cs">
       <DependentUpon>EditProjectWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Windows\EditUserWindow.xaml.cs">
-      <DependentUpon>EditUserWindow.xaml</DependentUpon>
+    <Compile Include="Views\Windows\EditWindow.xaml.cs">
+      <DependentUpon>EditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -438,7 +439,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Windows\EditUserWindow.xaml">
+    <Page Include="Views\Windows\EditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

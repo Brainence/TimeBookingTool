@@ -32,6 +32,7 @@
             <tools:ResetPasswordMultiConverter x:Key="ResetPasswordMultiConverter"/>
             <tools:AuthenticationControlMultiConverter x:Key = "AuthenticationControlMultiConverter"/>
             <tools:NewTimeEntryParamsConverter x:Key="NewTimeEntryParamsConverter"/>
+            <tools:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
 
             <SolidColorBrush x:Key="CalendarItemBackground" Color="#c2422b"/>
             <SolidColorBrush x:Key="CalendarItemMouseOverBrush" Color="#f77f50"/>

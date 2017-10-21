@@ -24,8 +24,9 @@
                 Command="{Binding Path=CloseButtonClick}"/>
     </Window.InputBindings>
     <Grid>
-        <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="7" Style="{StaticResource windowsButton}"
+        <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="7" Style="{StaticResource windowsButton}"
                 Command="{Binding Path=CloseButtonClick}">
+            <Image Source="../../Resources/Icons/close.png" Width="12"></Image>
         </Button>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Path=ErrorMsg, Mode=TwoWay}" Margin="4"  Height="20" Foreground="#660000"/>
         <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=CurrentViewModel}"></ContentControl>

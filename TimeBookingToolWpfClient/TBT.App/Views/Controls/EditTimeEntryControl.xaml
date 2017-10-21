@@ -65,10 +65,10 @@
                            VerticalAlignment="Top"
                            VerticalTextAlignment="Center"
                            TextAlignment="Left"
-                           Text="{Binding TimeText}"/>
+                           Text="{Binding TimeText, Mode=TwoWay}"/>
 
             <local:TextControl x:Name="timelimitTextBox"
-                           Text="{Binding TimeLimit}"
+                           Text="{Binding TimeLimit, Mode=TwoWay}"
                            Visibility="{Binding IsLimitVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                            Label="Limit"
                            Margin="5 4" FontSize="13"

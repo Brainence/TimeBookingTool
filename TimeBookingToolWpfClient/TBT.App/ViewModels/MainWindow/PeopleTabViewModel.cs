@@ -4,8 +4,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
+using TBT.App.Models.Commands;
+using TBT.App.ViewModels.EditWindowsViewModels;
+using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
@@ -16,9 +21,11 @@ namespace TBT.App.ViewModels.MainWindow
         private User _currentUser;
         private User _newUser;
         private BaseViewModel _createNewUserViewModel;
+        private BaseViewModel _editMyProfileViewModel;
         private bool _isExpandenNewUser;
         private bool _isExpandedEdit;
         private ObservableCollection<User> _users;
+        private bool _isLoading;
 
         #endregion
 
@@ -40,6 +47,12 @@ namespace TBT.App.ViewModels.MainWindow
         {
             get { return _createNewUserViewModel; }
             set { SetProperty(ref _createNewUserViewModel, value); }
+        }
+
+        public BaseViewModel EditMyProfileViewModel
+        {
+            get { return _editMyProfileViewModel; }
+            set { SetProperty(ref _editMyProfileViewModel, value); }
         }
 
         public bool IsExpandedNewUser
@@ -69,8 +82,26 @@ namespace TBT.App.ViewModels.MainWindow
         public ObservableCollection<User> Users
         {
             get { return _users; }
-            set { SetProperty(ref _users, value); }
+            set
+            {
+                if(SetProperty(ref _users, value))
+                {
+                    IsLoading = (value == null);
+                }
+            }
         }
+
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set { SetProperty(ref _isLoading, value); }
+        }
+
+        public ICommand RemoveUserCommand { get; set; }
+        public ICommand EditUserCommand { get; set; }
+
+        public event Action UserChanged;
+        public event Func<Task> UsersListChanged;
 
         #endregion
 
@@ -80,13 +111,86 @@ namespace TBT.App.ViewModels.MainWindow
         {
             CurrentUser = user;
             Users = users;
+            CreateNewUserViewModel = new EditUserViewModel()
+            {
+                ShowAdmin = true,
+                ShowPassword = true,
+                ForSaving = false,
+                EditingUser = new User()
+            };
+            ((EditUserViewModel)CreateNewUserViewModel).SavingUserAction += SaveUserEditingAction;
+
+            EditMyProfileViewModel = new EditUserViewModel()
+            {
+                ShowAdmin = false,
+                ShowPassword = false,
+                ForSaving = true,
+                EditingUser = CurrentUser
+            };
+            ((EditUserViewModel)EditMyProfileViewModel).SavingUserAction += SaveUserEditingAction;
+            EditUserCommand = new RelayCommand(obj => EditUser(obj as User), null);
+            RemoveUserCommand = new RelayCommand(obj => RemoveUser(obj as User), null);
         }
 
         #endregion
 
         #region Methods
 
+        public void ChangeCurrentUser(User newUser)
+        {
+            CurrentUser = newUser;
+        }
 
+        public void RefreshUsersList(ObservableCollection<User> users)
+        {
+            Users = users;
+        }
+
+        private void SaveUserEditingAction(bool userChanged, bool usersListChanged)
+        {
+            if(userChanged) { UserChanged?.Invoke(); }
+            if(usersListChanged) { UsersListChanged?.Invoke(); }
+        }
+
+        private void EditUser(User user)
+        {
+            if (user == null) return;
+
+            EditWindow euw = new EditWindow()
+            {
+                DataContext = new EditWindowViewModel()
+                {
+                    EditControl = new EditUserViewModel()
+                    {
+                        EditingUser = user,
+                        ShowAdmin = true,
+                        ShowPassword = false,
+                        ForSaving = true
+                    }
+                }
+            };
+            euw.ShowDialog();
+            SaveUserEditingAction(true, true);
+        }
+
+        private async void RemoveUser(User user)
+        {
+            try
+            {
+                if (user == null) return;
+                if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+
+                user.IsActive = false;
+
+                var x = await App.CommunicationService.PutAsJson("User", user);
+
+                UsersListChanged?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
+        }
 
         #endregion
     }

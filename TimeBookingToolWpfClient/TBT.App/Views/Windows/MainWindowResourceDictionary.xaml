@@ -23,10 +23,10 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:PeopleTabViewModel}">
-        <local:SpinnersApple/>
+        <local:PeopleTabControl/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:CreateNewUserViewModel}">
+    <DataTemplate DataType="{x:Type vm:EditUserViewModel}">
         <local:EditUserControl/>
     </DataTemplate>
 

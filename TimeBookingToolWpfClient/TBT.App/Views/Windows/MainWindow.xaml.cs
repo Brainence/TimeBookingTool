@@ -644,21 +644,21 @@ namespace TBT.App.Views.Windows
 
         private void EditUser_ImageClick(object sender, RoutedEventArgs e)
         {
-            var button = sender as Image;
-            if (button == null) return;
+            //var button = sender as Image;
+            //if (button == null) return;
 
-            var user = button.DataContext as User;
-            if (user == null) return;
+            //var user = button.DataContext as User;
+            //if (user == null) return;
 
-            EditUserWindow euw = new EditUserWindow(user);
+            //EditUserWindow euw = new EditUserWindow(user);
 
-            euw.Top = this.Top + (this.Height - euw.Height) / 2;
-            euw.Left = this.Left + (this.Width - euw.Width) / 2;
-            euw.CancelAction += Euw_CancelAction;
-            euw.SaveAction += Euw_SaveAction;
-            euw.ShowDialog();
-            euw.CancelAction -= Euw_CancelAction;
-            euw.SaveAction -= Euw_SaveAction;
+            //euw.Top = this.Top + (this.Height - euw.Height) / 2;
+            //euw.Left = this.Left + (this.Width - euw.Width) / 2;
+            //euw.CancelAction += Euw_CancelAction;
+            //euw.SaveAction += Euw_SaveAction;
+            //euw.ShowDialog();
+            //euw.CancelAction -= Euw_CancelAction;
+            //euw.SaveAction -= Euw_SaveAction;
         }
 
         private async void Euw_SaveAction()

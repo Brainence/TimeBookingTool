@@ -188,6 +188,8 @@ namespace TBT.App.ViewModels.MainWindow
                 var auth = new Views.Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel() };
                 App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
                 auth.ShowDialog();
+                RefreshUser();
+                GetUsers();
             }
             return IsShuttingDown();
         }
@@ -209,7 +211,7 @@ namespace TBT.App.ViewModels.MainWindow
             IsShown = true;
         }
 
-        private async void RefreshUser()
+        public async void RefreshUser()
         {
             try
             {
@@ -222,7 +224,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        private async Task GetUsers()
+        public async Task GetUsers()
         {
             try
             {

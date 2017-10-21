@@ -116,7 +116,7 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _selectedUserIndex; }
             set
             {
-                if (SetProperty(ref _selectedUserIndex, value))
+                if (SetProperty(ref _selectedUserIndex, value) && value >= 0)
                 {
                     ReportingUser = Users[value];
                     RefreshReportTimeEntires(ReportingUser?.Id);
@@ -493,6 +493,11 @@ namespace TBT.App.ViewModels.MainWindow
 
             var sum = timeEntries.Any() ? timeEntries.Select(t => t.Duration).Aggregate((t1, t2) => t1.Add(t2)) : new TimeSpan();
             Clipboard.SetText($"Total hours: {sum.TotalHours.ToString("N2")}");
+        }
+
+        public void RefreshCurrentUser(User user)
+        {
+            User = user;
         }
 
         public void RefreshUsersList(ObservableCollection<User> newUsersList)

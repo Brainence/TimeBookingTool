@@ -6,8 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
+using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.MainWindow
 {
@@ -15,56 +17,15 @@ namespace TBT.App.ViewModels.MainWindow
     {
         #region Fields
 
-        //private string _firstName;
-        //private string _lastName;
-        //private string _userName;
-        //private string _password;
-        //private int? _timeLimit;
-        //private bool _isAdmin;
         private User _editingUser;
         private bool _showPassword;
         private bool _showAdmin;
         private bool _forSaving;
+        private bool _changePassword;
 
         #endregion
 
         #region Properties
-
-        //public string FirstName
-        //{
-        //    get { return _firstName; }
-        //    set { SetProperty(ref _firstName, value); }
-        //}
-
-        //public string LastName
-        //{
-        //    get { return _lastName; }
-        //    set { SetProperty(ref _lastName, value); }
-        //}
-
-        //public string UserName
-        //{
-        //    get { return _userName; }
-        //    set { SetProperty(ref _userName, value); }
-        //}
-
-        //public string Password
-        //{
-        //    get { return _password; }
-        //    set { SetProperty(ref _password, value); }
-        //}
-
-        //public int? TimeLimit
-        //{
-        //    get { return _timeLimit; }
-        //    set { SetProperty(ref _timeLimit, value); }
-        //}
-
-        //public bool IsAdmin
-        //{
-        //    get { return _isAdmin; }
-        //    set { SetProperty(ref _isAdmin, value); }
-        //}
 
         public bool ShowPassword
         {
@@ -90,63 +51,87 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _forSaving, value); }
         }
 
-        public ICommand AddSaveCommand { get; set; }
-        public ICommand CancelCommand { get; set; }
+        public bool ChangePassword
+        {
+            get { return _changePassword; }
+            set { SetProperty(ref _changePassword, value); }
+        }
 
-        public event Action SavingUserAction;
+        public ICommand AddSaveCommand { get; set; }
+
+        public event Action<bool, bool> SavingUserAction;
 
 
         #endregion
 
         #region Constructors
 
-
+        public EditUserViewModel()
+        {
+            AddSaveCommand = new RelayCommand(obj => AddSaveUser(obj as ResetPasswordParameters), null);
+        }
 
         #endregion
 
         #region Methods
 
-        private async void AddSaveUser_ButtonClick()
+        private async void AddSaveUser(ResetPasswordParameters changePasswordParameters)
         {
-            if (ForSaving)
+            bool userChanged = false, usersListChanged = false;
+            try
             {
-                try
+                if (ForSaving)
                 {
-                    if (EditingUser == null || (EditingUser != null && string.IsNullOrEmpty(EditingUser.Username))) return;
+                    if (string.IsNullOrEmpty(EditingUser?.Username)) return;
+                    if (changePasswordParameters != null && ChangePassword)
+                    {
+                        if(changePasswordParameters.NewPassword != changePasswordParameters.ConfirmPassword)
+                        {
+                            MessageBox.Show("Please confirm your password.");
+                            return;
+                        }
+                        var isValid = JsonConvert.DeserializeObject<bool>(
+                        await App.CommunicationService.GetAsJson($"User/ValidatePassword/{EditingUser.Id}/{Uri.EscapeUriString(changePasswordParameters.TokenPassword)}"));
+
+                        if (!isValid)
+                        {
+                            MessageBox.Show("Incorrect password entered.");
+                            return;
+                        }
+                        else
+                        {
+                            await App.CommunicationService.GetAsJson(
+                                $"User/ChangePassword/{EditingUser.Id}/{Uri.EscapeUriString(changePasswordParameters.TokenPassword)}/{Uri.EscapeUriString(changePasswordParameters.ConfirmPassword)}");
+
+                            MessageBox.Show("Password has been changed successfully.");
+                        }
+                    }
 
                     EditingUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", EditingUser));
 
                     MessageBox.Show("User was saved successfully.");
+                    userChanged = true;
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-                }
-                finally
-                {
-                    SavingUserAction?.Invoke();
-                }
-            }
-            else
-            {
-                try
+                else
                 {
                     if (EditingUser == null || (EditingUser != null && string.IsNullOrEmpty(EditingUser.Username))) return;
 
                     var x = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={EditingUser.Username}"));
                     if (x == null)
                     {
-                        await App.CommunicationService.PostAsJson("User/NewUser", User);
+                        await App.CommunicationService.PostAsJson("User/NewUser", EditingUser);
                         EditingUser = new User();
                         MessageBox.Show("User account created successfully.");
+                        usersListChanged = true;
                     }
                     else
                         MessageBox.Show("Username already exists.");
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-                }
+                SavingUserAction?.Invoke(userChanged, usersListChanged);                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
         }
 
