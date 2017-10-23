@@ -48,7 +48,11 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:TasksTabViewModel}">
-        <local:SpinnersApple/>
+        <local:TaskTabControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type editvm:EditActivityViewModel}">
+        <local:EditActivityControl/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:SettingsTabViewModel}">

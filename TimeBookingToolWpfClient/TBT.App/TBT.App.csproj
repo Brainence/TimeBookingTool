@@ -188,6 +188,7 @@
     <Compile Include="ViewModels\Authentication\AuthenticationWindowViewModel.cs" />
     <Compile Include="ViewModels\Authentication\ForgotPasswordControlViewModel.cs" />
     <Compile Include="ViewModels\Authentication\ResetPasswordControlViewModel.cs" />
+    <Compile Include="ViewModels\EditWindowsViewModels\EditActivityViewModel.cs" />
     <Compile Include="ViewModels\EditWindowsViewModels\EditCustomerViewModel.cs" />
     <Compile Include="ViewModels\EditWindowsViewModels\EditProjectViewModel.cs" />
     <Compile Include="ViewModels\EditWindowsViewModels\EditWindowViewModel.cs" />
@@ -237,6 +238,9 @@
     <Compile Include="Views\Controls\DoubleLabelControl.xaml.cs">
       <DependentUpon>DoubleLabelControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\EditActivityControl.xaml.cs">
+      <DependentUpon>EditActivityControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\EditCustomerControl.xaml.cs">
       <DependentUpon>EditCustomerControl.xaml</DependentUpon>
     </Compile>
@@ -275,6 +279,9 @@
     </Compile>
     <Compile Include="Views\Controls\SpinnersCogs.xaml.cs">
       <DependentUpon>SpinnersCogs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\TaskTabControl.xaml.cs">
+      <DependentUpon>TaskTabControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\TextControl.xaml.cs">
       <DependentUpon>TextControl.xaml</DependentUpon>
@@ -393,6 +400,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controls\EditActivityControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controls\EditCustomerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -442,6 +453,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\SpinnersCogs.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\TaskTabControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
