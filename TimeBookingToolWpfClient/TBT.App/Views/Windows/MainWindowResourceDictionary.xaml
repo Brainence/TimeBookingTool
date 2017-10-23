@@ -40,7 +40,11 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:ProjectsTabViewModel}">
-        <local:SpinnersApple/>
+        <local:ProjectsTabControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type editvm:EditProjectViewModel}">
+        <local:EditProjectControl/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:TasksTabViewModel}">
