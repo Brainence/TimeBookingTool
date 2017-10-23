@@ -42,7 +42,7 @@
         <TabControl Grid.Row="0" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" ItemsSource="{Binding Tabs}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel>
+                    <StackPanel Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}">
                         <TextBlock Text="{Binding Title}"/>
                         <Image Source="{Binding Tag}"/>
                     </StackPanel>
@@ -50,7 +50,9 @@
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <ContentControl HorizontalAlignment="Stretch"  Content="{Binding Control}"></ContentControl>
+                    <ContentControl HorizontalAlignment="Stretch"  
+                                    Content="{Binding Control}"
+                                    Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

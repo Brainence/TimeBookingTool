@@ -21,6 +21,6 @@
                 Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
             <Image Source="../../Resources/Icons/close.png" Width="12"></Image>
         </Button>
-        <ContentControl Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Content="{Binding EditControl}"/>
+        <ContentControl Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="1" Content="{Binding EditControl}"/>
     </Grid>
 </Window>

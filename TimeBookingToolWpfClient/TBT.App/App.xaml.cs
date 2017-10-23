@@ -332,7 +332,8 @@ namespace TBT.App
             tempContext.UsersListChanged += ((PeopleTabViewModel)collection[2].Control).RefreshUsersList;
             ((PeopleTabViewModel)collection[2].Control).UserChanged += tempContext.RefreshUser;
             ((PeopleTabViewModel)collection[2].Control).UsersListChanged += tempContext.GetUsers;
-            collection.Add(new Helpers.MainWindowTabItem() { Control = new CustomerTabViewModel(), Title = "Customers", Tag = "../Icons/customers_white.png" });
+            collection.Add(new Helpers.MainWindowTabItem() { Control = new CustomerTabViewModel(user), Title = "Customers", Tag = "../Icons/customers_white.png" });
+            tempContext.CurrentUserChanged += ((CustomerTabViewModel)collection[3].Control).RefreshCurrentUser;
             collection.Add(new Helpers.MainWindowTabItem() { Control = new ProjectsTabViewModel(), Title = "Projects", Tag = "../Icons/projects_white.png" });
             collection.Add(new Helpers.MainWindowTabItem() { Control = new TasksTabViewModel(), Title = "Tasks", Tag = "../Icons/tasks_white.png" });
             collection.Add(new Helpers.MainWindowTabItem() { Control = new SettingsTabViewModel(), Title = "Settings", Tag = "../Icons/settings_white.png" });

@@ -17,7 +17,7 @@ namespace TBT.App.ViewModels.MainWindow
     {
         #region Fields
 
-        private User _user;
+        private User _currentUser;
         private ObservableCollection<MainWindowTabItem> _tabs;
         private int _selectedIndex;
         private bool _isShown;
@@ -34,12 +34,12 @@ namespace TBT.App.ViewModels.MainWindow
 
         public User CurrentUser
         {
-            get { return _user; }
+            get { return _currentUser; }
             set
             {
-                if (SetProperty(ref _user, value))
+                if (SetProperty(ref _currentUser, value))
                 {
-                    CurrentUserChanged?.Invoke(_user);
+                    CurrentUserChanged?.Invoke(_currentUser);
                 }
             }
         }

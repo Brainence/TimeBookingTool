@@ -11,7 +11,7 @@ using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
 
-namespace TBT.App.ViewModels.MainWindow
+namespace TBT.App.ViewModels.EditWindowsViewModels
 {
     public class EditUserViewModel: BaseViewModel
     {

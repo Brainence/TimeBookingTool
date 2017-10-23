@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:TBT.App.Views.Controls"
-                    xmlns:vm="clr-namespace:TBT.App.ViewModels.MainWindow">
+                    xmlns:vm="clr-namespace:TBT.App.ViewModels.MainWindow"
+                    xmlns:editvm="clr-namespace:TBT.App.ViewModels.EditWindowsViewModels">
     <DataTemplate DataType="{x:Type vm:CalendarTabViewModel}">
         <local:CalendarControl/>
     </DataTemplate>
@@ -26,12 +27,16 @@
         <local:PeopleTabControl/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:EditUserViewModel}">
+    <DataTemplate DataType="{x:Type editvm:EditUserViewModel}">
         <local:EditUserControl/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:CustomerTabViewModel}">
-        <local:SpinnersApple/>
+        <local:CustomersTabControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type editvm:EditCustomerViewModel}">
+        <local:EditCustomerControl/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:ProjectsTabViewModel}">

@@ -443,18 +443,18 @@ namespace TBT.App.Views.Windows
 
         private async Task GetCustomers()
         {
-            ItemsLoading = true;
-            try
-            {
-                Customers = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(
-                    await App.CommunicationService.GetAsJson($"Customer"));
+            //ItemsLoading = true;
+            //try
+            //{
+            //    Customers = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(
+            //        await App.CommunicationService.GetAsJson($"Customer"));
 
-                ItemsLoading = false;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+            //    ItemsLoading = false;
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            //}
         }
 
         private async Task GetProjects()
