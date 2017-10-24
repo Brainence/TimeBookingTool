@@ -290,23 +290,11 @@
     <Compile Include="Views\Controls\TimeEntryItemsControl.xaml.cs">
       <DependentUpon>TimeEntryItemsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Windows\EditActivityWindow.xaml.cs">
-      <DependentUpon>EditActivityWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Windows\EditCustomerWindow.xaml.cs">
-      <DependentUpon>EditCustomerWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Windows\EditProjectWindow.xaml.cs">
-      <DependentUpon>EditProjectWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Windows\EditWindow.xaml.cs">
       <DependentUpon>EditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Windows\ReportWindow.xaml.cs">
-      <DependentUpon>ReportWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -466,18 +454,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Windows\EditActivityWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Windows\EditCustomerWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Windows\EditProjectWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Windows\EditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -487,10 +463,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Windows\MainWindowResourceDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Windows\ReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

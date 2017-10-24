@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
-             mc:Ignorable="d">
+             mc:Ignorable="d"
+             MinWidth="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -12,10 +13,11 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid VerticalAlignment="Bottom"
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Center"
               Grid.Row="1">
-            <StackPanel Orientation="Horizontal" Margin="20 0" HorizontalAlignment="Center">
-                <local:TextControl Label="Customer name" Text="{Binding Path=EditingCustomersName, Mode=TwoWay}"/>
+            <StackPanel Grid.IsSharedSizeScope="True">
+                <local:TextControl Margin="20 10 20 5" Height="20"  Label="Customer name" Text="{Binding Path=EditingCustomersName, Mode=TwoWay}"/>
             </StackPanel>
         </Grid>
 

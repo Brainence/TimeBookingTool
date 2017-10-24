@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
              xmlns:helpers="clr-namespace:TBT.App.Helpers"
              mc:Ignorable="d" 
-             d:DesignHeight="300">
+             MinWidth="300">
 
     <Grid>
         <StackPanel Grid.IsSharedSizeScope="True">

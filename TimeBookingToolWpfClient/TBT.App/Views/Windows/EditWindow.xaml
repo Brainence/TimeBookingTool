@@ -10,7 +10,8 @@
         BorderBrush="Black"
         BorderThickness="1"
         WindowStyle="None"
-        Height="350" Width="500"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen"
         >
     <Grid>
         <Grid.RowDefinitions>
