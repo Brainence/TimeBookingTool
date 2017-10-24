@@ -257,9 +257,6 @@
     <Compile Include="Views\Controls\MultiSelectionComboBox.xaml.cs">
       <DependentUpon>MultiSelectionComboBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\NewUserControl.xaml.cs">
-      <DependentUpon>NewUserControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\PeopleTabControl.xaml.cs">
       <DependentUpon>PeopleTabControl.xaml</DependentUpon>
     </Compile>
@@ -422,10 +419,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\MultiSelectionComboBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Controls\NewUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

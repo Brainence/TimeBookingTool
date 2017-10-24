@@ -300,25 +300,14 @@ namespace TBT.App.ViewModels.MainWindow
 
             await RefreshReportTimeEntires(User.Id);
 
-            ReportPage reportPage = new ReportPage()
-            {
-                DataContext = new ReportPageViewModel()
-                {
-                    From = From,
-                    To = To,
-                    ReportingUser = ReportingUser,
-                    TimeEntries = TimeEntries
-                }
-            };
+            ReportPage reportPage = new ReportPage();
 
-            ReportWindow testWindow = new ReportWindow();
-            testWindow.reportPage = reportPage;
-            testWindow.ShowDialog();
+            reportPage.DataContext = this;
 
-            SaveXPSDocument(CreateUserReport(testWindow));
+            SaveXPSDocument(CreateUserReport(reportPage));
         }
 
-        private FixedDocument CreateUserReport(ReportWindow control)
+        private FixedDocument CreateUserReport(ReportPage control)
         {
 
             FixedDocument fixedDoc = new FixedDocument();
@@ -327,14 +316,14 @@ namespace TBT.App.ViewModels.MainWindow
 
             try
             {
-                //TimeEntryItemsControl.UpdateLayout();
-                control.Measure(new Size(int.MaxValue, int.MaxValue));
+                control.TimeEntryItemsControl.UpdateLayout();
+                //control.Measure(new Size(int.MaxValue, int.MaxValue));
                 
-                fixedPage.Height = control.reportPage.TimeEntryItemsControl.DesiredSize.Height + control.reportPage.TimeEntryItemsControl.Margin.Top
-                                                                                    + control.reportPage.TimeEntryItemsControl.Margin.Bottom
-                                                                                    + control.reportPage.Header.DesiredSize.Height
-                                                                                    + control.reportPage.Header.Margin.Top
-                                                                                    + control.reportPage.Header.Margin.Bottom;
+                fixedPage.Height = control.TimeEntryItemsControl.DesiredSize.Height + control.TimeEntryItemsControl.Margin.Top
+                                                                                    + control.TimeEntryItemsControl.Margin.Bottom
+                                                                                    + control.Header.DesiredSize.Height
+                                                                                    + control.Header.Margin.Top
+                                                                                    + control.Header.Margin.Bottom;
                 fixedPage.Width = 1100;
 
                 control.Height = fixedPage.Height;

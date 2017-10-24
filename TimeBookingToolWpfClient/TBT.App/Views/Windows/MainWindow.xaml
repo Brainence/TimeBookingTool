@@ -8,24 +8,16 @@
         xmlns:vm="clr-namespace:TBT.App.ViewModels.MainWindow"
         xmlns:controls="clr-namespace:TBT.App.Views.Controls"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        Closing="Window_Closing"
         mc:Ignorable="d"
         Icon="../../calendar_clock.ico"
-        SizeChanged="this_SizeChanged"
         Title="Time Booking Tool" 
         Height="700" 
-        Width="600" 
+        Width="{Binding Width, Mode=TwoWay}" 
         ResizeMode="CanMinimize"
         Style="{StaticResource WindowStyle}"
         Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}">
-    <!--<Window.DataContext>
-        <vm:MainWindowViewModel/>
-    </Window.DataContext>-->
     <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding LoadCommand}" />
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Drop">
+        <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction Command="{Binding CloseCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>

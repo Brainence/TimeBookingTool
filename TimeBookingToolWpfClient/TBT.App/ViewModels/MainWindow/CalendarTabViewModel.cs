@@ -238,6 +238,11 @@ namespace TBT.App.ViewModels.MainWindow
             return temp;
         }
 
+        public void ChangeDateFormat(bool isShort)
+        {
+            IsDateNameShort = isShort;
+        }
+
         #endregion
 
         #region Interface members

@@ -55,10 +55,4 @@
             </Setter>
         </Style>
     </ComboBox.ItemContainerStyle>
-
-    <!--<ComboBox.SelectionBoxTemplate>
-        <DataTemplate>
-            <TextBlock Text="{Binding SelectionBoxText, RelativeSource={RelativeSource AncestorType=local:MultiSelectionComboBox}}"/>
-        </DataTemplate>
-    </ComboBox.SelectionBoxTemplate>-->
 </ComboBox>

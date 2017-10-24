@@ -8,7 +8,7 @@ namespace TBT.App.Views.Controls
         public ReportPage()
         {
             InitializeComponent();
-            //Arrange(new Rect(0, 0, DesiredWidth, DesiredHeight));
+            Measure(new Size(int.MaxValue, int.MaxValue));
         }
     }
 }

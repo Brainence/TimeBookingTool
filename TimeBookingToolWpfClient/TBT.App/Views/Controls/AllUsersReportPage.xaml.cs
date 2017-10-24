@@ -7,7 +7,6 @@ namespace TBT.App.Views.Controls
         public AllUsersReportPage()
         {
             InitializeComponent();
-            DataContext = this;
         }
     }
 }

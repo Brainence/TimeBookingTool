@@ -26,9 +26,9 @@ namespace TBT.App.ViewModels.MainWindow
         private int _selectedIndex;
         private bool _isShown;
         private bool _loggedOut;
-        private bool _hideWindow;
         private bool _isVisible;
         private DispatcherTimer _dateTimer;
+        private double _width;
 
 
         #endregion
@@ -77,16 +77,23 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _loggedOut, value); }
         }
 
-        public bool HideWindow
-        {
-            get { return _hideWindow; }
-            set { SetProperty(ref _hideWindow, value); }
-        }
-
         public bool IsVisible
         {
             get { return _isVisible; }
             set { SetProperty(ref _isVisible, value); }
+        }
+
+        public double Width
+        {
+            get { return _width; }
+            set
+            {
+                if(SetProperty(ref _width, value))
+                {
+                    if (value >= 1250) { ChangeDateSize?.Invoke(false); }
+                    else { ChangeDateSize?.Invoke(true); }
+                }
+            }
         }
 
         public ICommand RefreshAllCommand { get; set; }
@@ -100,6 +107,7 @@ namespace TBT.App.ViewModels.MainWindow
         public event Action<ObservableCollection<Activity>> TasksListChanges;
         public event Action<ObservableCollection<Project>> ProjectsListChanges;
         public event Action<User> CurrentUserChanged;
+        public event Action<bool> ChangeDateSize;
 
         #endregion
 
@@ -115,8 +123,10 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 RefreshCurrentUser();
                 InitTabs();
+                Width = 600;
                 IsVisible = true;
                 SignOutCommand = new RelayCommand(obj => SignOut(), null);
+                CloseCommand = new RelayCommand(obj => Close(), null);
                 RefreshAllCommand = new RelayCommand(obj => RefreshAll(), null);
                 RefreshAll();
                 _dateTimer.Start();
@@ -126,6 +136,20 @@ namespace TBT.App.ViewModels.MainWindow
         #endregion
 
         #region Methods
+
+        public void Close()
+        {
+            _dateTimer?.Stop();
+
+            if (LoggedOut)
+            {
+                App.RememberMe = false;
+                App.Username = string.Empty;
+            }
+
+            SayBye();
+            IsVisible = false;
+        }
 
         private async void RefreshAll()
         {
@@ -139,7 +163,6 @@ namespace TBT.App.ViewModels.MainWindow
         private void SignOut()
         {
             LoggedOut = true;
-            HideWindow = false;
             App.Username = string.Empty;
 
             IsVisible = false;
@@ -189,12 +212,12 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Helpers
 
-        //private void SayBye()
-        //{
-        //    var userfirstname = CurrentUser?.FirstName ?? "";
+        private void SayBye()
+        {
+            var userfirstname = CurrentUser?.FirstName ?? "";
 
-        //    App.ShowBalloon($"I'm watching you", " ", 30000, App.EnableGreetingNotification);
-        //}
+            App.ShowBalloon($"I'm watching you", " ", 30000, App.EnableGreetingNotification);
+        }
 
         private static bool IsShuttingDown()
         {
@@ -252,6 +275,7 @@ namespace TBT.App.ViewModels.MainWindow
             Tabs = new ObservableCollection<MainWindowTabItem>();
             Tabs.Add(new MainWindowTabItem(){ Control = new CalendarTabViewModel(CurrentUser), Title = "Calendar", Tag = "../Icons/calendar_white.png", OnlyForAdmins = false });
             CurrentUserChanged += Tabs[0].Control.RefreshCurrentUser;
+            ChangeDateSize += ((CalendarTabViewModel)Tabs[0].Control).ChangeDateFormat;
             Tabs.Add(new MainWindowTabItem() { Control = new ReportingTabViewModel(CurrentUser), Title = "Reporting", Tag = "../Icons/reporting_white.png", OnlyForAdmins = false });
             CurrentUserChanged += Tabs[1].Control.RefreshCurrentUser;
             UsersListChanged += Tabs[1].Control.RefreshUsersList;
