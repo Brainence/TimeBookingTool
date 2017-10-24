@@ -37,7 +37,7 @@ namespace TBT.App.Views.Windows
         private bool _itemsLoading;
         private bool _usersLoading;
         private User _reportingUser;
-        private DispatcherTimer _dateTimer;
+        
         private Window _auth;
         private int _selectedIndex;
         private MainWindowViewModel _myDataContext;
@@ -58,24 +58,24 @@ namespace TBT.App.Views.Windows
 
             InitNotifyIcon();
 
-            if (!OpenAuthenticationWindow(authorized))
-            {
-                From = DateTime.Now.StartOfWeek(DayOfWeek.Wednesday);
-                To = DateTime.Now;
+            //if (!OpenAuthenticationWindow(authorized))
+            //{
+            //    From = DateTime.Now.StartOfWeek(DayOfWeek.Wednesday);
+            //    To = DateTime.Now;
 
-                App.GlobalTimer = new GlobalTimer();
-                _dateTimer = new DispatcherTimer();
-                _dateTimer.Interval = new TimeSpan(0, 0, 1);
+            //    App.GlobalTimer = new GlobalTimer();
+            //    _dateTimer = new DispatcherTimer();
+            //    _dateTimer.Interval = new TimeSpan(0, 0, 1);
 
-                NewUser = new User();
-                GetTimeEntriesCommand = new RelayCommand(async obj => await GetTimeEntries(obj), obj => From != null && To != null);
-                GetCustomersCommand = new RelayCommand(async obj => await GetCustomers(), null);
-                GetProjectsCommand = new RelayCommand(async obj => await GetProjects(), null);
-                GetActivitiesCommand = new RelayCommand(async obj => await GetActivities(), null);
-                LoggedOut = false;
-                MyDataContext = (DataContext as MainWindowViewModel);
-                RefreshUser();
-            }
+            //    NewUser = new User();
+            //    GetTimeEntriesCommand = new RelayCommand(async obj => await GetTimeEntries(obj), obj => From != null && To != null);
+            //    GetCustomersCommand = new RelayCommand(async obj => await GetCustomers(), null);
+            //    GetProjectsCommand = new RelayCommand(async obj => await GetProjects(), null);
+            //    GetActivitiesCommand = new RelayCommand(async obj => await GetActivities(), null);
+            //    LoggedOut = false;
+            //    MyDataContext = (DataContext as MainWindowViewModel);
+            //    RefreshUser();
+            //}
         }
 
         #region NotifyIcon
@@ -506,7 +506,7 @@ namespace TBT.App.Views.Windows
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            _dateTimer?.Stop();
+            //_dateTimer?.Stop();
 
             if (LoggedOut)
             {

@@ -41,7 +41,13 @@
         <TabControl Grid.Row="0" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" ItemsSource="{Binding Tabs, Mode=TwoWay}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel >
+                        <StackPanel.Visibility>
+                            <MultiBinding Converter="{StaticResource OnlyForAdminsVisibleConverter}" Mode="TwoWay">
+                                <Binding ElementName="mainWindow"  Path="DataContext.CurrentUser.IsAdmin" Mode="TwoWay"/>
+                                <Binding Path="OnlyForAdmins" Mode="TwoWay"/>
+                            </MultiBinding>
+                        </StackPanel.Visibility>
                         <TextBlock Text="{Binding Title}"/>
                         <Image Source="{Binding Tag}"/>
                     </StackPanel>
@@ -50,8 +56,14 @@
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <ContentControl HorizontalAlignment="Stretch"  
-                                    Content="{Binding Control}"
-                                    Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    Content="{Binding Control}">
+                        <ContentControl.Visibility>
+                            <MultiBinding Converter="{StaticResource OnlyForAdminsVisibleConverter}" Mode="TwoWay">
+                                <Binding ElementName="mainWindow"  Path="DataContext.CurrentUser.IsAdmin"/>
+                                <Binding Path="OnlyForAdmins"/>
+                            </MultiBinding>
+                        </ContentControl.Visibility>
+                    </ContentControl>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

@@ -136,8 +136,9 @@ namespace TBT.App.ViewModels.MainWindow
                     EditControl = new EditCustomerViewModel() { EditingCustomersName = customer.Name }
                 }
             };
-            editWindow.ShowDialog();
             var tempContext = (EditCustomerViewModel)((EditWindowViewModel)editWindow.DataContext).EditControl;
+            tempContext.CloseWindow += () => editWindow.Close();
+            editWindow.ShowDialog();
             if(tempContext.SaveChanges && tempContext.EditingCustomersName != customer.Name)
             {
                 customer.Name = tempContext.EditingCustomersName;

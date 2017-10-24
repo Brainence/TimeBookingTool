@@ -60,7 +60,7 @@ namespace TBT.App.ViewModels.MainWindow
                 if (value != null)
                 {
                     SetProperty(ref _selectedDay, value);
-                    SelectedDayChanged();
+                    
                 }
             }
         }
@@ -68,7 +68,14 @@ namespace TBT.App.ViewModels.MainWindow
         public User User
         {
             get { return _user; }
-            set { SetProperty(ref _user, value); }
+            set
+            {
+                if(SetProperty(ref _user, value))
+                {
+                    RefreshTimeEntries(Week);
+                    ChangeUserForNested?.Invoke(value);
+                }
+            }
         }
 
         public string WeekTime
@@ -100,26 +107,24 @@ namespace TBT.App.ViewModels.MainWindow
         public ICommand GoToCurrentWeekCommand { get; set; }
         public ICommand ChangeWeekCommand { get; set; }
 
+        public event Action<User> ChangeUserForNested;
         #endregion
 
         #region Constructors
 
         public CalendarTabViewModel(User user)
         {
-            //App.GlobalTimer = new GlobalTimer();
-            //_dateTimer = new DispatcherTimer();
-            //_dateTimer.Interval = new TimeSpan(0, 0, 1);
             User = user;
             Week = GetWeekOfDay(DateTime.Now);
             SelectedDay = DateTime.Now.Date;
             IsDateNameShort = true;
             TimeEntryItems = new TimeEntryItemsViewModel() { TimeEntries = User?.TimeEntries, };
             ((TimeEntryItemsViewModel)TimeEntryItems).RefreshTimeEntries += (async () => await RefreshTimeEntries(Week));
-            EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, IsLimitVisible = true, SelectedDay = SelectedDay };
+            EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, IsLimitVisible = User?.IsAdmin, SelectedDay = SelectedDay };
             EditTimeEntryViewModel tempVM = (EditTimeEntryViewModel)_editTimeEntryViewModel;
             PropertyChanged += tempVM.ShowLimit;
-            PropertyChanged += tempVM.ClearCurrentValues;
             PropertyChanged += tempVM.ChangeButtonName;
+            ChangeUserForNested += tempVM.RefreshCurrentUser;
             tempVM.RefreshTimeEntries += async () => await RefreshTimeEntries(Week);
             ChangeWeekCommand = new RelayCommand(obj => ChangeWeek(Convert.ToInt32(obj)), null);
             GoToSelectedDayCommand = new RelayCommand(obj => GoToDefaultWeek(true, false), obj => SelectedDay.HasValue && SelectedDay.Value.StartOfWeek(DayOfWeek.Monday) != Week.FirstOrDefault());
@@ -246,7 +251,6 @@ namespace TBT.App.ViewModels.MainWindow
         public async void RefreshCurrentUser(User user)
         {
             User = user;
-            await RefreshTimeEntries(Week);
         }
 
         public void RefreshUsersList(ObservableCollection<User> users) { }

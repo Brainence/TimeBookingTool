@@ -26,7 +26,7 @@ namespace TBT.App.ViewModels.MainWindow
         private string _timeLimit;
         private DateTime? _selectedDay;
         private string _errorMessage;
-        private bool _isLimitVisible;
+        private bool? _isLimitVisible;
         private string _emptyText;
 
         #endregion
@@ -81,7 +81,7 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _errorMessage, value); }
         }
 
-        public bool IsLimitVisible
+        public bool? IsLimitVisible
         {
             get { return _isLimitVisible; }
             set { SetProperty(ref _isLimitVisible, value); }
@@ -132,19 +132,6 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 SelectedDay = (sender as CalendarTabViewModel)?.SelectedDay?.Date;
             }
-        }
-
-        public void ClearCurrentValues(object sender, PropertyChangedEventArgs e)
-        {
-            //if(e.PropertyName == "SelectedIndex")
-            //{
-            //    SelectedProject = null;
-            //    EmptyText = "[Select project]";
-            //    SelectedActivity = null;
-            //    Comment = "";
-            //    TimeLimit = "";
-            //    TimeText = "";
-            //}
         }
 
 
@@ -272,7 +259,7 @@ namespace TBT.App.ViewModels.MainWindow
 
                 timeEntry = JsonConvert.DeserializeObject<TimeEntry>(await App.CommunicationService.PostAsJson("TimeEntry", timeEntry));
 
-                if (string.IsNullOrEmpty(input) && !notToday)
+                if (!string.IsNullOrEmpty(input) && !notToday)
                 {
                     await App.GlobalTimer.Start(timeEntry.Id);
                 }
@@ -308,6 +295,11 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 return await Task.FromResult(false);
             }
+        }
+
+        public void RefreshCurrentUser(User user)
+        {
+            User = user;
         }
 
         #endregion

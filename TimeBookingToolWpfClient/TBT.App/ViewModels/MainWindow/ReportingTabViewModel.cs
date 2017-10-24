@@ -313,6 +313,7 @@ namespace TBT.App.ViewModels.MainWindow
 
             ReportWindow testWindow = new ReportWindow();
             testWindow.reportPage = reportPage;
+            testWindow.ShowDialog();
 
             SaveXPSDocument(CreateUserReport(testWindow));
         }

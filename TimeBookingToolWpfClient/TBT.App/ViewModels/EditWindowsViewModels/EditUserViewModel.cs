@@ -60,6 +60,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public ICommand AddSaveCommand { get; set; }
 
         public event Action<bool, bool> SavingUserAction;
+        public event Action CloseWindow;
 
 
         #endregion
@@ -127,12 +128,18 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                     else
                         MessageBox.Show("Username already exists.");
                 }
-                SavingUserAction?.Invoke(userChanged, usersListChanged);                
+                SavingUserAction?.Invoke(userChanged, usersListChanged);
+                CloseWindow?.Invoke();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
+        }
+
+        public void RefreshCurrentUser(User user)
+        {
+            EditingUser = user;
         }
 
         #endregion

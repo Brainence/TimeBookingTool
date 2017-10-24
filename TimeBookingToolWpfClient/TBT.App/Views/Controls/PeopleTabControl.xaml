@@ -52,7 +52,7 @@
                 </Grid>
 
                 <Grid Grid.Row="3"
-                          Visibility="{Binding Path=Users, Converter={StaticResource EditButtonToVisibilityConverter}}">
+                          Visibility="{Binding Path=Users, Converter={StaticResource EnumerableToVisibilityConverter}}">
                     <ScrollViewer 
                               Margin="0 5 0 20" 
                               MinHeight="100"

@@ -18,7 +18,7 @@
 
         <local:ComboBoxControl x:Name="projectComboBox"  Grid.Row="0" 
                                        Label="Project" 
-                                       ItemsSource="{Binding Path=User.Projects}"
+                                       ItemsSource="{Binding Path=User.Projects, Mode=TwoWay}"
                                        SelectedItem="{Binding Path=SelectedProject, Mode=TwoWay}"
                                        
                                        FontSize="13"
@@ -27,7 +27,7 @@
         <!--EmptyText="[Select task]"-->
         <local:ComboBoxControl x:Name="taskComboBox" Grid.Row="1" 
                                        Label="Task" 
-                                       ItemsSource="{Binding Path=SelectedProject.Activities}"
+                                       ItemsSource="{Binding Path=SelectedProject.Activities, Mode=TwoWay}"
                                        SelectedItem="{Binding SelectedActivity, Mode=TwoWay}"
                                        
                                        FontSize="13"

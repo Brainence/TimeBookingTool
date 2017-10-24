@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
@@ -27,7 +28,8 @@ namespace TBT.App.ViewModels.MainWindow
         private bool _loggedOut;
         private bool _hideWindow;
         private bool _isVisible;
-       
+        private DispatcherTimer _dateTimer;
+
 
         #endregion
 
@@ -105,6 +107,9 @@ namespace TBT.App.ViewModels.MainWindow
 
         public MainWindowViewModel(bool authorized)
         {
+            App.GlobalTimer = new GlobalTimer();
+            _dateTimer = new DispatcherTimer();
+            _dateTimer.Interval = new TimeSpan(0, 0, 1);
             InitNotifyIcon();
             if (!OpenAuthenticationWindow(authorized))
             {
@@ -114,6 +119,7 @@ namespace TBT.App.ViewModels.MainWindow
                 SignOutCommand = new RelayCommand(obj => SignOut(), null);
                 RefreshAllCommand = new RelayCommand(obj => RefreshAll(), null);
                 RefreshAll();
+                _dateTimer.Start();
             }
         }
 
@@ -140,7 +146,7 @@ namespace TBT.App.ViewModels.MainWindow
             if (!OpenAuthenticationWindow(false))
             {
                 LoggedOut = false;
-                CurrentUserChanged?.Invoke(CurrentUser);
+                RefreshCurrentUser();
                 IsVisible = true;
             }
         }
@@ -244,29 +250,29 @@ namespace TBT.App.ViewModels.MainWindow
         private void InitTabs()
         {
             Tabs = new ObservableCollection<MainWindowTabItem>();
-            Tabs.Add(new MainWindowTabItem(){ Control = new CalendarTabViewModel(CurrentUser), Title = "Calendar", Tag = "../Icons/calendar_white.png" });
+            Tabs.Add(new MainWindowTabItem(){ Control = new CalendarTabViewModel(CurrentUser), Title = "Calendar", Tag = "../Icons/calendar_white.png", OnlyForAdmins = false });
             CurrentUserChanged += Tabs[0].Control.RefreshCurrentUser;
-            Tabs.Add(new MainWindowTabItem() { Control = new ReportingTabViewModel(CurrentUser), Title = "Reporting", Tag = "../Icons/reporting_white.png" });
+            Tabs.Add(new MainWindowTabItem() { Control = new ReportingTabViewModel(CurrentUser), Title = "Reporting", Tag = "../Icons/reporting_white.png", OnlyForAdmins = false });
             CurrentUserChanged += Tabs[1].Control.RefreshCurrentUser;
             UsersListChanged += Tabs[1].Control.RefreshUsersList;
-            Tabs.Add(new MainWindowTabItem() { Control = new PeopleTabViewModel(CurrentUser), Title = "People", Tag = "../Icons/people_white.png" });
+            Tabs.Add(new MainWindowTabItem() { Control = new PeopleTabViewModel(CurrentUser), Title = "People", Tag = "../Icons/people_white.png", OnlyForAdmins = false });
             CurrentUserChanged += Tabs[2].Control.RefreshCurrentUser;
             UsersListChanged += Tabs[2].Control.RefreshUsersList;
             Tabs[2].Control.UsersListChanged += RefreshUsersList;
             Tabs[2].Control.CurrentUserChanged += RefreshCurrentUser;
-            Tabs.Add(new MainWindowTabItem() { Control = new CustomerTabViewModel(CurrentUser), Title = "Customers", Tag = "../Icons/customers_white.png" });
+            Tabs.Add(new MainWindowTabItem() { Control = new CustomerTabViewModel(CurrentUser), Title = "Customers", Tag = "../Icons/customers_white.png", OnlyForAdmins = true });
             CurrentUserChanged += Tabs[3].Control.RefreshCurrentUser;
             CustomersListChanges += Tabs[3].Control.RefreshCustomersList;
             Tabs[3].Control.CustomersListChanged += RefreshCustomersList;
-            Tabs.Add(new MainWindowTabItem() { Control = new ProjectsTabViewModel(), Title = "Projects", Tag = "../Icons/projects_white.png" });
+            Tabs.Add(new MainWindowTabItem() { Control = new ProjectsTabViewModel(), Title = "Projects", Tag = "../Icons/projects_white.png", OnlyForAdmins = true });
             ProjectsListChanges += Tabs[4].Control.RefreshProjectsList;
             CustomersListChanges += Tabs[4].Control.RefreshCustomersList;
             Tabs[4].Control.ProjectsListChanged += RefreshProjectsList;
-            Tabs.Add(new MainWindowTabItem() { Control = new TasksTabViewModel(), Title = "Tasks", Tag = "../Icons/tasks_white.png" });
+            Tabs.Add(new MainWindowTabItem() { Control = new TasksTabViewModel(), Title = "Tasks", Tag = "../Icons/tasks_white.png", OnlyForAdmins = true });
             ProjectsListChanges += Tabs[5].Control.RefreshProjectsList;
             TasksListChanges += Tabs[5].Control.RefreshTasksList;
             Tabs[5].Control.TasksListChanged += RefreshTasksList;
-            Tabs.Add(new MainWindowTabItem() { Control = new SettingsTabViewModel(), Title = "Settings", Tag = "../Icons/settings_white.png" });
+            Tabs.Add(new MainWindowTabItem() { Control = new SettingsTabViewModel(), Title = "Settings", Tag = "../Icons/settings_white.png", OnlyForAdmins = false });
         }
 
         #endregion

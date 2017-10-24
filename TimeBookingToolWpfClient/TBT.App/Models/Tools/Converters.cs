@@ -429,4 +429,22 @@ namespace TBT.App.Models.Tools
             return null;
         }
     }
+
+    public class OnlyForAdminsVisibleConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values?.Count() < 2) return Visibility.Collapsed;
+            var isAdmin = (values[0] as bool?);
+            var onlyForAdmins = (values[1] as bool?);
+            if (!isAdmin.HasValue || !onlyForAdmins.HasValue) return Visibility.Collapsed;
+
+            return (isAdmin.Value) ? Visibility.Visible : (onlyForAdmins.Value) ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

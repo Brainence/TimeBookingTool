@@ -35,6 +35,7 @@
             <tools:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
             <tools:EnumerableToVisibilityConverter x:Key="EnumerableToVisibilityConverter"/>
             <tools:EnumerableToNotVisibilityConverter x:Key="EnumerableToNotVisibilityConverter"/>
+            <tools:OnlyForAdminsVisibleConverter x:Key="OnlyForAdminsVisibleConverter"/>
 
             <SolidColorBrush x:Key="CalendarItemBackground" Color="#c2422b"/>
             <SolidColorBrush x:Key="CalendarItemMouseOverBrush" Color="#f77f50"/>

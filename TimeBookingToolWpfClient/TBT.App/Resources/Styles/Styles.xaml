@@ -588,7 +588,7 @@
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
-                        <!--<Grid x:Name="tabItemTemplate">
+                        <Grid x:Name="tabItemTemplate">
                             <Grid.Style>
                                 <Style TargetType="Grid">
                                     <Style.Triggers>
@@ -607,7 +607,7 @@
                                     </Style.Triggers>
                                 <Setter Property="Cursor" Value="Hand"/>
                                 </Style>
-                            </Grid.Style>-->
+                            </Grid.Style>
                         <StackPanel VerticalAlignment="Center">
                             <StackPanel.Style>
                                 <Style TargetType="StackPanel">
@@ -653,7 +653,7 @@
                                 </TextBlock.Style>
                             </TextBlock>
                         </StackPanel>
-                        <!--</Grid>-->
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

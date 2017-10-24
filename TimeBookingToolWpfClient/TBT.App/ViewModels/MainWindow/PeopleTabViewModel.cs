@@ -83,6 +83,9 @@ namespace TBT.App.ViewModels.MainWindow
         public ICommand RemoveUserCommand { get; set; }
         public ICommand EditUserCommand { get; set; }
 
+        public event Action<User> ChangeUserForNested;
+        public event Action<ObservableCollection<User>> ChangeUsersListForNested;
+
         #endregion
 
         #region Constructors
@@ -109,6 +112,8 @@ namespace TBT.App.ViewModels.MainWindow
             ((EditUserViewModel)EditMyProfileViewModel).SavingUserAction += SaveUserEditingAction;
             EditUserCommand = new RelayCommand(obj => EditUser(obj as User), null);
             RemoveUserCommand = new RelayCommand(obj => RemoveUser(obj as User), null);
+            ChangeUserForNested += ((EditUserViewModel)EditMyProfileViewModel).RefreshCurrentUser;
+
         }
 
         #endregion
@@ -143,6 +148,7 @@ namespace TBT.App.ViewModels.MainWindow
                     }
                 }
             };
+            ((EditUserViewModel)((EditWindowViewModel)euw.DataContext).EditControl).CloseWindow += () => euw.Close();
             euw.ShowDialog();
             SaveUserEditingAction(true, true);
         }
@@ -180,6 +186,7 @@ namespace TBT.App.ViewModels.MainWindow
         public void RefreshCurrentUser(User user)
         {
             CurrentUser = user;
+            ChangeUserForNested?.Invoke(user);
         }
 
         public void RefreshUsersList(ObservableCollection<User> users)
