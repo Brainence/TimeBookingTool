@@ -179,6 +179,17 @@ namespace TBT.App
             EncryptionService = new EncryptionService();
             CommunicationService = new CommunicationService();
             AppSettings = new AppSettings();
+            InitNotifyIcon();
+        }
+
+        static void InitNotifyIcon()
+        {
+            GlobalNotification = new WF.NotifyIcon();
+            GlobalNotification.DoubleClick += GlobalNotification_DoubleClick;
+            GlobalNotification.Icon = TBT.App.Properties.Resources.TimeBookingTool;
+            GlobalNotification.Visible = true;
+
+            CreateContextMenu();
         }
 
         public static void ShowBalloon(string title, string body, int timeout, bool enabled)

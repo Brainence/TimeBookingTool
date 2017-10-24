@@ -13,14 +13,10 @@
         Title="Time Booking Tool" 
         Height="700" 
         Width="{Binding Width, Mode=TwoWay}" 
+        Closing="CloseWindow"
         ResizeMode="CanMinimize"
         Style="{StaticResource WindowStyle}"
         Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}">
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Closing">
-            <i:InvokeCommandAction Command="{Binding CloseCommand}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
     <Grid Margin="20 20 20 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

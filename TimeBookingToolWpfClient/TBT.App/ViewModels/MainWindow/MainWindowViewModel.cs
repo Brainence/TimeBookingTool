@@ -250,12 +250,12 @@ namespace TBT.App.ViewModels.MainWindow
                 if (!OpenAuthenticationWindow(false))
                 {
                     LoggedOut = false;
-                    IsShown = true;
+                    IsVisible = true;
                     return;
                 }
                 return;
             }
-            IsShown = true;
+            IsVisible = true;
         }
 
         private void ExitApplication()
