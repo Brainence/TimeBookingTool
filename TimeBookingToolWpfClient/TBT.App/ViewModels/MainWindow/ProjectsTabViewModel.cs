@@ -15,7 +15,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class ProjectsTabViewModel : BaseViewModel
+    public class ProjectsTabViewModel : BaseViewModel, IModelObservableViewModel
     {
         #region Fields
 
@@ -70,10 +70,8 @@ namespace TBT.App.ViewModels.MainWindow
 
         public ProjectsTabViewModel()
         {
-            RefreshProjects();
-            RefreshCustomers();
             CreateNewProjectCommand = new RelayCommand(obj => CreateNewProject(), obj => { return SelectedIndex >= 0; });
-            RefreshProjectsCommand = new RelayCommand(obj => RefreshProjects(), null);
+            RefreshProjectsCommand = new RelayCommand(obj => ProjectsListChanged?.Invoke(), null);
             EditProjectCommand = new RelayCommand(obj => EditProject(obj as Project), null);
             RemoveProjectCommand = new RelayCommand(obj => RemoveProject(obj as Project), null);
         }
@@ -112,7 +110,8 @@ namespace TBT.App.ViewModels.MainWindow
 
                 await App.CommunicationService.PostAsJson("Project", project);
 
-                await RefreshProjects();
+                Projects = null;
+                await ProjectsListChanged?.Invoke();
             }
             catch (Exception ex)
             {
@@ -120,37 +119,6 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        private async Task RefreshProjects()
-        {
-            ItemsLoading = true;
-            try
-            {
-                Projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(
-                    await App.CommunicationService.GetAsJson($"Project"));
-
-                ItemsLoading = false;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
-        }
-
-        public async Task RefreshCustomers()
-        {
-            ItemsLoading = true;
-            try
-            {
-                Customers = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(
-                    await App.CommunicationService.GetAsJson($"Customer"));
-
-                ItemsLoading = false;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
-        }
 
         private async void EditProject(Project project)
         {
@@ -176,7 +144,8 @@ namespace TBT.App.ViewModels.MainWindow
                 {
                     project = JsonConvert.DeserializeObject<Project>(await App.CommunicationService.PutAsJson("Project", project));
 
-                    await RefreshProjects();
+                    Projects = null;
+                    await ProjectsListChanged?.Invoke();
                 }
                 catch (Exception ex)
                 {
@@ -202,13 +171,40 @@ namespace TBT.App.ViewModels.MainWindow
                 project.IsActive = false;
                 var x = await App.CommunicationService.PutAsJson("Project", project);
 
-                await RefreshProjects();
+                Projects = null;
+                await ProjectsListChanged?.Invoke();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
         }
+
+        #endregion
+
+        #region Interface members
+
+        public event Action CurrentUserChanged;
+        public event Func<Task> UsersListChanged;
+        public event Func<Task> CustomersListChanged;
+        public event Func<Task> ProjectsListChanged;
+        public event Func<Task> TasksListChanged;
+
+        public void RefreshCurrentUser(User user) { }
+
+        public void RefreshUsersList(ObservableCollection<User> users) { }
+
+        public void RefreshCustomersList(ObservableCollection<Customer> customers)
+        {
+            Customers = customers;
+        }
+
+        public void RefreshProjectsList(ObservableCollection<Project> projects)
+        {
+            Projects = projects;
+        }
+
+        public void RefreshTasksList(ObservableCollection<Activity> activities) { }
 
         #endregion
     }

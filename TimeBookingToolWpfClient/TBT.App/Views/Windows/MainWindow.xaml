@@ -10,7 +10,6 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         Closing="Window_Closing"
         mc:Ignorable="d"
-        Loaded="this_Loaded"
         Icon="../../calendar_clock.ico"
         SizeChanged="this_SizeChanged"
         Title="Time Booking Tool" 
@@ -39,7 +38,7 @@
 
         </Grid.ColumnDefinitions>
 
-        <TabControl Grid.Row="0" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" ItemsSource="{Binding Tabs}">
+        <TabControl Grid.Row="0" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" ItemsSource="{Binding Tabs, Mode=TwoWay}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Visibility="{Binding ElementName=mainWindow, Path=DataContext.CurrentUser.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}">

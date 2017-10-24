@@ -42,7 +42,7 @@
                           Margin="20" 
                           Height="50"
                           Width="50"
-                          Visibility="{Binding Path=ItemsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+                          Visibility="{Binding Path=Customers, Converter={StaticResource EnumerableToNotVisibilityConverter}}"
                           HorizontalAlignment="Center" 
                           VerticalAlignment="Center">
 
@@ -52,7 +52,7 @@
         <Grid VerticalAlignment="Top" 
                           Grid.Row="2"
                           Margin="20"
-                          Visibility="{Binding Path=ItemsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}">
+                          Visibility="{Binding Path=Customers, Converter={StaticResource EnumerableToVisibilityConverter}}">
 
             <ScrollViewer
                               MinHeight="100"

@@ -179,7 +179,6 @@ namespace TBT.App
             EncryptionService = new EncryptionService();
             CommunicationService = new CommunicationService();
             AppSettings = new AppSettings();
-            InitNotifyIcon();
         }
 
         public static void ShowBalloon(string title, string body, int timeout, bool enabled)
@@ -205,11 +204,6 @@ namespace TBT.App
             catch { }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public bool IsProcessOpen(string name)
         {
             return Process.GetProcessesByName(name).Any();
@@ -221,7 +215,7 @@ namespace TBT.App
 
             Process thisProc = Process.GetCurrentProcess();
 
-            if (!IsProcessOpen("TBT.App.exe"))
+            if (!IsProcessOpen("TimeBookingTool.exe"))
             {
                 if (Process.GetProcessesByName(thisProc.ProcessName).Length > 1)
                 {
@@ -241,25 +235,25 @@ namespace TBT.App
             return Path.Combine(shortcutPath, ProductName, FileName);
         }
 
-        private static string GetStartupShortcutPath()
-        {
-            var startupPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-            return Path.Combine(startupPath, FileName);
-        }
+        //private static string GetStartupShortcutPath()
+        //{
+        //    var startupPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+        //    return Path.Combine(startupPath, FileName);
+        //}
 
-        public static void AddShortcutToStartup()
-        {
-            RegistryKey rk = Registry.CurrentUser.OpenSubKey
-                ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            rk.SetValue(System.Reflection.Assembly.GetEntryAssembly().FullName, System.Reflection.Assembly.GetEntryAssembly().Location);
-        }
+        //public static void AddShortcutToStartup()
+        //{
+        //    RegistryKey rk = Registry.CurrentUser.OpenSubKey
+        //        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        //    rk.SetValue(System.Reflection.Assembly.GetEntryAssembly().FullName, System.Reflection.Assembly.GetEntryAssembly().Location);
+        //}
 
-        public static void RemoveShortcutFromStartup()
-        {
-            RegistryKey rk = Registry.CurrentUser.OpenSubKey
-                ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            rk.DeleteValue(System.Reflection.Assembly.GetEntryAssembly().FullName, false);
-        }
+        //public static void RemoveShortcutFromStartup()
+        //{
+        //    RegistryKey rk = Registry.CurrentUser.OpenSubKey
+        //        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        //    rk.DeleteValue(System.Reflection.Assembly.GetEntryAssembly().FullName, false);
+        //}
 
         public static string UrlSafeDateToString(DateTime date)
         {
@@ -310,84 +304,9 @@ namespace TBT.App
                 var res = await UpdateTokens();
                 authorized = res && !string.IsNullOrEmpty(Username);
             }
-            var mainWindow = new MainWindow(authorized && RememberMe);
+            var mainWindow = new MainWindow() { DataContext = new MainWindowViewModel(authorized && RememberMe) };
 
-            var user = JsonConvert.DeserializeObject<User>(await CommunicationService.GetAsJson($"User?email={Username}"));
-            if (user == null) throw new Exception("Error occurred while trying to load user data.");
-
-            user.CurrentTimeZone = DateTimeOffset.Now.Offset;
-            user = JsonConvert.DeserializeObject<User>(await CommunicationService.PutAsJson("User", user));
-
-            mainWindow.DataContext = new MainWindowViewModel() { CurrentUser = user };
-            var tempContext = mainWindow.DataContext as MainWindowViewModel;
-            var collection = new ObservableCollection<Helpers.MainWindowTabItem>();
-            collection.Add(new Helpers.MainWindowTabItem() { Control = new CalendarTabViewModel(tempContext.CurrentUser), Title = "Calendar", Tag = "../Icons/calendar_white.png" });
-            tempContext.CurrentUserChanged += ((CalendarTabViewModel)collection[0].Control).ChangeCurrentUser;
-            collection.Add(new Helpers.MainWindowTabItem() { Control = new ReportingTabViewModel(tempContext.CurrentUser), Title = "Reporting", Tag = "../Icons/reporting_white.png" });
-            tempContext.CurrentUserChanged += ((ReportingTabViewModel)collection[1].Control).RefreshCurrentUser;
-            tempContext.UsersListChanged += ((ReportingTabViewModel)collection[1].Control).RefreshUsersList;
-            //tempContext.CurrentUserChanged += (x) => { ((ReportingTabViewModel)collection[1].Control).User = x; }; ???
-            collection.Add(new Helpers.MainWindowTabItem() { Control = new PeopleTabViewModel(tempContext.CurrentUser, tempContext.Users), Title = "People", Tag = "../Icons/people_white.png" });
-            tempContext.CurrentUserChanged += ((PeopleTabViewModel)collection[2].Control).ChangeCurrentUser;
-            tempContext.UsersListChanged += ((PeopleTabViewModel)collection[2].Control).RefreshUsersList;
-            ((PeopleTabViewModel)collection[2].Control).UserChanged += tempContext.RefreshUser;
-            ((PeopleTabViewModel)collection[2].Control).UsersListChanged += tempContext.GetUsers;
-            collection.Add(new Helpers.MainWindowTabItem() { Control = new CustomerTabViewModel(user), Title = "Customers", Tag = "../Icons/customers_white.png" });
-            tempContext.CurrentUserChanged += ((CustomerTabViewModel)collection[3].Control).RefreshCurrentUser;
-            collection.Add(new Helpers.MainWindowTabItem() { Control = new ProjectsTabViewModel(), Title = "Projects", Tag = "../Icons/projects_white.png" });
-            collection.Add(new Helpers.MainWindowTabItem() { Control = new TasksTabViewModel(), Title = "Tasks", Tag = "../Icons/tasks_white.png" });
-            collection.Add(new Helpers.MainWindowTabItem() { Control = new SettingsTabViewModel(), Title = "Settings", Tag = "../Icons/settings_white.png" });
-            tempContext.Tabs = collection;
             mainWindow.ShowDialog();
-        }
-        //    if (!(await CommunicationService.CheckConnection()))
-        //    {
-        //        MessageBox.Show("Server is offline, try later.");
-        //        Current.Shutdown();
-        //        return;
-        //    }
-        //    bool authorized = false;
-        //    if (RememberMe)
-        //    {
-        //        var res = await UpdateTokens();
-        //        authorized = res && !string.IsNullOrEmpty(Username);
-        //    }
-        //    try
-        //    {
-        //        MainWindow mainWindow = new MainWindow(authorized && RememberMe);
-
-        //        var user = JsonConvert.DeserializeObject<User>(await CommunicationService.GetAsJson($"User?email={Username}"));
-        //        if (user == null) throw new Exception("Error occurred while trying to load user data.");
-
-        //        user.CurrentTimeZone = DateTimeOffset.Now.Offset;
-        //        user = JsonConvert.DeserializeObject<User>(await CommunicationService.PutAsJson("User", user));
-
-        //        MainWindowViewModel dataContext;
-        //        mainWindow.DataContext = dataContext = new MainWindowViewModel() { CurrentUser = user };
-
-        //        AuthenticationUsername = Username;
-        //        Username = Username;
-        //        Greeting = dataContext.CurrentUser.FirstName;
-        //        Farewell = dataContext.CurrentUser.FirstName;
-        //        AppSettings.Save();
-
-        //        ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
-        //        mainWindow.ShowDialog();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-        //    }
-        //}
-
-        static void InitNotifyIcon()
-        {
-            GlobalNotification = new WF.NotifyIcon();
-            GlobalNotification.DoubleClick += GlobalNotification_DoubleClick;
-            GlobalNotification.Icon = TBT.App.Properties.Resources.TimeBookingTool;
-            GlobalNotification.Visible = true;
-
-            CreateContextMenu();
         }
 
         static Action _globalNotificationDoubleClick;

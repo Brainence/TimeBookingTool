@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,6 +11,7 @@ using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
+using TBT.App.Services.CommunicationService.Implementations;
 using TBT.App.ViewModels.Authentication;
 
 namespace TBT.App.ViewModels.MainWindow
@@ -21,8 +24,6 @@ namespace TBT.App.ViewModels.MainWindow
         private ObservableCollection<MainWindowTabItem> _tabs;
         private int _selectedIndex;
         private bool _isShown;
-        private ObservableCollection<User> _users;
-        private bool _usersLoading;
         private bool _loggedOut;
         private bool _hideWindow;
         private bool _isVisible;
@@ -53,31 +54,19 @@ namespace TBT.App.ViewModels.MainWindow
         public int SelectedIndex
         {
             get { return _selectedIndex; }
-            set { SetProperty(ref _selectedIndex, value); }
+            set
+            {
+                if(SetProperty(ref _selectedIndex, value))
+                {
+                    RefreshUsersList();
+                }
+            }
         }
 
         public bool IsShown
         {
             get { return _isShown; }
             set { SetProperty(ref _isShown, value); }
-        }
-
-        public ObservableCollection<User> Users
-        {
-            get { return _users; }
-            set
-            {
-                if (SetProperty(ref _users, value))
-                {
-                    UsersListChanged?.Invoke(_users);
-                }
-            }
-        }
-
-        public bool UsersLoading
-        {
-            get { return _usersLoading; }
-            set { SetProperty(ref _usersLoading, value); }
         }
 
         public bool LoggedOut
@@ -100,29 +89,61 @@ namespace TBT.App.ViewModels.MainWindow
 
         public ICommand RefreshAllCommand { get; set; }
         public ICommand SignOutCommand { get; set; }
-        public ICommand SizeChengeCommand { get; set; }
+        public ICommand SizeChangeCommand { get; set; }
         public ICommand LoadCommand { get; set; }
         public ICommand CloseCommand { get; set; }
 
         public event Action<ObservableCollection<User>> UsersListChanged;
+        public event Action<ObservableCollection<Customer>> CustomersListChanges;
+        public event Action<ObservableCollection<Activity>> TasksListChanges;
+        public event Action<ObservableCollection<Project>> ProjectsListChanges;
         public event Action<User> CurrentUserChanged;
-        
+
         #endregion
 
         #region Constructor
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(bool authorized)
         {
-            //CurrentUser = null;
-            GetUsers();
             InitNotifyIcon();
-            IsVisible = true;
-            SignOutCommand = new RelayCommand(obj => SignOut(), null);
+            if (!OpenAuthenticationWindow(authorized))
+            {
+                RefreshCurrentUser();
+                InitTabs();
+                IsVisible = true;
+                SignOutCommand = new RelayCommand(obj => SignOut(), null);
+                RefreshAllCommand = new RelayCommand(obj => RefreshAll(), null);
+                RefreshAll();
+            }
         }
 
         #endregion
 
         #region Methods
+
+        private async void RefreshAll()
+        {
+            RefreshCurrentUser();
+            await RefreshUsersList();
+            await RefreshCustomersList();
+            await RefreshProjectsList();
+            await RefreshTasksList();
+        }
+
+        private void SignOut()
+        {
+            LoggedOut = true;
+            HideWindow = false;
+            App.Username = string.Empty;
+
+            IsVisible = false;
+            if (!OpenAuthenticationWindow(false))
+            {
+                LoggedOut = false;
+                CurrentUserChanged?.Invoke(CurrentUser);
+                IsVisible = true;
+            }
+        }
 
         #region NotifyIcon
         public void InitNotifyIcon()
@@ -141,7 +162,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void NotifyIcon_SignOut()
         {
-            //SignOutButton_Click(null, null);
+            SignOut();
         }
 
         private void NotifyIcon_Quit()
@@ -161,12 +182,13 @@ namespace TBT.App.ViewModels.MainWindow
         #endregion
 
         #region Helpers
-        private void SayBye()
-        {
-            var userfirstname = CurrentUser?.FirstName ?? "";
 
-            App.ShowBalloon($"I'm watching you", " ", 30000, App.EnableGreetingNotification);
-        }
+        //private void SayBye()
+        //{
+        //    var userfirstname = CurrentUser?.FirstName ?? "";
+
+        //    App.ShowBalloon($"I'm watching you", " ", 30000, App.EnableGreetingNotification);
+        //}
 
         private static bool IsShuttingDown()
         {
@@ -188,8 +210,6 @@ namespace TBT.App.ViewModels.MainWindow
                 var auth = new Views.Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel() };
                 App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
                 auth.ShowDialog();
-                RefreshUser();
-                GetUsers();
             }
             return IsShuttingDown();
         }
@@ -201,41 +221,12 @@ namespace TBT.App.ViewModels.MainWindow
                 if (!OpenAuthenticationWindow(false))
                 {
                     LoggedOut = false;
-                    RefreshUser();
                     IsShown = true;
                     return;
                 }
                 return;
             }
-            RefreshUser();
             IsShown = true;
-        }
-
-        public async void RefreshUser()
-        {
-            try
-            {
-                var user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={App.Username}"));
-                CurrentUser = user;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
-        }
-
-        public async Task GetUsers()
-        {
-            try
-            {
-                UsersLoading = true;
-                Users = JsonConvert.DeserializeObject<ObservableCollection<User>>(await App.CommunicationService.GetAsJson("User"));
-                UsersLoading = false;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
         }
 
         private void ExitApplication()
@@ -250,18 +241,108 @@ namespace TBT.App.ViewModels.MainWindow
             Application.Current.Shutdown();
         }
 
-        private void SignOut()
+        private void InitTabs()
         {
-            LoggedOut = true;
-            HideWindow = false;
-            App.Username = string.Empty;
+            Tabs = new ObservableCollection<MainWindowTabItem>();
+            Tabs.Add(new MainWindowTabItem(){ Control = new CalendarTabViewModel(CurrentUser), Title = "Calendar", Tag = "../Icons/calendar_white.png" });
+            CurrentUserChanged += Tabs[0].Control.RefreshCurrentUser;
+            Tabs.Add(new MainWindowTabItem() { Control = new ReportingTabViewModel(CurrentUser), Title = "Reporting", Tag = "../Icons/reporting_white.png" });
+            CurrentUserChanged += Tabs[1].Control.RefreshCurrentUser;
+            UsersListChanged += Tabs[1].Control.RefreshUsersList;
+            Tabs.Add(new MainWindowTabItem() { Control = new PeopleTabViewModel(CurrentUser), Title = "People", Tag = "../Icons/people_white.png" });
+            CurrentUserChanged += Tabs[2].Control.RefreshCurrentUser;
+            UsersListChanged += Tabs[2].Control.RefreshUsersList;
+            Tabs[2].Control.UsersListChanged += RefreshUsersList;
+            Tabs[2].Control.CurrentUserChanged += RefreshCurrentUser;
+            Tabs.Add(new MainWindowTabItem() { Control = new CustomerTabViewModel(CurrentUser), Title = "Customers", Tag = "../Icons/customers_white.png" });
+            CurrentUserChanged += Tabs[3].Control.RefreshCurrentUser;
+            CustomersListChanges += Tabs[3].Control.RefreshCustomersList;
+            Tabs[3].Control.CustomersListChanged += RefreshCustomersList;
+            Tabs.Add(new MainWindowTabItem() { Control = new ProjectsTabViewModel(), Title = "Projects", Tag = "../Icons/projects_white.png" });
+            ProjectsListChanges += Tabs[4].Control.RefreshProjectsList;
+            CustomersListChanges += Tabs[4].Control.RefreshCustomersList;
+            Tabs[4].Control.ProjectsListChanged += RefreshProjectsList;
+            Tabs.Add(new MainWindowTabItem() { Control = new TasksTabViewModel(), Title = "Tasks", Tag = "../Icons/tasks_white.png" });
+            ProjectsListChanges += Tabs[5].Control.RefreshProjectsList;
+            TasksListChanges += Tabs[5].Control.RefreshTasksList;
+            Tabs[5].Control.TasksListChanged += RefreshTasksList;
+            Tabs.Add(new MainWindowTabItem() { Control = new SettingsTabViewModel(), Title = "Settings", Tag = "../Icons/settings_white.png" });
+        }
 
-            IsVisible = false;
-            if (!OpenAuthenticationWindow(false))
+        #endregion
+
+        #region Refresh data
+
+        private async void RefreshCurrentUser()
+        {
+            try
             {
-                LoggedOut = false;
-                RefreshUser();
-                IsVisible = true;
+                CurrentUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={App.Username}"));
+                if (CurrentUser == null) throw new Exception("Error occurred while trying to load user data.");
+                CurrentUser.CurrentTimeZone = DateTimeOffset.Now.Offset;
+                CurrentUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", CurrentUser));
+
+                CurrentUserChanged?.Invoke(CurrentUser);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
+        }
+
+        private async Task RefreshUsersList()
+        {
+            try
+            {
+                var users = JsonConvert.DeserializeObject<ObservableCollection<User>>(await App.CommunicationService.GetAsJson("User"));
+                UsersListChanged?.Invoke(users);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
+        }
+
+        private async Task RefreshCustomersList()
+        {
+            try
+            {
+                var customers = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(
+                    await App.CommunicationService.GetAsJson($"Customer"));
+                CustomersListChanges?.Invoke(customers);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
+        }
+
+        private async Task RefreshProjectsList()
+        {
+            try
+            {
+                var projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(
+                    await App.CommunicationService.GetAsJson($"Project"));
+                ProjectsListChanges?.Invoke(projects);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
+        }
+
+        public async Task RefreshTasksList()
+        {
+            try
+            {
+                var activities = new ObservableCollection<Activity>(JsonConvert.DeserializeObject<List<Activity>>(
+                                await App.CommunicationService.GetAsJson($"Activity"))
+                                    .OrderBy(a => a.Project.Name).ThenBy(a => a.Name));
+                TasksListChanges?.Invoke(activities);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
         }
 

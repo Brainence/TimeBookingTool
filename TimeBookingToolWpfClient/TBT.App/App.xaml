@@ -33,6 +33,8 @@
             <tools:AuthenticationControlMultiConverter x:Key = "AuthenticationControlMultiConverter"/>
             <tools:NewTimeEntryParamsConverter x:Key="NewTimeEntryParamsConverter"/>
             <tools:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+            <tools:EnumerableToVisibilityConverter x:Key="EnumerableToVisibilityConverter"/>
+            <tools:EnumerableToNotVisibilityConverter x:Key="EnumerableToNotVisibilityConverter"/>
 
             <SolidColorBrush x:Key="CalendarItemBackground" Color="#c2422b"/>
             <SolidColorBrush x:Key="CalendarItemMouseOverBrush" Color="#f77f50"/>

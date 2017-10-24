@@ -176,6 +176,7 @@
     <Compile Include="Models\AppModels\TimeEntry.cs" />
     <Compile Include="Models\AppModels\User.cs" />
     <Compile Include="Models\Base\BaseViewModel.cs" />
+    <Compile Include="Models\Base\IModelObservableViewModel.cs" />
     <Compile Include="Models\Base\ObservableObject.cs" />
     <Compile Include="Models\Commands\RelayCommand.cs" />
     <Compile Include="Models\Tools\Converters.cs" />

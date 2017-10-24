@@ -47,6 +47,11 @@ namespace TBT.App.Views.Windows
         public ICommand GetProjectsCommand { get; set; }
         public ICommand GetActivitiesCommand { get; set; }
 
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
         public MainWindow(bool authorized)
         {
             InitializeComponent();

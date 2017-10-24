@@ -23,7 +23,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class ReportingTabViewModel: BaseViewModel
+    public class ReportingTabViewModel: BaseViewModel, IModelObservableViewModel
     {
         #region Fields
 
@@ -495,17 +495,34 @@ namespace TBT.App.ViewModels.MainWindow
             Clipboard.SetText($"Total hours: {sum.TotalHours.ToString("N2")}");
         }
 
+
+        #endregion
+
+        #region Interface members
+
+        public event Action CurrentUserChanged;
+        public event Func<Task> UsersListChanged;
+        public event Func<Task> CustomersListChanged;
+        public event Func<Task> ProjectsListChanged;
+        public event Func<Task> TasksListChanged;
+
         public void RefreshCurrentUser(User user)
         {
             User = user;
         }
 
-        public void RefreshUsersList(ObservableCollection<User> newUsersList)
+        public void RefreshUsersList(ObservableCollection<User> users)
         {
-            Users = newUsersList;
+            Users = users;
             ReportingUser = Users?.FirstOrDefault(x => x.Id == User.Id);
             SelectedUserIndex = Users.IndexOf(ReportingUser);
         }
+
+        public void RefreshCustomersList(ObservableCollection<Customer> customers) { }
+
+        public void RefreshProjectsList(ObservableCollection<Project> projects) { }
+
+        public void RefreshTasksList(ObservableCollection<Activity> activities) { }
 
         #endregion
     }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
@@ -15,7 +16,7 @@ using TBT.App.Views.Controls;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class CalendarTabViewModel:BaseViewModel
+    public class CalendarTabViewModel:BaseViewModel, IModelObservableViewModel
     {
         #region Fields
 
@@ -105,11 +106,14 @@ namespace TBT.App.ViewModels.MainWindow
 
         public CalendarTabViewModel(User user)
         {
+            //App.GlobalTimer = new GlobalTimer();
+            //_dateTimer = new DispatcherTimer();
+            //_dateTimer.Interval = new TimeSpan(0, 0, 1);
             User = user;
             Week = GetWeekOfDay(DateTime.Now);
             SelectedDay = DateTime.Now.Date;
             IsDateNameShort = true;
-            TimeEntryItems = new TimeEntryItemsViewModel() { TimeEntries = User.TimeEntries, };
+            TimeEntryItems = new TimeEntryItemsViewModel() { TimeEntries = User?.TimeEntries, };
             ((TimeEntryItemsViewModel)TimeEntryItems).RefreshTimeEntries += (async () => await RefreshTimeEntries(Week));
             EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, IsLimitVisible = true, SelectedDay = SelectedDay };
             EditTimeEntryViewModel tempVM = (EditTimeEntryViewModel)_editTimeEntryViewModel;
@@ -229,11 +233,29 @@ namespace TBT.App.ViewModels.MainWindow
             return temp;
         }
 
-        public async void ChangeCurrentUser(User newUser)
+        #endregion
+
+        #region Interface members
+
+        public event Action CurrentUserChanged;
+        public event Func<Task> UsersListChanged;
+        public event Func<Task> CustomersListChanged;
+        public event Func<Task> ProjectsListChanged;
+        public event Func<Task> TasksListChanged;
+
+        public async void RefreshCurrentUser(User user)
         {
-            User = newUser;
+            User = user;
             await RefreshTimeEntries(Week);
         }
+
+        public void RefreshUsersList(ObservableCollection<User> users) { }
+
+        public void RefreshCustomersList(ObservableCollection<Customer> customers) { }
+
+        public void RefreshProjectsList(ObservableCollection<Project> projects) { }
+
+        public void RefreshTasksList(ObservableCollection<Activity> activities) { }
 
         #endregion
     }

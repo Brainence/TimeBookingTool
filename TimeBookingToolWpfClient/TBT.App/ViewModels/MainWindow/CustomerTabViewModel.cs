@@ -15,7 +15,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class CustomerTabViewModel: BaseViewModel
+    public class CustomerTabViewModel: BaseViewModel, IModelObservableViewModel
     {
         #region Fields
 
@@ -59,7 +59,7 @@ namespace TBT.App.ViewModels.MainWindow
                 SetProperty(ref _isExpanded, value);
                 if (value)
                 {
-                    RefreshCustomers();
+                    CustomersListChanged?.Invoke();
                 }
 
             }
@@ -76,47 +76,27 @@ namespace TBT.App.ViewModels.MainWindow
         public ICommand EditCustomerCommand { get; set; }
         public ICommand RemoveCustomerCommand { get; set; }
 
-        public event Func<Task> CustomerListChanged;
-
         #endregion
 
         #region Constructors
 
         public CustomerTabViewModel(User user)
         {
-            RefreshCustomers();
-            IsAdmin = user.IsAdmin;
+            if (user != null)
+            {
+                IsAdmin = user.IsAdmin;
+            }
             CreateNewCustomerCommand = new RelayCommand(obj => CreateNewCustomer(), null);
-            RefreshCustomersCommand = new RelayCommand(obj => RefreshCustomers(), null);
+            RefreshCustomersCommand = new RelayCommand(obj => CustomersListChanged?.Invoke(), null);
             EditCustomerCommand = new RelayCommand(obj => EditCustomer(obj as Customer), obj => { return IsAdmin; });
             RemoveCustomerCommand = new RelayCommand(obj => RemoveCustomer(obj as Customer), obj => { return IsAdmin; });
-            CustomerListChanged += RefreshCustomers;
         }
 
         #endregion
 
         #region Methods
 
-        public async Task RefreshCustomers()
-        {
-            ItemsLoading = true;
-            try
-            {
-                Customers = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(
-                    await App.CommunicationService.GetAsJson($"Customer"));
 
-                ItemsLoading = false;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
-        }
-
-        public void RefreshCurrentUser (User newUser)
-        {
-            IsAdmin = newUser.IsAdmin;
-        }
 
         public async void CreateNewCustomer()
         {
@@ -137,7 +117,8 @@ namespace TBT.App.ViewModels.MainWindow
 
                 await App.CommunicationService.PostAsJson("Customer", customer);
 
-                CustomerListChanged?.Invoke();
+                Customers = null;
+                await CustomersListChanged?.Invoke();
             }
             catch (Exception ex)
             {
@@ -163,6 +144,8 @@ namespace TBT.App.ViewModels.MainWindow
                 try
                 {
                     customer = JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.PutAsJson("Customer", customer));
+                    Customers = null;
+                    await CustomersListChanged?.Invoke();
                 }
                 catch (Exception ex)
                 {
@@ -192,16 +175,42 @@ namespace TBT.App.ViewModels.MainWindow
                     await App.CommunicationService.PutAsJson("Project", project);
                 }
 
-                //customer.IsActive = false;
                 var x = await App.CommunicationService.PutAsJson("Customer", customer);
 
-                CustomerListChanged?.Invoke();
+                Customers = null;
+                await CustomersListChanged?.Invoke();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
         }
+
+        #endregion
+
+        #region Interface members
+
+        public event Action CurrentUserChanged;
+        public event Func<Task> UsersListChanged;
+        public event Func<Task> CustomersListChanged;
+        public event Func<Task> ProjectsListChanged;
+        public event Func<Task> TasksListChanged;
+
+        public void RefreshCurrentUser(User newUser)
+        {
+            IsAdmin = newUser.IsAdmin;
+        }
+
+        public void RefreshUsersList(ObservableCollection<User> users) { }
+
+        public void RefreshCustomersList(ObservableCollection<Customer> customers)
+        {
+            Customers = customers;
+        }
+
+        public void RefreshProjectsList(ObservableCollection<Project> projects) { }
+
+        public void RefreshTasksList(ObservableCollection<Activity> activities) { }
 
         #endregion
     }

@@ -14,18 +14,16 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class PeopleTabViewModel: BaseViewModel
+    public class PeopleTabViewModel: BaseViewModel, IModelObservableViewModel
     {
         #region Fields
 
         private User _currentUser;
-        private User _newUser;
         private BaseViewModel _createNewUserViewModel;
         private BaseViewModel _editMyProfileViewModel;
         private bool _isExpandenNewUser;
         private bool _isExpandedEdit;
         private ObservableCollection<User> _users;
-        private bool _isLoading;
 
         #endregion
 
@@ -35,12 +33,6 @@ namespace TBT.App.ViewModels.MainWindow
         {
             get { return _currentUser; }
             set { SetProperty(ref _currentUser, value); }
-        }
-
-        public User NewUser
-        {
-            get { return _newUser; }
-            set { SetProperty(ref _newUser, value); }
         }
 
         public BaseViewModel CreateNewUserViewModel
@@ -84,33 +76,20 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _users; }
             set
             {
-                if(SetProperty(ref _users, value))
-                {
-                    IsLoading = (value == null);
-                }
+                SetProperty(ref _users, value);
             }
-        }
-
-        public bool IsLoading
-        {
-            get { return _isLoading; }
-            set { SetProperty(ref _isLoading, value); }
         }
 
         public ICommand RemoveUserCommand { get; set; }
         public ICommand EditUserCommand { get; set; }
 
-        public event Action UserChanged;
-        public event Func<Task> UsersListChanged;
-
         #endregion
 
         #region Constructors
 
-        public PeopleTabViewModel(User user, ObservableCollection<User> users)
+        public PeopleTabViewModel(User user)
         {
             CurrentUser = user;
-            Users = users;
             CreateNewUserViewModel = new EditUserViewModel()
             {
                 ShowAdmin = true,
@@ -136,20 +115,15 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Methods
 
-        public void ChangeCurrentUser(User newUser)
-        {
-            CurrentUser = newUser;
-        }
-
-        public void RefreshUsersList(ObservableCollection<User> users)
-        {
-            Users = users;
-        }
 
         private void SaveUserEditingAction(bool userChanged, bool usersListChanged)
         {
-            if(userChanged) { UserChanged?.Invoke(); }
-            if(usersListChanged) { UsersListChanged?.Invoke(); }
+            if(userChanged) { CurrentUserChanged?.Invoke(); }
+            if(usersListChanged)
+            {
+                Users = null;
+                UsersListChanged?.Invoke();
+            }
         }
 
         private void EditUser(User user)
@@ -184,13 +158,40 @@ namespace TBT.App.ViewModels.MainWindow
 
                 var x = await App.CommunicationService.PutAsJson("User", user);
 
-                UsersListChanged?.Invoke();
+                Users = null;
+                await UsersListChanged?.Invoke();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
         }
+
+        #endregion
+
+        #region Interface members
+
+        public event Action CurrentUserChanged;
+        public event Func<Task> UsersListChanged;
+        public event Func<Task> CustomersListChanged;
+        public event Func<Task> ProjectsListChanged;
+        public event Func<Task> TasksListChanged;
+
+        public void RefreshCurrentUser(User user)
+        {
+            CurrentUser = user;
+        }
+
+        public void RefreshUsersList(ObservableCollection<User> users)
+        {
+            Users = users;
+        }
+
+        public void RefreshCustomersList(ObservableCollection<Customer> customers) { }
+
+        public void RefreshProjectsList(ObservableCollection<Project> projects) { }
+
+        public void RefreshTasksList(ObservableCollection<Activity> activities) { }
 
         #endregion
     }
