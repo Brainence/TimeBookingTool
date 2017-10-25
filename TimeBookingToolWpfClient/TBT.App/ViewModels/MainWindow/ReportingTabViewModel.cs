@@ -20,6 +20,7 @@ using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
 using TBT.App.Views.Controls;
 using TBT.App.Views.Windows;
+using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.MainWindow
 {
@@ -156,8 +157,9 @@ namespace TBT.App.ViewModels.MainWindow
             User = currentUser;
             Users = null;
             IntervalTips = new ObservableCollection<string>() {
-                "This week", "Last week", "This month", "Last month",
-                "This year", "Last year", "All time"
+                Resources.ThisWeek, Resources.LastWeek, Resources.ThisMonth,
+                Resources.LastMonth, Resources.ThisYear, Resources.LastYear,
+                Resources.AllTime
             };
             SelectedTipIndex = 0;
             RefreshReportTimeEntiresCommand = new RelayCommand(async obj => await RefreshReportTimeEntires(ReportingUser.Id), null);
@@ -484,6 +486,17 @@ namespace TBT.App.ViewModels.MainWindow
             var sum = timeEntries.Any() ? timeEntries.Select(t => t.Duration).Aggregate((t1, t2) => t1.Add(t2)) : new TimeSpan();
             Clipboard.SetText($"Total hours: {sum.TotalHours.ToString("N2")}");
         }
+
+        //public void RefreshLanguage()
+        //{
+        //    var tempIndex = SelectedTipIndex;
+        //    IntervalTips = new ObservableCollection<string>() {
+        //        Resources.ThisWeek, Resources.LastWeek, Resources.ThisMonth,
+        //        Resources.LastMonth, Resources.ThisYear, Resources.LastYear,
+        //        Resources.AllTime
+        //    };
+        //    SelectedTipIndex = tempIndex;
+        //}
 
 
         #endregion

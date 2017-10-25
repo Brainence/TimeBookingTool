@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:p="clr-namespace:TBT.App.Properties"
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="1000">
@@ -15,18 +16,18 @@
 
         <Grid Grid.Row="0" Margin="20" Grid.IsSharedSizeScope="True" Name="Header">
             <StackPanel>
-                <local:DoubleLabelControl Label="FULL NAME:" Text="{Binding User.FullName}" FontSize="14" Margin="5"/>
-                <local:DoubleLabelControl Label="EMAIL:" Text="{Binding User.Username}" FontSize="14" Margin="5"/>
+                <local:DoubleLabelControl Label="{Binding Source={x:Static p:Resources.FullName}, Converter={StaticResource ToUpperConverter}, StringFormat={}{0}\:}" Text="{Binding User.FullName}" FontSize="14" Margin="5"/>
+                <local:DoubleLabelControl Label="{Binding Source={x:Static p:Resources.Email}, Converter={StaticResource ToUpperConverter}, StringFormat={}{0}\:}" Text="{Binding User.Username}" FontSize="14" Margin="5"/>
 
-                <local:DoubleLabelControl Label="TOTAL TIME:" 
+                <local:DoubleLabelControl Label="{Binding Source={x:Static p:Resources.TotalTime}, Converter={StaticResource ToUpperConverter}, StringFormat={}{0}\:}" 
                                           Text="{Binding ElementName=TimeEntryItemsControl,
                                                          Path=ItemsSource, 
                                                          Converter={StaticResource DurationConverter}, 
                                                          Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                           FontSize="14" Margin="5"/>
 
-                <local:DoubleLabelControl Label="FROM:" Text="{Binding From, StringFormat=d}" FontSize="14" Margin="5"/>
-                <local:DoubleLabelControl Label="TO:" Text="{Binding To, StringFormat=d}" FontSize="14" Margin="5"/>
+                <local:DoubleLabelControl Label="{Binding Source={x:Static p:Resources.From}, Converter={StaticResource ToUpperConverter}, StringFormat={}{0}\:}" Text="{Binding From, StringFormat=d}" FontSize="14" Margin="5"/>
+                <local:DoubleLabelControl Label="{Binding Source={x:Static p:Resources.To}, Converter={StaticResource ToUpperConverter}, StringFormat={}{0}\:}" Text="{Binding To, StringFormat=d}" FontSize="14" Margin="5"/>
 
             </StackPanel>
         </Grid>

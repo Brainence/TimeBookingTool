@@ -118,229 +118,232 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
+    <value>Адміністратор</value>
   </data>
   <data name="AllTime" xml:space="preserve">
-    <value>All time</value>
+    <value>Весь час</value>
   </data>
   <data name="BackToToday" xml:space="preserve">
-    <value>Back to today</value>
+    <value>Повернутись на сьогодні</value>
   </data>
   <data name="Calendar" xml:space="preserve">
-    <value>Calendar</value>
+    <value>Календар</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Скасувати</value>
   </data>
   <data name="ChangePassword" xml:space="preserve">
-    <value>Change password</value>
+    <value>Змінити пароль</value>
   </data>
   <data name="Comment" xml:space="preserve">
-    <value>Comment</value>
+    <value>Коментарій</value>
   </data>
   <data name="CompanyReport" xml:space="preserve">
-    <value>Company report</value>
+    <value>Звіт по компанії</value>
   </data>
   <data name="ConfirmPassword" xml:space="preserve">
-    <value>Confirm password</value>
+    <value>Підтвердіть пароль</value>
   </data>
   <data name="CopyTotalToClipboard" xml:space="preserve">
-    <value>Copy total time to clipboard</value>
+    <value>Скопіювати загальний час у буфер обміну</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Create</value>
+    <value>Створити</value>
   </data>
   <data name="CreateCustomer" xml:space="preserve">
-    <value>Create new customer</value>
+    <value>Створити нового замовника</value>
   </data>
   <data name="CreateNew" xml:space="preserve">
-    <value>Create new</value>
+    <value>Створити нового</value>
   </data>
   <data name="CreateProject" xml:space="preserve">
-    <value>Create new project</value>
+    <value>Створити новий проект</value>
   </data>
   <data name="CreateTask" xml:space="preserve">
-    <value>Create task</value>
+    <value>Створити завдання</value>
   </data>
   <data name="CurrentsWeek" xml:space="preserve">
-    <value>Current week</value>
+    <value>Поточний тиждень</value>
   </data>
   <data name="Customer" xml:space="preserve">
-    <value>Customer</value>
+    <value>Замовник</value>
   </data>
   <data name="CustomerName" xml:space="preserve">
-    <value>Customer name</value>
+    <value>Ім'я замовника</value>
   </data>
   <data name="Customers" xml:space="preserve">
-    <value>Customers</value>
+    <value>Замовники</value>
   </data>
   <data name="DisableGreeting" xml:space="preserve">
-    <value>Disable greeting</value>
+    <value>Виключити привітання</value>
   </data>
   <data name="DisableNotifications" xml:space="preserve">
-    <value>Disable notifications</value>
+    <value>Виключити оповіщення</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Змінити</value>
   </data>
   <data name="EditMyProfile" xml:space="preserve">
-    <value>Edit my profile</value>
+    <value>Змінити мій профіль</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>Ел. пошта</value>
   </data>
   <data name="EnableGreeting" xml:space="preserve">
-    <value>Enable greetings</value>
+    <value>Включити привітання</value>
   </data>
   <data name="EnableNotifications" xml:space="preserve">
-    <value>Enable notifications</value>
+    <value>Включити оповіщення</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First name</value>
+    <value>Ім'я</value>
   </data>
   <data name="From" xml:space="preserve">
-    <value>From</value>
+    <value>З</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full name</value>
+    <value>Повне ім'я</value>
   </data>
   <data name="LastMonth" xml:space="preserve">
-    <value>Last month</value>
+    <value>Попередній місяць</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last name</value>
+    <value>Прізвище</value>
   </data>
   <data name="LastWeek" xml:space="preserve">
-    <value>Last week</value>
+    <value>Попередній тиждень</value>
   </data>
   <data name="LastYear" xml:space="preserve">
-    <value>Last year</value>
+    <value>Попередній рік</value>
+  </data>
+  <data name="LastYear1" xml:space="preserve">
+    <value>Попередній рік</value>
   </data>
   <data name="Limit" xml:space="preserve">
-    <value>Limit</value>
+    <value>Ліміт</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
-    <value>New password</value>
+    <value>Новий пароль</value>
   </data>
   <data name="NewUser" xml:space="preserve">
-    <value>New user</value>
+    <value>Новий користувач</value>
   </data>
   <data name="OldPassword" xml:space="preserve">
-    <value>Old password</value>
+    <value>Старий пароль</value>
   </data>
   <data name="OpenTimeBookingTool" xml:space="preserve">
-    <value>Open Time Booking Tool</value>
+    <value>Відкрити "Time Booking Tool"</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Пароль</value>
   </data>
   <data name="People" xml:space="preserve">
-    <value>People</value>
+    <value>Люди</value>
   </data>
   <data name="Project" xml:space="preserve">
-    <value>Project</value>
+    <value>Проект</value>
   </data>
   <data name="ProjectName" xml:space="preserve">
-    <value>Project name</value>
+    <value>Назва проекту</value>
   </data>
   <data name="Projects" xml:space="preserve">
-    <value>Projects</value>
+    <value>Проекти</value>
   </data>
   <data name="Quit" xml:space="preserve">
-    <value>Quit</value>
+    <value>Вихід</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Refresh all data</value>
+    <value>Оновити всі дані</value>
   </data>
   <data name="RefreshCustomer" xml:space="preserve">
-    <value>Refresh customers list</value>
+    <value>Оновити список замовників</value>
   </data>
   <data name="RefreshProject" xml:space="preserve">
-    <value>Refresh projects list </value>
+    <value>Оновити список проектів</value>
   </data>
   <data name="RefreshReport" xml:space="preserve">
-    <value>Refresh report data</value>
+    <value>Оновити дані для звіту</value>
   </data>
   <data name="RefreshTask" xml:space="preserve">
-    <value>Refresh tasks list</value>
+    <value>Оновити список завдань</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Видалити</value>
   </data>
   <data name="Reporting" xml:space="preserve">
-    <value>Reporting</value>
+    <value>Звітування</value>
   </data>
   <data name="RunOnStartup" xml:space="preserve">
-    <value>Run on startup</value>
+    <value>Запускати при запуску системи</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Зберегти</value>
   </data>
   <data name="SelectedWeek" xml:space="preserve">
-    <value>Selected week</value>
+    <value>Обраний тиждень</value>
   </data>
   <data name="SelectTaskFirst" xml:space="preserve">
-    <value>Select task first</value>
+    <value>Спочатку оберіть завдання</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Опції</value>
   </data>
   <data name="SignOut" xml:space="preserve">
-    <value>Sign out</value>
+    <value>Вийти з акаунта</value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>Start</value>
+    <value>Почати</value>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Stop</value>
+    <value>Зупинити</value>
   </data>
   <data name="Task" xml:space="preserve">
-    <value>Task</value>
+    <value>Завдання</value>
   </data>
   <data name="TaskName" xml:space="preserve">
-    <value>TaskName</value>
+    <value>Назва завдання</value>
   </data>
   <data name="Tasks" xml:space="preserve">
-    <value>Tasks</value>
+    <value>Завдання</value>
   </data>
   <data name="ThisMonth" xml:space="preserve">
-    <value>This month</value>
+    <value>Поточний місяць</value>
   </data>
   <data name="ThisWeek" xml:space="preserve">
-    <value>This week</value>
+    <value>Поточний тиждень</value>
   </data>
   <data name="ThisYear" xml:space="preserve">
-    <value>This year</value>
+    <value>Поточний рік</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Time</value>
+    <value>Час</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="TimeBookingTool" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\TimeBookingTool.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\TimeBookingTool2.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TimeEnteredForDay" xml:space="preserve">
-    <value>Time entered for day</value>
+    <value>Загальний час за день</value>
   </data>
   <data name="TimeEnteredForWeek" xml:space="preserve">
-    <value>Time entered for week</value>
+    <value>Загальний час за тиждень</value>
   </data>
   <data name="TimeLimit" xml:space="preserve">
-    <value>Time limit</value>
+    <value>Часове обмеження</value>
   </data>
   <data name="To" xml:space="preserve">
-    <value>To</value>
+    <value>По</value>
   </data>
   <data name="TotalTime" xml:space="preserve">
-    <value>Total time</value>
+    <value>Загальний час</value>
   </data>
   <data name="User" xml:space="preserve">
-    <value>User</value>
+    <value>Юзер</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Логін</value>
   </data>
   <data name="UserReport" xml:space="preserve">
-    <value>User report</value>
+    <value>Звіт про користувача</value>
   </data>
 </root>

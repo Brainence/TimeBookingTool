@@ -6,11 +6,13 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using TBT.App.Common;
@@ -149,6 +151,20 @@ namespace TBT.App
                 AppSettings.Save();
             }
         }
+
+        public static string CultureTag
+        {
+            get
+            {
+                return AppSettings.Contains(Constants.CultureTag) ? (string)AppSettings[Constants.CultureTag] : "en";
+            }
+            set
+            {
+                AppSettings[Constants.CultureTag] = value;
+                AppSettings.Save();
+            }
+        }
+
         public static string AuthenticationUsername
         {
             get
@@ -309,14 +325,16 @@ namespace TBT.App
 
         private async void Application_Startup(object sender, StartupEventArgs e)
         {
+
             bool authorized = false;
             if (RememberMe)
             {
                 var res = await UpdateTokens();
                 authorized = res && !string.IsNullOrEmpty(Username);
             }
+            Thread.CurrentThread.CurrentCulture = new CultureInfo(CultureTag);
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(CultureTag);
             var mainWindow = new MainWindow() { DataContext = new MainWindowViewModel(authorized && RememberMe) };
-
             mainWindow.ShowDialog();
         }
 
@@ -348,13 +366,13 @@ namespace TBT.App
         static void CreateContextMenu()
         {
             GlobalNotification.ContextMenuStrip = new WF.ContextMenuStrip();
-            GlobalNotification.ContextMenuStrip.Items.Add("Open Time Booking Tool").Click += Open_Click;
+            GlobalNotification.ContextMenuStrip.Items.Add(TBT.App.Properties.Resources.OpenTimeBookingTool).Click += Open_Click;
             GlobalNotification.ContextMenuStrip.Items.Add("-");
             GlobalNotification.ContextMenuStrip.Items.Add("").Click += EnableNotifications_Click;
             GlobalNotification.ContextMenuStrip.Items.Add("").Click += EnableGreetingNotifications_Click;
             GlobalNotification.ContextMenuStrip.Items.Add("-");
-            GlobalNotification.ContextMenuStrip.Items.Add("Sign out").Click += SignOut_Click;
-            GlobalNotification.ContextMenuStrip.Items.Add("Quit").Click += Quit_Click;
+            GlobalNotification.ContextMenuStrip.Items.Add(TBT.App.Properties.Resources.SignOut).Click += SignOut_Click;
+            GlobalNotification.ContextMenuStrip.Items.Add(TBT.App.Properties.Resources.Quit).Click += Quit_Click;
 
             GlobalNotification.ContextMenuStrip.Opening += ContextMenuStrip_Opening;
         }
@@ -391,8 +409,8 @@ namespace TBT.App
         }
         static void ContextMenuStrip_Opening(object sender, CancelEventArgs e)
         {
-            GlobalNotification.ContextMenuStrip.Items[2].Text = EnableNotification ? "Disable notifications" : "Enable notifications";
-            GlobalNotification.ContextMenuStrip.Items[3].Text = EnableGreetingNotification ? "Disable greeting" : "Enable greeting";
+            GlobalNotification.ContextMenuStrip.Items[2].Text = EnableNotification ? TBT.App.Properties.Resources.DisableNotifications : TBT.App.Properties.Resources.EnableNotifications;
+            GlobalNotification.ContextMenuStrip.Items[3].Text = EnableGreetingNotification ? TBT.App.Properties.Resources.DisableGreeting : TBT.App.Properties.Resources.EnableGreeting;
             _contextMenuStripOpening?.Invoke();
         }
 

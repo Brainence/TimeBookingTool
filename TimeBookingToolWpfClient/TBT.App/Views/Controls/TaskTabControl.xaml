@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:p="clr-namespace:TBT.App.Properties"
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
              mc:Ignorable="d"
              Name="TaskTab">
@@ -38,12 +39,12 @@
                 <Button Command="{Binding CreateNewTaskCommand}" 
                         Template="{StaticResource HyperlinkButtonTemplate}" 
                         Margin="0 5 5 5" VerticalAlignment="Center">
-                    <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="Create task" />
+                    <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="{x:Static p:Resources.CreateTask}" />
                 </Button>
             </StackPanel>
 
             <Button Grid.Column="1" Command="{Binding Path=RefreshTasksCommand}" Template="{StaticResource HyperlinkButtonTemplate}" HorizontalAlignment="Right">
-                <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="Refresh" />
+                <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="{x:Static p:Resources.RefreshTask}" />
             </Button>
         </Grid>
 

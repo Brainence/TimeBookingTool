@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
+             xmlns:p="clr-namespace:TBT.App.Properties"
              mc:Ignorable="d" >
 
     <Grid Grid.IsSharedSizeScope="True">
@@ -17,7 +18,7 @@
         </Grid.RowDefinitions>
 
         <local:ComboBoxControl x:Name="projectComboBox"  Grid.Row="0" 
-                                       Label="Project" 
+                                       Label="{x:Static p:Resources.Project}" 
                                        ItemsSource="{Binding Path=User.Projects, Mode=TwoWay}"
                                        SelectedItem="{Binding Path=SelectedProject, Mode=TwoWay}"
                                        
@@ -26,7 +27,7 @@
         <!--EmptyText="[Select project]"-->
         <!--EmptyText="[Select task]"-->
         <local:ComboBoxControl x:Name="taskComboBox" Grid.Row="1" 
-                                       Label="Task" 
+                                       Label="{x:Static p:Resources.Task}" 
                                        ItemsSource="{Binding Path=SelectedProject.Activities, Mode=TwoWay}"
                                        SelectedItem="{Binding SelectedActivity, Mode=TwoWay}"
                                        
@@ -46,7 +47,7 @@
 
 
         <local:TextControl Grid.Row="2"
-                           Label="Comment" Text="{Binding Path=Comment, Mode=TwoWay}" 
+                           Label="{x:Static p:Resources.Project}" Text="{Binding Path=Comment, Mode=TwoWay}" 
                            Margin="5 4" FontSize="13" 
                            TextWrapping="Wrap" AcceptsReturn="True" 
                            Width="468"
@@ -57,7 +58,7 @@
 
             <local:TextControl x:Name="timeTextBox"
                            Grid.Row="3"
-                           Label="Time" 
+                           Label="{x:Static p:Resources.Time}" 
                            Margin="5 4" FontSize="13"
                            Width="468" 
                             Height="20"
@@ -70,7 +71,7 @@
             <local:TextControl x:Name="timelimitTextBox"
                            Text="{Binding TimeLimit, Mode=TwoWay}"
                            Visibility="{Binding IsLimitVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Label="Limit"
+                           Label="{x:Static p:Resources.Limit}"
                            Margin="5 4" FontSize="13"
                            Width="468" 
                             Height="20"
@@ -86,7 +87,7 @@
             <Button x:Name="startButton"
                 Command="{Binding CreateStartCommand}" 
                 ToolTipService.ShowOnDisabled="True"
-                ToolTip="{Binding ElementName=startButton, Path=IsEnabled, Converter={StaticResource StartButtonToolTipConverter}, ConverterParameter='Select task first.'}"
+                ToolTip="{Binding ElementName=startButton, Path=IsEnabled, Converter={StaticResource StartButtonToolTipConverter}, ConverterParameter={x:Static p:Resources.SelectTaskFirst}}"
                 HorizontalAlignment="Center"
                     Margin="0 5 0 0"
                 BorderThickness="0">

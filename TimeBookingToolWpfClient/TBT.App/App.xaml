@@ -36,6 +36,8 @@
             <tools:EnumerableToVisibilityConverter x:Key="EnumerableToVisibilityConverter"/>
             <tools:EnumerableToNotVisibilityConverter x:Key="EnumerableToNotVisibilityConverter"/>
             <tools:OnlyForAdminsVisibleConverter x:Key="OnlyForAdminsVisibleConverter"/>
+            <tools:ToUpperConverter x:Key="ToUpperConverter"/>
+            <tools:BoolToWindowState x:Key="BoolToWindowState"/>
 
             <SolidColorBrush x:Key="CalendarItemBackground" Color="#c2422b"/>
             <SolidColorBrush x:Key="CalendarItemMouseOverBrush" Color="#f77f50"/>
@@ -72,6 +74,11 @@
             <SolidColorBrush x:Key="ChangeWeekButtonBackground" Color="Transparent"/>
             <SolidColorBrush x:Key="ChangeWeekButtonMouseOverBackground" Color="#c2422b"/>
             <SolidColorBrush x:Key="ChangeWeekButtonForeground" Color="#c2422b"/>
+
+            <DataTemplate x:Key="LanguageItemComboBoxTemplate">
+                <Image Width="32" Height="24" Source="{Binding Flag}" VerticalAlignment="Stretch"
+                           HorizontalAlignment="Center" Stretch="Fill"/>
+            </DataTemplate>
 
         </ResourceDictionary>
     </Application.Resources>

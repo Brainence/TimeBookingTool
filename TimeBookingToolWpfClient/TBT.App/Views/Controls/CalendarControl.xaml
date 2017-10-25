@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:p="clr-namespace:TBT.App.Properties"
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
              mc:Ignorable="d" 
              Background="White">
@@ -29,19 +30,19 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5">
 
                     <Button Template="{StaticResource HyperlinkButtonTemplate}" 
-                            Content="Current week"
+                            Content="{x:Static p:Resources.CurrentsWeek}"
                             Command="{Binding GoToCurrentWeekCommand}"
                             VerticalContentAlignment="Center"
                             Margin="15 4 15 4"/>
 
                     <Button Template="{StaticResource HyperlinkButtonTemplate}" 
-                            Content="Back to today"
+                            Content="{x:Static p:Resources.BackToToday}"
                             Command="{Binding BackTodayCommand}"
                             VerticalContentAlignment="Center"
                             Margin="15 4 15 4"/>
 
                     <Button Template="{StaticResource HyperlinkButtonTemplate}" 
-                            Content="Selected week"
+                            Content="{x:Static p:Resources.SelectedWeek}"
                             Command="{Binding GoToSelectedDayCommand}"
                             VerticalContentAlignment="Center"
                             Margin="15 4 15 4"/>
@@ -209,19 +210,55 @@
                             VerticalAlignment="Top" 
                             HorizontalAlignment="Stretch"
                             Visibility="{Binding IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
-            <StackPanel Grid.Row="2" Margin="20 10 20 5">
-                <TextBlock Text="{Binding Path=User.TimeEntries, 
-                                          Converter={StaticResource DurationConverter}, 
-                                          Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}Time entered for a day: {0}}"
-                           FontSize="14" 
+            <Grid Grid.Row="2" Margin="20 10 20 5">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <!--<TextBlock FontSize="14" 
                            FontWeight="Bold"
-                           VerticalAlignment="Center"/>
+                           VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0}\: {1}}" Mode="OneWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding Source="{x:Static p:Resources.TimeEnteredForDay}"/>
+                            <Binding Path="User.TimeEntries"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>-->
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <TextBlock FontSize="13" 
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Text="{x:Static p:Resources.TimeEnteredForDay}"/>
+                    <TextBlock FontSize="14" 
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Text="{Binding Path=User.TimeEntries, Converter={StaticResource DurationConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}\: {0}}"/>
+                </StackPanel>
 
-                <TextBlock Text="{Binding Path=WeekTime, StringFormat={}Time entered for a week: {0}}"
-                           FontSize="14" 
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <TextBlock FontSize="13" 
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Text="{x:Static p:Resources.TimeEnteredForWeek}"/>
+                    <TextBlock FontSize="14" 
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Text="{Binding Path=WeekTime, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}\: {0}}"/>
+                </StackPanel>
+
+
+                <!--<TextBlock FontSize="14" 
                            FontWeight="Bold"
-                           VerticalAlignment="Center"/>
-            </StackPanel>
+                           VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0}\: {1}}" Mode="OneWay"  UpdateSourceTrigger="PropertyChanged">
+                            <Binding Source="{x:Static p:Resources.TimeEnteredForWeek}"/>
+                            <Binding Path="WeekTime"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>-->
+            </Grid>
 
             <StackPanel Grid.Row="1" Margin="20" VerticalAlignment="Top" HorizontalAlignment="Stretch"
                       Visibility="{Binding Path=IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">

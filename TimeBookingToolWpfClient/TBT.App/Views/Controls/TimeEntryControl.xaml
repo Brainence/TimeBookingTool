@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
+             xmlns:p="clr-namespace:TBT.App.Properties"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" >
     <i:Interaction.Triggers>
@@ -69,14 +70,14 @@
                                         <DataTrigger Binding="{Binding Path=TimeEntry.IsRunning}" Value="true">
                                             <Setter Property="Content" >
                                                 <Setter.Value>
-                                                    <Image Source="/Resources/Icons/stop.png" Stretch="Fill" Height="12" Width="12" ToolTip="Stop"/>
+                                                    <Image Source="/Resources/Icons/stop.png" Stretch="Fill" Height="12" Width="12" ToolTip="{x:Static p:Resources.Stop}"/>
                                                 </Setter.Value>
                                             </Setter>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Path=TimeEntry.IsRunning}" Value="false">
                                             <Setter Property="Content" >
                                                 <Setter.Value>
-                                                    <Image Source="/Resources/Icons/play.png" Stretch="Fill" Height="16" Width="16" ToolTip="Start"/>
+                                                    <Image Source="/Resources/Icons/play.png" Stretch="Fill" Height="16" Width="16" ToolTip="{x:Static p:Resources.Start}"/>
                                                 </Setter.Value>
                                             </Setter>
                                         </DataTrigger>
@@ -109,7 +110,7 @@
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
-                            <Image Source="/Resources/Icons/editing.png" Stretch="Fill" Height="12" Width="12" ToolTip="Edit"/>
+                            <Image Source="/Resources/Icons/editing.png" Stretch="Fill" Height="12" Width="12" ToolTip="{x:Static p:Resources.Edit}"/>
                         </Button>
 
                         <Button Command="{Binding Path=RemoveCommand, Mode=TwoWay}" 
@@ -133,7 +134,7 @@
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
-                            <Image Source="/Resources/Icons/bin.png" Stretch="Fill" Height="12" Width="12" ToolTip="Remove"/>
+                                <Image Source="/Resources/Icons/bin.png" Stretch="Fill" Height="12" Width="12" ToolTip="{x:Static p:Resources.Remove}"/>
                         </Button>
 
                         <TextBlock Text="{Binding Path=TimeEntry, Converter={StaticResource TimeEntryConverter}}" 
@@ -200,7 +201,7 @@
                                                             </Style>
                                                         </Grid.Style>
 
-                                                        <TextBlock Text="Save" 
+                                                            <TextBlock Text="{x:Static p:Resources.Save}" 
                                                                    Margin="6 4" 
                                                                    Foreground="#ffffff"
                                                                    HorizontalAlignment="Center"
@@ -242,7 +243,7 @@
                                                             </Style>
                                                         </Grid.Style>
 
-                                                        <TextBlock Text="Cancel"
+                                                            <TextBlock Text="{x:Static p:Resources.Cancel}"
                                                                    Margin="6 4" 
                                                                    Foreground="#ffffff"
                                                                    HorizontalAlignment="Center"

@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:p="clr-namespace:TBT.App.Properties"
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
              xmlns:controls="clr-namespace:TBT.App.Views.Controls"
              mc:Ignorable="d" 
@@ -21,7 +22,7 @@
                 <Grid x:Name="newUserGrid" Grid.Row="0"  
                           Visibility="{Binding Path=CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
 
-                    <Expander Header="New User" Height="Auto" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" x:Name="ExpanderNewUser" IsExpanded="{Binding IsExpandedNewUser}">
+                    <Expander Header="{x:Static p:Resources.NewUser}" Height="Auto" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" x:Name="ExpanderNewUser" IsExpanded="{Binding IsExpandedNewUser}">
                         <ContentControl Content="{Binding CreateNewUserViewModel}"></ContentControl>
                     </Expander>
                 </Grid>
@@ -29,7 +30,7 @@
                 <Grid x:Name="editMyProfile" Grid.Row="1"  
                           Visibility="{Binding Path=CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
 
-                    <Expander Header="Edit my profile" Height="Auto" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" x:Name="ExpanderEditMyProfile" IsExpanded="{Binding IsExpandedEdit}">
+                    <Expander Header="{x:Static p:Resources.EditMyProfile}" Height="Auto" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" x:Name="ExpanderEditMyProfile" IsExpanded="{Binding IsExpandedEdit}">
                         <ContentControl Content="{Binding EditMyProfileViewModel}"></ContentControl>
                     </Expander>
                 </Grid>
@@ -82,7 +83,7 @@
                                                 <ColumnDefinition SharedSizeGroup="Edit" Width="25"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Image Height="16" Grid.Column="0" Margin="0 5" Source="../../Resources/Icons/administrator.png" ToolTip="Administrator">
+                                            <Image Height="16" Grid.Column="0" Margin="0 5" Source="../../Resources/Icons/administrator.png" ToolTip="{x:Static p:Resources.Admin}">
                                                 <Image.Style>
                                                     <Style TargetType="Image">
                                                         <Style.Triggers>

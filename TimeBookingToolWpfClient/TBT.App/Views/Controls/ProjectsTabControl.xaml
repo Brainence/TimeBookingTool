@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:p="clr-namespace:TBT.App.Properties"
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
              mc:Ignorable="d"
              Name="ProjectsTab">
@@ -32,21 +33,12 @@
 
                 <Button Command="{Binding CreateNewProjectCommand}" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Width="Auto" 
                                 HorizontalAlignment="Right" VerticalAlignment="Center" Height="20">
-                    <!--<Button.Style>
-                        <Style TargetType="Button">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Path=SelectedItem}" Value="{x:Null}">
-                                    <Setter Property="IsEnabled" Value="False"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>-->
-                    <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="Create project" />
+                    <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="{x:Static p:Resources.CreateProject}" />
                 </Button>
             </StackPanel>
 
             <Button Grid.Column="1" Command="{Binding Path=RefreshProjectsCommand}" Template="{StaticResource HyperlinkButtonTemplate}" HorizontalAlignment="Right">
-                <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="Refresh" />
+                <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="{x:Static p:Resources.RefreshProject}" />
             </Button>
         </Grid>
 

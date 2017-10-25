@@ -12,6 +12,7 @@ using TBT.App.Helpers;
 using TBT.App.ViewModels.MainWindow;
 using TBT.App.Views.Controls;
 using System.Collections;
+using TBT.App.Properties;
 
 namespace TBT.App.Models.Tools
 {
@@ -336,7 +337,7 @@ namespace TBT.App.Models.Tools
             DateTime dateTime;
             var res = DateTime.TryParse(value?.ToString(), out dateTime);
 
-            return res ? dateTime.Date == DateTime.Now.Date ? "START" : "CREATE" : "CREATE";
+            return res ? dateTime.Date == DateTime.Now.Date ? Resources.Start.ToUpper() : Resources.Create.ToUpper() : Resources.Create.ToUpper();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -445,6 +446,35 @@ namespace TBT.App.Models.Tools
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public class ToUpperConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value?.ToString().ToUpper();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class BoolToWindowState : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var x = value as bool?;
+            if (x == null) return WindowState.Minimized;
+
+            return x.Value ? WindowState.Normal : WindowState.Minimized;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((WindowState)value) == WindowState.Minimized ? false : true;
         }
     }
 }

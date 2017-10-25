@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:p="clr-namespace:TBT.App.Properties"
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
              mc:Ignorable="d"
              MinWidth="500">
@@ -17,12 +18,12 @@
               VerticalAlignment="Center"
               Grid.Row="1">
             <StackPanel Grid.IsSharedSizeScope="True">
-                <local:TextControl Margin="20 10 20 5" Height="20"  Label="Customer name" Text="{Binding Path=EditingCustomersName, Mode=TwoWay}"/>
+                <local:TextControl Margin="20 10 20 5" Height="20"  Label="{x:Static p:Resources.CustomerName}" Text="{Binding Path=EditingCustomersName, Mode=TwoWay}"/>
             </StackPanel>
         </Grid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Height="25" Margin="10 0 10 0" Content="Save" Command="{Binding SaveCommand}" Template="{StaticResource HyperlinkButtonTemplate}"/>
+            <Button Height="25" Margin="10 0 10 0" Content="{x:Static p:Resources.Save}" Command="{Binding SaveCommand}" Template="{StaticResource HyperlinkButtonTemplate}"/>
         </StackPanel>
     </Grid>
 </UserControl>

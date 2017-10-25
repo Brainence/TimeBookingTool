@@ -14,6 +14,9 @@ using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
 using TBT.App.Services.CommunicationService.Implementations;
 using TBT.App.ViewModels.Authentication;
+using TBT.App.Properties;
+using System.Threading;
+using System.Globalization;
 
 namespace TBT.App.ViewModels.MainWindow
 {
@@ -29,6 +32,10 @@ namespace TBT.App.ViewModels.MainWindow
         private bool _isVisible;
         private DispatcherTimer _dateTimer;
         private double _width;
+        private bool _windowState;
+        private ObservableCollection<LanguageItem> _languages;
+        private int _selectedLanguageIndex;
+        private bool _manualSelect;
 
 
         #endregion
@@ -96,6 +103,37 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
+        public bool WindowState
+        {
+            get { return _windowState; }
+            set { SetProperty(ref _windowState, value); }
+        }
+
+        public ObservableCollection<LanguageItem> Languages
+        {
+            get { return _languages; }
+            set { SetProperty(ref _languages, value); }
+        }
+
+        public int SelectedLanguageIndex
+        {
+            get { return _selectedLanguageIndex; }
+            set
+            {
+                if (_manualSelect && _selectedLanguageIndex != value)
+                {
+                    if (MessageBox.Show("App will be restarted to change the language. Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+                }
+                if (SetProperty(ref _selectedLanguageIndex, value) && value >= 0 && value < Languages.Count && _manualSelect)
+                {
+                    App.CultureTag = Languages[value].Culture;
+                    Application.Current.Shutdown();
+                    System.Windows.Forms.Application.Restart();
+                }
+                _manualSelect = true;
+            }
+        }
+
         public ICommand RefreshAllCommand { get; set; }
         public ICommand SignOutCommand { get; set; }
         public ICommand SizeChangeCommand { get; set; }
@@ -115,14 +153,16 @@ namespace TBT.App.ViewModels.MainWindow
 
         public MainWindowViewModel(bool authorized)
         {
-            App.GlobalTimer = new GlobalTimer();
-            _dateTimer = new DispatcherTimer();
-            _dateTimer.Interval = new TimeSpan(0, 0, 1);
-            InitNotifyIcon();
             if (!OpenAuthenticationWindow(authorized))
             {
+                _manualSelect = false;
+                App.GlobalTimer = new GlobalTimer();
+                _dateTimer = new DispatcherTimer();
+                _dateTimer.Interval = new TimeSpan(0, 0, 1);
+                InitNotifyIcon();
                 RefreshCurrentUser();
                 InitTabs();
+                InitLanguages();
                 Width = 600;
                 IsVisible = true;
                 SignOutCommand = new RelayCommand(obj => SignOut(), null);
@@ -130,6 +170,7 @@ namespace TBT.App.ViewModels.MainWindow
                 RefreshAllCommand = new RelayCommand(obj => RefreshAll(), null);
                 RefreshAll();
                 _dateTimer.Start();
+                WindowState = true;
             }
         }
 
@@ -255,7 +296,8 @@ namespace TBT.App.ViewModels.MainWindow
                 }
                 return;
             }
-            IsVisible = true;
+            if (!WindowState) { WindowState = true; }
+            else { IsVisible = true; }
         }
 
         private void ExitApplication()
@@ -273,30 +315,42 @@ namespace TBT.App.ViewModels.MainWindow
         private void InitTabs()
         {
             Tabs = new ObservableCollection<MainWindowTabItem>();
-            Tabs.Add(new MainWindowTabItem(){ Control = new CalendarTabViewModel(CurrentUser), Title = "Calendar", Tag = "../Icons/calendar_white.png", OnlyForAdmins = false });
+            Tabs.Add(new MainWindowTabItem(){ Control = new CalendarTabViewModel(CurrentUser), Title = Resources.Calendar, Tag = "../Icons/calendar_white.png", OnlyForAdmins = false });
             CurrentUserChanged += Tabs[0].Control.RefreshCurrentUser;
             ChangeDateSize += ((CalendarTabViewModel)Tabs[0].Control).ChangeDateFormat;
-            Tabs.Add(new MainWindowTabItem() { Control = new ReportingTabViewModel(CurrentUser), Title = "Reporting", Tag = "../Icons/reporting_white.png", OnlyForAdmins = false });
+            Tabs.Add(new MainWindowTabItem() { Control = new ReportingTabViewModel(CurrentUser), Title = Resources.Reporting, Tag = "../Icons/reporting_white.png", OnlyForAdmins = false });
             CurrentUserChanged += Tabs[1].Control.RefreshCurrentUser;
             UsersListChanged += Tabs[1].Control.RefreshUsersList;
-            Tabs.Add(new MainWindowTabItem() { Control = new PeopleTabViewModel(CurrentUser), Title = "People", Tag = "../Icons/people_white.png", OnlyForAdmins = false });
+            Tabs.Add(new MainWindowTabItem() { Control = new PeopleTabViewModel(CurrentUser), Title = Resources.People, Tag = "../Icons/people_white.png", OnlyForAdmins = false });
             CurrentUserChanged += Tabs[2].Control.RefreshCurrentUser;
             UsersListChanged += Tabs[2].Control.RefreshUsersList;
             Tabs[2].Control.UsersListChanged += RefreshUsersList;
             Tabs[2].Control.CurrentUserChanged += RefreshCurrentUser;
-            Tabs.Add(new MainWindowTabItem() { Control = new CustomerTabViewModel(CurrentUser), Title = "Customers", Tag = "../Icons/customers_white.png", OnlyForAdmins = true });
+            Tabs.Add(new MainWindowTabItem() { Control = new CustomerTabViewModel(CurrentUser), Title = Resources.Customers, Tag = "../Icons/customers_white.png", OnlyForAdmins = true });
             CurrentUserChanged += Tabs[3].Control.RefreshCurrentUser;
             CustomersListChanges += Tabs[3].Control.RefreshCustomersList;
             Tabs[3].Control.CustomersListChanged += RefreshCustomersList;
-            Tabs.Add(new MainWindowTabItem() { Control = new ProjectsTabViewModel(), Title = "Projects", Tag = "../Icons/projects_white.png", OnlyForAdmins = true });
+            Tabs.Add(new MainWindowTabItem() { Control = new ProjectsTabViewModel(), Title = Resources.Projects, Tag = "../Icons/projects_white.png", OnlyForAdmins = true });
             ProjectsListChanges += Tabs[4].Control.RefreshProjectsList;
             CustomersListChanges += Tabs[4].Control.RefreshCustomersList;
             Tabs[4].Control.ProjectsListChanged += RefreshProjectsList;
-            Tabs.Add(new MainWindowTabItem() { Control = new TasksTabViewModel(), Title = "Tasks", Tag = "../Icons/tasks_white.png", OnlyForAdmins = true });
+            Tabs.Add(new MainWindowTabItem() { Control = new TasksTabViewModel(), Title = Resources.Tasks, Tag = "../Icons/tasks_white.png", OnlyForAdmins = true });
             ProjectsListChanges += Tabs[5].Control.RefreshProjectsList;
             TasksListChanges += Tabs[5].Control.RefreshTasksList;
             Tabs[5].Control.TasksListChanged += RefreshTasksList;
-            Tabs.Add(new MainWindowTabItem() { Control = new SettingsTabViewModel(), Title = "Settings", Tag = "../Icons/settings_white.png", OnlyForAdmins = false });
+            Tabs.Add(new MainWindowTabItem() { Control = new SettingsTabViewModel(), Title = Resources.Settings, Tag = "../Icons/settings_white.png", OnlyForAdmins = false });
+        }
+
+        public void InitLanguages()
+        {
+            Languages = new ObservableCollection<LanguageItem>()
+            {
+                new LanguageItem() { Culture = "uk-UA", Flag = "Resources/Icons/ukr.png" },
+                new LanguageItem() { Culture = "en", Flag = "Resources/Icons/en.png" }
+            };
+            var currentCulture = Thread.CurrentThread.CurrentUICulture.ToString();
+            var tempIndex = Languages.Select((item, index) => new { item = item, index = index }).FirstOrDefault(x => x.item.Culture == currentCulture)?.index;
+            SelectedLanguageIndex = tempIndex ?? -1;
         }
 
         #endregion

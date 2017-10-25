@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,7 +61,7 @@ namespace TBT.App.ViewModels.MainWindow
                 if (value != null)
                 {
                     SetProperty(ref _selectedDay, value);
-                    
+                    RefreshTimeEntries(Week);
                 }
             }
         }
@@ -116,7 +117,6 @@ namespace TBT.App.ViewModels.MainWindow
         {
             User = user;
             Week = GetWeekOfDay(DateTime.Now);
-            SelectedDay = DateTime.Now.Date;
             IsDateNameShort = true;
             TimeEntryItems = new TimeEntryItemsViewModel() { TimeEntries = User?.TimeEntries, };
             ((TimeEntryItemsViewModel)TimeEntryItems).RefreshTimeEntries += (async () => await RefreshTimeEntries(Week));
@@ -125,6 +125,7 @@ namespace TBT.App.ViewModels.MainWindow
             PropertyChanged += tempVM.ShowLimit;
             PropertyChanged += tempVM.ChangeButtonName;
             ChangeUserForNested += tempVM.RefreshCurrentUser;
+            SelectedDay = DateTime.Now.Date;
             tempVM.RefreshTimeEntries += async () => await RefreshTimeEntries(Week);
             ChangeWeekCommand = new RelayCommand(obj => ChangeWeek(Convert.ToInt32(obj)), null);
             GoToSelectedDayCommand = new RelayCommand(obj => GoToDefaultWeek(true, false), obj => SelectedDay.HasValue && SelectedDay.Value.StartOfWeek(DayOfWeek.Monday) != Week.FirstOrDefault());

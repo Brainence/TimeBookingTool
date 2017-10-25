@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:p="clr-namespace:TBT.App.Properties"
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
              xmlns:controls="clr-namespace:TBT.App.Views.Controls"
              mc:Ignorable="d"
@@ -27,14 +28,14 @@
                 <Button Command="{Binding CreateNewCustomerCommand}" 
                         Template="{StaticResource HyperlinkButtonTemplate}" 
                         Margin="5" HorizontalAlignment="Right">
-                    <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="Create customer" />
+                    <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="{x:Static p:Resources.CreateCustomer}" />
                 </Button>
             </StackPanel>
 
             <Button Grid.Column="1" Command="{Binding Path=RefreshCustomersCommand}" 
                     Template="{StaticResource HyperlinkButtonTemplate}" 
                     Margin="0" HorizontalAlignment="Right">
-                <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="Refresh" />
+                <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="{x:Static p:Resources.RefreshCustomer}" />
             </Button>
         </Grid>
 
@@ -89,7 +90,7 @@
                                     <Expander Grid.Column="1" 
                                               Width="310"
                                               Margin="5 5 15 5" 
-                                              Header="Projects"
+                                              Header="{x:Static p:Resources.Projects}"
                                               IsExpanded="{Binding IsExpanded}">
 
                                         <ItemsControl ItemsSource="{Binding Projects}">

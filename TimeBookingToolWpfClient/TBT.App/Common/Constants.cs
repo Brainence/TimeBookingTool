@@ -15,6 +15,7 @@
         public static string RememberMe => "RememberMe";
         public static string CurrentRunningTimeEntryId => "CurrentRunningTimeEntryId";
         public static string EnableGreetingNotification => "EnableGreetingNotification";
+        public static string CultureTag => "CultureTag";
         
     }
 }

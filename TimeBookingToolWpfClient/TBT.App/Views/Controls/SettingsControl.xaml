@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:p="clr-namespace:TBT.App.Properties"
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
              mc:Ignorable="d" >
     <Grid Background="White">
@@ -14,17 +15,17 @@
         <StackPanel Margin="20 20">
             <CheckBox x:Name="RunOnStartupCheckBox"
                                       Margin="10" FontSize="13"
-                                      Content="Run on startup" 
+                                      Content="{x:Static p:Resources.RunOnStartup}" 
                                       IsChecked="{Binding RunOnSturtupCheck}"/>
 
             <CheckBox x:Name="EnableNotificationCheckBox"
                                       Margin="10" FontSize="13"
-                                      Content="Enable notifications" 
+                                      Content="{x:Static p:Resources.EnableNotifications}" 
                                       IsChecked="{Binding NotificationsCheck}"/>
 
             <CheckBox x:Name="EnableGreetingNotificationCheckBox"
                                       Margin="10" FontSize="13"
-                                      Content="Enable greeting" 
+                                      Content="{x:Static p:Resources.EnableGreeting}" 
                                       IsChecked="{Binding GreetingCheck}"/>
 
         </StackPanel>
