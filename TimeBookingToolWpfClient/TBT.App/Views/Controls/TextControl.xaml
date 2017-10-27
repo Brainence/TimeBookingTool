@@ -21,7 +21,8 @@
                  VerticalAlignment="Stretch"
                  TextAlignment="{Binding ElementName=this, Path=TextAlignment, Mode=TwoWay}"
                  VerticalContentAlignment="{Binding ElementName=this, Path=VerticalTextAlignment, Mode=TwoWay}"
-                 Margin="0 0 0 0" Grid.Column="1" Foreground="#c2422b" FontWeight="Bold" FontSize="13" HorizontalAlignment="Stretch"/>
+                 Margin="0 0 0 0" Grid.Column="1" Foreground="#c2422b" FontWeight="Bold" FontSize="13" HorizontalAlignment="Stretch"
+                 Name="TextArea"/>
     </Grid>
 
 </UserControl>
