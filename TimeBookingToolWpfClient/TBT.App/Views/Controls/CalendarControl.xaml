@@ -212,8 +212,8 @@
                             Visibility="{Binding IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
             <Grid Grid.Row="2" Margin="20 10 20 5">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="14"/>
+                    <RowDefinition Height="14"/>
                 </Grid.RowDefinitions>
                 <!--<TextBlock FontSize="14" 
                            FontWeight="Bold"
