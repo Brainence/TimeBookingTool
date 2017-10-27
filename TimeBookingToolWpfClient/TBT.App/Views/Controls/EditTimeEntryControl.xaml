@@ -66,6 +66,7 @@
                            VerticalAlignment="Top"
                            VerticalTextAlignment="Center"
                            TextAlignment="Left"
+                           PreviewTextInput="CheckInput"
                            Text="{Binding TimeText, Mode=TwoWay}"/>
 
             <local:TextControl x:Name="timelimitTextBox"
@@ -74,10 +75,11 @@
                            Label="{x:Static p:Resources.Limit}"
                            Margin="5 4" FontSize="13"
                            Width="468" 
-                            Height="20"
+                           Height="20"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
                            VerticalTextAlignment="Center"
+                           PreviewTextInput="CheckInput"
                            TextAlignment="Left"/>
 
         </StackPanel>

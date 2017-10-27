@@ -17,5 +17,16 @@ namespace TBT.App.Views.Controls
         {
             InitializeComponent();
         }
+
+        private void CheckInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = IsTextAllowed(e.Text);
+        }
+
+        private bool IsTextAllowed(string text)
+        {
+            Regex regex = new Regex("[^0-9.:-]+");
+            return regex.IsMatch(text);
+        }
     }
 }

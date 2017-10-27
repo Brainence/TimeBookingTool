@@ -451,4 +451,7 @@
   <data name="SelectCustomer" xml:space="preserve">
     <value>Select customer</value>
   </data>
+  <data name="TimeOverflowed" xml:space="preserve">
+    <value>Entered time is out or range [-256204778.80152154...256204778.80152154] hours</value>
+  </data>
 </root>

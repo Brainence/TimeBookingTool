@@ -107,7 +107,8 @@
                                     <Button Grid.Column="2" Margin="5" 
                                             Visibility="{Binding ElementName=CustomersControl, Path=DataContext.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}"
                                             Command="{Binding ElementName=CustomersControl, Path=DataContext.EditCustomerCommand}"
-                                            CommandParameter="{Binding}">
+                                            CommandParameter="{Binding}"
+                                            VerticalAlignment="Top">
                                         <Image Height="20" VerticalAlignment="Top" Source="../../Resources/Icons/editing.png" Width="20"
                                                Cursor="Hand"/>
                                     </Button>

@@ -454,4 +454,7 @@
   <data name="SelectCustomer" xml:space="preserve">
     <value>Виберіть замовника</value>
   </data>
+  <data name="TimeOverflowed" xml:space="preserve">
+    <value>Ви ввели час, що виходить за межі [-256204778.80152154...256204778.80152154] годин</value>
+  </data>
 </root>

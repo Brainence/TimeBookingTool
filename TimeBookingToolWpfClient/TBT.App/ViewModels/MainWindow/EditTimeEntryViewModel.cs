@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -156,7 +157,6 @@ namespace TBT.App.ViewModels.MainWindow
                     return;
                 }
 
-                double hours = 0;
                 TimeSpan duration;
                 DateTime? timeLimit;
                 var input = TimeText;
@@ -175,49 +175,9 @@ namespace TBT.App.ViewModels.MainWindow
                         duration = new TimeSpan();
                     }
                 }
-                else if (input.Contains(":"))
-                {
-                    var hour = input.Substring(0, input.IndexOf(":"));
-                    var min = input.Substring(input.IndexOf(":") + 1);
-
-                    int h;
-                    int m;
-
-                    var res = int.TryParse(hour, out h) & int.TryParse(min, out m);
-
-                    if (!res || h < 0 || m < 0 || m > 59)
-                    {
-                        MessageBox.Show($"{Properties.Resources.IncorrectTimeInputFormat}.");
-                        return;
-                    }
-
-                    duration = new TimeSpan(h, m, 0);
-                    if (duration.TotalHours >= 24)
-                    {
-                        MessageBox.Show($"{Properties.Resources.EnteredBigTime}.");
-                        return;
-                    }
-                }
                 else
                 {
-                    var res = double.TryParse(input, out hours);
-
-                    if (!res || hours < 0)
-                    {
-                        MessageBox.Show($"{Properties.Resources.IncorrectTimeInputFormat}.");
-                        return;
-                    }
-
-                    duration = TimeSpan.FromHours(hours);
-                    if (duration.TotalHours > 24)
-                    {
-                        MessageBox.Show($"{Properties.Resources.EnteredBigTime}.");
-                        return;
-                    }
-                    else if (duration.TotalHours == 24.0)
-                    {
-                        duration = TimeSpan.FromHours(23.9999);
-                    }
+                    duration = InputTimeToTimeSpan(input);
                 }
 
                 if (string.IsNullOrEmpty(limit))
@@ -226,23 +186,7 @@ namespace TBT.App.ViewModels.MainWindow
                 }
                 else
                 {
-                    double lim;
-                    var res = double.TryParse(limit, out lim);
-
-                    if (res)
-                    {
-                        if (lim < 0.5)
-                        {
-                            MessageBox.Show($"{Properties.Resources.EnteredSmallTimeLimit} 30 {Properties.Resources.Minutes}.");
-                            return;
-                        }
-                        else timeLimit = DateTime.UtcNow.AddHours(lim);
-                    }
-                    else
-                    {
-                        MessageBox.Show($"{Properties.Resources.IncorrectTimeLimitFormat}.");
-                        return;
-                    }
+                    timeLimit = DateTime.UtcNow.Add(InputTimeToTimeSpan(TimeLimit));
                 }
 
                 if (!await CanStartOrEditTimeEntry(string.IsNullOrEmpty(input) && !notToday ? duration : (TimeSpan?)null) && User != null && User.TimeLimit.HasValue)
@@ -279,10 +223,71 @@ namespace TBT.App.ViewModels.MainWindow
 
                 RefreshTimeEntries?.Invoke();
             }
+            catch(OverflowException ex)
+            {
+                MessageBox.Show($"{Properties.Resources.TimeOverflowed}.");
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
+        }
+
+        private TimeSpan InputTimeToTimeSpan(string input)
+        {
+            TimeSpan duration;
+            double hours = 0;
+            if (input.Contains(":"))
+            {
+                duration = InputSeparatedBy(input, ':');
+            }
+            else if(input.Contains("."))
+            {
+                duration = InputSeparatedBy(input, '.');
+            }
+            else
+            {
+                var res = double.TryParse(input, out hours);
+
+                if (!res || hours < 0)
+                {
+                    throw new Exception($"{Properties.Resources.IncorrectTimeInputFormat}.");
+                }
+
+                duration = TimeSpan.FromHours(hours);
+                if (duration.TotalHours > 24)
+                {
+                    throw new Exception($"{Properties.Resources.EnteredBigTime}.");
+                }
+                else if (duration.TotalHours == 24.0)
+                {
+                    duration = TimeSpan.FromHours(23.9999);
+                }
+            }
+            return duration;
+        }
+
+        private TimeSpan InputSeparatedBy(string input, char separator)
+        {
+            var hour = input.Substring(0, input.IndexOf(separator));
+            var min = input.Substring(input.IndexOf(separator) + 1);
+
+            int h;
+            int m;
+
+            var res = int.TryParse(hour, out h) & int.TryParse(min, out m);
+
+            if (!res || h < 0 || m < 0 || m > 59)
+            {
+                throw new Exception($"{Properties.Resources.IncorrectTimeInputFormat}.");
+            }
+
+            var duration = new TimeSpan(h, m, 0);
+            if (duration.TotalHours >= 24)
+            {
+                throw new Exception($"{Properties.Resources.EnteredBigTime}.");
+            }
+            return duration;
         }
 
         private async Task<bool> CanStartOrEditTimeEntry(TimeSpan? duration)

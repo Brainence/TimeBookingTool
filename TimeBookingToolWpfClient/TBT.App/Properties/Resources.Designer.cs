@@ -962,6 +962,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entered time is out or range [-256204778.80152154...256204778.80152154] hours.
+        /// </summary>
+        public static string TimeOverflowed {
+            get {
+                return ResourceManager.GetString("TimeOverflowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To.
         /// </summary>
         public static string To {
