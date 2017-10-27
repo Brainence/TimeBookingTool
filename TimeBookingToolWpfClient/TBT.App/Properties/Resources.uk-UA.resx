@@ -457,6 +457,12 @@
   <data name="TimeOverflowed" xml:space="preserve">
     <value>Ви ввели час, що виходить за межі [-256204778.80152154...256204778.80152154] годин</value>
   </data>
+  <data name="ActivityAlreadyPicked" xml:space="preserve">
+    <value>Ви вже вибрали це завдання</value>
+  </data>
+  <data name="EditItInTimeEntryList" xml:space="preserve">
+    <value>Ви можете змінити його в списку дій</value>
+  </data>
   <data name="Farewell" xml:space="preserve">
     <value>Бувай</value>
   </data>

@@ -454,6 +454,12 @@
   <data name="TimeOverflowed" xml:space="preserve">
     <value>Entered time is out or range [-256204778.80152154...256204778.80152154] hours</value>
   </data>
+  <data name="ActivityAlreadyPicked" xml:space="preserve">
+    <value>You already pick this task</value>
+  </data>
+  <data name="EditItInTimeEntryList" xml:space="preserve">
+    <value>You may edit it in Time Entry list</value>
+  </data>
   <data name="Farewell" xml:space="preserve">
     <value>Bye</value>
   </data>

@@ -156,6 +156,11 @@ namespace TBT.App.ViewModels.MainWindow
                     MessageBox.Show($"{Properties.Resources.CommentLenghError} 2048.");
                     return;
                 }
+                if(User.TimeEntries.FirstOrDefault(x => x.Activity.Id == SelectedActivity.Id) != null)
+                {
+                    MessageBox.Show($"{Properties.Resources.ActivityAlreadyPicked}. {Properties.Resources.EditItInTimeEntryList}.");
+                    return;
+                }
 
                 TimeSpan duration;
                 DateTime? timeLimit;

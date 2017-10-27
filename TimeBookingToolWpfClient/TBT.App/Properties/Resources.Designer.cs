@@ -61,6 +61,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You already pick this task.
+        /// </summary>
+        public static string ActivityAlreadyPicked {
+            get {
+                return ResourceManager.GetString("ActivityAlreadyPicked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Activity with name.
         /// </summary>
         public static string ActivityWithName {
@@ -363,6 +372,15 @@ namespace TBT.App.Properties {
         public static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You may edit it in Time Entry list.
+        /// </summary>
+        public static string EditItInTimeEntryList {
+            get {
+                return ResourceManager.GetString("EditItInTimeEntryList", resourceCulture);
             }
         }
         
