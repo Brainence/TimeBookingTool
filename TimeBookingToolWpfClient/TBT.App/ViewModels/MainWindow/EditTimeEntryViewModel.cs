@@ -210,7 +210,7 @@ namespace TBT.App.ViewModels.MainWindow
 
                 timeEntry = JsonConvert.DeserializeObject<TimeEntry>(await App.CommunicationService.PostAsJson("TimeEntry", timeEntry));
 
-                if (!string.IsNullOrEmpty(input) && !notToday)
+                if (string.IsNullOrEmpty(input) && !notToday)
                 {
                     await App.GlobalTimer.Start(timeEntry.Id);
                 }
