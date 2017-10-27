@@ -469,4 +469,7 @@
   <data name="Greetings" xml:space="preserve">
     <value>Привіт</value>
   </data>
+  <data name="ConnectionLost" xml:space="preserve">
+    <value>Відсутнє з'єднання з сервером. Намагаюся поновити.</value>
+  </data>
 </root>

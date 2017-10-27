@@ -36,6 +36,7 @@ namespace TBT.App.ViewModels.MainWindow
         private ObservableCollection<LanguageItem> _languages;
         private int _selectedLanguageIndex;
         private bool _manualSelect;
+        private bool _isConnected;
 
 
         #endregion
@@ -134,6 +135,15 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
+        public bool IsConnected
+        {
+            get { return _isConnected; }
+            set
+            {
+                SetProperty(ref _isConnected, value);
+            }
+        }
+
         public ICommand RefreshAllCommand { get; set; }
         public ICommand SignOutCommand { get; set; }
         public ICommand SizeChangeCommand { get; set; }
@@ -153,22 +163,30 @@ namespace TBT.App.ViewModels.MainWindow
 
         public MainWindowViewModel(bool authorized)
         {
+            IsConnected = true;
             _manualSelect = false;
             InitLanguages();
             if (!OpenAuthenticationWindow(authorized))
             {
+                IsConnected = CommunicationService.CheckConnection();
+                CommunicationService.ConnectionChanged += RefreshIsConnected;
+                CommunicationService.ConnectionChanged += CommunicationService.ListenConnection;
                 App.GlobalTimer = new GlobalTimer();
                 _dateTimer = new DispatcherTimer();
                 _dateTimer.Interval = new TimeSpan(0, 0, 1);
                 InitNotifyIcon();
-                RefreshCurrentUser(this);
-                InitTabs();
                 Width = 600;
                 IsVisible = true;
                 SignOutCommand = new RelayCommand(obj => SignOut(), null);
                 CloseCommand = new RelayCommand(obj => Close(), null);
                 RefreshAllCommand = new RelayCommand(obj => RefreshAll(), null);
-                RefreshAll();
+                try
+                {
+                    RefreshCurrentUser(this);
+                    InitTabs();
+                    RefreshAll();
+                }
+                catch (Exception) { }
                 _dateTimer.Start();
                 WindowState = true;
                 App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
@@ -195,11 +213,15 @@ namespace TBT.App.ViewModels.MainWindow
 
         private async void RefreshAll()
         {
-            RefreshCurrentUser(this);
-            await RefreshUsersList(this);
-            await RefreshCustomersList(this);
-            await RefreshProjectsList(this);
-            await RefreshTasksList(this);
+            try
+            {
+                RefreshCurrentUser(this);
+                await RefreshUsersList(this);
+                await RefreshCustomersList(this);
+                await RefreshProjectsList(this);
+                await RefreshTasksList(this);
+            }
+            catch(Exception) { }
         }
 
         private void SignOut()
@@ -211,7 +233,11 @@ namespace TBT.App.ViewModels.MainWindow
             if (!OpenAuthenticationWindow(false))
             {
                 LoggedOut = false;
-                RefreshCurrentUser(this);
+                try
+                {
+                    RefreshCurrentUser(this);
+                }
+                catch (Exception) { } 
                 IsVisible = true;
                 App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
             }
@@ -385,6 +411,7 @@ namespace TBT.App.ViewModels.MainWindow
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                throw ex;
             }
         }
 
@@ -429,6 +456,11 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
+        }
+
+        public void RefreshIsConnected(bool isConnected)
+        {
+            IsConnected = isConnected;
         }
 
         #endregion

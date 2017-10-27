@@ -250,6 +250,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection lost. Trying to recover..
+        /// </summary>
+        public static string ConnectionLost {
+            get {
+                return ResourceManager.GetString("ConnectionLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy total time to clipboard.
         /// </summary>
         public static string CopyTotalToClipboard {

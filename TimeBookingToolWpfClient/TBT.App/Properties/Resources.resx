@@ -466,4 +466,7 @@
   <data name="Greetings" xml:space="preserve">
     <value>Hello</value>
   </data>
+  <data name="ConnectionLost" xml:space="preserve">
+    <value>Connection lost. Trying to recover.</value>
+  </data>
 </root>

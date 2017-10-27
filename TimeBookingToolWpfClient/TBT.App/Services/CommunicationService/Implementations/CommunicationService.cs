@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using TBT.App.Common;
@@ -18,6 +19,7 @@ namespace TBT.App.Services.CommunicationService.Implementations
     {
         private static string baseUrl;
         private static HttpClient _client;
+        private static bool IsConnected;
 
         static CommunicationService()
         {
@@ -28,10 +30,12 @@ namespace TBT.App.Services.CommunicationService.Implementations
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All };
         }
 
-        public async Task<bool> CheckConnection()
+        public static bool CheckConnection()
         {
-            return (await _client.GetAsync("user")).StatusCode != HttpStatusCode.NotFound;
+            return (_client.GetAsync("User")).Result.StatusCode != HttpStatusCode.NotFound;
         }
+
+        public static event Action<bool> ConnectionChanged;
 
         public static void ListenAccessToken(object sender, PropertyChangedEventArgs e)
         {
@@ -45,6 +49,18 @@ namespace TBT.App.Services.CommunicationService.Implementations
                 {
                     _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", App.AccessToken);
                 }
+            }
+        }
+
+        public async static void ListenConnection(bool isConnected)
+        {
+            if(!isConnected)
+            {
+                while(!CheckConnection())
+                {
+                    await Task.Delay(10000);
+                }
+                ConnectionChanged?.Invoke(true);
             }
         }
 
@@ -69,6 +85,11 @@ namespace TBT.App.Services.CommunicationService.Implementations
                     {
                         return await (await serverResponse(url, data)).Content.ReadAsStringAsync();
                     }
+                }
+                else if(response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    ConnectionChanged?.Invoke(false);
+                    throw new HttpResponseException(response);
                 }
                 else response.EnsureSuccessStatusCode();
 

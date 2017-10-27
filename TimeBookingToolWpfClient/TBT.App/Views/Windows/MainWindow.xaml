@@ -27,8 +27,11 @@
         <Grid.ColumnDefinitions>
 
         </Grid.ColumnDefinitions>
-
-        <TabControl Grid.Row="0" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" ItemsSource="{Binding Tabs, Mode=TwoWay}">
+        <StackPanel Grid.Row="0" VerticalAlignment="Center">
+            <controls:SpinnersCogs Visibility="{Binding IsConnected, Converter={StaticResource BoolToNotVisibilityConverter}}" Grid.Row="0" />
+            <TextBox FontSize="20" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" Text="{x:Static p:Resources.ConnectionLost}" Foreground="{StaticResource SpinnerForeground}"/>
+        </StackPanel>
+        <TabControl Grid.Row="0" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}" ItemsSource="{Binding Tabs, Mode=TwoWay}">
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <ContentControl HorizontalAlignment="Stretch"  
@@ -45,7 +48,7 @@
         </TabControl>
 
         <Grid Grid.Row="1">
-            <StackPanel HorizontalAlignment="Right" Grid.Column="1" Margin="10 0 0 10" Orientation="Horizontal">
+            <StackPanel HorizontalAlignment="Right" Grid.Column="1" Margin="10 0 0 10" Orientation="Horizontal" Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">
                 <ComboBox HorizontalAlignment="Right" Text="Language"
                           ItemTemplate="{StaticResource LanguageItemComboBoxTemplate}"
                           ItemsSource="{Binding Languages, Mode=TwoWay}"
