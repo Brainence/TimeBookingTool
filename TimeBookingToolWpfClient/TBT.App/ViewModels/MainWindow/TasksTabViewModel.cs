@@ -135,7 +135,8 @@ namespace TBT.App.ViewModels.MainWindow
                 {
                     EditControl = new EditActivityViewModel(activity)
                     {
-                        Projects = Projects
+                        Projects = Projects,
+                        SelectedProject = activity.Project
                     }
                 }
             };

@@ -38,7 +38,8 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                 if(SetProperty(ref _selectedCustomer, value))
                 {
                     SaveProject = false;
-                    SelectedCustomerIndex = Customers.Select((item, index) => new { Item = item, Index = index }).First(x => x.Item.Id == value.Id).Index;
+                    SelectedCustomerIndex = Customers.Select((item, index) => new { Item = item, Index = index }).
+                                                      First(x => x.Item.Id == value.Id).Index;
                 }
             }
         }

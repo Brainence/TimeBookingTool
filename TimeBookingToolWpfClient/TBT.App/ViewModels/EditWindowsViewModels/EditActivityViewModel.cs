@@ -18,6 +18,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         private ObservableCollection<Project> _projects;
         private Project _selectedProject;
         private Activity _editingActivity;
+        private int _selectedProjectIndex;
 
         #endregion
 
@@ -37,6 +38,8 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                 if(SetProperty(ref _selectedProject, value))
                 {
                     SaveActivity = false;
+                    SelectedProjectIndex = Projects.Select((item, index) => new { Item = item, Index = index }).
+                                                    First(x => x.Item.Id == value.Id).Index;
                 }
             }
         }
@@ -53,6 +56,12 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
             }
         }
 
+        public int SelectedProjectIndex
+        {
+            get { return _selectedProjectIndex; }
+            set { SetProperty(ref _selectedProjectIndex, value); }
+        }
+
         public bool SaveActivity { get; set; }
 
         public ICommand SaveCommand { get; set; }
@@ -65,7 +74,6 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public EditActivityViewModel(Activity activity)
         {
             EditingActivity = activity;
-            SelectedProject = activity.Project;
             SaveActivity = false;
             SaveCommand = new RelayCommand(obj => Save(), null);
         }
