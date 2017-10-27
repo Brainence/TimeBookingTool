@@ -81,7 +81,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Interface members
 
-        public event Action<object> CurrentUserChanged;
+        public event Func<object, Task> CurrentUserChanged;
         public event Func<object, Task> UsersListChanged;
         public event Func<object, Task> CustomersListChanged;
         public event Func<object, Task> ProjectsListChanged;

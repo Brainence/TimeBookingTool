@@ -120,7 +120,8 @@ namespace TBT.App
         {
             get
             {
-                return AppSettings.Contains(Constants.Greeting) ? $"{TBT.App.Properties.Resources.Greetings}, {(string)AppSettings[Constants.Greeting]}!" : $"{TBT.App.Properties.Resources.Greetings}!";
+                return $"{TBT.App.Properties.Resources.Greetings} {(string)AppSettings[Constants.Username]}!";
+                //return AppSettings.Contains(Constants.Greeting) ? $"{TBT.App.Properties.Resources.Greetings}, {(string)AppSettings[Constants.Greeting]}!" : $"{TBT.App.Properties.Resources.Greetings}!";
             }
             set
             {
@@ -132,7 +133,8 @@ namespace TBT.App
         {
             get
             {
-                return AppSettings.Contains(Constants.Farewell) ? $"{TBT.App.Properties.Resources.Farewell}, {(string)AppSettings[Constants.Farewell]}!" : $"{TBT.App.Properties.Resources.Greetings}";
+                return $"{TBT.App.Properties.Resources.Farewell} {(string)AppSettings[Constants.Username]}!";
+                //return AppSettings.Contains(Constants.Username) ? $"{TBT.App.Properties.Resources.Farewell} {(string)AppSettings[Constants.Username]}!" : $"{TBT.App.Properties.Resources.Farewell}";
             }
             set
             {

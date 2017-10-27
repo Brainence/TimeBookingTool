@@ -111,7 +111,7 @@ namespace TBT.App.ViewModels.MainWindow
                 activity = new Activity()
                 {
                     Name = NewTaskName,
-                    Project = new Project() { Id = SelectedProject.Id },
+                    Project = SelectedProject,
                     IsActive = true
                 };
 
@@ -184,7 +184,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Interface members
 
-        public event Action<object> CurrentUserChanged;
+        public event Func<object, Task> CurrentUserChanged;
         public event Func<object, Task> UsersListChanged;
         public event Func<object, Task> CustomersListChanged;
         public event Func<object, Task> ProjectsListChanged;
@@ -198,12 +198,20 @@ namespace TBT.App.ViewModels.MainWindow
 
         public void RefreshProjectsList(object sender, ObservableCollection<Project> projects)
         {
-            Projects = projects;
+            if (sender != this)
+            {
+                var tempIndex = SelectedProjectIndex;
+                Projects = projects;
+                SelectedProjectIndex = tempIndex;
+            }
         }
 
         public void RefreshTasksList(object sender, ObservableCollection<Activity> activities)
         {
-            Activities = activities;
+            if (sender != this)
+            {
+                Activities = activities;
+            }
         }
 
         #endregion

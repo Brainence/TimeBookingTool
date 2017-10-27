@@ -15,7 +15,7 @@ namespace TBT.App.Models.Base
         void RefreshCustomersList(object sender, ObservableCollection<Customer> customers);
         void RefreshProjectsList(object sender, ObservableCollection<Project> projects);
         void RefreshTasksList(object sender, ObservableCollection<Activity> activities);
-        event Action<object> CurrentUserChanged;
+        event Func<object, Task> CurrentUserChanged;
         event Func<object, Task> UsersListChanged;
         event Func<object, Task> CustomersListChanged;
         event Func<object, Task> ProjectsListChanged;

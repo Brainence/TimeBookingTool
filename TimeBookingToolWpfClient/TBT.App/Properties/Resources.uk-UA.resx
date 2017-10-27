@@ -472,4 +472,7 @@
   <data name="ConnectionLost" xml:space="preserve">
     <value>Відсутнє з'єднання з сервером. Намагаюся поновити.</value>
   </data>
+  <data name="NiceWishToNotification" xml:space="preserve">
+    <value>Гарного дня</value>
+  </data>
 </root>

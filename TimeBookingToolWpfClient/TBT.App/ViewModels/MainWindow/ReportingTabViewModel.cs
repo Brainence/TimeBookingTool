@@ -484,7 +484,7 @@ namespace TBT.App.ViewModels.MainWindow
             var timeEntries = TimeEntries.Where(t => !t.IsRunning).ToList();
 
             var sum = timeEntries.Any() ? timeEntries.Select(t => t.Duration).Aggregate((t1, t2) => t1.Add(t2)) : new TimeSpan();
-            Clipboard.SetText($"Total hours: {sum.TotalHours.ToString("N2")}");
+            Clipboard.SetText($"{Resources.TotalTime}: {sum.TotalHours.ToString("N2")}");
         }
 
 
@@ -492,7 +492,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Interface members
 
-        public event Action<object> CurrentUserChanged;
+        public event Func<object, Task> CurrentUserChanged;
         public event Func<object, Task> UsersListChanged;
         public event Func<object, Task> CustomersListChanged;
         public event Func<object, Task> ProjectsListChanged;

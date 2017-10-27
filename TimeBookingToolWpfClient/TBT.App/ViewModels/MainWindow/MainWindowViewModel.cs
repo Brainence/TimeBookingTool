@@ -168,9 +168,9 @@ namespace TBT.App.ViewModels.MainWindow
             InitLanguages();
             if (!OpenAuthenticationWindow(authorized))
             {
-                IsConnected = CommunicationService.CheckConnection();
-                CommunicationService.ConnectionChanged += RefreshIsConnected;
-                CommunicationService.ConnectionChanged += CommunicationService.ListenConnection;
+                //IsConnected = CommunicationService.CheckConnection();
+                //CommunicationService.ConnectionChanged += RefreshIsConnected;
+                //CommunicationService.ConnectionChanged += CommunicationService.ListenConnection;
                 App.GlobalTimer = new GlobalTimer();
                 _dateTimer = new DispatcherTimer();
                 _dateTimer.Interval = new TimeSpan(0, 0, 1);
@@ -215,7 +215,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             try
             {
-                RefreshCurrentUser(this);
+                await RefreshCurrentUser(this);
                 await RefreshUsersList(this);
                 await RefreshCustomersList(this);
                 await RefreshProjectsList(this);
@@ -224,7 +224,7 @@ namespace TBT.App.ViewModels.MainWindow
             catch(Exception) { }
         }
 
-        private void SignOut()
+        private async void SignOut()
         {
             LoggedOut = true;
             App.Username = string.Empty;
@@ -235,7 +235,7 @@ namespace TBT.App.ViewModels.MainWindow
                 LoggedOut = false;
                 try
                 {
-                    RefreshCurrentUser(this);
+                    await RefreshCurrentUser(this);
                 }
                 catch (Exception) { } 
                 IsVisible = true;
@@ -283,9 +283,8 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void SayBye()
         {
-            //Message?
-            //var userfirstname = CurrentUser?.FirstName ?? "";
-            //App.ShowBalloon($"I'm watching you", " ", 30000, App.EnableGreetingNotification);
+            var userfirstname = CurrentUser?.FirstName ?? "";
+            App.ShowBalloon($"{Resources.NiceWishToNotification} !", " ", 30000, App.EnableGreetingNotification);
         }
 
         private static bool IsShuttingDown()
@@ -384,7 +383,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Refresh data
 
-        private async void RefreshCurrentUser(object sender)
+        private async Task RefreshCurrentUser(object sender)
         {
             try
             {

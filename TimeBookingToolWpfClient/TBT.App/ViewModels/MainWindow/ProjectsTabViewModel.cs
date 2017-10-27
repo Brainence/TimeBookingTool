@@ -184,7 +184,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Interface members
 
-        public event Action<object> CurrentUserChanged;
+        public event Func<object, Task> CurrentUserChanged;
         public event Func<object, Task> UsersListChanged;
         public event Func<object, Task> CustomersListChanged;
         public event Func<object, Task> ProjectsListChanged;
@@ -198,7 +198,9 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (sender != this)
             {
+                var tempIndex = SelectedIndex;
                 Customers = customers;
+                SelectedIndex = tempIndex;
             }
         }
 

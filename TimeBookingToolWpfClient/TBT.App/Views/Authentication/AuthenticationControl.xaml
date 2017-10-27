@@ -24,8 +24,8 @@
 
             <StackPanel Orientation="Horizontal" Grid.Row="0">
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="{Binding Source={x:Static p:Resources.Username}, StringFormat={}{0}\: }" Height="20" Margin="4" HorizontalAlignment="Right"/>
-                    <TextBlock Text="{Binding Source={x:Static p:Resources.Password}, StringFormat={}{0}\: }" Height="20" Margin="4" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Source={x:Static p:Resources.Username}, StringFormat={}{0}\: }" Height="20" Margin="4" Foreground="White" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Source={x:Static p:Resources.Password}, StringFormat={}{0}\: }" Height="20" Margin="4" Foreground="White" HorizontalAlignment="Right"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Width="220">
                     <TextBox x:Name="TextBox" Text="{Binding Path=Username, Mode=TwoWay}"  

@@ -637,6 +637,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Have a nice day.
+        /// </summary>
+        public static string NiceWishToNotification {
+            get {
+                return ResourceManager.GetString("NiceWishToNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Old password.
         /// </summary>
         public static string OldPassword {
