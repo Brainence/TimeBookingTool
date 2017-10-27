@@ -284,7 +284,7 @@ namespace TBT.App.ViewModels.MainWindow
         private void SayBye()
         {
             var userfirstname = CurrentUser?.FirstName ?? "";
-            App.ShowBalloon($"{Resources.NiceWishToNotification} !", " ", 30000, App.EnableGreetingNotification);
+            App.ShowBalloon($"{Resources.NiceWishToNotification} !", " ", 30000, App.EnableNotification);
         }
 
         private static bool IsShuttingDown()

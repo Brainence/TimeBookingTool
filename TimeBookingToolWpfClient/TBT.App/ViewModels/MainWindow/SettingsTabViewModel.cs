@@ -40,14 +40,14 @@ namespace TBT.App.ViewModels.MainWindow
 
         public bool NotificationsCheck
         {
-            get { return App.EnableGreetingNotification; }
-            set { App.EnableGreetingNotification = value; }
+            get { return App.EnableNotification; }
+            set { App.EnableNotification = value; }
         }
 
         public bool GreetingCheck
         {
-            get { return App.EnableNotification; }
-            set { App.EnableNotification = value; }
+            get { return App.EnableGreetingNotification; }
+            set { App.EnableGreetingNotification = value; }
         }
 
         #endregion

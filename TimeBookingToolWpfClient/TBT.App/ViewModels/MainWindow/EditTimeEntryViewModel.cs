@@ -43,7 +43,13 @@ namespace TBT.App.ViewModels.MainWindow
         public Project SelectedProject
         {
             get { return _selectedProject; }
-            set { SetProperty(ref _selectedProject, value); }
+            set
+            {
+                if(SetProperty(ref _selectedProject, value))
+                {
+                    SelectedActivity = null;
+                }
+            }
         }
 
         public Activity SelectedActivity
@@ -105,6 +111,7 @@ namespace TBT.App.ViewModels.MainWindow
         public EditTimeEntryViewModel()
         {
             CreateStartCommand = new RelayCommand(obj => CreateNewActivity(), null);
+            SelectedProject = null;
         }
 
         #endregion

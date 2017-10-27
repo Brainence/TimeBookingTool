@@ -21,12 +21,12 @@
             <CheckBox x:Name="EnableNotificationCheckBox"
                                       Margin="10" FontSize="13"
                                       Content="{x:Static p:Resources.EnableNotifications}" 
-                                      IsChecked="{Binding NotificationsCheck}"/>
+                                      IsChecked="{Binding NotificationsCheck, Mode=TwoWay}"/>
 
             <CheckBox x:Name="EnableGreetingNotificationCheckBox"
                                       Margin="10" FontSize="13"
                                       Content="{x:Static p:Resources.EnableGreeting}" 
-                                      IsChecked="{Binding GreetingCheck}"/>
+                                      IsChecked="{Binding GreetingCheck, Mode=TwoWay}"/>
 
         </StackPanel>
 
