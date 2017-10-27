@@ -298,7 +298,7 @@
     <value>Task</value>
   </data>
   <data name="TaskName" xml:space="preserve">
-    <value>TaskName</value>
+    <value>Task name</value>
   </data>
   <data name="Tasks" xml:space="preserve">
     <value>Tasks</value>
@@ -342,5 +342,113 @@
   </data>
   <data name="UserReport" xml:space="preserve">
     <value>User report</value>
+  </data>
+  <data name="AlreadyHaveToken" xml:space="preserve">
+    <value>Already have token</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Forgot your password?</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset password</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Token" xml:space="preserve">
+    <value>Token</value>
+  </data>
+  <data name="ActivityWithName" xml:space="preserve">
+    <value>Activity with name</value>
+  </data>
+  <data name="AllFieldsRequired" xml:space="preserve">
+    <value>All fields are required.</value>
+  </data>
+  <data name="AlreadyExists" xml:space="preserve">
+    <value>already exists</value>
+  </data>
+  <data name="AnEmailHasSent" xml:space="preserve">
+    <value>An email with token has been sent to your email.</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Are you sure?</value>
+  </data>
+  <data name="CannotCreateProjectWithoutCustomer" xml:space="preserve">
+    <value>Cannot create project without customer</value>
+  </data>
+  <data name="CannotCreateTaskWithoutProject" xml:space="preserve">
+    <value>Cannot create task without project</value>
+  </data>
+  <data name="CommentLenghError" xml:space="preserve">
+    <value>Comment length cannot be greater then</value>
+  </data>
+  <data name="ConfirmYourPassword" xml:space="preserve">
+    <value>Please confirm your password.</value>
+  </data>
+  <data name="CustomerWithName" xml:space="preserve">
+    <value>Customer with name</value>
+  </data>
+  <data name="EnteredBigTime" xml:space="preserve">
+    <value>Time entered for day must be less then 24 hours</value>
+  </data>
+  <data name="EnteredSmallTimeLimit" xml:space="preserve">
+    <value>Time limit should bw greater then</value>
+  </data>
+  <data name="ErrorOccuredWhileCreateProject" xml:space="preserve">
+    <value>Error occurred while creating new project</value>
+  </data>
+  <data name="ErrorOccuredWhileCreateTask" xml:space="preserve">
+    <value>Error occurred while creating new task</value>
+  </data>
+  <data name="ErrorOccurredTryAgain" xml:space="preserve">
+    <value>Error occurred, try again.</value>
+  </data>
+  <data name="HourLimit" xml:space="preserve">
+    <value>hour limit</value>
+  </data>
+  <data name="IncorrectTimeInputFormat" xml:space="preserve">
+    <value>Incorrect time input format</value>
+  </data>
+  <data name="IncorrectTimeLimitFormat" xml:space="preserve">
+    <value>Incorrect time limit input format</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="PasswordBeenChanged" xml:space="preserve">
+    <value>Password has been changed.</value>
+  </data>
+  <data name="ProjectWithName" xml:space="preserve">
+    <value>Project with name</value>
+  </data>
+  <data name="UserNameDoesntExist" xml:space="preserve">
+    <value>Username doesn't exist.</value>
+  </data>
+  <data name="UserNameIsRequierd" xml:space="preserve">
+    <value>Username is required.</value>
+  </data>
+  <data name="UserNameOfPasswordEmpty" xml:space="preserve">
+    <value>Username or password is empty.</value>
+  </data>
+  <data name="YouHaveReachedMonthly" xml:space="preserve">
+    <value>You have reached your monthly</value>
+  </data>
+  <data name="YouHaveToInputTheTime" xml:space="preserve">
+    <value>You have to input the time</value>
+  </data>
+  <data name="SelectProject" xml:space="preserve">
+    <value>Select project</value>
+  </data>
+  <data name="SelectTask" xml:space="preserve">
+    <value>Select task</value>
+  </data>
+  <data name="SelectCustomer" xml:space="preserve">
+    <value>Select customer</value>
   </data>
 </root>

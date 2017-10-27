@@ -140,6 +140,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public void RefreshCurrentUser(User user)
         {
             EditingUser = user;
+            ChangePassword = false;
         }
 
         #endregion

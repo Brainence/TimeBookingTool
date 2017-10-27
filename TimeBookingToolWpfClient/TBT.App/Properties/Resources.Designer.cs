@@ -61,6 +61,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activity with name.
+        /// </summary>
+        public static string ActivityWithName {
+            get {
+                return ResourceManager.GetString("ActivityWithName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Admin.
         /// </summary>
         public static string Admin {
@@ -70,11 +79,56 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All fields are required..
+        /// </summary>
+        public static string AllFieldsRequired {
+            get {
+                return ResourceManager.GetString("AllFieldsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All time.
         /// </summary>
         public static string AllTime {
             get {
                 return ResourceManager.GetString("AllTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to already exists.
+        /// </summary>
+        public static string AlreadyExists {
+            get {
+                return ResourceManager.GetString("AlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Already have token.
+        /// </summary>
+        public static string AlreadyHaveToken {
+            get {
+                return ResourceManager.GetString("AlreadyHaveToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An email with token has been sent to your email..
+        /// </summary>
+        public static string AnEmailHasSent {
+            get {
+                return ResourceManager.GetString("AnEmailHasSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure?.
+        /// </summary>
+        public static string AreYouSure {
+            get {
+                return ResourceManager.GetString("AreYouSure", resourceCulture);
             }
         }
         
@@ -106,6 +160,33 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot create project without customer.
+        /// </summary>
+        public static string CannotCreateProjectWithoutCustomer {
+            get {
+                return ResourceManager.GetString("CannotCreateProjectWithoutCustomer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot create task without project.
+        /// </summary>
+        public static string CannotCreateTaskWithoutProject {
+            get {
+                return ResourceManager.GetString("CannotCreateTaskWithoutProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change.
+        /// </summary>
+        public static string Change {
+            get {
+                return ResourceManager.GetString("Change", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change password.
         /// </summary>
         public static string ChangePassword {
@@ -124,6 +205,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment length cannot be greater then.
+        /// </summary>
+        public static string CommentLenghError {
+            get {
+                return ResourceManager.GetString("CommentLenghError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company report.
         /// </summary>
         public static string CompanyReport {
@@ -138,6 +228,15 @@ namespace TBT.App.Properties {
         public static string ConfirmPassword {
             get {
                 return ResourceManager.GetString("ConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please confirm your password..
+        /// </summary>
+        public static string ConfirmYourPassword {
+            get {
+                return ResourceManager.GetString("ConfirmYourPassword", resourceCulture);
             }
         }
         
@@ -232,6 +331,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customer with name.
+        /// </summary>
+        public static string CustomerWithName {
+            get {
+                return ResourceManager.GetString("CustomerWithName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disable greeting.
         /// </summary>
         public static string DisableGreeting {
@@ -295,11 +403,65 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Time entered for day must be less then 24 hours.
+        /// </summary>
+        public static string EnteredBigTime {
+            get {
+                return ResourceManager.GetString("EnteredBigTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time limit should bw greater then.
+        /// </summary>
+        public static string EnteredSmallTimeLimit {
+            get {
+                return ResourceManager.GetString("EnteredSmallTimeLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred while creating new project.
+        /// </summary>
+        public static string ErrorOccuredWhileCreateProject {
+            get {
+                return ResourceManager.GetString("ErrorOccuredWhileCreateProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred while creating new task.
+        /// </summary>
+        public static string ErrorOccuredWhileCreateTask {
+            get {
+                return ResourceManager.GetString("ErrorOccuredWhileCreateTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred, try again..
+        /// </summary>
+        public static string ErrorOccurredTryAgain {
+            get {
+                return ResourceManager.GetString("ErrorOccurredTryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First name.
         /// </summary>
         public static string FirstName {
             get {
                 return ResourceManager.GetString("FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forgot your password?.
+        /// </summary>
+        public static string ForgotPassword {
+            get {
+                return ResourceManager.GetString("ForgotPassword", resourceCulture);
             }
         }
         
@@ -318,6 +480,33 @@ namespace TBT.App.Properties {
         public static string FullName {
             get {
                 return ResourceManager.GetString("FullName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to hour limit.
+        /// </summary>
+        public static string HourLimit {
+            get {
+                return ResourceManager.GetString("HourLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incorrect time input format.
+        /// </summary>
+        public static string IncorrectTimeInputFormat {
+            get {
+                return ResourceManager.GetString("IncorrectTimeInputFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incorrect time limit input format.
+        /// </summary>
+        public static string IncorrectTimeLimitFormat {
+            get {
+                return ResourceManager.GetString("IncorrectTimeLimitFormat", resourceCulture);
             }
         }
         
@@ -367,6 +556,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to minutes.
+        /// </summary>
+        public static string Minutes {
+            get {
+                return ResourceManager.GetString("Minutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New password.
         /// </summary>
         public static string NewPassword {
@@ -381,6 +579,15 @@ namespace TBT.App.Properties {
         public static string NewUser {
             get {
                 return ResourceManager.GetString("NewUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        public static string Next {
+            get {
+                return ResourceManager.GetString("Next", resourceCulture);
             }
         }
         
@@ -408,6 +615,15 @@ namespace TBT.App.Properties {
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password has been changed..
+        /// </summary>
+        public static string PasswordBeenChanged {
+            get {
+                return ResourceManager.GetString("PasswordBeenChanged", resourceCulture);
             }
         }
         
@@ -444,6 +660,15 @@ namespace TBT.App.Properties {
         public static string Projects {
             get {
                 return ResourceManager.GetString("Projects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project with name.
+        /// </summary>
+        public static string ProjectWithName {
+            get {
+                return ResourceManager.GetString("ProjectWithName", resourceCulture);
             }
         }
         
@@ -520,6 +745,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset password.
+        /// </summary>
+        public static string ResetPassword {
+            get {
+                return ResourceManager.GetString("ResetPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Run on startup.
         /// </summary>
         public static string RunOnStartup {
@@ -538,11 +772,38 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select customer.
+        /// </summary>
+        public static string SelectCustomer {
+            get {
+                return ResourceManager.GetString("SelectCustomer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected week.
         /// </summary>
         public static string SelectedWeek {
             get {
                 return ResourceManager.GetString("SelectedWeek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select project.
+        /// </summary>
+        public static string SelectProject {
+            get {
+                return ResourceManager.GetString("SelectProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select task.
+        /// </summary>
+        public static string SelectTask {
+            get {
+                return ResourceManager.GetString("SelectTask", resourceCulture);
             }
         }
         
@@ -561,6 +822,15 @@ namespace TBT.App.Properties {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign in.
+        /// </summary>
+        public static string SignIn {
+            get {
+                return ResourceManager.GetString("SignIn", resourceCulture);
             }
         }
         
@@ -601,7 +871,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TaskName.
+        ///   Looks up a localized string similar to Task name.
         /// </summary>
         public static string TaskName {
             get {
@@ -701,6 +971,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Token.
+        /// </summary>
+        public static string Token {
+            get {
+                return ResourceManager.GetString("Token", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total time.
         /// </summary>
         public static string TotalTime {
@@ -728,11 +1007,56 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Username doesn&apos;t exist..
+        /// </summary>
+        public static string UserNameDoesntExist {
+            get {
+                return ResourceManager.GetString("UserNameDoesntExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username is required..
+        /// </summary>
+        public static string UserNameIsRequierd {
+            get {
+                return ResourceManager.GetString("UserNameIsRequierd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username or password is empty..
+        /// </summary>
+        public static string UserNameOfPasswordEmpty {
+            get {
+                return ResourceManager.GetString("UserNameOfPasswordEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User report.
         /// </summary>
         public static string UserReport {
             get {
                 return ResourceManager.GetString("UserReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have reached your monthly.
+        /// </summary>
+        public static string YouHaveReachedMonthly {
+            get {
+                return ResourceManager.GetString("YouHaveReachedMonthly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have to input the time.
+        /// </summary>
+        public static string YouHaveToInputTheTime {
+            get {
+                return ResourceManager.GetString("YouHaveToInputTheTime", resourceCulture);
             }
         }
     }

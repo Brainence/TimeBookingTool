@@ -3,6 +3,7 @@ using System.Windows.Input;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
 using TBT.App.Helpers;
+using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.Authentication
 {
@@ -70,7 +71,7 @@ namespace TBT.App.ViewModels.Authentication
             _mainVM.ErrorMsg = string.Empty;
             if (string.IsNullOrEmpty(args.TokenPassword) || string.IsNullOrEmpty(args.NewPassword) || string.IsNullOrEmpty(args.ConfirmPassword))
             {
-                _mainVM.ErrorMsg = "All fields are required.";
+                _mainVM.ErrorMsg = Resources.AllFieldsRequired;
                 ChangeButtonIsEnabled = true;
                 ChangeCancelButtonIsEnabled = true;
                 return;
@@ -78,7 +79,7 @@ namespace TBT.App.ViewModels.Authentication
 
             if (args.NewPassword != args.ConfirmPassword)
             {
-                _mainVM.ErrorMsg = "Please confirm your password.";
+                _mainVM.ErrorMsg = Resources.ConfirmYourPassword;
                 ChangeButtonIsEnabled = true;
                 ChangeCancelButtonIsEnabled = true;
                 return;
@@ -88,22 +89,21 @@ namespace TBT.App.ViewModels.Authentication
             {
                 var result = JsonConvert.DeserializeObject<bool?>(
                     await App.CommunicationService.GetAsJson(
-                        $"ResetTicket/ChangePassword/{UserId}/{args.NewPassword}/{args.TokenPassword}",
-                        allowAnonymous: true));
+                        $"ResetTicket/ChangePassword/{UserId}/{args.NewPassword}/{args.TokenPassword}"));
 
                 if (result == null || (result.HasValue && !result.Value))
                 {
-                    _mainVM.ErrorMsg = "Error occurred, try again.";
+                    _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
                     ChangeButtonIsEnabled = true;
                     ChangeCancelButtonIsEnabled = true;
                     return;
                 }
-                _mainVM.ErrorMsg = "Password has been changed.";
+                _mainVM.ErrorMsg = Resources.PasswordBeenChanged;
                 _mainVM.CurrentViewModel = new AuthenticationControlViewModel(_mainVM);
             }
             catch
             {
-                _mainVM.ErrorMsg = "Error occurred, try again.";
+                _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
             }
 
             ChangeButtonIsEnabled = true;

@@ -71,7 +71,7 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
 
-                                <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="3" />
+                                <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="2" />
 
                                 <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="0 10">
                                     <Grid.ColumnDefinitions>

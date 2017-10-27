@@ -49,7 +49,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (SetProperty(ref _currentUser, value))
                 {
-                    CurrentUserChanged?.Invoke(_currentUser);
+                    CurrentUserChanged?.Invoke(this, _currentUser);
                 }
             }
         }
@@ -67,7 +67,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if(SetProperty(ref _selectedIndex, value))
                 {
-                    RefreshUsersList();
+                    RefreshAll();
                 }
             }
         }
@@ -140,11 +140,11 @@ namespace TBT.App.ViewModels.MainWindow
         public ICommand LoadCommand { get; set; }
         public ICommand CloseCommand { get; set; }
 
-        public event Action<ObservableCollection<User>> UsersListChanged;
-        public event Action<ObservableCollection<Customer>> CustomersListChanges;
-        public event Action<ObservableCollection<Activity>> TasksListChanges;
-        public event Action<ObservableCollection<Project>> ProjectsListChanges;
-        public event Action<User> CurrentUserChanged;
+        public event Action<object, ObservableCollection<User>> UsersListChanged;
+        public event Action<object, ObservableCollection<Customer>> CustomersListChanges;
+        public event Action<object, ObservableCollection<Activity>> TasksListChanges;
+        public event Action<object, ObservableCollection<Project>> ProjectsListChanges;
+        public event Action<object, User> CurrentUserChanged;
         public event Action<bool> ChangeDateSize;
 
         #endregion
@@ -153,16 +153,16 @@ namespace TBT.App.ViewModels.MainWindow
 
         public MainWindowViewModel(bool authorized)
         {
+            _manualSelect = false;
+            InitLanguages();
             if (!OpenAuthenticationWindow(authorized))
             {
-                _manualSelect = false;
                 App.GlobalTimer = new GlobalTimer();
                 _dateTimer = new DispatcherTimer();
                 _dateTimer.Interval = new TimeSpan(0, 0, 1);
                 InitNotifyIcon();
-                RefreshCurrentUser();
+                RefreshCurrentUser(this);
                 InitTabs();
-                InitLanguages();
                 Width = 600;
                 IsVisible = true;
                 SignOutCommand = new RelayCommand(obj => SignOut(), null);
@@ -194,11 +194,11 @@ namespace TBT.App.ViewModels.MainWindow
 
         private async void RefreshAll()
         {
-            RefreshCurrentUser();
-            await RefreshUsersList();
-            await RefreshCustomersList();
-            await RefreshProjectsList();
-            await RefreshTasksList();
+            RefreshCurrentUser(this);
+            await RefreshUsersList(this);
+            await RefreshCustomersList(this);
+            await RefreshProjectsList(this);
+            await RefreshTasksList(this);
         }
 
         private void SignOut()
@@ -210,7 +210,7 @@ namespace TBT.App.ViewModels.MainWindow
             if (!OpenAuthenticationWindow(false))
             {
                 LoggedOut = false;
-                RefreshCurrentUser();
+                RefreshCurrentUser(this);
                 IsVisible = true;
             }
         }
@@ -277,7 +277,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (!authorized)
             {
-                var auth = new Views.Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel() };
+                var auth = new Views.Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel(Languages, SelectedLanguageIndex) };
                 App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
                 auth.ShowDialog();
             }
@@ -357,7 +357,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Refresh data
 
-        private async void RefreshCurrentUser()
+        private async void RefreshCurrentUser(object sender)
         {
             try
             {
@@ -366,7 +366,7 @@ namespace TBT.App.ViewModels.MainWindow
                 CurrentUser.CurrentTimeZone = DateTimeOffset.Now.Offset;
                 CurrentUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", CurrentUser));
 
-                CurrentUserChanged?.Invoke(CurrentUser);
+                CurrentUserChanged?.Invoke(sender, CurrentUser);
             }
             catch (Exception ex)
             {
@@ -374,12 +374,12 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        private async Task RefreshUsersList()
+        private async Task RefreshUsersList(object sender)
         {
             try
             {
                 var users = JsonConvert.DeserializeObject<ObservableCollection<User>>(await App.CommunicationService.GetAsJson("User"));
-                UsersListChanged?.Invoke(users);
+                UsersListChanged?.Invoke(sender, users);
             }
             catch (Exception ex)
             {
@@ -387,13 +387,13 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        private async Task RefreshCustomersList()
+        private async Task RefreshCustomersList(object sender)
         {
             try
             {
                 var customers = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(
                     await App.CommunicationService.GetAsJson($"Customer"));
-                CustomersListChanges?.Invoke(customers);
+                CustomersListChanges?.Invoke(sender, customers);
             }
             catch (Exception ex)
             {
@@ -401,13 +401,13 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        private async Task RefreshProjectsList()
+        private async Task RefreshProjectsList(object sender)
         {
             try
             {
                 var projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(
                     await App.CommunicationService.GetAsJson($"Project"));
-                ProjectsListChanges?.Invoke(projects);
+                ProjectsListChanges?.Invoke(sender, projects);
             }
             catch (Exception ex)
             {
@@ -415,14 +415,14 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public async Task RefreshTasksList()
+        public async Task RefreshTasksList(object sender)
         {
             try
             {
                 var activities = new ObservableCollection<Activity>(JsonConvert.DeserializeObject<List<Activity>>(
                                 await App.CommunicationService.GetAsJson($"Activity"))
                                     .OrderBy(a => a.Project.Name).ThenBy(a => a.Name));
-                TasksListChanges?.Invoke(activities);
+                TasksListChanges?.Invoke(sender, activities);
             }
             catch (Exception ex)
             {

@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Linq;
+using System.Collections;
 
 namespace TBT.App.Views.Controls
 {
@@ -44,10 +46,39 @@ namespace TBT.App.Views.Controls
         {
             get { return (object)GetValue(SelectedItemProperty); }
             set { SetValue(SelectedItemProperty, value); }
+            //{
+            //    if (value != null)
+            //    {
+            //        SetValue(SelectedItemProperty, value);
+            //        var i = 0;
+            //        foreach (var item in ItemsSource)
+            //        {
+            //            if (item.Equals(value))
+            //            {
+            //                SelectedIndex = i;
+            //                break;
+            //            }
+            //            else
+            //            {
+            //                i--;
+            //            }
+            //            i++;
+            //        }
+            //    }
+            //}
         }
 
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty
             .Register(nameof(SelectedItem), typeof(object), typeof(ComboBoxControl));
+
+        public int SelectedIndex
+        {
+            get { return (int)GetValue(SelectedIndexProperty); }
+            set { SetValue(SelectedIndexProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty
+            .Register(nameof(SelectedIndex), typeof(int), typeof(ComboBoxControl));
 
         private void ComboBox_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {

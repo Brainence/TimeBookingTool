@@ -84,7 +84,7 @@ namespace TBT.App.ViewModels.MainWindow
         public ICommand EditUserCommand { get; set; }
 
         public event Action<User> ChangeUserForNested;
-        public event Action<ObservableCollection<User>> ChangeUsersListForNested;
+        //public event Action<ObservableCollection<User>> ChangeUsersListForNested;
 
         #endregion
 
@@ -123,11 +123,10 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void SaveUserEditingAction(bool userChanged, bool usersListChanged)
         {
-            if(userChanged) { CurrentUserChanged?.Invoke(); }
+            if(userChanged) { CurrentUserChanged?.Invoke(this); }
             if(usersListChanged)
             {
-                Users = null;
-                UsersListChanged?.Invoke();
+                UsersListChanged?.Invoke(this);
             }
         }
 
@@ -158,14 +157,14 @@ namespace TBT.App.ViewModels.MainWindow
             try
             {
                 if (user == null) return;
-                if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+                if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
                 user.IsActive = false;
 
                 var x = await App.CommunicationService.PutAsJson("User", user);
 
-                Users = null;
-                await UsersListChanged?.Invoke();
+                await UsersListChanged?.Invoke(this);
+                Users.Remove(user);
             }
             catch (Exception ex)
             {
@@ -177,28 +176,34 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Interface members
 
-        public event Action CurrentUserChanged;
-        public event Func<Task> UsersListChanged;
-        public event Func<Task> CustomersListChanged;
-        public event Func<Task> ProjectsListChanged;
-        public event Func<Task> TasksListChanged;
+        public event Action<object> CurrentUserChanged;
+        public event Func<object, Task> UsersListChanged;
+        public event Func<object, Task> CustomersListChanged;
+        public event Func<object, Task> ProjectsListChanged;
+        public event Func<object, Task> TasksListChanged;
 
-        public void RefreshCurrentUser(User user)
+        public void RefreshCurrentUser(object sender, User user)
         {
-            CurrentUser = user;
+            if (sender != this)
+            {
+                CurrentUser = user;
+            }
             ChangeUserForNested?.Invoke(user);
         }
 
-        public void RefreshUsersList(ObservableCollection<User> users)
+        public void RefreshUsersList(object sender, ObservableCollection<User> users)
         {
-            Users = users;
+            if (sender != this)
+            {
+                Users = users;
+            }
         }
 
-        public void RefreshCustomersList(ObservableCollection<Customer> customers) { }
+        public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers) { }
 
-        public void RefreshProjectsList(ObservableCollection<Project> projects) { }
+        public void RefreshProjectsList(object sender, ObservableCollection<Project> projects) { }
 
-        public void RefreshTasksList(ObservableCollection<Activity> activities) { }
+        public void RefreshTasksList(object sender, ObservableCollection<Activity> activities) { }
 
         #endregion
     }

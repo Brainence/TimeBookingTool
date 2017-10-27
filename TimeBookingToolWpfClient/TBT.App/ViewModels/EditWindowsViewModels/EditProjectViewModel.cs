@@ -18,6 +18,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         private ObservableCollection<Customer> _customers;
         private Customer _selectedCustomer;
         private Project _editingProject;
+        private int _selectedCustomerIndex;
 
         #endregion
 
@@ -37,8 +38,15 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                 if(SetProperty(ref _selectedCustomer, value))
                 {
                     SaveProject = false;
+                    SelectedCustomerIndex = Customers.Select((item, index) => new { Item = item, Index = index }).First(x => x.Item.Id == value.Id).Index;
                 }
             }
+        }
+
+        public int SelectedCustomerIndex
+        {
+            get { return _selectedCustomerIndex; }
+            set { SetProperty(ref _selectedCustomerIndex, value); }
         }
 
         public Project EditingProject
@@ -65,7 +73,6 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public EditProjectViewModel(Project project)
         {
             EditingProject = project;
-            SelectedCustomer = project.Customer;
             SaveProject = false;
             SaveCommand = new RelayCommand(obj => Save(), null);
         }

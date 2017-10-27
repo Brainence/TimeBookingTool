@@ -199,6 +199,7 @@
     <Compile Include="ViewModels\EditWindowsViewModels\EditCustomerViewModel.cs" />
     <Compile Include="ViewModels\EditWindowsViewModels\EditProjectViewModel.cs" />
     <Compile Include="ViewModels\EditWindowsViewModels\EditWindowViewModel.cs" />
+    <Compile Include="ViewModels\EtcViewModels\ComboBoxControlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\CalendarTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\CustomerTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\EditTimeEntryViewModel.cs" />
@@ -207,7 +208,6 @@
     <Compile Include="ViewModels\MainWindow\PeopleTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ProjectsTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ReportingTabViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ReportPageViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SettingsTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TasksTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TimeEntryItemsViewModel.cs" />
@@ -555,6 +555,7 @@
     <Resource Include="Resources\Icons\en.png" />
     <Resource Include="Resources\Icons\ukr.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\XamlSpy.3.0.5\build\XamlSpy.targets" Condition="Exists('..\packages\XamlSpy.3.0.5\build\XamlSpy.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

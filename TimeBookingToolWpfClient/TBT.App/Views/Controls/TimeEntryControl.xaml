@@ -175,14 +175,14 @@
                             <Button Name="saveButton"
                                     VerticalAlignment="Bottom"
                                     HorizontalAlignment="Left"
+                                    Width="Auto"
                                     Command="{Binding SaveTimeEntryCommand}" Margin="0 0 2 0">
                                 <Button.Style>
                                     <Style TargetType="Button">
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="Button">
-                                                    <Grid x:Name="thisButtonTemplate" HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                                                          Width="55">
+                                                    <Grid x:Name="thisButtonTemplate" HorizontalAlignment="Stretch" VerticalAlignment="Center">
 
                                                         <Grid.Style>
                                                             <Style TargetType="Grid">
@@ -217,14 +217,14 @@
 
                             <Button VerticalAlignment="Bottom"
                                     HorizontalAlignment="Right"
-                                    Command="{Binding CancelEditTimeEntryCommand}">
+                                    Command="{Binding CancelEditTimeEntryCommand}"
+                                    Width="Auto">
                                 <Button.Style>
                                     <Style TargetType="Button">
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="Button">
-                                                    <Grid x:Name="thisButtonTemplate" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                          Width="55">
+                                                    <Grid x:Name="thisButtonTemplate" HorizontalAlignment="Center" VerticalAlignment="Center">
 
                                                         <Grid.Style>
                                                             <Style TargetType="Grid">

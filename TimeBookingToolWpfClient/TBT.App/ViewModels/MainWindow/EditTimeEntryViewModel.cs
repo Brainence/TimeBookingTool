@@ -104,7 +104,6 @@ namespace TBT.App.ViewModels.MainWindow
         public EditTimeEntryViewModel()
         {
             CreateStartCommand = new RelayCommand(obj => CreateNewActivity(), null);
-            //EmptyText = "[Select project]";
         }
 
         #endregion
@@ -134,6 +133,14 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
+        public void ClearError(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "SelectedDay")
+            {
+                ErrorMessage = "";
+            }
+        }
+
 
         private async void CreateNewActivity()
         {
@@ -145,7 +152,7 @@ namespace TBT.App.ViewModels.MainWindow
 
                 if (Comment != null && Comment.Length >= 2048)
                 {
-                    MessageBox.Show("Comment length cannot be greater then 2048.");
+                    MessageBox.Show($"{Properties.Resources.CommentLenghError} 2048.");
                     return;
                 }
 
@@ -160,7 +167,7 @@ namespace TBT.App.ViewModels.MainWindow
                 {
                     if (notToday)
                     {
-                        ErrorMessage = $"You have to input the time.";
+                        ErrorMessage = $"{Properties.Resources.YouHaveToInputTheTime}.";
                         return;
                     }
                     else
@@ -180,14 +187,14 @@ namespace TBT.App.ViewModels.MainWindow
 
                     if (!res || h < 0 || m < 0 || m > 59)
                     {
-                        MessageBox.Show("Incorrect time input format.");
+                        MessageBox.Show($"{Properties.Resources.IncorrectTimeInputFormat}.");
                         return;
                     }
 
                     duration = new TimeSpan(h, m, 0);
                     if (duration.TotalHours >= 24)
                     {
-                        MessageBox.Show("Time entered for day must be less then 24 hours.");
+                        MessageBox.Show($"{Properties.Resources.EnteredBigTime}.");
                         return;
                     }
                 }
@@ -197,14 +204,14 @@ namespace TBT.App.ViewModels.MainWindow
 
                     if (!res || hours < 0)
                     {
-                        MessageBox.Show("Incorrect time input format.");
+                        MessageBox.Show($"{Properties.Resources.IncorrectTimeInputFormat}.");
                         return;
                     }
 
                     duration = TimeSpan.FromHours(hours);
                     if (duration.TotalHours > 24)
                     {
-                        MessageBox.Show("Time entered for day must be less then 24 hours.");
+                        MessageBox.Show($"{Properties.Resources.EnteredBigTime}.");
                         return;
                     }
                     else if (duration.TotalHours == 24.0)
@@ -226,21 +233,21 @@ namespace TBT.App.ViewModels.MainWindow
                     {
                         if (lim < 0.5)
                         {
-                            MessageBox.Show("Time limit should be greater then 30 minutes.");
+                            MessageBox.Show($"{Properties.Resources.EnteredSmallTimeLimit} 30 {Properties.Resources.Minutes}.");
                             return;
                         }
                         else timeLimit = DateTime.UtcNow.AddHours(lim);
                     }
                     else
                     {
-                        MessageBox.Show("Incorrect time limit input format.");
+                        MessageBox.Show($"{Properties.Resources.IncorrectTimeLimitFormat}.");
                         return;
                     }
                 }
 
                 if (!await CanStartOrEditTimeEntry(string.IsNullOrEmpty(input) && !notToday ? duration : (TimeSpan?)null) && User != null && User.TimeLimit.HasValue)
                 {
-                    ErrorMessage = $"You have reached your monthly {User.TimeLimit.Value}-hour limit.";
+                    ErrorMessage = $"{Properties.Resources.YouHaveReachedMonthly} {User.TimeLimit.Value}-{Properties.Resources.HourLimit}.";
                     return;
                 }
 

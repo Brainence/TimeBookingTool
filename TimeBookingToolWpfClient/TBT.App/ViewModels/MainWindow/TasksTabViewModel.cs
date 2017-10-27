@@ -24,6 +24,7 @@ namespace TBT.App.ViewModels.MainWindow
         private ObservableCollection<Activity> _activities;
         private Project _selectedProject;
         private bool _itemsLoading;
+        private int _selectedProjectIndex;
 
         #endregion
 
@@ -59,6 +60,12 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _itemsLoading, value); }
         }
 
+        public int SelectedProjectIndex
+        {
+            get { return _selectedProjectIndex; }
+            set { SetProperty(ref _selectedProjectIndex, value); }
+        }
+
         public ICommand CreateNewTaskCommand { get; set; }
         public ICommand RefreshTasksCommand { get; set; }
         public ICommand EditTaskCommand { get; set; }
@@ -72,9 +79,10 @@ namespace TBT.App.ViewModels.MainWindow
         public TasksTabViewModel()
         {
             CreateNewTaskCommand = new RelayCommand(obj => CreateNewtask(), null);
-            RefreshTasksCommand = new RelayCommand(obj => TasksListChanged?.Invoke(), null);
+            RefreshTasksCommand = new RelayCommand(obj => { Activities = null; TasksListChanged?.Invoke(null); }, null);
             EditTaskCommand = new RelayCommand(obj => EditTask(obj as Activity), null);
             RemoveTaskCommand = new RelayCommand(obj => RemoveTask(obj as Activity), null);
+            SelectedProjectIndex = 0;
         }
 
         #endregion
@@ -87,7 +95,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (SelectedProject == null)
                 {
-                    MessageBox.Show($"Cannot create task without project.");
+                    MessageBox.Show($"{Properties.Resources.CannotCreateTaskWithoutProject}.");
                     return;
                 }
 
@@ -97,7 +105,7 @@ namespace TBT.App.ViewModels.MainWindow
 
                 if (activity != null)
                 {
-                    MessageBox.Show($"Activity with name '{NewTaskName}' already exists.");
+                    MessageBox.Show($"{Properties.Resources.ActivityWithName} '{NewTaskName}' {Properties.Resources.AlreadyExists}.");
                     return;
                 }
                 activity = new Activity()
@@ -108,12 +116,12 @@ namespace TBT.App.ViewModels.MainWindow
                 };
 
                 await App.CommunicationService.PostAsJson("Activity", activity);
-                Activities = null;
-                await TasksListChanged?.Invoke();
+                await TasksListChanged?.Invoke(this);
+                Activities.Add(activity);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error occurred while creating new task. {ex.Message} {ex.InnerException?.Message}");
+                MessageBox.Show($"{Properties.Resources.ErrorOccuredWhileCreateTask}. {ex.Message} {ex.InnerException?.Message}");
             }
         }
 
@@ -142,8 +150,7 @@ namespace TBT.App.ViewModels.MainWindow
                 {
                     activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.PutAsJson("Activity", activity));
 
-                    Activities = null;
-                    await TasksListChanged?.Invoke();
+                    await TasksListChanged?.Invoke(this);
                 }
                 catch (Exception ex)
                 {
@@ -154,7 +161,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         private async void RemoveTask(Activity activity)
         {
-            if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+            if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
             if (activity == null) return;
 
@@ -163,8 +170,8 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 var x = await App.CommunicationService.PutAsJson("Activity", activity);
 
-                Activities = null;
-                await TasksListChanged?.Invoke();
+                await TasksListChanged?.Invoke(this);
+                Activities.Remove(activity);
             }
             catch (Exception ex)
             {
@@ -176,24 +183,24 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Interface members
 
-        public event Action CurrentUserChanged;
-        public event Func<Task> UsersListChanged;
-        public event Func<Task> CustomersListChanged;
-        public event Func<Task> ProjectsListChanged;
-        public event Func<Task> TasksListChanged;
+        public event Action<object> CurrentUserChanged;
+        public event Func<object, Task> UsersListChanged;
+        public event Func<object, Task> CustomersListChanged;
+        public event Func<object, Task> ProjectsListChanged;
+        public event Func<object, Task> TasksListChanged;
 
-        public void RefreshCurrentUser(User user) { }
+        public void RefreshCurrentUser(object sender, User user) { }
 
-        public void RefreshUsersList(ObservableCollection<User> users) { }
+        public void RefreshUsersList(object sender, ObservableCollection<User> users) { }
 
-        public void RefreshCustomersList(ObservableCollection<Customer> customers) { }
+        public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers) { }
 
-        public void RefreshProjectsList(ObservableCollection<Project> projects)
+        public void RefreshProjectsList(object sender, ObservableCollection<Project> projects)
         {
             Projects = projects;
         }
 
-        public void RefreshTasksList(ObservableCollection<Activity> activities)
+        public void RefreshTasksList(object sender, ObservableCollection<Activity> activities)
         {
             Activities = activities;
         }

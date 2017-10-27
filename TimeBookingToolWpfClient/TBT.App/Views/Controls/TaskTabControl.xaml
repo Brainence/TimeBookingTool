@@ -31,7 +31,7 @@
                           Style="{StaticResource ComboBoxFlatStyle}"
                           ItemsSource="{Binding Path=Projects, Mode=TwoWay}"
                           SelectedItem="{Binding SelectedProject, Mode=TwoWay}"
-                          Text="[Select project]"
+                          SelectedIndex="{Binding SelectedProjectIndex}"
                           Height="20"
                           Margin="5" Foreground="#c2422b" FontWeight="Bold" />
 

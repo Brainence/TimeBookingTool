@@ -195,7 +195,6 @@ namespace TBT.App
             EncryptionService = new EncryptionService();
             CommunicationService = new CommunicationService();
             AppSettings = new AppSettings();
-            InitNotifyIcon();
         }
 
         static void InitNotifyIcon()
@@ -334,8 +333,9 @@ namespace TBT.App
             }
             Thread.CurrentThread.CurrentCulture = new CultureInfo(CultureTag);
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(CultureTag);
+            InitNotifyIcon();
             var mainWindow = new MainWindow() { DataContext = new MainWindowViewModel(authorized && RememberMe) };
-            mainWindow.ShowDialog();
+            if (mainWindow.Visibility != Visibility.Collapsed) { mainWindow.ShowDialog(); }
         }
 
         static Action _globalNotificationDoubleClick;

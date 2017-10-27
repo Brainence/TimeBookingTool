@@ -11,6 +11,7 @@ using TBT.App.Common;
 using TBT.App.Helpers;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
+using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.Authentication
 {
@@ -68,7 +69,7 @@ namespace TBT.App.ViewModels.Authentication
         {
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(closeParameters?.Password))
             {
-                _mainVM.ErrorMsg = "Username or password is empty.";
+                _mainVM.ErrorMsg = Resources.UserNameOfPasswordEmpty;
                 return;
             }
             EnableForgotPasswordButton = false;

@@ -10,15 +10,15 @@ namespace TBT.App.Models.Base
 {
     public interface IModelObservableViewModel
     {
-        void RefreshCurrentUser(User user);
-        void RefreshUsersList(ObservableCollection<User> users);
-        void RefreshCustomersList(ObservableCollection<Customer> customers);
-        void RefreshProjectsList(ObservableCollection<Project> projects);
-        void RefreshTasksList(ObservableCollection<Activity> activities);
-        event Action CurrentUserChanged;
-        event Func<Task> UsersListChanged;
-        event Func<Task> CustomersListChanged;
-        event Func<Task> ProjectsListChanged;
-        event Func<Task> TasksListChanged;
+        void RefreshCurrentUser(object sender, User user);
+        void RefreshUsersList(object sender, ObservableCollection<User> users);
+        void RefreshCustomersList(object sender, ObservableCollection<Customer> customers);
+        void RefreshProjectsList(object sender, ObservableCollection<Project> projects);
+        void RefreshTasksList(object sender, ObservableCollection<Activity> activities);
+        event Action<object> CurrentUserChanged;
+        event Func<object, Task> UsersListChanged;
+        event Func<object, Task> CustomersListChanged;
+        event Func<object, Task> ProjectsListChanged;
+        event Func<object, Task> TasksListChanged;
     }
 }

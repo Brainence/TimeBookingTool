@@ -487,45 +487,40 @@ namespace TBT.App.ViewModels.MainWindow
             Clipboard.SetText($"Total hours: {sum.TotalHours.ToString("N2")}");
         }
 
-        //public void RefreshLanguage()
-        //{
-        //    var tempIndex = SelectedTipIndex;
-        //    IntervalTips = new ObservableCollection<string>() {
-        //        Resources.ThisWeek, Resources.LastWeek, Resources.ThisMonth,
-        //        Resources.LastMonth, Resources.ThisYear, Resources.LastYear,
-        //        Resources.AllTime
-        //    };
-        //    SelectedTipIndex = tempIndex;
-        //}
-
 
         #endregion
 
         #region Interface members
 
-        public event Action CurrentUserChanged;
-        public event Func<Task> UsersListChanged;
-        public event Func<Task> CustomersListChanged;
-        public event Func<Task> ProjectsListChanged;
-        public event Func<Task> TasksListChanged;
+        public event Action<object> CurrentUserChanged;
+        public event Func<object, Task> UsersListChanged;
+        public event Func<object, Task> CustomersListChanged;
+        public event Func<object, Task> ProjectsListChanged;
+        public event Func<object, Task> TasksListChanged;
 
-        public void RefreshCurrentUser(User user)
+        public void RefreshCurrentUser(object sender, User user)
         {
-            User = user;
+            if (sender != this)
+            {
+                User = user;
+            }
         }
 
-        public void RefreshUsersList(ObservableCollection<User> users)
+        public void RefreshUsersList(object sender, ObservableCollection<User> users)
         {
-            Users = users;
-            ReportingUser = Users?.FirstOrDefault(x => x.Id == User.Id);
-            SelectedUserIndex = Users.IndexOf(ReportingUser);
+            if (sender != null)
+            {
+                Users = users;
+                ReportingUser = Users?.FirstOrDefault(x => x.Id == User.Id);
+                SelectedUserIndex = Users.IndexOf(ReportingUser);
+            }
         }
 
-        public void RefreshCustomersList(ObservableCollection<Customer> customers) { }
+        public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers) { }
 
-        public void RefreshProjectsList(ObservableCollection<Project> projects) { }
+        public void RefreshProjectsList(object sender, ObservableCollection<Project> projects) { }
 
-        public void RefreshTasksList(ObservableCollection<Activity> activities) { }
+        public void RefreshTasksList(object sender, ObservableCollection<Activity> activities) { }
 
         #endregion
     }

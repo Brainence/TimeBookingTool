@@ -21,7 +21,7 @@
                                        Label="{x:Static p:Resources.Project}" 
                                        ItemsSource="{Binding Path=User.Projects, Mode=TwoWay}"
                                        SelectedItem="{Binding Path=SelectedProject, Mode=TwoWay}"
-                                       
+                                       EmptyText="{Binding Source={x:Static p:Resources.SelectProject}, StringFormat={}[{0}]}"
                                        FontSize="13"
                                        Margin="5 4"/>
         <!--EmptyText="[Select project]"-->
@@ -30,7 +30,7 @@
                                        Label="{x:Static p:Resources.Task}" 
                                        ItemsSource="{Binding Path=SelectedProject.Activities, Mode=TwoWay}"
                                        SelectedItem="{Binding SelectedActivity, Mode=TwoWay}"
-                                       
+                                       EmptyText="{Binding Source={x:Static p:Resources.SelectTask}, StringFormat={}[{0}]}"
                                        FontSize="13"
                                        Margin="5 4">
 
@@ -47,7 +47,7 @@
 
 
         <local:TextControl Grid.Row="2"
-                           Label="{x:Static p:Resources.Project}" Text="{Binding Path=Comment, Mode=TwoWay}" 
+                           Label="{x:Static p:Resources.Comment}" Text="{Binding Path=Comment, Mode=TwoWay}" 
                            Margin="5 4" FontSize="13" 
                            TextWrapping="Wrap" AcceptsReturn="True" 
                            Width="468"
@@ -144,7 +144,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <TextBlock x:Name="errorMsg" Text="{Binding ErrorMessage}" Height="10" Foreground="Red" TextAlignment="Center"/>
+            <TextBlock x:Name="errorMsg" Text="{Binding ErrorMessage}" Height="15" Foreground="Red" TextAlignment="Center"/>
         </StackPanel>
     </Grid>
 </UserControl>

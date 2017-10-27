@@ -3,6 +3,7 @@ using System.Windows.Input;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
+using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.Authentication
 {
@@ -71,18 +72,18 @@ namespace TBT.App.ViewModels.Authentication
             NextCancelButtonIsEnabled = false;
             if (string.IsNullOrEmpty(Username))
             {
-                _mainVM.ErrorMsg = "Username is required.";
+                _mainVM.ErrorMsg = Resources.UserNameIsRequierd;
                 NextButtonIsEnabled = true;
                 NextCancelButtonIsEnabled = true;
                 return;
             }
 
             var user = JsonConvert.DeserializeObject<User>(
-                await App.CommunicationService.GetAsJson($"User?email={Username}", allowAnonymous: true));
+                await App.CommunicationService.GetAsJson($"User?email={Username}"));
 
             if (user == null)
             {
-                _mainVM.ErrorMsg = "Username doesn't exist.";
+                _mainVM.ErrorMsg = Resources.UserNameDoesntExist;
                 NextButtonIsEnabled = true;
                 NextCancelButtonIsEnabled = true;
                 return;
@@ -91,17 +92,17 @@ namespace TBT.App.ViewModels.Authentication
             if (!AlreadyHaveToken)
             {
                 var result = JsonConvert.DeserializeObject<bool?>(
-                    await App.CommunicationService.GetAsJson($"ResetTicket/CreateResetTicket/{user.Id}", allowAnonymous: true));
+                    await App.CommunicationService.GetAsJson($"ResetTicket/CreateResetTicket/{user.Id}"));
 
-                if (result == null || !result.Value)
+                if (result.HasValue || !result.Value)
                 {
-                    _mainVM.ErrorMsg = "Error occurred, try again.";
+                    _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
                     NextButtonIsEnabled = true;
                     NextCancelButtonIsEnabled = true;
                     return;
                 }
 
-                _mainVM.ErrorMsg = "An email with token has been sent to your email.";
+                _mainVM.ErrorMsg = Resources.AnEmailHasSent;
             }
             else
             {

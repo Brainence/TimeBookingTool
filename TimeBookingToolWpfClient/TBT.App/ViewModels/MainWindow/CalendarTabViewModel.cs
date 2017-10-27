@@ -124,6 +124,7 @@ namespace TBT.App.ViewModels.MainWindow
             EditTimeEntryViewModel tempVM = (EditTimeEntryViewModel)_editTimeEntryViewModel;
             PropertyChanged += tempVM.ShowLimit;
             PropertyChanged += tempVM.ChangeButtonName;
+            PropertyChanged += tempVM.ClearError;
             ChangeUserForNested += tempVM.RefreshCurrentUser;
             SelectedDay = DateTime.Now.Date;
             tempVM.RefreshTimeEntries += async () => await RefreshTimeEntries(Week);
@@ -248,24 +249,27 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Interface members
 
-        public event Action CurrentUserChanged;
-        public event Func<Task> UsersListChanged;
-        public event Func<Task> CustomersListChanged;
-        public event Func<Task> ProjectsListChanged;
-        public event Func<Task> TasksListChanged;
+        public event Action<object> CurrentUserChanged;
+        public event Func<object, Task> UsersListChanged;
+        public event Func<object, Task> CustomersListChanged;
+        public event Func<object, Task> ProjectsListChanged;
+        public event Func<object, Task> TasksListChanged;
 
-        public async void RefreshCurrentUser(User user)
+        public void RefreshCurrentUser(object sender, User user)
         {
-            User = user;
+            if (sender != this)
+            {
+                User = user;
+            }
         }
 
-        public void RefreshUsersList(ObservableCollection<User> users) { }
+        public void RefreshUsersList(object sender, ObservableCollection<User> users) { }
 
-        public void RefreshCustomersList(ObservableCollection<Customer> customers) { }
+        public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers) { }
 
-        public void RefreshProjectsList(ObservableCollection<Project> projects) { }
+        public void RefreshProjectsList(object sender, ObservableCollection<Project> projects) { }
 
-        public void RefreshTasksList(ObservableCollection<Activity> activities) { }
+        public void RefreshTasksList(object sender, ObservableCollection<Activity> activities) { }
 
         #endregion
     }

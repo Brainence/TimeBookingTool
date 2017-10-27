@@ -27,8 +27,7 @@
                     </Expander>
                 </Grid>
 
-                <Grid x:Name="editMyProfile" Grid.Row="1"  
-                          Visibility="{Binding Path=CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid x:Name="editMyProfile" Grid.Row="1">
 
                     <Expander Header="{x:Static p:Resources.EditMyProfile}" Height="Auto" VerticalAlignment="Center" FontSize="13" FontWeight="Bold" x:Name="ExpanderEditMyProfile" IsExpanded="{Binding IsExpandedEdit}">
                         <ContentControl Content="{Binding EditMyProfileViewModel}"></ContentControl>

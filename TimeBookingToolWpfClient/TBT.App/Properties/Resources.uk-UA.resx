@@ -346,4 +346,112 @@
   <data name="UserReport" xml:space="preserve">
     <value>Звіт про користувача</value>
   </data>
+  <data name="AlreadyHaveToken" xml:space="preserve">
+    <value>Вже маю токен</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Змінити</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Забули свій пароль?</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Далі</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Змінити пароль</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Увійти</value>
+  </data>
+  <data name="Token" xml:space="preserve">
+    <value>Токен</value>
+  </data>
+  <data name="ActivityWithName" xml:space="preserve">
+    <value>Завдання з ім'ям</value>
+  </data>
+  <data name="AllFieldsRequired" xml:space="preserve">
+    <value>Всі поля мають бути заповнені.</value>
+  </data>
+  <data name="AlreadyExists" xml:space="preserve">
+    <value>вже існує</value>
+  </data>
+  <data name="AnEmailHasSent" xml:space="preserve">
+    <value>Лист з токеном відіслано вам на пошту.</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Ви впевнені?</value>
+  </data>
+  <data name="CannotCreateProjectWithoutCustomer" xml:space="preserve">
+    <value>Не можу створити проект без замовника</value>
+  </data>
+  <data name="CannotCreateTaskWithoutProject" xml:space="preserve">
+    <value>Не можу створити завдання без проекту</value>
+  </data>
+  <data name="CommentLenghError" xml:space="preserve">
+    <value>Довжина коментаря не може перевищувати</value>
+  </data>
+  <data name="ConfirmYourPassword" xml:space="preserve">
+    <value>Будь-ласка, підтвердіть ваш пароль.</value>
+  </data>
+  <data name="CustomerWithName" xml:space="preserve">
+    <value>Замовник з ім'ям</value>
+  </data>
+  <data name="EnteredBigTime" xml:space="preserve">
+    <value>Введений час повинен бути мешне 24 годин на добу</value>
+  </data>
+  <data name="EnteredSmallTimeLimit" xml:space="preserve">
+    <value>Часове обмеження повинно бути більше</value>
+  </data>
+  <data name="ErrorOccuredWhileCreateProject" xml:space="preserve">
+    <value>Виникла помилка під час створення нового проекту</value>
+  </data>
+  <data name="ErrorOccuredWhileCreateTask" xml:space="preserve">
+    <value>Виникла помилка під час створення нового завдання</value>
+  </data>
+  <data name="ErrorOccurredTryAgain" xml:space="preserve">
+    <value>Виникла помилка, спробуйте ще раз.</value>
+  </data>
+  <data name="HourLimit" xml:space="preserve">
+    <value>годинне обмеження</value>
+  </data>
+  <data name="IncorrectTimeInputFormat" xml:space="preserve">
+    <value>Час вказано в невірному форматі</value>
+  </data>
+  <data name="IncorrectTimeLimitFormat" xml:space="preserve">
+    <value>Часове обмеження вказано в невірному форматі</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>хвилин</value>
+  </data>
+  <data name="PasswordBeenChanged" xml:space="preserve">
+    <value>Пароль було змінено.</value>
+  </data>
+  <data name="ProjectWithName" xml:space="preserve">
+    <value>Проект з ім'ям</value>
+  </data>
+  <data name="UserNameDoesntExist" xml:space="preserve">
+    <value>Введений логін не існує.</value>
+  </data>
+  <data name="UserNameIsRequierd" xml:space="preserve">
+    <value>Логін не може бути пустим.</value>
+  </data>
+  <data name="UserNameOfPasswordEmpty" xml:space="preserve">
+    <value>Не заповнено логін чи пароль.</value>
+  </data>
+  <data name="YouHaveReachedMonthly" xml:space="preserve">
+    <value>Ви досягли вашого місячного</value>
+  </data>
+  <data name="YouHaveToInputTheTime" xml:space="preserve">
+    <value>Ви маєте вказати час</value>
+  </data>
+  <data name="SelectProject" xml:space="preserve">
+    <value>Виберіть проект</value>
+  </data>
+  <data name="SelectTask" xml:space="preserve">
+    <value>Виберіть завдання</value>
+  </data>
+  <data name="SelectCustomer" xml:space="preserve">
+    <value>Виберіть замовника</value>
+  </data>
 </root>

@@ -71,7 +71,7 @@ namespace TBT.App.ViewModels.MainWindow
         public ProjectsTabViewModel()
         {
             CreateNewProjectCommand = new RelayCommand(obj => CreateNewProject(), obj => { return SelectedIndex >= 0; });
-            RefreshProjectsCommand = new RelayCommand(obj => ProjectsListChanged?.Invoke(), null);
+            RefreshProjectsCommand = new RelayCommand(obj => { Projects = null; ProjectsListChanged?.Invoke(null); }, null);
             EditProjectCommand = new RelayCommand(obj => EditProject(obj as Project), null);
             RemoveProjectCommand = new RelayCommand(obj => RemoveProject(obj as Project), null);
         }
@@ -91,13 +91,13 @@ namespace TBT.App.ViewModels.MainWindow
 
                 if (project != null)
                 {
-                    MessageBox.Show($"Project with name '{name}' already exists.");
+                    MessageBox.Show($"{Properties.Resources.ProjectWithName} '{name}' {Properties.Resources.AlreadyExists}.");
                     return;
                 }
                 //TODO: Create project without customer
                 if (SelectedIndex < 0)
                 {
-                    MessageBox.Show($"Cannot create project without customer.");
+                    MessageBox.Show($"{Properties.Resources.CannotCreateProjectWithoutCustomer}.");
                     return;
                 }
 
@@ -110,12 +110,12 @@ namespace TBT.App.ViewModels.MainWindow
 
                 await App.CommunicationService.PostAsJson("Project", project);
 
-                Projects = null;
-                await ProjectsListChanged?.Invoke();
+                await ProjectsListChanged?.Invoke(this);
+                Projects.Add(project);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error occurred while creating new customer. {ex.Message} {ex.InnerException?.Message}");
+                MessageBox.Show($"{Properties.Resources.ErrorOccuredWhileCreateProject}. {ex.Message} {ex.InnerException?.Message}");
             }
         }
 
@@ -129,7 +129,8 @@ namespace TBT.App.ViewModels.MainWindow
                 {
                     EditControl = new EditProjectViewModel(project)
                     {
-                        Customers = Customers
+                        Customers = Customers,
+                        SelectedCustomer = project.Customer
                     }
                 }
             };
@@ -144,8 +145,7 @@ namespace TBT.App.ViewModels.MainWindow
                 {
                     project = JsonConvert.DeserializeObject<Project>(await App.CommunicationService.PutAsJson("Project", project));
 
-                    Projects = null;
-                    await ProjectsListChanged?.Invoke();
+                    await ProjectsListChanged?.Invoke(this);
                 }
                 catch (Exception ex)
                 {
@@ -156,7 +156,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         private async void RemoveProject(Project project)
         {
-            if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+            if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
             if (project == null) return;
 
@@ -171,8 +171,8 @@ namespace TBT.App.ViewModels.MainWindow
                 project.IsActive = false;
                 var x = await App.CommunicationService.PutAsJson("Project", project);
 
-                Projects = null;
-                await ProjectsListChanged?.Invoke();
+                await ProjectsListChanged?.Invoke(this);
+                Projects.Remove(project);
             }
             catch (Exception ex)
             {
@@ -184,27 +184,33 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Interface members
 
-        public event Action CurrentUserChanged;
-        public event Func<Task> UsersListChanged;
-        public event Func<Task> CustomersListChanged;
-        public event Func<Task> ProjectsListChanged;
-        public event Func<Task> TasksListChanged;
+        public event Action<object> CurrentUserChanged;
+        public event Func<object, Task> UsersListChanged;
+        public event Func<object, Task> CustomersListChanged;
+        public event Func<object, Task> ProjectsListChanged;
+        public event Func<object, Task> TasksListChanged;
 
-        public void RefreshCurrentUser(User user) { }
+        public void RefreshCurrentUser(object sender, User user) { }
 
-        public void RefreshUsersList(ObservableCollection<User> users) { }
+        public void RefreshUsersList(object sender, ObservableCollection<User> users) { }
 
-        public void RefreshCustomersList(ObservableCollection<Customer> customers)
+        public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers)
         {
-            Customers = customers;
+            if (sender != this)
+            {
+                Customers = customers;
+            }
         }
 
-        public void RefreshProjectsList(ObservableCollection<Project> projects)
+        public void RefreshProjectsList(object sender, ObservableCollection<Project> projects)
         {
-            Projects = projects;
+            if (sender != this)
+            {
+                Projects = projects;
+            }
         }
 
-        public void RefreshTasksList(ObservableCollection<Activity> activities) { }
+        public void RefreshTasksList(object sender, ObservableCollection<Activity> activities) { }
 
         #endregion
     }

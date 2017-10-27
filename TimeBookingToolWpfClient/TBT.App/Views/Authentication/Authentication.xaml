@@ -28,6 +28,11 @@
                 Command="{Binding Path=CloseButtonClick}">
             <Image Source="../../Resources/Icons/close.png" Width="12"></Image>
         </Button>
+        <ComboBox HorizontalAlignment="Left" Text="Language" VerticalAlignment="Top" Margin="7"
+                          ItemTemplate="{StaticResource LanguageItemComboBoxTemplate}"
+                          ItemsSource="{Binding Languages, Mode=TwoWay}"
+                          SelectedIndex="{Binding SelectedLanguageIndex, Mode=TwoWay}"/>
+
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Path=ErrorMsg, Mode=TwoWay}" Margin="4"  Height="20" Foreground="#660000"/>
         <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=CurrentViewModel}"></ContentControl>
     </Grid>

@@ -206,7 +206,7 @@
             <ContentControl Grid.Row="1"
                             Content="{Binding TimeEntryItems}"
                             Margin="20 10 20 0" 
-                            Height="175"
+                            Height="170"
                             VerticalAlignment="Top" 
                             HorizontalAlignment="Stretch"
                             Visibility="{Binding IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}"/>

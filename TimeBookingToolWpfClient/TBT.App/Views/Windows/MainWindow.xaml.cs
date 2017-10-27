@@ -29,7 +29,7 @@ namespace TBT.App.Views.Windows
 
         private void CloseWindow(object sender, CancelEventArgs e)
         {
-            (DataContext as MainWindowViewModel).CloseCommand.Execute(null);
+            (DataContext as MainWindowViewModel)?.CloseCommand.Execute(null);
             e.Cancel = true;
         }
     }

@@ -59,7 +59,7 @@ namespace TBT.App.ViewModels.MainWindow
                 SetProperty(ref _isExpanded, value);
                 if (value)
                 {
-                    CustomersListChanged?.Invoke();
+                    CustomersListChanged?.Invoke(this);
                 }
 
             }
@@ -87,7 +87,7 @@ namespace TBT.App.ViewModels.MainWindow
                 IsAdmin = user.IsAdmin;
             }
             CreateNewCustomerCommand = new RelayCommand(obj => CreateNewCustomer(), null);
-            RefreshCustomersCommand = new RelayCommand(obj => CustomersListChanged?.Invoke(), null);
+            RefreshCustomersCommand = new RelayCommand(obj => { Customers = null; CustomersListChanged?.Invoke(null); }, null);
             EditCustomerCommand = new RelayCommand(obj => EditCustomer(obj as Customer), obj => { return IsAdmin; });
             RemoveCustomerCommand = new RelayCommand(obj => RemoveCustomer(obj as Customer), obj => { return IsAdmin; });
         }
@@ -109,7 +109,7 @@ namespace TBT.App.ViewModels.MainWindow
 
                 if (customer != null)
                 {
-                    MessageBox.Show($"Customer with name '{name}' already exists.");
+                    MessageBox.Show($"{Properties.Resources.CustomerWithName} '{name}' {Properties.Resources.AlreadyExists}.");
                     return;
                 }
 
@@ -117,8 +117,8 @@ namespace TBT.App.ViewModels.MainWindow
 
                 await App.CommunicationService.PostAsJson("Customer", customer);
 
-                Customers = null;
-                await CustomersListChanged?.Invoke();
+                await CustomersListChanged?.Invoke(this);
+                Customers.Add(customer);
             }
             catch (Exception ex)
             {
@@ -145,8 +145,7 @@ namespace TBT.App.ViewModels.MainWindow
                 try
                 {
                     customer = JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.PutAsJson("Customer", customer));
-                    Customers = null;
-                    await CustomersListChanged?.Invoke();
+                    await CustomersListChanged?.Invoke(this);
                 }
                 catch (Exception ex)
                 {
@@ -158,7 +157,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         public async void RemoveCustomer(Customer customer)
         {
-            if (MessageBox.Show("Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+            if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
             if (customer == null) return;
             customer.IsActive = false;
@@ -178,8 +177,8 @@ namespace TBT.App.ViewModels.MainWindow
 
                 var x = await App.CommunicationService.PutAsJson("Customer", customer);
 
-                Customers = null;
-                await CustomersListChanged?.Invoke();
+                await CustomersListChanged?.Invoke(this);
+                Customers.Remove(customer);
             }
             catch (Exception ex)
             {
@@ -191,27 +190,33 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Interface members
 
-        public event Action CurrentUserChanged;
-        public event Func<Task> UsersListChanged;
-        public event Func<Task> CustomersListChanged;
-        public event Func<Task> ProjectsListChanged;
-        public event Func<Task> TasksListChanged;
+        public event Action<object> CurrentUserChanged;
+        public event Func<object, Task> UsersListChanged;
+        public event Func<object, Task> CustomersListChanged;
+        public event Func<object, Task> ProjectsListChanged;
+        public event Func<object, Task> TasksListChanged;
 
-        public void RefreshCurrentUser(User newUser)
+        public void RefreshCurrentUser(object sender, User newUser)
         {
-            IsAdmin = newUser.IsAdmin;
+            if (sender != this)
+            {
+                IsAdmin = newUser.IsAdmin;
+            }
         }
 
-        public void RefreshUsersList(ObservableCollection<User> users) { }
+        public void RefreshUsersList(object sender, ObservableCollection<User> users) { }
 
-        public void RefreshCustomersList(ObservableCollection<Customer> customers)
+        public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers)
         {
-            Customers = customers;
+            if (sender != this)
+            {
+                Customers = customers;
+            }
         }
 
-        public void RefreshProjectsList(ObservableCollection<Project> projects) { }
+        public void RefreshProjectsList(object sender, ObservableCollection<Project> projects) { }
 
-        public void RefreshTasksList(ObservableCollection<Activity> activities) { }
+        public void RefreshTasksList(object sender, ObservableCollection<Activity> activities) { }
 
         #endregion
     }

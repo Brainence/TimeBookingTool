@@ -89,22 +89,22 @@ namespace TBT.App.Services.CommunicationService.Implementations
             }
         }
 
-        public async Task<string> GetAsJson(string url, bool allowAnonymous = false)
+        public async Task<string> GetAsJson(string url)
         {
             return await SendRequest((x, y) => _client.GetAsync(x), url, null);
         }
 
-        public async Task<string> PostAsJson(string url, object data, bool allowAnonymous = false)
+        public async Task<string> PostAsJson(string url, object data)
         {
             return await SendRequest((x, y) => _client.PostAsync(x, y as StringContent), url, data);
         }
 
-        public async Task<string> PutAsJson(string url, object data, bool allowAnonymous = false)
+        public async Task<string> PutAsJson(string url, object data)
         {
             return await SendRequest((x, y) => _client.PutAsync(x, y as StringContent), url, data);
         }
 
-        public async Task<string> Delete(string url, bool allowAnonymous = false)
+        public async Task<string> Delete(string url)
         {
             return await SendRequest((x, y) => _client.DeleteAsync(x), url, null);
         }

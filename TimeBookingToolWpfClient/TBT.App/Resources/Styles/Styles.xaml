@@ -66,6 +66,32 @@
         </TextBlock>
     </ControlTemplate>
 
+    <ControlTemplate x:Key="HyperlinkAuthButtonTemplate" TargetType="Button">
+        <TextBlock HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                   Margin="{TemplateBinding Padding}">
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="White" />
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Foreground" Value="Red" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="LightGray" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+            
+            <ContentPresenter/>
+        </TextBlock>
+    </ControlTemplate>
+
     <Style TargetType="{x:Type TextBox}"
            x:Key="AddingTextBoxStyle">
         <Setter Property="Foreground" Value="#c2422b" />
@@ -564,7 +590,16 @@
             <SolidColorBrush x:Key="TabItemIsSelectedForeground" Color="#444545"/>
             <SolidColorBrush x:Key="TabItemMouseOverBackground" Color="Transparent"/>
             <SolidColorBrush x:Key="TabItemMouseOverForeground" Color="#ffffff"/>
+            <tools:OnlyForAdminsVisibleConverter x:Key="OnlyForAdminsVisibleConverter"/>
         </Style.Resources>
+        <Setter Property="Visibility">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource OnlyForAdminsVisibleConverter}" Mode="TwoWay">
+                    <Binding ElementName="mainWindow"  Path="DataContext.CurrentUser.IsAdmin"/>
+                    <Binding Path="OnlyForAdmins"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
@@ -609,26 +644,26 @@
                                 </Style>
                             </Grid.Style>
                         <StackPanel VerticalAlignment="Center">
-                            <StackPanel.Style>
-                                <Style TargetType="StackPanel">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="False">
-                                            <Setter Property="Background" Value="{StaticResource TabItemBackground}"/>
-                                        </Trigger>
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="False">
+                                                <Setter Property="Background" Value="{StaticResource TabItemBackground}"/>
+                                            </Trigger>
 
-                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem}}" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource TabItemIsSelectedBackground}" />
-                                        </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem}}" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource TabItemIsSelectedBackground}" />
+                                            </DataTrigger>
 
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Cursor" Value="Hand" />
-                                            <Setter Property="Background" Value="{StaticResource TabItemMouseOverBackground}"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                    <Setter Property="Cursor" Value="Hand"/>
-                                </Style>
-                            </StackPanel.Style>
-                            <Image Height="22" Width="22" Margin="0 0 0 2" Source="{Binding Tag, Mode=TwoWay}" />
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Cursor" Value="Hand" />
+                                                <Setter Property="Background" Value="{StaticResource TabItemMouseOverBackground}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                        <Setter Property="Cursor" Value="Hand"/>
+                                    </Style>
+                                </StackPanel.Style>
+                                <Image Height="22" Width="22" Margin="0 0 0 2" Source="{Binding Tag, Mode=TwoWay}" />
                             <TextBlock x:Name="tabTimeHeader"
                                    Text="{Binding Title}"
                                    VerticalAlignment="Center"
