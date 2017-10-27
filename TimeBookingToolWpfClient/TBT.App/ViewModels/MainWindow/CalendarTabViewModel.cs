@@ -120,9 +120,9 @@ namespace TBT.App.ViewModels.MainWindow
             IsDateNameShort = true;
             TimeEntryItems = new TimeEntryItemsViewModel() { TimeEntries = User?.TimeEntries, };
             ((TimeEntryItemsViewModel)TimeEntryItems).RefreshTimeEntries += (async () => await RefreshTimeEntries(Week));
-            EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, IsLimitVisible = User?.IsAdmin, SelectedDay = SelectedDay };
+            EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, SelectedDay = SelectedDay };
             EditTimeEntryViewModel tempVM = (EditTimeEntryViewModel)_editTimeEntryViewModel;
-            PropertyChanged += tempVM.ShowLimit;
+            //PropertyChanged += tempVM.ShowLimit;
             PropertyChanged += tempVM.ChangeButtonName;
             PropertyChanged += tempVM.ClearError;
             ChangeUserForNested += tempVM.RefreshCurrentUser;
