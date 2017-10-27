@@ -171,6 +171,7 @@ namespace TBT.App.ViewModels.MainWindow
                 RefreshAll();
                 _dateTimer.Start();
                 WindowState = true;
+                App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
             }
         }
 
@@ -212,6 +213,7 @@ namespace TBT.App.ViewModels.MainWindow
                 LoggedOut = false;
                 RefreshCurrentUser(this);
                 IsVisible = true;
+                App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
             }
         }
 
@@ -255,9 +257,9 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void SayBye()
         {
-            var userfirstname = CurrentUser?.FirstName ?? "";
-
-            App.ShowBalloon($"I'm watching you", " ", 30000, App.EnableGreetingNotification);
+            //Message?
+            //var userfirstname = CurrentUser?.FirstName ?? "";
+            //App.ShowBalloon($"I'm watching you", " ", 30000, App.EnableGreetingNotification);
         }
 
         private static bool IsShuttingDown()
@@ -278,7 +280,6 @@ namespace TBT.App.ViewModels.MainWindow
             if (!authorized)
             {
                 var auth = new Views.Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel(Languages, SelectedLanguageIndex) };
-                App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
                 auth.ShowDialog();
             }
             return IsShuttingDown();

@@ -454,4 +454,10 @@
   <data name="TimeOverflowed" xml:space="preserve">
     <value>Entered time is out or range [-256204778.80152154...256204778.80152154] hours</value>
   </data>
+  <data name="Farewell" xml:space="preserve">
+    <value>Bye</value>
+  </data>
+  <data name="Greetings" xml:space="preserve">
+    <value>Hello</value>
+  </data>
 </root>

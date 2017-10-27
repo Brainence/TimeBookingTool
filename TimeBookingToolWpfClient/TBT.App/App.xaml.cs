@@ -21,6 +21,7 @@ using TBT.App.Services.CommunicationService.Implementations;
 using TBT.App.Services.Encryption.Implementations;
 using TBT.App.ViewModels.MainWindow;
 using TBT.App.Views.Windows;
+using TBT.App.Properties;
 using WF = System.Windows.Forms;
 
 namespace TBT.App
@@ -119,7 +120,7 @@ namespace TBT.App
         {
             get
             {
-                return AppSettings.Contains(Constants.Greeting) ? $"Hello, {(string)AppSettings[Constants.Greeting]}!" : "Hello!";
+                return AppSettings.Contains(Constants.Greeting) ? $"{TBT.App.Properties.Resources.Greetings}, {(string)AppSettings[Constants.Greeting]}!" : $"{TBT.App.Properties.Resources.Greetings}!";
             }
             set
             {
@@ -131,7 +132,7 @@ namespace TBT.App
         {
             get
             {
-                return AppSettings.Contains(Constants.Farewell) ? $"Bye, {(string)AppSettings[Constants.Farewell]}!" : "Bye";
+                return AppSettings.Contains(Constants.Farewell) ? $"{TBT.App.Properties.Resources.Farewell}, {(string)AppSettings[Constants.Farewell]}!" : $"{TBT.App.Properties.Resources.Greetings}";
             }
             set
             {

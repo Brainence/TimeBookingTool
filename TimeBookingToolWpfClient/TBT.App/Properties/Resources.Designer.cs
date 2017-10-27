@@ -448,6 +448,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bye.
+        /// </summary>
+        public static string Farewell {
+            get {
+                return ResourceManager.GetString("Farewell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First name.
         /// </summary>
         public static string FirstName {
@@ -480,6 +489,15 @@ namespace TBT.App.Properties {
         public static string FullName {
             get {
                 return ResourceManager.GetString("FullName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello.
+        /// </summary>
+        public static string Greetings {
+            get {
+                return ResourceManager.GetString("Greetings", resourceCulture);
             }
         }
         

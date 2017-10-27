@@ -457,4 +457,10 @@
   <data name="TimeOverflowed" xml:space="preserve">
     <value>Ви ввели час, що виходить за межі [-256204778.80152154...256204778.80152154] годин</value>
   </data>
+  <data name="Farewell" xml:space="preserve">
+    <value>Бувай</value>
+  </data>
+  <data name="Greetings" xml:space="preserve">
+    <value>Привіт</value>
+  </data>
 </root>
