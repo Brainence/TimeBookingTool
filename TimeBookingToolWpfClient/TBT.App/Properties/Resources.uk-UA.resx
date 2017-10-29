@@ -478,4 +478,7 @@
   <data name="AppWillRestartToChangeLang" xml:space="preserve">
     <value>Програма буде перезапущена, щоб змінити мову</value>
   </data>
+  <data name="ClickToChangeLanguage" xml:space="preserve">
+    <value>Натисніть, щоб змінити мову</value>
+  </data>
 </root>

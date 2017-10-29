@@ -48,12 +48,11 @@
         </TabControl>
 
         <Grid Grid.Row="1">
-            <StackPanel HorizontalAlignment="Right" Grid.Column="1" Margin="10 0 0 10" Orientation="Horizontal" Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">
-                <ComboBox HorizontalAlignment="Right" Text="Language"
-                          ItemTemplate="{StaticResource LanguageItemComboBoxTemplate}"
-                          ItemsSource="{Binding Languages, Mode=TwoWay}"
-                          SelectedIndex="{Binding SelectedLanguageIndex, Mode=TwoWay}"
-                          SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"/>
+            <ContentControl Content="{Binding LanguageControl}" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Center"/>
+            <StackPanel HorizontalAlignment="Right" Grid.Column="1" Margin="10 0 0 10" Orientation="Horizontal" 
+                        Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">
 
                 <Image Source="../../Resources/Icons/refresh.png" Height="18" Margin="0 5 5 5" Cursor="Hand" ToolTip="{x:Static p:Resources.Refresh}">
                     <Image.InputBindings>

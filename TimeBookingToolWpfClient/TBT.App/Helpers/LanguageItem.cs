@@ -11,6 +11,7 @@ namespace TBT.App.Helpers
     {
         public string Culture { get; set; }
         public string Flag { get; set; }
+        public string LanguageName { get; set; }
 
         public override bool Equals(LanguageItem x, LanguageItem y)
         {

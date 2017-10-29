@@ -214,6 +214,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click to choose another language.
+        /// </summary>
+        public static string ClickToChangeLanguage {
+            get {
+                return ResourceManager.GetString("ClickToChangeLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment.
         /// </summary>
         public static string Comment {

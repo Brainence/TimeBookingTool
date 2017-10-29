@@ -17,6 +17,7 @@ using TBT.App.ViewModels.Authentication;
 using TBT.App.Properties;
 using System.Threading;
 using System.Globalization;
+using TBT.App.ViewModels.EtcViewModels;
 
 namespace TBT.App.ViewModels.MainWindow
 {
@@ -33,11 +34,8 @@ namespace TBT.App.ViewModels.MainWindow
         private DispatcherTimer _dateTimer;
         private double _width;
         private bool _windowState;
-        private ObservableCollection<LanguageItem> _languages;
-        private int _selectedLanguageIndex;
-        private LanguageItem _selectedLanguage;
-        private bool _manualSelect;
         private bool _isConnected;
+        private BaseViewModel _languageControl;
 
 
         #endregion
@@ -74,12 +72,6 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public bool IsShown
-        {
-            get { return _isShown; }
-            set { SetProperty(ref _isShown, value); }
-        }
-
         public bool LoggedOut
         {
             get { return _loggedOut; }
@@ -111,40 +103,6 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _windowState, value); }
         }
 
-        public ObservableCollection<LanguageItem> Languages
-        {
-            get { return _languages; }
-            set { SetProperty(ref _languages, value); }
-        }
-
-        public int SelectedLanguageIndex
-        {
-            get { return _selectedLanguageIndex; }
-            set
-            {
-                if (_manualSelect && _selectedLanguageIndex != value)
-                {
-                    if (MessageBox.Show($"{Resources.AppWillRestartToChangeLang}. {Resources.AreYouSure}", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK){ return; }
-                }
-                if (SetProperty(ref _selectedLanguageIndex, value) && value >= 0 && value < Languages.Count && _manualSelect)
-                {
-                    App.CultureTag = Languages[value].Culture;
-                    Application.Current.Shutdown();
-                    System.Windows.Forms.Application.Restart();
-                }
-                _manualSelect = true;
-            }
-        }
-
-        public LanguageItem SelectedLanguage
-        {
-            get { return _selectedLanguage; }
-            set
-            {
-                if (value == Languages[SelectedLanguageIndex]) { SetProperty(ref _selectedLanguage, value); }
-            }
-        }
-
         public bool IsConnected
         {
             get { return _isConnected; }
@@ -152,6 +110,12 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 SetProperty(ref _isConnected, value);
             }
+        }
+
+        public BaseViewModel LanguageControl
+        {
+            get { return _languageControl; }
+            set { SetProperty(ref _languageControl, value); }
         }
 
         public ICommand RefreshAllCommand { get; set; }
@@ -174,8 +138,7 @@ namespace TBT.App.ViewModels.MainWindow
         public MainWindowViewModel(bool authorized)
         {
             IsConnected = true;
-            _manualSelect = false;
-            InitLanguages();
+            LanguageControl = new LanguageControlViewModel();
             if (!OpenAuthenticationWindow(authorized))
             {
                 //IsConnected = CommunicationService.CheckConnection();
@@ -314,7 +277,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (!authorized)
             {
-                var auth = new Views.Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel(Languages, SelectedLanguageIndex) };
+                var auth = new Views.Authentication.Authentication() { DataContext = new AuthenticationWindowViewModel() };
                 auth.ShowDialog();
             }
             return IsShuttingDown();
@@ -375,19 +338,6 @@ namespace TBT.App.ViewModels.MainWindow
             TasksListChanges += Tabs[5].Control.RefreshTasksList;
             Tabs[5].Control.TasksListChanged += RefreshTasksList;
             Tabs.Add(new MainWindowTabItem() { Control = new SettingsTabViewModel(), Title = Resources.Settings, Tag = "../Icons/settings_white.png", OnlyForAdmins = false });
-        }
-
-        public void InitLanguages()
-        {
-            Languages = new ObservableCollection<LanguageItem>()
-            {
-                new LanguageItem() { Culture = "uk-UA", Flag = "Resources/Icons/ukr.png" },
-                new LanguageItem() { Culture = "en", Flag = "Resources/Icons/en.png" }
-            };
-            var currentCulture = Thread.CurrentThread.CurrentUICulture.ToString();
-            var tempIndex = Languages.Select((item, index) => new { item = item, index = index }).FirstOrDefault(x => x.item.Culture == currentCulture)?.index;
-            SelectedLanguageIndex = tempIndex ?? -1;
-            SelectedLanguage = Languages[SelectedLanguageIndex];
         }
 
         #endregion

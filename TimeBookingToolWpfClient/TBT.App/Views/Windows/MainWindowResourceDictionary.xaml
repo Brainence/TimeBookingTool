@@ -2,7 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:TBT.App.Views.Controls"
                     xmlns:vm="clr-namespace:TBT.App.ViewModels.MainWindow"
+                    xmlns:etcvm="clr-namespace:TBT.App.ViewModels.EtcViewModels"
                     xmlns:editvm="clr-namespace:TBT.App.ViewModels.EditWindowsViewModels">
+    <DataTemplate DataType="{x:Type etcvm:LanguageControlViewModel}">
+        <local:LanguageControl/>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type vm:CalendarTabViewModel}">
         <local:CalendarControl/>
     </DataTemplate>

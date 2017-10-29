@@ -200,6 +200,7 @@
     <Compile Include="ViewModels\EditWindowsViewModels\EditProjectViewModel.cs" />
     <Compile Include="ViewModels\EditWindowsViewModels\EditWindowViewModel.cs" />
     <Compile Include="ViewModels\EtcViewModels\ComboBoxControlViewModel.cs" />
+    <Compile Include="ViewModels\EtcViewModels\LanguageControlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\CalendarTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\CustomerTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\EditTimeEntryViewModel.cs" />
@@ -259,6 +260,9 @@
     </Compile>
     <Compile Include="Views\Controls\EditUserControl.xaml.cs">
       <DependentUpon>EditUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\LanguageControl.xaml.cs">
+      <DependentUpon>LanguageControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\MultiSelectionComboBox.xaml.cs">
       <DependentUpon>MultiSelectionComboBox.xaml</DependentUpon>
@@ -413,6 +417,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\EditUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\LanguageControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

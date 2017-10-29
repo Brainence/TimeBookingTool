@@ -37,7 +37,7 @@ namespace TBT.App.ViewModels.Authentication
 
         #region Constructors
 
-        public AuthenticationWindowViewModel(ObservableCollection<LanguageItem> languages, int selectedLanguageIndex)
+        public AuthenticationWindowViewModel()
         {
             CurrentViewModel = new AuthenticationControlViewModel(this);
             CloseButtonClick = new RelayCommand(obj => ExitApplication(), null);

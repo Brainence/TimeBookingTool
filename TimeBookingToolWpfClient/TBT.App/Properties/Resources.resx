@@ -475,4 +475,7 @@
   <data name="AppWillRestartToChangeLang" xml:space="preserve">
     <value>App will be restarted to change the language</value>
   </data>
+  <data name="ClickToChangeLanguage" xml:space="preserve">
+    <value>Click to choose another language</value>
+  </data>
 </root>
