@@ -475,4 +475,7 @@
   <data name="NiceWishToNotification" xml:space="preserve">
     <value>Гарного дня</value>
   </data>
+  <data name="AppWillRestartToChangeLang" xml:space="preserve">
+    <value>Програма буде перезапущена, щоб змінити мову</value>
+  </data>
 </root>

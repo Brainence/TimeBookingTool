@@ -22,6 +22,7 @@ namespace TBT.App.ViewModels.MainWindow
         private string _newProjectName;
         private ObservableCollection<Customer> _customers;
         private ObservableCollection<Project> _projects;
+        private Customer _selectedCustomer;
         private int _selectedIndex;
         private bool _itemsLoading;
 
@@ -45,6 +46,12 @@ namespace TBT.App.ViewModels.MainWindow
         {
             get { return _projects; }
             set { SetProperty(ref _projects, value); }
+        }
+
+        public Customer SelectedCustomer
+        {
+            get { return _selectedCustomer; }
+            set { SetProperty(ref _selectedCustomer, value); }
         }
 
         public int SelectedIndex
@@ -74,6 +81,7 @@ namespace TBT.App.ViewModels.MainWindow
             RefreshProjectsCommand = new RelayCommand(obj => { Projects = null; ProjectsListChanged?.Invoke(null); }, null);
             EditProjectCommand = new RelayCommand(obj => EditProject(obj as Project), null);
             RemoveProjectCommand = new RelayCommand(obj => RemoveProject(obj as Project), null);
+            SelectedIndex = 0;
         }
 
         #endregion
@@ -104,7 +112,7 @@ namespace TBT.App.ViewModels.MainWindow
                 project = new Project()
                 {
                     Name = name,
-                    Customer = new Customer() { Id = Customers[SelectedIndex].Id },
+                    Customer = SelectedCustomer,
                     IsActive = true
                 };
 

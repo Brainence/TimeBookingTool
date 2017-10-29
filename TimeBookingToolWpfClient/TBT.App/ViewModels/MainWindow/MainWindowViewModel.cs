@@ -35,6 +35,7 @@ namespace TBT.App.ViewModels.MainWindow
         private bool _windowState;
         private ObservableCollection<LanguageItem> _languages;
         private int _selectedLanguageIndex;
+        private LanguageItem _selectedLanguage;
         private bool _manualSelect;
         private bool _isConnected;
 
@@ -123,7 +124,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (_manualSelect && _selectedLanguageIndex != value)
                 {
-                    if (MessageBox.Show("App will be restarted to change the language. Are you sure?", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+                    if (MessageBox.Show($"{Resources.AppWillRestartToChangeLang}. {Resources.AreYouSure}", "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK){ return; }
                 }
                 if (SetProperty(ref _selectedLanguageIndex, value) && value >= 0 && value < Languages.Count && _manualSelect)
                 {
@@ -132,6 +133,15 @@ namespace TBT.App.ViewModels.MainWindow
                     System.Windows.Forms.Application.Restart();
                 }
                 _manualSelect = true;
+            }
+        }
+
+        public LanguageItem SelectedLanguage
+        {
+            get { return _selectedLanguage; }
+            set
+            {
+                if (value == Languages[SelectedLanguageIndex]) { SetProperty(ref _selectedLanguage, value); }
             }
         }
 
@@ -377,6 +387,7 @@ namespace TBT.App.ViewModels.MainWindow
             var currentCulture = Thread.CurrentThread.CurrentUICulture.ToString();
             var tempIndex = Languages.Select((item, index) => new { item = item, index = index }).FirstOrDefault(x => x.item.Culture == currentCulture)?.index;
             SelectedLanguageIndex = tempIndex ?? -1;
+            SelectedLanguage = Languages[SelectedLanguageIndex];
         }
 
         #endregion

@@ -472,4 +472,7 @@
   <data name="NiceWishToNotification" xml:space="preserve">
     <value>Have a nice day</value>
   </data>
+  <data name="AppWillRestartToChangeLang" xml:space="preserve">
+    <value>App will be restarted to change the language</value>
+  </data>
 </root>

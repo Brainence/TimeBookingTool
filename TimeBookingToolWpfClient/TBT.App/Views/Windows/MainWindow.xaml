@@ -52,7 +52,8 @@
                 <ComboBox HorizontalAlignment="Right" Text="Language"
                           ItemTemplate="{StaticResource LanguageItemComboBoxTemplate}"
                           ItemsSource="{Binding Languages, Mode=TwoWay}"
-                          SelectedIndex="{Binding SelectedLanguageIndex, Mode=TwoWay}"/>
+                          SelectedIndex="{Binding SelectedLanguageIndex, Mode=TwoWay}"
+                          SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"/>
 
                 <Image Source="../../Resources/Icons/refresh.png" Height="18" Margin="0 5 5 5" Cursor="Hand" ToolTip="{x:Static p:Resources.Refresh}">
                     <Image.InputBindings>

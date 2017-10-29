@@ -133,6 +133,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to App will be restarted to change the language.
+        /// </summary>
+        public static string AppWillRestartToChangeLang {
+            get {
+                return ResourceManager.GetString("AppWillRestartToChangeLang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure?.
         /// </summary>
         public static string AreYouSure {

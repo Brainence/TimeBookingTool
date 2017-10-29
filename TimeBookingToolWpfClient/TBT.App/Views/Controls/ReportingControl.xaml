@@ -60,7 +60,7 @@
                 <StackPanel Grid.Column="2" HorizontalAlignment="Right" Margin="0 0 0 0" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Height="20" Margin="0 0 0 0"
                         Command="{Binding CreateCompanyReportCommand}"
-                        Visibility="{Binding User.IsAdmin, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                        Visibility="{Binding Path=User.IsAdmin, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}}"
                         Template="{StaticResource HyperlinkButtonTemplate}">
                         <Image Source="../../Resources/Icons/company_report.png" Height="18" ToolTip="{x:Static p:Resources.CompanyReport}" />
                     </Button>
