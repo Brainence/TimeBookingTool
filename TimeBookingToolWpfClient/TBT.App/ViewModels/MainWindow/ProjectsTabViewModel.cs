@@ -119,7 +119,9 @@ namespace TBT.App.ViewModels.MainWindow
                 await App.CommunicationService.PostAsJson("Project", project);
 
                 await ProjectsListChanged?.Invoke(this);
+                project.Id = -1;
                 Projects.Add(project);
+                NewProjectName = "";
             }
             catch (Exception ex)
             {
@@ -170,6 +172,11 @@ namespace TBT.App.ViewModels.MainWindow
 
             try
             {
+                if(project.Id < 0)
+                {
+                    project = JsonConvert.DeserializeObject<Project>(await App.CommunicationService.GetAsJson($"Project/GetByName/{Uri.EscapeUriString(project.Name)}"));
+                }
+
                 foreach (var activity in project.Activities)
                 {
                     activity.IsActive = false;
@@ -180,7 +187,7 @@ namespace TBT.App.ViewModels.MainWindow
                 var x = await App.CommunicationService.PutAsJson("Project", project);
 
                 await ProjectsListChanged?.Invoke(this);
-                Projects.Remove(project);
+                Projects.Remove(Projects?.FirstOrDefault(item => item.Name == project.Name));
             }
             catch (Exception ex)
             {

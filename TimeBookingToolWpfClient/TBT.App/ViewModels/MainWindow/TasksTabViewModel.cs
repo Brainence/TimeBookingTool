@@ -117,7 +117,9 @@ namespace TBT.App.ViewModels.MainWindow
 
                 await App.CommunicationService.PostAsJson("Activity", activity);
                 await TasksListChanged?.Invoke(this);
+                activity.Id = -1;
                 Activities.Add(activity);
+                NewTaskName = "";
             }
             catch (Exception ex)
             {
@@ -165,14 +167,18 @@ namespace TBT.App.ViewModels.MainWindow
             if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
             if (activity == null) return;
-
-            activity.IsActive = false;
             try
             {
+                if(activity.Id < 0)
+                {
+                    activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.GetAsJson($"Activity/GetByName/{Uri.EscapeUriString(activity.Name)}/{Uri.EscapeUriString(activity.Project.Id.ToString())}"));
+                }
+                activity.IsActive = false;
                 var x = await App.CommunicationService.PutAsJson("Activity", activity);
 
                 await TasksListChanged?.Invoke(this);
-                Activities.Remove(activity);
+                Activities.Remove(Activities?.FirstOrDefault(item => item.Name == activity.Name &&
+                                                                     item.Project.Id == activity.Project.Id));
             }
             catch (Exception ex)
             {

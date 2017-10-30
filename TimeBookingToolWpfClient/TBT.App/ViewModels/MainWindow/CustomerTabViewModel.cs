@@ -118,7 +118,9 @@ namespace TBT.App.ViewModels.MainWindow
                 await App.CommunicationService.PostAsJson("Customer", customer);
 
                 await CustomersListChanged?.Invoke(this);
+                customer.Id = -1;
                 Customers.Add(customer);
+                NewCustomersName = "";
             }
             catch (Exception ex)
             {
@@ -158,11 +160,15 @@ namespace TBT.App.ViewModels.MainWindow
         public async void RemoveCustomer(Customer customer)
         {
             if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
-
             if (customer == null) return;
-            customer.IsActive = false;
             try
             {
+                if (customer.Id < 0)
+                {
+                    customer = JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.GetAsJson($"Customer/GetByName/{Uri.EscapeUriString(customer.Name)}"));
+                }
+
+                customer.IsActive = false;
                 foreach (var project in customer.Projects)
                 {
                     foreach (var activity in project.Activities)
@@ -178,7 +184,7 @@ namespace TBT.App.ViewModels.MainWindow
                 var x = await App.CommunicationService.PutAsJson("Customer", customer);
 
                 await CustomersListChanged?.Invoke(this);
-                Customers.Remove(customer);
+                Customers.Remove(Customers?.FirstOrDefault(item => item.Name == customer.Name));
             }
             catch (Exception ex)
             {
