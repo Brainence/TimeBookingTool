@@ -70,6 +70,7 @@ namespace TBT.App.ViewModels.Authentication
         {
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(closeParameters?.Password))
             {
+                if (!_mainVM.IsError) { _mainVM.IsError = true; }
                 _mainVM.ErrorMsg = Resources.UserNameOfPasswordEmpty;
                 return;
             }
@@ -112,20 +113,20 @@ namespace TBT.App.ViewModels.Authentication
                     {
                         if (response.Headers.Contains("BadRequestHeader"))
                         {
+                            if (!_mainVM.IsError) { _mainVM.IsError = true; }
                             _mainVM.ErrorMsg = response.Headers.GetValues("BadRequestHeader").FirstOrDefault();
                         }
                     }
                     else
                     {
-                        _mainVM.ErrorColor = MessageColors.Message;
+                        if (_mainVM.IsError) { _mainVM.IsError = false; }
                         _mainVM.ErrorMsg = response.ReasonPhrase;
-                        _mainVM.ErrorColor = MessageColors.Error;
                     }
                 }
             }
             catch (Exception ex)
             {
-                _mainVM.ErrorColor = MessageColors.Error;
+                if (!_mainVM.IsError) { _mainVM.IsError = true; }
                 _mainVM.ErrorMsg = ex.InnerException?.Message ?? ex.Message;
             }
         }

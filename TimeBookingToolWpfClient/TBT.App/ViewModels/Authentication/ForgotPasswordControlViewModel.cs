@@ -74,6 +74,7 @@ namespace TBT.App.ViewModels.Authentication
             NextCancelButtonIsEnabled = false;
             if (string.IsNullOrEmpty(Username))
             {
+                if (!_mainVM.IsError) { _mainVM.IsError = true; }
                 _mainVM.ErrorMsg = Resources.UserNameIsRequierd;
                 NextButtonIsEnabled = true;
                 NextCancelButtonIsEnabled = true;
@@ -85,6 +86,7 @@ namespace TBT.App.ViewModels.Authentication
 
             if (user == null)
             {
+                if (!_mainVM.IsError) { _mainVM.IsError = true; }
                 _mainVM.ErrorMsg = Resources.UserNameDoesntExist;
                 NextButtonIsEnabled = true;
                 NextCancelButtonIsEnabled = true;
@@ -98,14 +100,14 @@ namespace TBT.App.ViewModels.Authentication
 
                 if (!result)
                 {
+                    if (!_mainVM.IsError) { _mainVM.IsError = true; }
                     _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
                     NextButtonIsEnabled = true;
                     NextCancelButtonIsEnabled = true;
                     return;
                 }
-                _mainVM.ErrorColor = Common.MessageColors.Message;
+                if (_mainVM.IsError) { _mainVM.IsError = false; }
                 _mainVM.ErrorMsg = Resources.AnEmailHasSent;
-                _mainVM.ErrorColor = Common.MessageColors.Error;
             }
             else
             {

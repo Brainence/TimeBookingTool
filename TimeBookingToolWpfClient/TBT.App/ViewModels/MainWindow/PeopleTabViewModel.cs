@@ -124,10 +124,7 @@ namespace TBT.App.ViewModels.MainWindow
         private void SaveUserEditingAction(bool userChanged, bool usersListChanged)
         {
             if(userChanged) { CurrentUserChanged?.Invoke(this); }
-            if(usersListChanged)
-            {
-                UsersListChanged?.Invoke(this);
-            }
+            UsersListChanged?.Invoke(null);
         }
 
         private void EditUser(User user)

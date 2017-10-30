@@ -88,7 +88,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                     {
                         if(changePasswordParameters.NewPassword != changePasswordParameters.ConfirmPassword)
                         {
-                            MessageBox.Show("Please confirm your password.");
+                            MessageBox.Show(Properties.Resources.ConfirmYourPassword);
                             return;
                         }
                         var isValid = JsonConvert.DeserializeObject<bool>(
@@ -96,7 +96,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
 
                         if (!isValid)
                         {
-                            MessageBox.Show("Incorrect password entered.");
+                            MessageBox.Show(Properties.Resources.IncorrectPasswordEntered);
                             return;
                         }
                         else
@@ -104,13 +104,13 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                             await App.CommunicationService.GetAsJson(
                                 $"User/ChangePassword/{EditingUser.Id}/{Uri.EscapeUriString(changePasswordParameters.TokenPassword)}/{Uri.EscapeUriString(changePasswordParameters.ConfirmPassword)}");
 
-                            MessageBox.Show("Password has been changed successfully.");
+                            MessageBox.Show(Properties.Resources.PasswordBeenChanged);
                         }
                     }
 
                     EditingUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", EditingUser));
 
-                    MessageBox.Show("User was saved successfully.");
+                    MessageBox.Show(Properties.Resources.UserWasSaved);
                     userChanged = true;
                 }
                 else
@@ -122,11 +122,11 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                     {
                         await App.CommunicationService.PostAsJson("User/NewUser", EditingUser);
                         EditingUser = new User();
-                        MessageBox.Show("User account created successfully.");
+                        MessageBox.Show(Properties.Resources.UserAccountCreated);
                         usersListChanged = true;
                     }
                     else
-                        MessageBox.Show("Username already exists.");
+                        MessageBox.Show(Properties.Resources.UsernameAlreadyExists);
                 }
                 SavingUserAction?.Invoke(userChanged, usersListChanged);
                 CloseWindow?.Invoke();

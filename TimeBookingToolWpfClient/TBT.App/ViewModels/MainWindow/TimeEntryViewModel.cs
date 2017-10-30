@@ -188,25 +188,12 @@ namespace TBT.App.ViewModels.MainWindow
 
         private async Task Edit()
         {
-            bool refresh;
             if (TimeEntry == null) return;
-            if (TimeEntry.IsRunning)
-            {
-                refresh = await Stop();
-                _temporaryStopped = true;
-            }
 
             if(IsEditing)
             {
                 IsEditing = false;
                 CanStart = !IsEditing;
-                if (_temporaryStopped)
-                {
-                    refresh = await Start();
-                    _temporaryStopped = false;
-                    if (refresh)
-                        RefreshTimeEntries?.Invoke();
-                }
                 return;
             }
             try
@@ -227,7 +214,6 @@ namespace TBT.App.ViewModels.MainWindow
                 TimerTextBox = $"{TimeEntry.Duration.Hours:00}:{TimeEntry.Duration.Minutes:00}";
                 Comment = TimeEntry.Comment;
                 CanSave = false;
-                //TimerTextBlock = TimerTextBox;
                 ScrollToEdited?.Invoke(_id);
             }
 

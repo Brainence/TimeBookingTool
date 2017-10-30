@@ -491,4 +491,16 @@
   <data name="ShortSeconds" xml:space="preserve">
     <value>s</value>
   </data>
+  <data name="IncorrectPasswordEntered" xml:space="preserve">
+    <value>Incorrect password entered.</value>
+  </data>
+  <data name="UserAccountCreated" xml:space="preserve">
+    <value>User account created successfully.</value>
+  </data>
+  <data name="UsernameAlreadyExists" xml:space="preserve">
+    <value>Username already exists.</value>
+  </data>
+  <data name="UserWasSaved" xml:space="preserve">
+    <value>User was saved successfully.</value>
+  </data>
 </root>

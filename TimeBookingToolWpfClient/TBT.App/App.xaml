@@ -40,6 +40,7 @@
             <tools:ToUpperConverter x:Key="ToUpperConverter"/>
             <tools:BoolToWindowState x:Key="BoolToWindowState"/>
             <tools:ReverseTimeEntryConverter x:Key="ReverseTimeEntryConverter"/>
+            <tools:BoolToErrorColor x:Key="BoolToErrorColor"/>
 
             <SolidColorBrush x:Key="CalendarItemBackground" Color="#c2422b"/>
             <SolidColorBrush x:Key="CalendarItemMouseOverBrush" Color="#f77f50"/>

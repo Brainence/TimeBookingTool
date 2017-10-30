@@ -23,7 +23,7 @@ namespace TBT.App.Common
 
     public class MessageColors
     {
-        public static Brush Error => Brushes.DarkRed;
-        public static Brush Message => Brushes.DarkGreen;
+        public static SolidBrush Error => new SolidBrush(Color.White);
+        public static SolidBrush Message => new SolidBrush(Color.Black);
     }
 }

@@ -494,4 +494,16 @@
   <data name="ShortSeconds" xml:space="preserve">
     <value>сек</value>
   </data>
+  <data name="IncorrectPasswordEntered" xml:space="preserve">
+    <value>Ви ввели неправильний пароль.</value>
+  </data>
+  <data name="UserAccountCreated" xml:space="preserve">
+    <value>Акаунт користвуча успішно створено.</value>
+  </data>
+  <data name="UsernameAlreadyExists" xml:space="preserve">
+    <value>Даний логін вже існує.</value>
+  </data>
+  <data name="UserWasSaved" xml:space="preserve">
+    <value>Інформація про користувача успішно збережена.</value>
+  </data>
 </root>

@@ -73,6 +73,7 @@ namespace TBT.App.ViewModels.Authentication
             _mainVM.ErrorMsg = string.Empty;
             if (string.IsNullOrEmpty(args.TokenPassword) || string.IsNullOrEmpty(args.NewPassword) || string.IsNullOrEmpty(args.ConfirmPassword))
             {
+                if (!_mainVM.IsError) { _mainVM.IsError = true; }
                 _mainVM.ErrorMsg = Resources.AllFieldsRequired;
                 ChangeButtonIsEnabled = true;
                 ChangeCancelButtonIsEnabled = true;
@@ -81,6 +82,7 @@ namespace TBT.App.ViewModels.Authentication
 
             if (args.NewPassword != args.ConfirmPassword)
             {
+                if (!_mainVM.IsError) { _mainVM.IsError = true; }
                 _mainVM.ErrorMsg = Resources.ConfirmYourPassword;
                 ChangeButtonIsEnabled = true;
                 ChangeCancelButtonIsEnabled = true;
@@ -95,18 +97,19 @@ namespace TBT.App.ViewModels.Authentication
 
                 if (result == null || (result.HasValue && !result.Value))
                 {
+                    if (!_mainVM.IsError) { _mainVM.IsError = true; }
                     _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
                     ChangeButtonIsEnabled = true;
                     ChangeCancelButtonIsEnabled = true;
                     return;
                 }
-                _mainVM.ErrorColor = MessageColors.Message;
+                if (_mainVM.IsError) { _mainVM.IsError = false; }
                 _mainVM.ErrorMsg = Resources.PasswordBeenChanged;
-                _mainVM.ErrorColor = MessageColors.Error;
                 _mainVM.CurrentViewModel = new AuthenticationControlViewModel(_mainVM);
             }
             catch
             {
+                if (!_mainVM.IsError) { _mainVM.IsError = true; }
                 _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
             }
 

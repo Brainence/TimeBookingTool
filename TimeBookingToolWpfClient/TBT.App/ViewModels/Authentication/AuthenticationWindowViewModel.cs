@@ -14,7 +14,7 @@ namespace TBT.App.ViewModels.Authentication
 
         private string _errorMsg;
         private BaseViewModel _currentViewModel;
-        private Brush _errorColor;
+        private bool _isError;
 
         #endregion
 
@@ -32,10 +32,10 @@ namespace TBT.App.ViewModels.Authentication
             set { SetProperty(ref _currentViewModel, value); }
         }
 
-        public Brush ErrorColor
+        public bool IsError
         {
-            get { return _errorColor; }
-            set { SetProperty(ref _errorColor, value); }
+            get { return _isError; }
+            set { SetProperty(ref _isError, value); }
         }
 
         public ICommand CloseButtonClick { get; private set; }
@@ -48,7 +48,6 @@ namespace TBT.App.ViewModels.Authentication
         {
             CurrentViewModel = new AuthenticationControlViewModel(this);
             CloseButtonClick = new RelayCommand(obj => ExitApplication(), null);
-            _errorColor = Brushes.DarkGreen;
         }
 
         #endregion

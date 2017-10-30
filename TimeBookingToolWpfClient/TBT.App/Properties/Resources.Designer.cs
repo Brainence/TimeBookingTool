@@ -556,6 +556,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incorrect password entered..
+        /// </summary>
+        public static string IncorrectPasswordEntered {
+            get {
+                return ResourceManager.GetString("IncorrectPasswordEntered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incorrect time input format.
         /// </summary>
         public static string IncorrectTimeInputFormat {
@@ -1106,11 +1115,29 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User account created successfully..
+        /// </summary>
+        public static string UserAccountCreated {
+            get {
+                return ResourceManager.GetString("UserAccountCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Username.
         /// </summary>
         public static string Username {
             get {
                 return ResourceManager.GetString("Username", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username already exists..
+        /// </summary>
+        public static string UsernameAlreadyExists {
+            get {
+                return ResourceManager.GetString("UsernameAlreadyExists", resourceCulture);
             }
         }
         
@@ -1147,6 +1174,15 @@ namespace TBT.App.Properties {
         public static string UserReport {
             get {
                 return ResourceManager.GetString("UserReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User was saved successfully..
+        /// </summary>
+        public static string UserWasSaved {
+            get {
+                return ResourceManager.GetString("UserWasSaved", resourceCulture);
             }
         }
         
