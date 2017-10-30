@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:p="clr-namespace:TBT.App.Properties"
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
+             xmlns:bindings="clr-namespace:TBT.App.Models.Tools"
              mc:Ignorable="d" 
              d:DesignHeight="1000">
 
@@ -59,8 +60,8 @@
 
                                 <Grid Grid.Column="0" Grid.IsSharedSizeScope="True" Margin="20 5 20 5" HorizontalAlignment="Right">
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Path=Date, StringFormat={}{0:dddd dd MMMM}}"/>
-                                        <TextBlock Text="{Binding Path=Date, StringFormat={}{0:yyyy}}" HorizontalAlignment="Right" Foreground="Gray"/>
+                                        <TextBlock Text="{bindings:CultureAwareBinding Path=Date, StringFormat={}{0:dddd dd MMMM}}"/>
+                                        <TextBlock Text="{bindings:CultureAwareBinding Path=Date, StringFormat={}{0:yyyy}}" HorizontalAlignment="Right" Foreground="Gray"/>
                                     </StackPanel>
                                 </Grid>
 
@@ -77,7 +78,7 @@
                                     <TextBlock Grid.Column="0" Grid.Row="0"
                                                            MaxWidth="350"
                                                            Margin="20 5 5 5" 
-                                                           Text="Working hours"
+                                                           Text="{x:Static p:Resources.WorkingHours}"
                                                            Foreground="#4d4d4d"
                                                            TextAlignment="Right"/>
 
@@ -91,7 +92,7 @@
                                     <TextBlock Grid.Column="0" Grid.Row="1"
                                                            MaxWidth="350"
                                                            Margin="20 5 5 5" 
-                                                           Text="Task"
+                                                           Text="{x:Static p:Resources.Task}"
                                                            Foreground="#4d4d4d"
                                                            TextAlignment="Right"/>
 

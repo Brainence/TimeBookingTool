@@ -478,4 +478,17 @@
   <data name="ClickToChangeLanguage" xml:space="preserve">
     <value>Click to choose another language</value>
   </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>Working hours</value>
+  </data>
+  <data name="ShortHours" xml:space="preserve">
+    <value>h</value>
+    <comment>`</comment>
+  </data>
+  <data name="ShortMinutes" xml:space="preserve">
+    <value>m</value>
+  </data>
+  <data name="ShortSeconds" xml:space="preserve">
+    <value>s</value>
+  </data>
 </root>

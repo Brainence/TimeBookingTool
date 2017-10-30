@@ -24,9 +24,6 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-
-        </Grid.ColumnDefinitions>
         <!--<StackPanel Grid.Row="0" VerticalAlignment="Center">
             <controls:SpinnersCogs Visibility="{Binding IsConnected, Converter={StaticResource BoolToNotVisibilityConverter}}" Grid.Row="0" />
             <TextBox FontSize="20" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" Text="{x:Static p:Resources.ConnectionLost}" Foreground="{StaticResource SpinnerForeground}"/>
@@ -50,7 +47,8 @@
         <Grid Grid.Row="1">
             <ContentControl Content="{Binding LanguageControl}" 
                             HorizontalAlignment="Left" 
-                            VerticalAlignment="Center"/>
+                            VerticalAlignment="Center">
+            </ContentControl>
             <StackPanel HorizontalAlignment="Right" Grid.Column="1" Margin="10 0 0 10" Orientation="Horizontal" 
                         Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">
 

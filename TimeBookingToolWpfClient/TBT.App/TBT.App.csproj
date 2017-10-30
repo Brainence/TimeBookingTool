@@ -166,7 +166,7 @@
     <Compile Include="App\GlobalTimer.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Helpers\AuthenticationControlClosePararmeters.cs" />
-    <Compile Include="Helpers\DateTimeExtensions.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\LanguageItem.cs" />
     <Compile Include="Helpers\MainWindowTabItem.cs" />
     <Compile Include="Helpers\ResetPasswordParameters.cs" />
@@ -180,6 +180,7 @@
     <Compile Include="Models\Base\IModelObservableViewModel.cs" />
     <Compile Include="Models\Base\ObservableObject.cs" />
     <Compile Include="Models\Commands\RelayCommand.cs" />
+    <Compile Include="Models\Tools\Bindings.cs" />
     <Compile Include="Models\Tools\Converters.cs" />
     <Compile Include="Models\Tools\AccessToken.cs" />
     <Compile Include="Properties\Resources.uk-UA.Designer.cs">

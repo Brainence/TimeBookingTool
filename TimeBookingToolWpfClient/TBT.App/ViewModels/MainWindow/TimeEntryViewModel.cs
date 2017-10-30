@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
@@ -27,6 +28,8 @@ namespace TBT.App.ViewModels.MainWindow
         private int _id;
         private bool _canEdit;
         private bool _canStart;
+        private bool _canSave;
+        private bool _temporaryStopped;
 
         #endregion
 
@@ -47,7 +50,13 @@ namespace TBT.App.ViewModels.MainWindow
         public string Comment
         {
             get { return _comment; }
-            set { SetProperty(ref _comment, value); }
+            set
+            {
+                if(SetProperty(ref _comment, value))
+                {
+                    CanSave = true;
+                }
+            }
         }
 
         public bool IsActive
@@ -65,7 +74,13 @@ namespace TBT.App.ViewModels.MainWindow
         public string TimerTextBox
         {
             get { return _timerTextBox; }
-            set { SetProperty(ref _timerTextBox, value); }
+            set
+            {
+                if (SetProperty(ref _timerTextBox, value))
+                {
+                    CanSave = true;
+                }
+            }
         }
 
         public bool CanEdit
@@ -78,6 +93,12 @@ namespace TBT.App.ViewModels.MainWindow
         {
             get { return _canStart; }
             set { SetProperty(ref _canStart, value); }
+        }
+
+        public bool CanSave
+        {
+            get { return _canSave; }
+            set { SetProperty(ref _canSave, value); }
         }
 
         public ICommand StartStopCommand { get; set; }
@@ -103,7 +124,7 @@ namespace TBT.App.ViewModels.MainWindow
             RemoveCommand = new RelayCommand(async obj => await Remove(), null);
             EditCommand = new RelayCommand(async obj => await Edit(), null);
             SaveTimeEntryCommand = new RelayCommand(obj => SaveTimeEntry() , null);
-            CancelEditTimeEntryCommand = new RelayCommand(obj => CancelEditButton_Click(), null);
+            CancelEditTimeEntryCommand = new RelayCommand(async obj => await Edit(), null);
             InitCommand = new RelayCommand(obj => InitLoading(), null);
         }
 
@@ -167,8 +188,27 @@ namespace TBT.App.ViewModels.MainWindow
 
         private async Task Edit()
         {
+            bool refresh;
             if (TimeEntry == null) return;
+            if (TimeEntry.IsRunning)
+            {
+                refresh = await Stop();
+                _temporaryStopped = true;
+            }
 
+            if(IsEditing)
+            {
+                IsEditing = false;
+                CanStart = !IsEditing;
+                if (_temporaryStopped)
+                {
+                    refresh = await Start();
+                    _temporaryStopped = false;
+                    if (refresh)
+                        RefreshTimeEntries?.Invoke();
+                }
+                return;
+            }
             try
             {
                 var timeEntry = JsonConvert.DeserializeObject<TimeEntry>(
@@ -180,12 +220,14 @@ namespace TBT.App.ViewModels.MainWindow
                 if (TimeEntry == null) return;
                 _startDate = DateTime.UtcNow;
 
-                IsEditing = !IsEditing;
+                IsEditing = true;
+                CanStart = !IsEditing;
                 EditingTimeEntry?.Invoke(this);
 
                 TimerTextBox = $"{TimeEntry.Duration.Hours:00}:{TimeEntry.Duration.Minutes:00}";
                 Comment = TimeEntry.Comment;
-                TimerTextBlock = TimerTextBox;
+                CanSave = false;
+                //TimerTextBlock = TimerTextBox;
                 ScrollToEdited?.Invoke(_id);
             }
 
@@ -234,7 +276,7 @@ namespace TBT.App.ViewModels.MainWindow
                     await App.CommunicationService.PutAsJson("TimeEntry/ServerDuration", TimeEntry);
                 }
 
-                TimerTextBlock = currentDuration.ToString(@"hh\h\ mm\m\ ss\s");
+                TimerTextBlock = $"{currentDuration.Hours.ToString("d2")}{Properties.Resources.ShortHours} {currentDuration.Minutes.ToString("d2")}{Properties.Resources.ShortMinutes} {currentDuration.Seconds.ToString("d2")}{Properties.Resources.ShortSeconds}";
             }
             catch (Exception ex)
             {
@@ -244,7 +286,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         public async void InitLoading()
         {
-            TimerTextBlock = TimeEntry.Duration.ToString(@"hh\h\ mm\m\ ss\s");
+            TimerTextBlock = $"{TimeEntry.Duration.Hours.ToString("d2")}{Properties.Resources.ShortHours} {TimeEntry.Duration.Minutes.ToString("d2")}{Properties.Resources.ShortMinutes} {TimeEntry.Duration.Seconds.ToString("d2")}{Properties.Resources.ShortSeconds}";
             if (TimeEntry != null)
             {
                 var canStartOrEdit = await CanStartOrEditTimeEntry(TimeEntry.IsRunning ? TimeEntry.Duration : (TimeSpan?)null);
@@ -266,71 +308,19 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (TimeEntry == null) return;
 
-                if (Comment != null && Comment.Length >= 2048)
+                if (TimeEntry.Comment != null && TimeEntry.Comment.Length >= 2048)
                 {
                     MessageBox.Show("Comment length cannot be greater then 2048.");
                     return;
                 }
 
-                double hours = 0;
-                TimeSpan duration;
-                bool clientDuration = true;
-
-                if (string.IsNullOrEmpty(TimerTextBlock))
+                if (string.IsNullOrEmpty(TimerTextBox))
                 {
-                    duration = new TimeSpan();
-                }
-                else if (TimerTextBlock == TimerTextBox)
-                {
-                    var timeEntry = JsonConvert.DeserializeObject<TimeEntry>(
-                        await App.CommunicationService.GetAsJson($"TimeEntry/{TimeEntry.Id}"));
-
-                    duration = timeEntry != null ? timeEntry.Duration : new TimeSpan();
-                    clientDuration = false;
-                }
-                else if (TimerTextBlock.Contains(":"))
-                {
-                    var hour = TimerTextBox.Substring(0, TimerTextBlock.IndexOf(":"));
-                    var min = TimerTextBox.Substring(TimerTextBlock.IndexOf(":") + 1);
-
-                    int h;
-                    int m;
-
-                    var res = int.TryParse(hour, out h) & int.TryParse(min, out m);
-
-                    if (!res || h < 0 || m < 0 || m > 59)
-                    {
-                        MessageBox.Show("Incorrect input format.");
-                        return;
-                    }
-
-                    duration = new TimeSpan(h, m, 0);
-                    if (duration.TotalHours >= 24)
-                    {
-                        MessageBox.Show("Time entered for day must be less then 24 hours.");
-                        return;
-                    }
+                    TimeEntry.Duration = new TimeSpan();
                 }
                 else
                 {
-                    var res = double.TryParse(TimerTextBlock, out hours);
-
-                    if (!res || hours < 0)
-                    {
-                        MessageBox.Show("Incorrect input format.");
-                        return;
-                    }
-
-                    duration = TimeSpan.FromHours(hours);
-                    if (duration.TotalHours > 24)
-                    {
-                        MessageBox.Show("Time entered for day must be less then 24 hours.");
-                        return;
-                    }
-                    else if (duration.TotalHours == 24.0)
-                    {
-                        duration = TimeSpan.FromHours(23.9999);
-                    }
+                    TimeEntry.Duration = TimerTextBox.ToTimespan();
                 }
 
                 if (TimeEntry.Activity != null)
@@ -343,12 +333,15 @@ namespace TBT.App.ViewModels.MainWindow
                     TimeEntry.User = new User() { Id = TimeEntry.User.Id };
                 }
 
-                TimeEntry.Duration = duration;
                 TimeEntry.Comment = Comment;
 
-                await App.CommunicationService.PutAsJson(clientDuration ? "TimeEntry/ClientDuration" : "TimeEntry/ServerDuration", TimeEntry);
+                await App.CommunicationService.PutAsJson("TimeEntry/ClientDuration", TimeEntry);
 
                 IsEditing = !IsEditing;
+                if(_temporaryStopped)
+                {
+                    await Start();
+                }
 
                 RefreshTimeEntries?.Invoke();
             }

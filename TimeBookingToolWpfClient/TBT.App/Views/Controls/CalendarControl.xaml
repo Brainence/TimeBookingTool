@@ -94,13 +94,14 @@
                     </Button>
 
                     <ListBox x:Name="WeekListBox"
-                         ItemsSource="{Binding Path=Week, Mode=TwoWay}" 
-                         HorizontalContentAlignment="Stretch"
-                         HorizontalAlignment="Stretch"
-                         SelectedIndex="{Binding SelectedIndex}"
-                         SelectedItem="{Binding SelectedDay}"
-                         BorderBrush="Transparent"
-                         Background="Transparent">
+                             ItemsSource="{Binding Path=Week, Mode=TwoWay}" 
+                             HorizontalContentAlignment="Stretch"
+                             HorizontalAlignment="Stretch"
+                             SelectedIndex="{Binding SelectedIndex}"
+                             SelectedItem="{Binding SelectedDay}"
+                             BorderBrush="Transparent"
+                             Background="Transparent"
+                             MouseWheel="ChangeWeekOnWheel">
 
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>

@@ -481,4 +481,17 @@
   <data name="ClickToChangeLanguage" xml:space="preserve">
     <value>Натисніть, щоб змінити мову</value>
   </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>Робочі години</value>
+  </data>
+  <data name="ShortHours" xml:space="preserve">
+    <value>год</value>
+    <comment>`</comment>
+  </data>
+  <data name="ShortMinutes" xml:space="preserve">
+    <value>хв</value>
+  </data>
+  <data name="ShortSeconds" xml:space="preserve">
+    <value>сек</value>
+  </data>
 </root>

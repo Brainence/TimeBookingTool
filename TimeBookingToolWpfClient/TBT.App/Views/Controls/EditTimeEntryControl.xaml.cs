@@ -14,9 +14,12 @@ namespace TBT.App.Views.Controls
 
     public partial class EditTimeEntryControl : UserControl
     {
+        private Regex _validRegex;
+
         public EditTimeEntryControl()
         {
             InitializeComponent();
+            _validRegex = new Regex("[^0-9.:]+");
         }
 
         private void CheckInput(object sender, TextCompositionEventArgs e)
@@ -24,18 +27,12 @@ namespace TBT.App.Views.Controls
             if (e.Text == "." || e.Text == ":")
             {
                 var count = (sender as TextControl).TextArea.Text?.Count(x => x == ':' || x == '.') == 0;
-                e.Handled = new Regex("[^0-9.:-]+").IsMatch(e.Text) || !count;
+                e.Handled = _validRegex.IsMatch(e.Text) || !count;
             }
             else
             {
-                e.Handled = new Regex("[^0-9.:-]+").IsMatch(e.Text);
+                e.Handled = _validRegex.IsMatch(e.Text);
             }
-        }
-
-        private bool IsTextAllowed(string text)
-        {
-            Regex regex = new Regex("[^0-9.:-]+");
-            return regex.IsMatch(text);
         }
     }
 }

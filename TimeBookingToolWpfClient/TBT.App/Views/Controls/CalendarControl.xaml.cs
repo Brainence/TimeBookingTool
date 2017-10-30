@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Commands;
+using TBT.App.ViewModels.MainWindow;
 
 namespace TBT.App.Views.Controls
 {
@@ -19,6 +20,13 @@ namespace TBT.App.Views.Controls
         public CalendarControl()
         {
             InitializeComponent();
+        }
+
+        private void ChangeWeekOnWheel(object sender, MouseWheelEventArgs e)
+        {
+            var tempContext = (DataContext as CalendarTabViewModel);
+            if (e.Delta > 0) { tempContext.ChangeWeekCommand.Execute(7); }
+            else { tempContext.ChangeWeekCommand.Execute(-7); }
         }
     }
 }

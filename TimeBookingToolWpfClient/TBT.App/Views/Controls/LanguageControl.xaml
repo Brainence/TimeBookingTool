@@ -22,7 +22,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Image Source="{Binding Flag}" Margin="3" ToolTip="{Binding LanguageName}">
+                    <Image Source="{Binding Flag}" Margin="3" ToolTip="{Binding LanguageName}" Cursor="Hand">
                         <Image.InputBindings>
                             <MouseBinding Gesture="LeftClick" Command="{Binding ElementName=LanguageItemsControl, Path=DataContext.ChangeLanguageCommand}"
                                       CommandParameter="{Binding}"/>
@@ -35,7 +35,7 @@
                Margin="3"
                Visibility="{Binding ShowSelectedLanguage, Converter={StaticResource BoolToVisibilityConverter}}"
                ToolTip="{x:Static p:Resources.ClickToChangeLanguage}"
-               Width="32">
+               Width="32" Cursor="Hand">
             <Image.InputBindings>
                 <MouseBinding Gesture="LeftClick" Command="{Binding ChangeLanguageCommand}"/>
             </Image.InputBindings>

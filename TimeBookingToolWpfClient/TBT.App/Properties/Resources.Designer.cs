@@ -898,6 +898,33 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to h.
+        /// </summary>
+        public static string ShortHours {
+            get {
+                return ResourceManager.GetString("ShortHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to m.
+        /// </summary>
+        public static string ShortMinutes {
+            get {
+                return ResourceManager.GetString("ShortMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to s.
+        /// </summary>
+        public static string ShortSeconds {
+            get {
+                return ResourceManager.GetString("ShortSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sign in.
         /// </summary>
         public static string SignIn {
@@ -1120,6 +1147,15 @@ namespace TBT.App.Properties {
         public static string UserReport {
             get {
                 return ResourceManager.GetString("UserReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Working hours.
+        /// </summary>
+        public static string WorkingHours {
+            get {
+                return ResourceManager.GetString("WorkingHours", resourceCulture);
             }
         }
         

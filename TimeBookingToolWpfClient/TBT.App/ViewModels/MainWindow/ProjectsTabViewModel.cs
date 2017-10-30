@@ -23,7 +23,7 @@ namespace TBT.App.ViewModels.MainWindow
         private ObservableCollection<Customer> _customers;
         private ObservableCollection<Project> _projects;
         private Customer _selectedCustomer;
-        private int _selectedIndex;
+        private int _selectedCustomerIndex;
         private bool _itemsLoading;
 
         #endregion
@@ -54,10 +54,10 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _selectedCustomer, value); }
         }
 
-        public int SelectedIndex
+        public int SelectedCustomerIndex
         {
-            get { return _selectedIndex; }
-            set { SetProperty(ref _selectedIndex, value); }
+            get { return _selectedCustomerIndex; }
+            set { SetProperty(ref _selectedCustomerIndex, value); }
         }
 
         public bool ItemsLoading
@@ -77,11 +77,11 @@ namespace TBT.App.ViewModels.MainWindow
 
         public ProjectsTabViewModel()
         {
-            CreateNewProjectCommand = new RelayCommand(obj => CreateNewProject(), obj => { return SelectedIndex >= 0; });
+            CreateNewProjectCommand = new RelayCommand(obj => CreateNewProject(), null);
             RefreshProjectsCommand = new RelayCommand(obj => { Projects = null; ProjectsListChanged?.Invoke(null); }, null);
             EditProjectCommand = new RelayCommand(obj => EditProject(obj as Project), null);
             RemoveProjectCommand = new RelayCommand(obj => RemoveProject(obj as Project), null);
-            SelectedIndex = 0;
+            SelectedCustomerIndex = 0;
         }
 
         #endregion
@@ -103,7 +103,7 @@ namespace TBT.App.ViewModels.MainWindow
                     return;
                 }
                 //TODO: Create project without customer
-                if (SelectedIndex < 0)
+                if (SelectedCustomerIndex < 0)
                 {
                     MessageBox.Show($"{Properties.Resources.CannotCreateProjectWithoutCustomer}.");
                     return;
@@ -206,9 +206,9 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (sender != this)
             {
-                var tempIndex = SelectedIndex;
+                var tempIndex = SelectedCustomerIndex;
                 Customers = customers;
-                SelectedIndex = tempIndex;
+                SelectedCustomerIndex = tempIndex;
             }
         }
 

@@ -26,7 +26,7 @@
                 <ComboBox x:Name="createProjectComboBox" Width="150" 
                           Style="{StaticResource ComboBoxFlatStyle}"
                           ItemsSource="{Binding Path=Customers}"
-                          SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
+                          SelectedIndex="{Binding SelectedCustomerIndex, Mode=TwoWay}"
                           SelectedItem="{Binding SelectedCustomer}"
                           Text="[Select customer]"
                           Height="20"
