@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Windows.Input;
+using System.Windows.Media;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
@@ -91,18 +93,19 @@ namespace TBT.App.ViewModels.Authentication
 
             if (!AlreadyHaveToken)
             {
-                var result = JsonConvert.DeserializeObject<bool?>(
+                var result = JsonConvert.DeserializeObject<bool>(
                     await App.CommunicationService.GetAsJson($"ResetTicket/CreateResetTicket/{user.Id}"));
 
-                if (result.HasValue || !result.Value)
+                if (!result)
                 {
                     _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
                     NextButtonIsEnabled = true;
                     NextCancelButtonIsEnabled = true;
                     return;
                 }
-
+                _mainVM.ErrorColor = Common.MessageColors.Message;
                 _mainVM.ErrorMsg = Resources.AnEmailHasSent;
+                _mainVM.ErrorColor = Common.MessageColors.Error;
             }
             else
             {

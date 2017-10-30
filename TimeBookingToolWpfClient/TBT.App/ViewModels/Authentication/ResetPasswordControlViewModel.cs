@@ -2,8 +2,10 @@
 using System.Windows.Input;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
-using TBT.App.Helpers;
+using TBT.App.Common;
 using TBT.App.Properties;
+using System.Windows.Media;
+using TBT.App.Helpers;
 
 namespace TBT.App.ViewModels.Authentication
 {
@@ -98,7 +100,9 @@ namespace TBT.App.ViewModels.Authentication
                     ChangeCancelButtonIsEnabled = true;
                     return;
                 }
+                _mainVM.ErrorColor = MessageColors.Message;
                 _mainVM.ErrorMsg = Resources.PasswordBeenChanged;
+                _mainVM.ErrorColor = MessageColors.Error;
                 _mainVM.CurrentViewModel = new AuthenticationControlViewModel(_mainVM);
             }
             catch

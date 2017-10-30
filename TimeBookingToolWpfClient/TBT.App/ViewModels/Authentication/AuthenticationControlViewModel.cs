@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using TBT.App.Common;
 using TBT.App.Helpers;
 using TBT.App.Models.Base;
@@ -110,16 +111,21 @@ namespace TBT.App.ViewModels.Authentication
                     else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
                     {
                         if (response.Headers.Contains("BadRequestHeader"))
+                        {
                             _mainVM.ErrorMsg = response.Headers.GetValues("BadRequestHeader").FirstOrDefault();
+                        }
                     }
                     else
                     {
+                        _mainVM.ErrorColor = MessageColors.Message;
                         _mainVM.ErrorMsg = response.ReasonPhrase;
+                        _mainVM.ErrorColor = MessageColors.Error;
                     }
                 }
             }
             catch (Exception ex)
             {
+                _mainVM.ErrorColor = MessageColors.Error;
                 _mainVM.ErrorMsg = ex.InnerException?.Message ?? ex.Message;
             }
         }

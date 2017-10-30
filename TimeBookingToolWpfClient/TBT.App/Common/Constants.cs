@@ -1,4 +1,6 @@
-﻿namespace TBT.App.Common
+﻿using System.Drawing;
+
+namespace TBT.App.Common
 {
     public class Constants
     {
@@ -17,5 +19,11 @@
         public static string EnableGreetingNotification => "EnableGreetingNotification";
         public static string CultureTag => "CultureTag";
         
+    }
+
+    public class MessageColors
+    {
+        public static Brush Error => Brushes.DarkRed;
+        public static Brush Message => Brushes.DarkGreen;
     }
 }

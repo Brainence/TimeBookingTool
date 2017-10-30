@@ -39,9 +39,9 @@ namespace TBT.App.Services.CommunicationService.Implementations
 
         public static void ListenAccessToken(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "AccessToken")
+            if (e.PropertyName == nameof(App.AccessToken))
             {
-                if (string.IsNullOrEmpty(Type.GetType((sender as Type)?.FullName)?.GetProperty(e.PropertyName).GetValue(null).ToString()))
+                if (string.IsNullOrEmpty(App.AccessToken))
                 {
                     _client.DefaultRequestHeaders.Clear();
                 }

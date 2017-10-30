@@ -131,7 +131,8 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListBoxItem">
-                                            <StackPanel Background="{TemplateBinding Background}" Orientation="Horizontal" >
+                                            <StackPanel Background="{TemplateBinding Background}" Orientation="Horizontal"
+                                                        MouseWheel="ChangeWeekOnWheel">
                                                 <ContentPresenter/>
                                             </StackPanel>
                                         </ControlTemplate>

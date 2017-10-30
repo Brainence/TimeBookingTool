@@ -50,7 +50,7 @@ namespace TBT.App
             {
                 AppSettings[Constants.AccessToken] = EncryptionService.Encrypt(value);
                 AppSettings.Save();
-                OnStaticPropertyChanged("AccessToken");
+                OnStaticPropertyChanged(nameof(App.AccessToken));
             }
         }
         public static string RefreshToken
@@ -113,7 +113,7 @@ namespace TBT.App
             {
                 AppSettings[Constants.RunOnStartup] = value;
                 AppSettings.Save();
-                OnStaticPropertyChanged("RunOnStartup");
+                OnStaticPropertyChanged(nameof(App.RunOnStartup));
             }
         }
         public static string Greeting
