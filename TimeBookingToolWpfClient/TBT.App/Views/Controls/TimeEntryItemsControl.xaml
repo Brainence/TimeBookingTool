@@ -14,7 +14,7 @@
                       HorizontalAlignment="Stretch"
                       Name="TimeEntriesScrollView"
                       Visibility="{Binding IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}">
-            <ItemsControl Name="TimeEntriesItems" ItemsSource="{Binding Path=TimeEntries, Mode=TwoWay}" AlternationCount="100">
+            <ItemsControl Name="TimeEntriesItems" ItemsSource="{Binding Path=TimeEntries, Mode=TwoWay, Converter={StaticResource ReverseTimeEntryConverter}}" AlternationCount="100">
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

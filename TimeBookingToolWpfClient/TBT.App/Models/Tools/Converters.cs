@@ -14,6 +14,7 @@ using TBT.App.Views.Controls;
 using System.Collections;
 using TBT.App.Properties;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace TBT.App.Models.Tools
 {
@@ -414,6 +415,19 @@ namespace TBT.App.Models.Tools
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return ((WindowState)value) == WindowState.Minimized ? false : true;
+        }
+    }
+
+    public class ReverseTimeEntryConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (value as IEnumerable<TimeEntry>)?.Reverse();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
         }
     }
 }

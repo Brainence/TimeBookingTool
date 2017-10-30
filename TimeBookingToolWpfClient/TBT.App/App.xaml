@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:TBT.App"
              xmlns:tools="clr-namespace:TBT.App.Models.Tools"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              Startup="Application_Startup">
     
     <Application.Resources>
@@ -38,6 +39,7 @@
             <tools:OnlyForAdminsVisibleConverter x:Key="OnlyForAdminsVisibleConverter"/>
             <tools:ToUpperConverter x:Key="ToUpperConverter"/>
             <tools:BoolToWindowState x:Key="BoolToWindowState"/>
+            <tools:ReverseTimeEntryConverter x:Key="ReverseTimeEntryConverter"/>
 
             <SolidColorBrush x:Key="CalendarItemBackground" Color="#c2422b"/>
             <SolidColorBrush x:Key="CalendarItemMouseOverBrush" Color="#f77f50"/>
