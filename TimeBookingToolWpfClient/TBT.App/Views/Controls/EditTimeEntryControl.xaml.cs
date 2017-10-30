@@ -20,10 +20,12 @@ namespace TBT.App.Views.Controls
         {
             InitializeComponent();
             _validRegex = new Regex("[^0-9.:]+");
+            //_validRegex = new Regex(@"^[0-9]{0,2}([:.][0-9]{1,2})?");
         }
 
         private void CheckInput(object sender, TextCompositionEventArgs e)
         {
+            //e.Handled = !_validRegex.IsMatch((sender as TextControl).TextArea.Text + e.Text);
             if (e.Text == "." || e.Text == ":")
             {
                 var count = (sender as TextControl).TextArea.Text?.Count(x => x == ':' || x == '.') == 0;

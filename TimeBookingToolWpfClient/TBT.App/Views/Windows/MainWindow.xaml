@@ -18,7 +18,8 @@
         ResizeMode="CanMinimize"
         Style="{StaticResource WindowStyle}"
         WindowState="{Binding WindowState, Converter={StaticResource BoolToWindowState}, Mode=TwoWay}"
-        Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}">
+        Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}"
+        WindowStartupLocation="CenterScreen">
     <Grid Margin="15 15 15 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

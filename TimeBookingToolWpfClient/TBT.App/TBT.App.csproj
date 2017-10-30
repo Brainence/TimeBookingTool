@@ -170,6 +170,7 @@
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\LanguageItem.cs" />
     <Compile Include="Helpers\MainWindowTabItem.cs" />
+    <Compile Include="Helpers\RefreshEvents.cs" />
     <Compile Include="Helpers\ResetPasswordParameters.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Models\AppModels\Customer.cs" />

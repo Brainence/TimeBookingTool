@@ -63,6 +63,7 @@
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
                            VerticalTextAlignment="Center"
+                               
                            TextAlignment="Left"
                            PreviewTextInput="CheckInput"
                            Text="{Binding TimeText, Mode=TwoWay}"/>
