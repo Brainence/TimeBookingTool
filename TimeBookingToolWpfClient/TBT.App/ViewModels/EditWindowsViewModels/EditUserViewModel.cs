@@ -91,10 +91,10 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                             MessageBox.Show(Properties.Resources.ConfirmYourPassword);
                             return;
                         }
-                        var isValid = JsonConvert.DeserializeObject<bool>(
+                        var isValid = JsonConvert.DeserializeObject<bool?>(
                         await App.CommunicationService.GetAsJson($"User/ValidatePassword/{EditingUser.Id}/{Uri.EscapeUriString(changePasswordParameters.TokenPassword)}"));
 
-                        if (!isValid)
+                        if (!isValid.HasValue && !isValid.Value)
                         {
                             MessageBox.Show(Properties.Resources.IncorrectPasswordEntered);
                             return;

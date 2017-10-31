@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using TBT.App.Helpers;
@@ -80,40 +82,48 @@ namespace TBT.App.ViewModels.Authentication
                 NextCancelButtonIsEnabled = true;
                 return;
             }
-
-            var user = JsonConvert.DeserializeObject<User>(
-                await App.CommunicationService.GetAsJson($"User?email={Username}"));
-
-            if (user == null)
+            try
             {
-                _mainVM.ErrorColor = Common.MessageColors.Error;
-                _mainVM.ErrorMsg = Resources.UserNameDoesntExist;
-                NextButtonIsEnabled = true;
-                NextCancelButtonIsEnabled = true;
-                return;
-            }
 
-            if (!AlreadyHaveToken)
-            {
-                var result = JsonConvert.DeserializeObject<bool>(
-                    await App.CommunicationService.GetAsJson($"ResetTicket/CreateResetTicket/{user.Id}"));
+                var user = JsonConvert.DeserializeObject<User>(
+                    await App.CommunicationService.GetAsJson($"User?email={Username}"));
 
-                if (!result)
+                if (user == null)
                 {
                     _mainVM.ErrorColor = Common.MessageColors.Error;
-                    _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
+                    _mainVM.ErrorMsg = Resources.UserNameDoesntExist;
                     NextButtonIsEnabled = true;
                     NextCancelButtonIsEnabled = true;
                     return;
                 }
-                _mainVM.ErrorColor = Common.MessageColors.Message;
-                _mainVM.ErrorMsg = Resources.AnEmailHasSent;
+
+                if (!AlreadyHaveToken)
+                {
+                    var result = JsonConvert.DeserializeObject<bool>(
+                        await App.CommunicationService.GetAsJson($"ResetTicket/CreateResetTicket/{user.Id}"));
+
+                    if (!result)
+                    {
+                        _mainVM.ErrorColor = Common.MessageColors.Error;
+                        _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
+                        NextButtonIsEnabled = true;
+                        NextCancelButtonIsEnabled = true;
+                        return;
+                    }
+                    _mainVM.ErrorColor = Common.MessageColors.Message;
+                    _mainVM.ErrorMsg = Resources.AnEmailHasSent;
+                }
+                else
+                {
+                    _mainVM.ErrorMsg = string.Empty;
+                }
+                _mainVM.CurrentViewModel = new ResetPasswordControlViewModel(_mainVM) { UserId = user.Id };
             }
-            else
+            catch(Exception)
             {
-                _mainVM.ErrorMsg = string.Empty;
+                _mainVM.ErrorColor = Common.MessageColors.Error;
+                _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
             }
-            _mainVM.CurrentViewModel = new ResetPasswordControlViewModel(_mainVM) { UserId = user.Id};
         }
 
         private void CancelChangePassword()

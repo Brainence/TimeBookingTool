@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Windows;
 using TBT.App.Common;
 using TBT.App.Services.CommunicationService.Interfaces;
 
@@ -98,15 +99,15 @@ namespace TBT.App.Services.CommunicationService.Implementations
             }
             catch (HttpResponseException httpException)
             {
-                throw new Exception("HttpResonseException:", httpException);
+                throw new Exception("HttpResonseException: ", httpException);
             }
             catch (HttpRequestException httpException)
             {
-                throw new Exception("HttpResonseException:", httpException);
+                throw new Exception("HttpRequestException: ", httpException);
             }
             catch (Exception ex)
             {
-                throw new Exception("Unknown exception:", ex);
+                throw new Exception($"Unknown exception: ", ex);
             }
         }
 
