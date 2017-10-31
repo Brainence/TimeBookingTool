@@ -330,5 +330,7 @@ namespace TBT.App.ViewModels.MainWindow
         }
 
         #endregion
+
+        #endregion
     }
 }
