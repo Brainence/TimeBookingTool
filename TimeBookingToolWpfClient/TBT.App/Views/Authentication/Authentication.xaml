@@ -28,7 +28,7 @@
                 Command="{Binding Path=CloseButtonClick}">
             <Image Source="../../Resources/Icons/close.png" Width="12"></Image>
         </Button>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Path=ErrorMsg, Mode=TwoWay}" Margin="4"  Height="20" Foreground="{Binding IsError, Mode=TwoWay, Converter={StaticResource BoolToErrorColor}}"/>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Path=ErrorMsg, Mode=TwoWay}" Margin="4"  Height="20" Foreground="{Binding ErrorColor}"/>
         <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=CurrentViewModel}"></ContentControl>
     </Grid>
 </Window>

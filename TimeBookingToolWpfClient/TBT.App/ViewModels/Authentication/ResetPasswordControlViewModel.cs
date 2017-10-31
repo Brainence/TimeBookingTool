@@ -2,7 +2,6 @@
 using System.Windows.Input;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
-using TBT.App.Common;
 using TBT.App.Properties;
 using System.Windows.Media;
 using TBT.App.Helpers;
@@ -73,7 +72,7 @@ namespace TBT.App.ViewModels.Authentication
             _mainVM.ErrorMsg = string.Empty;
             if (string.IsNullOrEmpty(args.TokenPassword) || string.IsNullOrEmpty(args.NewPassword) || string.IsNullOrEmpty(args.ConfirmPassword))
             {
-                if (!_mainVM.IsError) { _mainVM.IsError = true; }
+                _mainVM.ErrorColor = Common.MessageColors.Error;
                 _mainVM.ErrorMsg = Resources.AllFieldsRequired;
                 ChangeButtonIsEnabled = true;
                 ChangeCancelButtonIsEnabled = true;
@@ -82,7 +81,7 @@ namespace TBT.App.ViewModels.Authentication
 
             if (args.NewPassword != args.ConfirmPassword)
             {
-                if (!_mainVM.IsError) { _mainVM.IsError = true; }
+                _mainVM.ErrorColor = Common.MessageColors.Error;
                 _mainVM.ErrorMsg = Resources.ConfirmYourPassword;
                 ChangeButtonIsEnabled = true;
                 ChangeCancelButtonIsEnabled = true;
@@ -97,19 +96,19 @@ namespace TBT.App.ViewModels.Authentication
 
                 if (result == null || (result.HasValue && !result.Value))
                 {
-                    if (!_mainVM.IsError) { _mainVM.IsError = true; }
+                    _mainVM.ErrorColor = Common.MessageColors.Error;
                     _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
                     ChangeButtonIsEnabled = true;
                     ChangeCancelButtonIsEnabled = true;
                     return;
                 }
-                if (_mainVM.IsError) { _mainVM.IsError = false; }
+                _mainVM.ErrorColor = Common.MessageColors.Message;
                 _mainVM.ErrorMsg = Resources.PasswordBeenChanged;
                 _mainVM.CurrentViewModel = new AuthenticationControlViewModel(_mainVM);
             }
             catch
             {
-                if (!_mainVM.IsError) { _mainVM.IsError = true; }
+                _mainVM.ErrorColor = Common.MessageColors.Error;
                 _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
             }
 

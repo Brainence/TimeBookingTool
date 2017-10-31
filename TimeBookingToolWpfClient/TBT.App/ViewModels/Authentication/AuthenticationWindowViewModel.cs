@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using System.Drawing;
+using System.Windows.Media;
 using TBT.App.Helpers;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
@@ -14,7 +14,7 @@ namespace TBT.App.ViewModels.Authentication
 
         private string _errorMsg;
         private BaseViewModel _currentViewModel;
-        private bool _isError;
+        private Brush _errorColor;
 
         #endregion
 
@@ -32,10 +32,10 @@ namespace TBT.App.ViewModels.Authentication
             set { SetProperty(ref _currentViewModel, value); }
         }
 
-        public bool IsError
+        public Brush ErrorColor
         {
-            get { return _isError; }
-            set { SetProperty(ref _isError, value); }
+            get { return _errorColor; }
+            set { SetProperty(ref _errorColor, value); }
         }
 
         public ICommand CloseButtonClick { get; private set; }

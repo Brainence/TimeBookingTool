@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using TBT.App.Common;
 using TBT.App.Helpers;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
@@ -70,7 +69,7 @@ namespace TBT.App.ViewModels.Authentication
         {
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(closeParameters?.Password))
             {
-                if (!_mainVM.IsError) { _mainVM.IsError = true; }
+                _mainVM.ErrorColor = Common.MessageColors.Error;
                 _mainVM.ErrorMsg = Resources.UserNameOfPasswordEmpty;
                 return;
             }
@@ -90,7 +89,7 @@ namespace TBT.App.ViewModels.Authentication
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
 
-                    var response = await client.PostAsync(ConfigurationManager.AppSettings[Constants.LoginUrl],
+                    var response = await client.PostAsync(ConfigurationManager.AppSettings[Common.Constants.LoginUrl],
                         new FormUrlEncodedContent(
                             new Dictionary<string, string>()
                             {
@@ -113,20 +112,20 @@ namespace TBT.App.ViewModels.Authentication
                     {
                         if (response.Headers.Contains("BadRequestHeader"))
                         {
-                            if (!_mainVM.IsError) { _mainVM.IsError = true; }
+                            _mainVM.ErrorColor = Common.MessageColors.Error;
                             _mainVM.ErrorMsg = response.Headers.GetValues("BadRequestHeader").FirstOrDefault();
                         }
                     }
                     else
                     {
-                        if (_mainVM.IsError) { _mainVM.IsError = false; }
+                        _mainVM.ErrorColor = Common.MessageColors.Message;
                         _mainVM.ErrorMsg = response.ReasonPhrase;
                     }
                 }
             }
             catch (Exception ex)
             {
-                if (!_mainVM.IsError) { _mainVM.IsError = true; }
+                _mainVM.ErrorColor = Common.MessageColors.Error;
                 _mainVM.ErrorMsg = ex.InnerException?.Message ?? ex.Message;
             }
         }
