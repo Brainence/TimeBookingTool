@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
@@ -14,7 +15,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class PeopleTabViewModel: BaseViewModel, IModelObservableViewModel
+    public class PeopleTabViewModel: BaseViewModel
     {
         #region Fields
 
@@ -110,6 +111,8 @@ namespace TBT.App.ViewModels.MainWindow
                 EditingUser = CurrentUser
             };
             ((EditUserViewModel)EditMyProfileViewModel).SavingUserAction += SaveUserEditingAction;
+            RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
+            RefreshEvents.ChangeUsersList += RefreshUsersList;
             EditUserCommand = new RelayCommand(obj => EditUser(obj as User), null);
             RemoveUserCommand = new RelayCommand(obj => RemoveUser(obj as User), null);
             ChangeUserForNested += ((EditUserViewModel)EditMyProfileViewModel).RefreshCurrentUser;
@@ -123,8 +126,8 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void SaveUserEditingAction(bool userChanged, bool usersListChanged)
         {
-            if(userChanged) { CurrentUserChanged?.Invoke(this); }
-            UsersListChanged?.Invoke(null);
+            if(userChanged) { RefreshEvents.RefreshCurrentUser(this); }
+            RefreshEvents.RefreshUsersList(null);
         }
 
         private void EditUser(User user)
@@ -160,7 +163,7 @@ namespace TBT.App.ViewModels.MainWindow
 
                 var x = await App.CommunicationService.PutAsJson("User", user);
 
-                await UsersListChanged?.Invoke(this);
+                await RefreshEvents.RefreshUsersList(this);
                 Users.Remove(user);
             }
             catch (Exception ex)
@@ -168,16 +171,6 @@ namespace TBT.App.ViewModels.MainWindow
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
         }
-
-        #endregion
-
-        #region Interface members
-
-        public event Func<object, Task> CurrentUserChanged;
-        public event Func<object, Task> UsersListChanged;
-        public event Func<object, Task> CustomersListChanged;
-        public event Func<object, Task> ProjectsListChanged;
-        public event Func<object, Task> TasksListChanged;
 
         public void RefreshCurrentUser(object sender, User user)
         {
@@ -195,12 +188,6 @@ namespace TBT.App.ViewModels.MainWindow
                 Users = users;
             }
         }
-
-        public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers) { }
-
-        public void RefreshProjectsList(object sender, ObservableCollection<Project> projects) { }
-
-        public void RefreshTasksList(object sender, ObservableCollection<Activity> activities) { }
 
         #endregion
     }

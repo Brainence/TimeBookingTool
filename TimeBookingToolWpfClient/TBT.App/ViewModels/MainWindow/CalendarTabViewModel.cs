@@ -17,7 +17,7 @@ using TBT.App.Views.Controls;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class CalendarTabViewModel:BaseViewModel, IModelObservableViewModel
+    public class CalendarTabViewModel:BaseViewModel
     {
         #region Fields
 
@@ -126,6 +126,7 @@ namespace TBT.App.ViewModels.MainWindow
             PropertyChanged += tempVM.ChangeButtonName;
             PropertyChanged += tempVM.ClearError;
             ChangeUserForNested += tempVM.RefreshCurrentUser;
+            RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
             SelectedDay = DateTime.Now.Date;
             tempVM.RefreshTimeEntries += async () => await RefreshTimeEntries(Week);
             ChangeWeekCommand = new RelayCommand(obj => ChangeWeek(Convert.ToInt32(obj)), null);
@@ -244,17 +245,6 @@ namespace TBT.App.ViewModels.MainWindow
         {
             IsDateNameShort = isShort;
         }
-
-        #endregion
-
-        #region Interface members
-
-        public event Func<object, Task> CurrentUserChanged;
-        public event Func<object, Task> UsersListChanged;
-        public event Func<object, Task> CustomersListChanged;
-        public event Func<object, Task> ProjectsListChanged;
-        public event Func<object, Task> TasksListChanged;
-
         public void RefreshCurrentUser(object sender, User user)
         {
             if (sender != this)
@@ -262,14 +252,6 @@ namespace TBT.App.ViewModels.MainWindow
                 User = user;
             }
         }
-
-        public void RefreshUsersList(object sender, ObservableCollection<User> users) { }
-
-        public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers) { }
-
-        public void RefreshProjectsList(object sender, ObservableCollection<Project> projects) { }
-
-        public void RefreshTasksList(object sender, ObservableCollection<Activity> activities) { }
 
         #endregion
     }

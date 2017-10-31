@@ -6,7 +6,7 @@ namespace TBT.App.Helpers
     {
         public string Title { get; set; }
         public string Tag { get; set; }
-        public IModelObservableViewModel Control { get; set; }
+        public BaseViewModel Control { get; set; }
         public bool OnlyForAdmins { get; set; }
     }
 }

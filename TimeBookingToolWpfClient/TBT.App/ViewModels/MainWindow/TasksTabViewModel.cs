@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
@@ -15,7 +16,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class TasksTabViewModel: BaseViewModel, IModelObservableViewModel
+    public class TasksTabViewModel: BaseViewModel
     {
         #region Fields
 
@@ -79,9 +80,11 @@ namespace TBT.App.ViewModels.MainWindow
         public TasksTabViewModel()
         {
             CreateNewTaskCommand = new RelayCommand(obj => CreateNewtask(), null);
-            RefreshTasksCommand = new RelayCommand(obj => { Activities = null; TasksListChanged?.Invoke(null); }, null);
+            RefreshTasksCommand = new RelayCommand(async obj => { Activities = null; await RefreshEvents.RefreshTasksList(null); }, null);
             EditTaskCommand = new RelayCommand(obj => EditTask(obj as Activity), null);
             RemoveTaskCommand = new RelayCommand(obj => RemoveTask(obj as Activity), null);
+            RefreshEvents.ChangeProjectsList += RefreshProjectsList;
+            RefreshEvents.ChangeTasksList += RefreshTasksList;
             SelectedProjectIndex = 0;
         }
 
@@ -116,7 +119,7 @@ namespace TBT.App.ViewModels.MainWindow
                 };
 
                 await App.CommunicationService.PostAsJson("Activity", activity);
-                await TasksListChanged?.Invoke(this);
+                await RefreshEvents.RefreshTasksList(this);
                 activity.Id = -1;
                 Activities.Add(activity);
                 NewTaskName = "";
@@ -153,7 +156,7 @@ namespace TBT.App.ViewModels.MainWindow
                 {
                     activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.PutAsJson("Activity", activity));
 
-                    await TasksListChanged?.Invoke(this);
+                    await RefreshEvents.RefreshTasksList(this);
                 }
                 catch (Exception ex)
                 {
@@ -176,7 +179,7 @@ namespace TBT.App.ViewModels.MainWindow
                 activity.IsActive = false;
                 var x = await App.CommunicationService.PutAsJson("Activity", activity);
 
-                await TasksListChanged?.Invoke(this);
+                await RefreshEvents.RefreshTasksList(this);
                 Activities.Remove(Activities?.FirstOrDefault(item => item.Name == activity.Name &&
                                                                      item.Project.Id == activity.Project.Id));
             }
@@ -185,22 +188,6 @@ namespace TBT.App.ViewModels.MainWindow
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
         }
-
-        #endregion
-
-        #region Interface members
-
-        public event Func<object, Task> CurrentUserChanged;
-        public event Func<object, Task> UsersListChanged;
-        public event Func<object, Task> CustomersListChanged;
-        public event Func<object, Task> ProjectsListChanged;
-        public event Func<object, Task> TasksListChanged;
-
-        public void RefreshCurrentUser(object sender, User user) { }
-
-        public void RefreshUsersList(object sender, ObservableCollection<User> users) { }
-
-        public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers) { }
 
         public void RefreshProjectsList(object sender, ObservableCollection<Project> projects)
         {

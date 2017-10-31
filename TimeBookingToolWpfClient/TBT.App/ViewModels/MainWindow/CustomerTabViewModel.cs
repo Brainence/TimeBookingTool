@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
@@ -15,8 +16,8 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class CustomerTabViewModel: BaseViewModel, IModelObservableViewModel
-    {
+    public class CustomerTabViewModel: BaseViewModel
+{
         #region Fields
 
         private bool _itemsLoading;
@@ -59,7 +60,7 @@ namespace TBT.App.ViewModels.MainWindow
                 SetProperty(ref _isExpanded, value);
                 if (value)
                 {
-                    CustomersListChanged?.Invoke(this);
+                    RefreshEvents.RefreshCustomersList(this);
                 }
 
             }
@@ -86,8 +87,9 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 IsAdmin = user.IsAdmin;
             }
+            RefreshEvents.ChangeCustomersList += RefreshCustomersList;
             CreateNewCustomerCommand = new RelayCommand(obj => CreateNewCustomer(), null);
-            RefreshCustomersCommand = new RelayCommand(obj => { Customers = null; CustomersListChanged?.Invoke(null); }, null);
+            RefreshCustomersCommand = new RelayCommand(async obj => { Customers = null; await RefreshEvents.RefreshCustomersList(null); }, null);
             EditCustomerCommand = new RelayCommand(obj => EditCustomer(obj as Customer), obj => { return IsAdmin; });
             RemoveCustomerCommand = new RelayCommand(obj => RemoveCustomer(obj as Customer), obj => { return IsAdmin; });
         }
@@ -117,7 +119,7 @@ namespace TBT.App.ViewModels.MainWindow
 
                 await App.CommunicationService.PostAsJson("Customer", customer);
 
-                await CustomersListChanged?.Invoke(this);
+                await RefreshEvents.RefreshCustomersList(this);
                 customer.Id = -1;
                 Customers.Add(customer);
                 NewCustomersName = "";
@@ -147,7 +149,7 @@ namespace TBT.App.ViewModels.MainWindow
                 try
                 {
                     customer = JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.PutAsJson("Customer", customer));
-                    await CustomersListChanged?.Invoke(this);
+                    await RefreshEvents.RefreshCustomersList(this);
                 }
                 catch (Exception ex)
                 {
@@ -183,7 +185,7 @@ namespace TBT.App.ViewModels.MainWindow
 
                 var x = await App.CommunicationService.PutAsJson("Customer", customer);
 
-                await CustomersListChanged?.Invoke(this);
+                await RefreshEvents.RefreshCustomersList(this);
                 Customers.Remove(Customers?.FirstOrDefault(item => item.Name == customer.Name));
             }
             catch (Exception ex)
@@ -192,26 +194,6 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        #endregion
-
-        #region Interface members
-
-        public event Func<object, Task> CurrentUserChanged;
-        public event Func<object, Task> UsersListChanged;
-        public event Func<object, Task> CustomersListChanged;
-        public event Func<object, Task> ProjectsListChanged;
-        public event Func<object, Task> TasksListChanged;
-
-        public void RefreshCurrentUser(object sender, User newUser)
-        {
-            if (sender != this)
-            {
-                IsAdmin = newUser.IsAdmin;
-            }
-        }
-
-        public void RefreshUsersList(object sender, ObservableCollection<User> users) { }
-
         public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers)
         {
             if (sender != this)
@@ -219,10 +201,6 @@ namespace TBT.App.ViewModels.MainWindow
                 Customers = customers;
             }
         }
-
-        public void RefreshProjectsList(object sender, ObservableCollection<Project> projects) { }
-
-        public void RefreshTasksList(object sender, ObservableCollection<Activity> activities) { }
 
         #endregion
     }

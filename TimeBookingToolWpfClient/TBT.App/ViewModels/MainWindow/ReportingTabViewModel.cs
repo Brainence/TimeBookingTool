@@ -24,8 +24,8 @@ using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class ReportingTabViewModel: BaseViewModel, IModelObservableViewModel
-    {
+    public class ReportingTabViewModel: BaseViewModel
+{
         #region Fields
 
 
@@ -161,6 +161,8 @@ namespace TBT.App.ViewModels.MainWindow
                 Resources.LastMonth, Resources.ThisYear, Resources.LastYear,
                 Resources.AllTime
             };
+            RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
+            RefreshEvents.ChangeUsersList += RefreshUsersList;
             SelectedTipIndex = 0;
             RefreshReportTimeEntiresCommand = new RelayCommand(async obj => await RefreshReportTimeEntires(ReportingUser.Id), null);
             CreateCompanyReportCommand = new RelayCommand(async obj => await SaveCompanyReport(), obj => { return User.IsAdmin; });
@@ -487,17 +489,6 @@ namespace TBT.App.ViewModels.MainWindow
             Clipboard.SetText($"{Resources.TotalTime}: {sum.TotalHours.ToString("N2")}");
         }
 
-
-        #endregion
-
-        #region Interface members
-
-        public event Func<object, Task> CurrentUserChanged;
-        public event Func<object, Task> UsersListChanged;
-        public event Func<object, Task> CustomersListChanged;
-        public event Func<object, Task> ProjectsListChanged;
-        public event Func<object, Task> TasksListChanged;
-
         public void RefreshCurrentUser(object sender, User user)
         {
             if (sender != this)
@@ -515,12 +506,6 @@ namespace TBT.App.ViewModels.MainWindow
                 SelectedUserIndex = Users.IndexOf(ReportingUser);
             }
         }
-
-        public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers) { }
-
-        public void RefreshProjectsList(object sender, ObservableCollection<Project> projects) { }
-
-        public void RefreshTasksList(object sender, ObservableCollection<Activity> activities) { }
 
         #endregion
     }

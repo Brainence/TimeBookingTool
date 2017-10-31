@@ -49,7 +49,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (SetProperty(ref _currentUser, value))
                 {
-                    CurrentUserChanged?.Invoke(this, _currentUser);
+                    RefreshEvents.RefreshCurrentUser(this);
                 }
             }
         }
@@ -124,11 +124,6 @@ namespace TBT.App.ViewModels.MainWindow
         public ICommand LoadCommand { get; set; }
         public ICommand CloseCommand { get; set; }
 
-        public event Action<object, ObservableCollection<User>> UsersListChanged;
-        public event Action<object, ObservableCollection<Customer>> CustomersListChanges;
-        public event Action<object, ObservableCollection<Activity>> TasksListChanges;
-        public event Action<object, ObservableCollection<Project>> ProjectsListChanges;
-        public event Action<object, User> CurrentUserChanged;
         public event Action<bool> ChangeDateSize;
 
         #endregion
@@ -139,6 +134,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             IsConnected = true;
             LanguageControl = new LanguageControlViewModel();
+            RefreshEvents.ChangeCurrentUser += ChangeCurrentUser;
             if (!OpenAuthenticationWindow(authorized))
             {
                 //IsConnected = CommunicationService.CheckConnection();
@@ -155,7 +151,7 @@ namespace TBT.App.ViewModels.MainWindow
                 RefreshAllCommand = new RelayCommand(obj => RefreshAll(), null);
                 try
                 {
-                    RefreshCurrentUser(this);
+                    RefreshEvents.RefreshCurrentUser(null);
                     InitTabs();
                     RefreshAll();
                 }
@@ -188,11 +184,11 @@ namespace TBT.App.ViewModels.MainWindow
         {
             try
             {
-                await RefreshCurrentUser(this);
-                await RefreshUsersList(this);
-                await RefreshCustomersList(this);
-                await RefreshProjectsList(this);
-                await RefreshTasksList(this);
+                await RefreshEvents.RefreshCurrentUser(this);
+                await RefreshEvents.RefreshUsersList(this);
+                await RefreshEvents.RefreshCustomersList(this);
+                await RefreshEvents.RefreshProjectsList(this);
+                await RefreshEvents.RefreshTasksList(this);
             }
             catch(Exception) { }
         }
@@ -208,7 +204,7 @@ namespace TBT.App.ViewModels.MainWindow
                 LoggedOut = false;
                 try
                 {
-                    await RefreshCurrentUser(this);
+                    await RefreshEvents.RefreshCurrentUser(null);
                 }
                 catch (Exception) { } 
                 IsVisible = true;
@@ -315,115 +311,23 @@ namespace TBT.App.ViewModels.MainWindow
         {
             Tabs = new ObservableCollection<MainWindowTabItem>();
             Tabs.Add(new MainWindowTabItem(){ Control = new CalendarTabViewModel(CurrentUser), Title = Resources.Calendar, Tag = "../Icons/calendar_white.png", OnlyForAdmins = false });
-            CurrentUserChanged += Tabs[0].Control.RefreshCurrentUser;
-            ChangeDateSize += ((CalendarTabViewModel)Tabs[0].Control).ChangeDateFormat;
             Tabs.Add(new MainWindowTabItem() { Control = new ReportingTabViewModel(CurrentUser), Title = Resources.Reporting, Tag = "../Icons/reporting_white.png", OnlyForAdmins = false });
-            CurrentUserChanged += Tabs[1].Control.RefreshCurrentUser;
-            UsersListChanged += Tabs[1].Control.RefreshUsersList;
             Tabs.Add(new MainWindowTabItem() { Control = new PeopleTabViewModel(CurrentUser), Title = Resources.People, Tag = "../Icons/people_white.png", OnlyForAdmins = false });
-            CurrentUserChanged += Tabs[2].Control.RefreshCurrentUser;
-            UsersListChanged += Tabs[2].Control.RefreshUsersList;
-            Tabs[2].Control.UsersListChanged += RefreshUsersList;
-            Tabs[2].Control.CurrentUserChanged += RefreshCurrentUser;
             Tabs.Add(new MainWindowTabItem() { Control = new CustomerTabViewModel(CurrentUser), Title = Resources.Customers, Tag = "../Icons/customers_white.png", OnlyForAdmins = true });
-            CurrentUserChanged += Tabs[3].Control.RefreshCurrentUser;
-            CustomersListChanges += Tabs[3].Control.RefreshCustomersList;
-            Tabs[3].Control.CustomersListChanged += RefreshCustomersList;
             Tabs.Add(new MainWindowTabItem() { Control = new ProjectsTabViewModel(), Title = Resources.Projects, Tag = "../Icons/projects_white.png", OnlyForAdmins = true });
-            ProjectsListChanges += Tabs[4].Control.RefreshProjectsList;
-            CustomersListChanges += Tabs[4].Control.RefreshCustomersList;
-            Tabs[4].Control.ProjectsListChanged += RefreshProjectsList;
             Tabs.Add(new MainWindowTabItem() { Control = new TasksTabViewModel(), Title = Resources.Tasks, Tag = "../Icons/tasks_white.png", OnlyForAdmins = true });
-            ProjectsListChanges += Tabs[5].Control.RefreshProjectsList;
-            TasksListChanges += Tabs[5].Control.RefreshTasksList;
-            Tabs[5].Control.TasksListChanged += RefreshTasksList;
             Tabs.Add(new MainWindowTabItem() { Control = new SettingsTabViewModel(), Title = Resources.Settings, Tag = "../Icons/settings_white.png", OnlyForAdmins = false });
         }
 
-        #endregion
-
-        #region Refresh data
-
-        private async Task RefreshCurrentUser(object sender)
+        public void ChangeCurrentUser(object sender, User newUser)
         {
-            try
-            {
-                CurrentUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={App.Username}"));
-                if (CurrentUser == null) throw new Exception("Error occurred while trying to load user data.");
-                CurrentUser.CurrentTimeZone = DateTimeOffset.Now.Offset;
-                CurrentUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", CurrentUser));
-
-                CurrentUserChanged?.Invoke(sender, CurrentUser);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
-        }
-
-        private async Task RefreshUsersList(object sender)
-        {
-            try
-            {
-                var users = JsonConvert.DeserializeObject<ObservableCollection<User>>(await App.CommunicationService.GetAsJson("User"));
-                UsersListChanged?.Invoke(sender, users);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-                throw ex;
-            }
-        }
-
-        private async Task RefreshCustomersList(object sender)
-        {
-            try
-            {
-                var customers = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(
-                    await App.CommunicationService.GetAsJson($"Customer"));
-                CustomersListChanges?.Invoke(sender, customers);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
-        }
-
-        private async Task RefreshProjectsList(object sender)
-        {
-            try
-            {
-                var projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(
-                    await App.CommunicationService.GetAsJson($"Project"));
-                ProjectsListChanges?.Invoke(sender, projects);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
-        }
-
-        public async Task RefreshTasksList(object sender)
-        {
-            try
-            {
-                var activities = new ObservableCollection<Activity>(JsonConvert.DeserializeObject<List<Activity>>(
-                                await App.CommunicationService.GetAsJson($"Activity"))
-                                    .OrderBy(a => a.Project.Name).ThenBy(a => a.Name));
-                TasksListChanges?.Invoke(sender, activities);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+            if (sender != this) { CurrentUser = newUser; }
         }
 
         public void RefreshIsConnected(bool isConnected)
         {
             IsConnected = isConnected;
         }
-
-        #endregion
 
         #endregion
     }
