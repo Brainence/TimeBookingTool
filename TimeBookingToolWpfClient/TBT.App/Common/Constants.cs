@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.Text.RegularExpressions;
+using System.Windows.Media;
 
 namespace TBT.App.Common
 {
@@ -18,7 +19,7 @@ namespace TBT.App.Common
         public static string CurrentRunningTimeEntryId => "CurrentRunningTimeEntryId";
         public static string EnableGreetingNotification => "EnableGreetingNotification";
         public static string CultureTag => "CultureTag";
-        
+        public static Regex TimeRegex => new Regex(@"^(\d{1,2}){1}([:.]{1}\d{0,2})?$");
     }
 
     public class MessageColors
