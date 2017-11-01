@@ -765,8 +765,10 @@
             <SolidColorBrush x:Key="HeaderBackground" Color="Transparent"/>
             <SolidColorBrush x:Key="HeaderForeground" Color="White"/>
             
-            <Style TargetType="Grid" x:Key="HeaderGridItemStyle">
+            <Style TargetType="StackPanel" x:Key="HeaderGridItemStyle">
                 <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
             </Style>
             
             <Style TargetType="TextBlock" x:Key="HeaderTextBlockStyle">
@@ -793,15 +795,15 @@
                     <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem}}" Value="True">
                         <Setter Property="BorderBrush" Value="{StaticResource HeaderBorderForeground}"/>
                         <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="Width" Value="73"/>
-                        <Setter Property="Height" Value="53"/>
+                        <!--<Setter Property="Width" Value="73"/>
+                        <Setter Property="Height" Value="53"/>-->
                     </DataTrigger>
 
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="BorderBrush" Value="{StaticResource HeaderBorderForeground}"/>
                         <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="Width" Value="73"/>
-                        <Setter Property="Height" Value="53"/>
+                        <!--<Setter Property="Width" Value="73"/>
+                        <Setter Property="Height" Value="53"/>-->
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -812,6 +814,7 @@
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="0 0 1 0"/>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -822,11 +825,18 @@
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="ListBoxItem">
-                    <Style.Triggers>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <!--<Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="Transparent" />
                         </Trigger>
-                    </Style.Triggers>
+                    </Style.Triggers>-->
                 </Style>
             </Setter.Value>
         </Setter>
@@ -834,16 +844,12 @@
             <Setter.Value>
                 <DataTemplate>
                     <Border Style="{StaticResource HeaderBorderStyle}">
-                        <Grid Style="{StaticResource HeaderGridItemStyle}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Image Height="22" Grid.Row="0" Width="22" Margin="0 0 0 2" Source="{Binding Tag, Mode=TwoWay}" />
+                        <StackPanel Style="{StaticResource HeaderGridItemStyle}">
+                            <Image Height="22" Width="22" Margin="0 0 0 1" Source="{Binding Tag, Mode=TwoWay}" />
                             <TextBlock Grid.Row="1" x:Name="tabTimeHeader" Text="{Binding Title}" 
                                    Style="{StaticResource HeaderTextBlockStyle}"/>
 
-                        </Grid>
+                        </StackPanel>
                     </Border>
                 </DataTemplate>
             </Setter.Value>

@@ -36,7 +36,7 @@
         <!--Connection lost control-->
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="55"/>
+                <RowDefinition Height="57"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
