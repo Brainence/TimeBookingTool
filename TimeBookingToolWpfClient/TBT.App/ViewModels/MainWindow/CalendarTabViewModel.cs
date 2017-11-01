@@ -17,7 +17,7 @@ using TBT.App.Views.Controls;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class CalendarTabViewModel:BaseViewModel
+    public class CalendarTabViewModel:BaseViewModel, IDisposable
     {
         #region Fields
 
@@ -169,6 +169,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (User == null) return;
             if (User.Id == 0) return;
+            if (!SelectedDay.HasValue) return;
 
             try
             {
@@ -207,7 +208,7 @@ namespace TBT.App.ViewModels.MainWindow
                     var sum = JsonConvert.DeserializeObject<TimeSpan?>(
                         await App.CommunicationService.GetAsJson($"TimeEntry/GetDuration/{User.Id}/{App.UrlSafeDateToString(mon)}/{App.UrlSafeDateToString(sun)}"));
 
-                    if (sum != null && sum.HasValue)
+                    if (sum.HasValue)
                         WeekTime = $"{(sum.Value.Hours + sum.Value.Days * 24):00}:{sum.Value.Minutes:00} ({sum.Value.TotalHours:00.00})";
                     else
                         WeekTime = "00:00 (00.00)";
@@ -252,6 +253,56 @@ namespace TBT.App.ViewModels.MainWindow
                 User = user;
             }
         }
+
+
+        #region IDisposable
+
+        private bool disposed = false;
+
+        public virtual void Dispose()
+        {
+            if (disposed) { return; }
+
+            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
+            disposed = true;
+        }
+
+        #endregion
+
+        #region IDisposable Support
+        //private bool disposedValue = false; // To detect redundant calls
+
+        //protected virtual void Dispose(bool disposing)
+        //{
+        //    if (!disposedValue)
+        //    {
+        //        if (disposing)
+        //        {
+        //            // TODO: dispose managed state (managed objects).
+        //        }
+
+        //        // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+        //        // TODO: set large fields to null.
+
+        //        disposedValue = true;
+        //    }
+        //}
+
+        //// TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        //// ~CalendarTabViewModel() {
+        ////   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        ////   Dispose(false);
+        //// }
+
+        //// This code added to correctly implement the disposable pattern.
+        //public void Dispose()
+        //{
+        //    // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //    Dispose(true);
+        //    // TODO: uncomment the following line if the finalizer is overridden above.
+        //    //GC.SuppressFinalize(this);
+        //}
+        #endregion
 
         #endregion
     }

@@ -16,7 +16,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class CustomerTabViewModel: BaseViewModel
+    public class CustomerTabViewModel: BaseViewModel, IDisposable
 {
         #region Fields
 
@@ -200,6 +200,20 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 Customers = customers;
             }
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        private bool disposed = false;
+
+        public virtual void Dispose()
+        {
+            if (disposed) { return; }
+
+            RefreshEvents.ChangeCustomersList -= RefreshCustomersList;
+            disposed = true;
         }
 
         #endregion

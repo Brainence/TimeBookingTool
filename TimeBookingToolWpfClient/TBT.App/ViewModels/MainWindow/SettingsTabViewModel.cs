@@ -12,7 +12,7 @@ using TBT.App.Models.Base;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class SettingsTabViewModel: BaseViewModel, IModelObservableViewModel
+    public class SettingsTabViewModel: BaseViewModel, IDisposable
     {
         #region Fields
 
@@ -79,23 +79,9 @@ namespace TBT.App.ViewModels.MainWindow
 
         #endregion
 
-        #region Interface members
+        #region IDisposable
 
-        public event Func<object, Task> CurrentUserChanged;
-        public event Func<object, Task> UsersListChanged;
-        public event Func<object, Task> CustomersListChanged;
-        public event Func<object, Task> ProjectsListChanged;
-        public event Func<object, Task> TasksListChanged;
-
-        public void RefreshCurrentUser(object sender, User user) { }
-
-        public void RefreshUsersList(object sender, ObservableCollection<User> users) { }
-
-        public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers) { }
-
-        public void RefreshProjectsList(object sender, ObservableCollection<Project> projects) { }
-
-        public void RefreshTasksList(object sender, ObservableCollection<Activity> activities) { }
+        public virtual void Dispose() { }
 
         #endregion
     }

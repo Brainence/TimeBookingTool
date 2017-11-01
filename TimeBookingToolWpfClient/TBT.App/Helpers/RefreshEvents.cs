@@ -12,16 +12,6 @@ namespace TBT.App.Helpers
 {
     public class RefreshEvents
     {
-        //#region Notification events
-
-        //public static event Func<object, Task> CurrentUserChanged;
-        //public static event Func<object, Task> UsersListChanged;
-        //public static event Func<object, Task> CustomersListChanged;
-        //public static event Func<object, Task> ProjectsListChanged;
-        //public static event Func<object, Task> TasksListChanged;
-
-        //#endregion
-
         #region Refresh events
 
         public static event Action<object, ObservableCollection<User>> ChangeUsersList;

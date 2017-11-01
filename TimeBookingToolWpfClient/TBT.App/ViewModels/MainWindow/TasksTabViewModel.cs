@@ -16,7 +16,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class TasksTabViewModel: BaseViewModel
+    public class TasksTabViewModel: BaseViewModel, IDisposable
     {
         #region Fields
 
@@ -205,6 +205,21 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 Activities = activities;
             }
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        private bool disposed = false;
+
+        public virtual void Dispose()
+        {
+            if (disposed) { return; }
+
+            RefreshEvents.ChangeProjectsList -= RefreshProjectsList;
+            RefreshEvents.ChangeTasksList -= RefreshTasksList;
+            disposed = true;
         }
 
         #endregion
