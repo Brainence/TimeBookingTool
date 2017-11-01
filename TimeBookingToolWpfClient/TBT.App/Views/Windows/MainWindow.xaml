@@ -42,7 +42,7 @@
 
             <ListBox Grid.Row="0" Style="{StaticResource HeaderStyle}">
             </ListBox>
-            <ContentControl Grid.Row="1" Content="{Binding SelectedViewModel}"/>
+            <ContentControl Grid.Row="1" Margin="0 5 0 0" Content="{Binding SelectedViewModel}"/>
         </Grid>
 
 

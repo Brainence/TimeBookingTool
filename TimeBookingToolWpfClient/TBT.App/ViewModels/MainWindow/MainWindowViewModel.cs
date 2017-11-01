@@ -239,6 +239,8 @@ namespace TBT.App.ViewModels.MainWindow
             IsVisible = false;
             if (!OpenAuthenticationWindow(false))
             {
+                SelectedTab = Tabs[0];
+                ViewModelCache = null;
                 LoggedOut = false;
                 try
                 {

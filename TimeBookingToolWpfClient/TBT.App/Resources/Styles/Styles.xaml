@@ -764,11 +764,28 @@
         <Style.Resources>
             <SolidColorBrush x:Key="HeaderBackground" Color="Transparent"/>
             <SolidColorBrush x:Key="HeaderForeground" Color="White"/>
+            <tools:OnlyForAdminsVisibleConverter x:Key="OnlyForAdminsVisibleConverter"/>
             
             <Style TargetType="StackPanel" x:Key="HeaderGridItemStyle">
                 <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Height" Value="55"/>
+                <Setter Property="Width" Value="75"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="Background" Value="{StaticResource HeaderBackground}"/>
+                    </Trigger>
+
+                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}" Value="True">
+                        <Setter Property="Background" Value="{StaticResource HeaderBackground}" />
+                    </DataTrigger>
+
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Cursor" Value="Hand" />
+                        <Setter Property="Background" Value="{StaticResource HeaderBackground}"/>
+                    </Trigger>
+                </Style.Triggers>
             </Style>
             
             <Style TargetType="TextBlock" x:Key="HeaderTextBlockStyle">
@@ -792,7 +809,7 @@
                 <Setter Property="Height" Value="55"/>
                 <Setter Property="Width" Value="75"/>
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem}}" Value="True">
+                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}" Value="True">
                         <Setter Property="BorderBrush" Value="{StaticResource HeaderBorderForeground}"/>
                         <Setter Property="BorderThickness" Value="1"/>
                         <!--<Setter Property="Width" Value="73"/>
@@ -814,11 +831,10 @@
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Margin" Value="0 0 1 0"/>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" Margin="0"/>
+                    <StackPanel Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
@@ -832,6 +848,14 @@
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
+                    <Setter Property="Visibility">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource OnlyForAdminsVisibleConverter}" Mode="TwoWay">
+                                <Binding ElementName="mainWindow"  Path="DataContext.CurrentUser.IsAdmin"/>
+                                <Binding Path="OnlyForAdmins"/>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
                     <!--<Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="Transparent" />
@@ -843,9 +867,10 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Border Style="{StaticResource HeaderBorderStyle}">
+                    <Border Style="{StaticResource HeaderBorderStyle}" Margin="0 0 3 0">
                         <StackPanel Style="{StaticResource HeaderGridItemStyle}">
-                            <Image Height="22" Width="22" Margin="0 0 0 1" Source="{Binding Tag, Mode=TwoWay}" />
+                            <Image Height="22" Width="22" Margin="0 10 0 1" 
+                                   Source="{Binding Tag, Mode=TwoWay}"/>
                             <TextBlock Grid.Row="1" x:Name="tabTimeHeader" Text="{Binding Title}" 
                                    Style="{StaticResource HeaderTextBlockStyle}"/>
 
