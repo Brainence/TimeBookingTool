@@ -503,4 +503,7 @@
   <data name="UserWasSaved" xml:space="preserve">
     <value>User was saved successfully.</value>
   </data>
+  <data name="YouCantRemoveLastAdmin" xml:space="preserve">
+    <value>You can't remove last admin.</value>
+  </data>
 </root>

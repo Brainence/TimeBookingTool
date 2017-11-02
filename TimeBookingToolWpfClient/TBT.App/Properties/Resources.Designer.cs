@@ -1196,6 +1196,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can&apos;t remove last admin..
+        /// </summary>
+        public static string YouCantRemoveLastAdmin {
+            get {
+                return ResourceManager.GetString("YouCantRemoveLastAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have reached your monthly.
         /// </summary>
         public static string YouHaveReachedMonthly {

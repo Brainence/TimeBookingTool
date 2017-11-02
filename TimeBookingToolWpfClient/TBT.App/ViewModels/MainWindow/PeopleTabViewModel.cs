@@ -157,6 +157,11 @@ namespace TBT.App.ViewModels.MainWindow
             try
             {
                 if (user == null) return;
+                if (user.IsAdmin && Users.Where(item => item.IsAdmin).Count() == 1)
+                {
+                    MessageBox.Show(Properties.Resources.YouCantRemoveLastAdmin);
+                    return;
+                }
                 if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
                 user.IsActive = false;

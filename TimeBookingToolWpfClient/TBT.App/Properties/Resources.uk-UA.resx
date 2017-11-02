@@ -506,4 +506,7 @@
   <data name="UserWasSaved" xml:space="preserve">
     <value>Інформація про користувача успішно збережена.</value>
   </data>
+  <data name="YouCantRemoveLastAdmin" xml:space="preserve">
+    <value>Ви не можете видалити останнього адміністратора.</value>
+  </data>
 </root>
