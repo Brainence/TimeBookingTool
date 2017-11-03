@@ -71,11 +71,6 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _timeText, value); }
         }
 
-        //public string TimeLimit
-        //{
-        //    get { return _timeLimit; }
-        //    set { SetProperty(ref _timeLimit, value); }
-        //}
 
         public DateTime? SelectedDay
         {
@@ -88,12 +83,6 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _errorMessage; }
             set { SetProperty(ref _errorMessage, value); }
         }
-
-        //public bool? IsLimitVisible
-        //{
-        //    get { return _isLimitVisible; }
-        //    set { SetProperty(ref _isLimitVisible, value); }
-        //}
 
         public string EmptyText
         {
@@ -118,21 +107,6 @@ namespace TBT.App.ViewModels.MainWindow
         #endregion
 
         #region Methods
-
-        //public void ShowLimit(object sender, PropertyChangedEventArgs e)
-        //{
-        //    if(e.PropertyName == "SelectedDay")
-        //    {
-        //        if((sender as CalendarTabViewModel)?.SelectedDay?.Date == DateTime.Now.Date)
-        //        {
-        //            IsLimitVisible = true;
-        //        }
-        //        else
-        //        {
-        //            IsLimitVisible = false;
-        //        }
-        //    }
-        //}
 
         public void ChangeButtonName(object sender, PropertyChangedEventArgs e)
         {
@@ -166,9 +140,7 @@ namespace TBT.App.ViewModels.MainWindow
                 }
 
                 TimeSpan duration;
-                //DateTime? timeLimit;
                 var input = TimeText;
-                //var limit = TimeLimit;
                 var notToday = SelectedDay.HasValue && SelectedDay.Value != DateTime.Today;
 
                 if (string.IsNullOrEmpty(input))
@@ -186,17 +158,7 @@ namespace TBT.App.ViewModels.MainWindow
                 else
                 {
                     duration = input.ToTimespan();
-                    //duration = InputTimeToTimeSpan(input);
                 }
-
-                //if (string.IsNullOrEmpty(limit))
-                //{
-                //    timeLimit = null;
-                //}
-                //else
-                //{
-                //    timeLimit = DateTime.UtcNow.Add(InputTimeToTimeSpan(TimeLimit));
-                //}
 
                 if (!await CanStartOrEditTimeEntry(string.IsNullOrEmpty(input) && !notToday ? duration : (TimeSpan?)null) && User != null && User.TimeLimit.HasValue)
                 {
@@ -212,7 +174,6 @@ namespace TBT.App.ViewModels.MainWindow
                     Comment = Comment,
                     IsActive = true,
                     Duration = duration
-                    //TimeLimit = timeLimit
                 };
 
                 Comment = string.Empty;
@@ -225,7 +186,6 @@ namespace TBT.App.ViewModels.MainWindow
                 }
 
                 TimeText = string.Empty;
-                //TimeLimit = string.Empty;
 
                 User.TimeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
                     await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{User.Id}/{App.UrlSafeDateToString(SelectedDay.Value.ToUniversalTime())}/{App.UrlSafeDateToString(SelectedDay.Value.ToUniversalTime())}"));

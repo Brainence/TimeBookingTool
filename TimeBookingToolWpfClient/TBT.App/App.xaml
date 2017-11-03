@@ -78,9 +78,19 @@
             <SolidColorBrush x:Key="ChangeWeekButtonMouseOverBackground" Color="#c2422b"/>
             <SolidColorBrush x:Key="ChangeWeekButtonForeground" Color="#c2422b"/>
 
-            <DataTemplate x:Key="LanguageItemComboBoxTemplate">
-                <Image Width="32" Height="24" Source="{Binding Flag}" VerticalAlignment="Stretch"
-                           HorizontalAlignment="Center" Stretch="Fill"/>
+            <DataTemplate x:Key="HeaderItemTemplate">
+                <Border Style="{StaticResource HeaderBorderStyle}">
+                    <Grid Style="{StaticResource HeaderGridItemStyle}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Image Height="22" Grid.Row="0" Width="22" Margin="0 0 0 2" Source="{Binding Tag, Mode=TwoWay}" />
+                        <TextBlock Grid.Row="1" x:Name="tabTimeHeader" Text="{Binding Title}" 
+                                   Style="{StaticResource HeaderTextBlockStyle}"/>
+
+                    </Grid>
+                </Border>
             </DataTemplate>
 
         </ResourceDictionary>

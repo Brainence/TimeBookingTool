@@ -150,7 +150,8 @@ namespace TBT.App.ViewModels.MainWindow
             if (!TimeEntry.IsRunning) return await Task.FromResult(false);
 
             var result = await App.GlobalTimer.Stop(TimeEntry.Id);
-            if (result) App.GlobalTimer.StartTimer();
+            if (result) { App.GlobalTimer.TimerTick -= TimerTick; }
+            //if (result) App.GlobalTimer.StartTimer();
 
             return result;
         }
@@ -162,7 +163,11 @@ namespace TBT.App.ViewModels.MainWindow
             if (TimeEntry.Duration >= _dayLimit) return await Task.FromResult(false);
             var result = await App.GlobalTimer.Start(TimeEntry.Id);
 
-            if (result) _startDate = DateTime.UtcNow;
+            if (result)
+            {
+                _startDate = DateTime.UtcNow;
+                App.GlobalTimer.TimerTick += TimerTick;
+            }
 
             return result;
         }
@@ -247,7 +252,7 @@ namespace TBT.App.ViewModels.MainWindow
             var currentDuration = TimeEntry.Duration + DateTime.UtcNow.TimeOfDay - _startDate.TimeOfDay;
             if (currentDuration >= _dayLimit)
             {
-                App.GlobalTimer.StopTimer();
+                //App.GlobalTimer.StopTimeEntryTimer();
                 await Stop();
             }
             try
@@ -283,7 +288,7 @@ namespace TBT.App.ViewModels.MainWindow
                 {
                     App.GlobalTimer.TimerTick += TimerTick;
                     _startDate = DateTime.UtcNow;
-                    App.GlobalTimer.StartTimer();
+                    //App.GlobalTimer.StartTimeEntryTimer();
                 }
             }
         }
@@ -337,12 +342,12 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public void CancelEditButton_Click()
-        {
-            IsEditing = !IsEditing;
+        //public void CancelEditButton_Click()
+        //{
+        //    IsEditing = !IsEditing;
 
-            Comment = string.Empty;
-        }
+        //    Comment = string.Empty;
+        //}
 
         #endregion
     }

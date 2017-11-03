@@ -27,7 +27,9 @@ namespace TBT.App.ViewModels.MainWindow
 
         private User _currentUser;
         private ObservableCollection<MainWindowTabItem> _tabs;
-        private int _selectedIndex;
+        private MainWindowTabItem _selectedTab;
+        private ICacheable _selectedViewModel;
+        private HashSet<ICacheable> _viewModelCache;
         private bool _isShown;
         private bool _loggedOut;
         private bool _isVisible;
@@ -60,15 +62,44 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _tabs, value); }
         }
 
-        public int SelectedIndex
+        public MainWindowTabItem SelectedTab
         {
-            get { return _selectedIndex; }
+            get { return _selectedTab; }
             set
             {
-                if(SetProperty(ref _selectedIndex, value))
+                if (SetProperty(ref _selectedTab, value) && value != null)
+                {
+                    var temp = GetViewModelFromEnum(value.Control);
+                    ViewModelCache.Remove(temp);
+                    SelectedViewModel = temp;
+                }
+            }
+        }
+
+        public ICacheable SelectedViewModel
+        {
+            get { return _selectedViewModel; }
+            set
+            {
+                if(value != _selectedViewModel && _selectedViewModel != null)
+                {
+                    _selectedViewModel.ExpiresDate = DateTime.Now.AddMinutes(5);
+                    _viewModelCache.Add(_selectedViewModel);
+                }
+                if(SetProperty(ref _selectedViewModel, value))
                 {
                     RefreshAll();
                 }
+            }
+        }
+
+        public HashSet<ICacheable> ViewModelCache
+        {
+            get { return _viewModelCache; }
+            set
+            {
+                //if(value != _viewModelCache) { _viewModelCache?.Dispose(); }
+                SetProperty(ref _viewModelCache, value);
             }
         }
 
@@ -141,8 +172,6 @@ namespace TBT.App.ViewModels.MainWindow
                 //CommunicationService.ConnectionChanged += RefreshIsConnected;
                 //CommunicationService.ConnectionChanged += CommunicationService.ListenConnection;
                 App.GlobalTimer = new GlobalTimer();
-                _dateTimer = new DispatcherTimer();
-                _dateTimer.Interval = new TimeSpan(0, 0, 1);
                 InitNotifyIcon();
                 Width = 600;
                 IsVisible = true;
@@ -156,8 +185,8 @@ namespace TBT.App.ViewModels.MainWindow
                     RefreshAll();
                 }
                 catch (Exception) { }
-                _dateTimer.Start();
                 WindowState = true;
+                App.GlobalTimer.StartTimer();
                 App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
             }
         }
@@ -168,8 +197,6 @@ namespace TBT.App.ViewModels.MainWindow
 
         public void Close()
         {
-            _dateTimer?.Stop();
-
             if (LoggedOut)
             {
                 App.RememberMe = false;
@@ -178,6 +205,7 @@ namespace TBT.App.ViewModels.MainWindow
 
             SayBye();
             IsVisible = false;
+            ViewModelCache.Clear();
         }
 
         private async void RefreshAll()
@@ -199,8 +227,11 @@ namespace TBT.App.ViewModels.MainWindow
             App.Username = string.Empty;
 
             IsVisible = false;
+            ViewModelCache.Clear();
             if (!OpenAuthenticationWindow(false))
             {
+                SelectedTab = Tabs[0];
+                ViewModelCache = null;
                 LoggedOut = false;
                 try
                 {
@@ -249,6 +280,45 @@ namespace TBT.App.ViewModels.MainWindow
         #endregion
 
         #region Helpers
+
+        private ICacheable GetViewModelFromEnum(TabsType tabType)
+        {
+            switch(tabType)
+            {
+                case TabsType.CalendarTab:
+                    {
+                        return ViewModelCache.FirstOrDefault(item => (item is CalendarTabViewModel)) ?? new CalendarTabViewModel(CurrentUser);
+                    }
+                case TabsType.ReportingTab:
+                    {
+                        return ViewModelCache.FirstOrDefault(item => (item is ReportingTabViewModel)) ?? new ReportingTabViewModel(CurrentUser);
+                    }
+                case TabsType.PeopleTab:
+                    {
+                        return ViewModelCache.FirstOrDefault(item => (item is PeopleTabViewModel)) ?? new PeopleTabViewModel(CurrentUser);
+                    }
+                case TabsType.CustomersTab:
+                    {
+                        return ViewModelCache.FirstOrDefault(item => (item is CustomerTabViewModel)) ?? new CustomerTabViewModel(CurrentUser);
+                    }
+                case TabsType.ProjectsTab:
+                    {
+                        return ViewModelCache.FirstOrDefault(item => (item is ProjectsTabViewModel)) ?? new ProjectsTabViewModel();
+                    }
+                case TabsType.TasksTab:
+                    {
+                        return ViewModelCache.FirstOrDefault(item => (item is TasksTabViewModel)) ?? new TasksTabViewModel();
+                    }
+                case TabsType.SettingsTab:
+                    {
+                        return ViewModelCache.FirstOrDefault(item => (item is SettingsTabViewModel)) ?? new SettingsTabViewModel();
+                    }
+                default:
+                    {
+                        return null;
+                    }
+            }
+        }
 
         private void SayBye()
         {
@@ -310,13 +380,16 @@ namespace TBT.App.ViewModels.MainWindow
         private void InitTabs()
         {
             Tabs = new ObservableCollection<MainWindowTabItem>();
-            Tabs.Add(new MainWindowTabItem(){ Control = new CalendarTabViewModel(CurrentUser), Title = Resources.Calendar, Tag = "../Icons/calendar_white.png", OnlyForAdmins = false });
-            Tabs.Add(new MainWindowTabItem() { Control = new ReportingTabViewModel(CurrentUser), Title = Resources.Reporting, Tag = "../Icons/reporting_white.png", OnlyForAdmins = false });
-            Tabs.Add(new MainWindowTabItem() { Control = new PeopleTabViewModel(CurrentUser), Title = Resources.People, Tag = "../Icons/people_white.png", OnlyForAdmins = false });
-            Tabs.Add(new MainWindowTabItem() { Control = new CustomerTabViewModel(CurrentUser), Title = Resources.Customers, Tag = "../Icons/customers_white.png", OnlyForAdmins = true });
-            Tabs.Add(new MainWindowTabItem() { Control = new ProjectsTabViewModel(), Title = Resources.Projects, Tag = "../Icons/projects_white.png", OnlyForAdmins = true });
-            Tabs.Add(new MainWindowTabItem() { Control = new TasksTabViewModel(), Title = Resources.Tasks, Tag = "../Icons/tasks_white.png", OnlyForAdmins = true });
-            Tabs.Add(new MainWindowTabItem() { Control = new SettingsTabViewModel(), Title = Resources.Settings, Tag = "../Icons/settings_white.png", OnlyForAdmins = false });
+            Tabs.Add(new MainWindowTabItem() { Control = TabsType.CalendarTab, Title = Resources.Calendar, Tag = "../Icons/calendar_white.png", OnlyForAdmins = false });
+            Tabs.Add(new MainWindowTabItem() { Control = TabsType.ReportingTab, Title = Resources.Reporting, Tag = "../Icons/reporting_white.png", OnlyForAdmins = false });
+            Tabs.Add(new MainWindowTabItem() { Control = TabsType.PeopleTab, Title = Resources.People, Tag = "../Icons/people_white.png", OnlyForAdmins = false });
+            Tabs.Add(new MainWindowTabItem() { Control = TabsType.CustomersTab, Title = Resources.Customers, Tag = "../Icons/customers_white.png", OnlyForAdmins = true });
+            Tabs.Add(new MainWindowTabItem() { Control = TabsType.ProjectsTab, Title = Resources.Projects, Tag = "../Icons/projects_white.png", OnlyForAdmins = true });
+            Tabs.Add(new MainWindowTabItem() { Control = TabsType.TasksTab, Title = Resources.Tasks, Tag = "../Icons/tasks_white.png", OnlyForAdmins = true });
+            Tabs.Add(new MainWindowTabItem() { Control = TabsType.SettingsTab, Title = Resources.Settings, Tag = "../Icons/settings_white.png", OnlyForAdmins = false });
+            ViewModelCache = new HashSet<ICacheable>();
+            SelectedTab = Tabs[0];
+            App.GlobalTimer.CacheTimerTick += CheckViewModelCache;
         }
 
         public void ChangeCurrentUser(object sender, User newUser)
@@ -328,6 +401,14 @@ namespace TBT.App.ViewModels.MainWindow
         {
             IsConnected = isConnected;
         }
+
+        private void CheckViewModelCache()
+        {
+            if (_viewModelCache?.Any() != true) { return; }
+            _viewModelCache.RemoveWhere(x => x.ExpiresDate < DateTime.Now);
+        }
+
+        #endregion
 
         #endregion
 

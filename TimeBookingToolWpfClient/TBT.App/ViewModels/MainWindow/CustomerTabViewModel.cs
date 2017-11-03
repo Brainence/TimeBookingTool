@@ -16,8 +16,8 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class CustomerTabViewModel: BaseViewModel
-{
+    public class CustomerTabViewModel: BaseViewModel, ICacheable
+    {
         #region Fields
 
         private bool _itemsLoading;
@@ -71,6 +71,8 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _isAdmin; }
             set { SetProperty(ref _isAdmin, value); }
         }
+
+        public DateTime ExpiresDate { get; set; }
 
         public ICommand CreateNewCustomerCommand { get; set; }
         public ICommand RefreshCustomersCommand { get; set; }
@@ -200,6 +202,20 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 Customers = customers;
             }
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        private bool disposed = false;
+
+        public virtual void Dispose()
+        {
+            if (disposed) { return; }
+
+            RefreshEvents.ChangeCustomersList -= RefreshCustomersList;
+            disposed = true;
         }
 
         #endregion

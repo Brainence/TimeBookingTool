@@ -25,11 +25,28 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+
+        <!--Connection lost control-->
+
         <!--<StackPanel Grid.Row="0" VerticalAlignment="Center">
             <controls:SpinnersCogs Visibility="{Binding IsConnected, Converter={StaticResource BoolToNotVisibilityConverter}}" Grid.Row="0" />
             <TextBox FontSize="20" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" Text="{x:Static p:Resources.ConnectionLost}" Foreground="{StaticResource SpinnerForeground}"/>
         </StackPanel>-->
-        <TabControl Grid.Row="0" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}" ItemsSource="{Binding Tabs, Mode=TwoWay}">
+
+        <!--Connection lost control-->
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="57"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <ListBox Grid.Row="0" Style="{StaticResource HeaderStyle}">
+            </ListBox>
+            <ContentControl Grid.Row="1" Margin="0 5 0 0" Content="{Binding SelectedViewModel}"/>
+        </Grid>
+
+
+        <!--<TabControl Grid.Row="0" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}" ItemsSource="{Binding Tabs, Mode=TwoWay}">
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <ContentControl HorizontalAlignment="Stretch"  
@@ -43,7 +60,7 @@
                     </ContentControl>
                 </DataTemplate>
             </TabControl.ContentTemplate>
-        </TabControl>
+        </TabControl>-->
 
         <Grid Grid.Row="1">
             <ContentControl Content="{Binding LanguageControl}" 

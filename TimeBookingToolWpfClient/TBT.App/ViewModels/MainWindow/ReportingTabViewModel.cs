@@ -24,8 +24,8 @@ using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class ReportingTabViewModel: BaseViewModel
-{
+    public class ReportingTabViewModel: BaseViewModel, ICacheable
+    {
         #region Fields
 
 
@@ -142,6 +142,8 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _isEnable; }
             set { SetProperty(ref _isEnable, value); }
         }
+
+        public DateTime ExpiresDate { get; set; }
 
         public ICommand RefreshReportTimeEntiresCommand { get; set; }
         public ICommand CreateCompanyReportCommand { get; set; }
@@ -505,6 +507,22 @@ namespace TBT.App.ViewModels.MainWindow
                 ReportingUser = Users?.FirstOrDefault(x => x.Id == User.Id);
                 SelectedUserIndex = Users.IndexOf(ReportingUser);
             }
+        }
+
+        #endregion
+
+
+        #region IDisposable
+
+        private bool disposed = false;
+
+        public virtual void Dispose()
+        {
+            if (disposed) { return; }
+
+            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
+            RefreshEvents.ChangeUsersList -= RefreshUsersList;
+            disposed = true;
         }
 
         #endregion

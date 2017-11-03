@@ -16,7 +16,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class ProjectsTabViewModel : BaseViewModel
+    public class ProjectsTabViewModel : BaseViewModel, ICacheable
     {
         #region Fields
 
@@ -66,6 +66,8 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _itemsLoading; }
             set { SetProperty(ref _itemsLoading, value); }
         }
+
+        public DateTime ExpiresDate { get; set; }
 
         public ICommand CreateNewProjectCommand { get; set; }
         public ICommand RefreshProjectsCommand { get; set; }
@@ -214,6 +216,21 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 Projects = projects;
             }
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        private bool disposed = false;
+
+        public virtual void Dispose()
+        {
+            if (disposed) { return; }
+
+            RefreshEvents.ChangeProjectsList += RefreshProjectsList;
+            RefreshEvents.ChangeCustomersList += RefreshCustomersList;
+            disposed = true;
         }
 
         #endregion
