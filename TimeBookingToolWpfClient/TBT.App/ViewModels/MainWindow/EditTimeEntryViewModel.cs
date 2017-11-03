@@ -25,11 +25,10 @@ namespace TBT.App.ViewModels.MainWindow
         private Activity _selectedActivity;
         private string _comment;
         private string _timeText;
-        //private string _timeLimit;
         private DateTime? _selectedDay;
         private string _errorMessage;
-        //private bool? _isLimitVisible;
-        private string _emptyText;
+        private int? _savedProjectId;
+        private int? _savedActivityId;
 
         #endregion
 
@@ -49,6 +48,7 @@ namespace TBT.App.ViewModels.MainWindow
                 if(SetProperty(ref _selectedProject, value))
                 {
                     SelectedActivity = null;
+                    if (value != null) { _savedProjectId = value?.Id; }
                 }
             }
         }
@@ -56,7 +56,13 @@ namespace TBT.App.ViewModels.MainWindow
         public Activity SelectedActivity
         {
             get { return _selectedActivity; }
-            set { SetProperty(ref _selectedActivity, value); }
+            set
+            {
+                if (SetProperty(ref _selectedActivity, value) && value != null)
+                {
+                    _savedActivityId = value?.Id;
+                }
+            }
         }
 
         public string Comment
@@ -82,12 +88,6 @@ namespace TBT.App.ViewModels.MainWindow
         {
             get { return _errorMessage; }
             set { SetProperty(ref _errorMessage, value); }
-        }
-
-        public string EmptyText
-        {
-            get { return _emptyText; }
-            set { SetProperty(ref _emptyText, value); }
         }
 
         public ICommand CreateStartCommand { get; set; }
@@ -224,6 +224,14 @@ namespace TBT.App.ViewModels.MainWindow
         public void RefreshCurrentUser(User user)
         {
             User = user;
+            if (_savedProjectId.HasValue)
+            {
+                SelectedProject = User?.Projects?.FirstOrDefault(x => x.Id == _savedProjectId.Value);
+                if(_savedActivityId.HasValue)
+                {
+                    SelectedActivity = SelectedProject?.Activities?.FirstOrDefault(x => x.Id == _savedActivityId);
+                }
+            }
         }
 
         #endregion

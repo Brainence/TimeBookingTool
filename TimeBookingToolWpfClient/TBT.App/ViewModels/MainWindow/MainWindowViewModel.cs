@@ -39,7 +39,6 @@ namespace TBT.App.ViewModels.MainWindow
         private bool _isConnected;
         private BaseViewModel _languageControl;
 
-
         #endregion
 
         #region Properties
@@ -159,7 +158,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         #endregion
 
-        #region Constructor
+        #region Constructors
 
         public MainWindowViewModel(bool authorized)
         {
@@ -227,10 +226,10 @@ namespace TBT.App.ViewModels.MainWindow
             App.Username = string.Empty;
 
             IsVisible = false;
+            SelectedTab = Tabs[0];
             ViewModelCache.Clear();
             if (!OpenAuthenticationWindow(false))
             {
-                SelectedTab = Tabs[0];
                 ViewModelCache = null;
                 LoggedOut = false;
                 try
@@ -407,8 +406,6 @@ namespace TBT.App.ViewModels.MainWindow
             if (_viewModelCache?.Any() != true) { return; }
             _viewModelCache.RemoveWhere(x => x.ExpiresDate < DateTime.Now);
         }
-
-        #endregion
 
         #endregion
 

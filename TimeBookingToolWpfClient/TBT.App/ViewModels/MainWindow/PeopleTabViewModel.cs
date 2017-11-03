@@ -86,7 +86,7 @@ namespace TBT.App.ViewModels.MainWindow
         public ICommand RemoveUserCommand { get; set; }
         public ICommand EditUserCommand { get; set; }
 
-        public event Action<User> ChangeUserForNested;
+        public event Action<object, User> ChangeUserForNested;
         //public event Action<ObservableCollection<User>> ChangeUsersListForNested;
 
         #endregion
@@ -185,7 +185,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 CurrentUser = user;
             }
-            ChangeUserForNested?.Invoke(user);
+            ChangeUserForNested?.Invoke(sender, user);
         }
 
         public void RefreshUsersList(object sender, ObservableCollection<User> users)

@@ -10,6 +10,7 @@ using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
+using TBT.App.ViewModels.MainWindow;
 
 namespace TBT.App.ViewModels.EditWindowsViewModels
 {
@@ -137,9 +138,9 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
             }
         }
 
-        public void RefreshCurrentUser(User user)
+        public void RefreshCurrentUser(object sender, User user)
         {
-            EditingUser = user;
+            if(!(sender is MainWindowViewModel)) EditingUser = user;
             ChangePassword = false;
         }
 
