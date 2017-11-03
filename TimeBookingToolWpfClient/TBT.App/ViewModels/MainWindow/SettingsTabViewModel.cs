@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TBT.App.Common;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class SettingsTabViewModel: BaseViewModel, IDisposable
+    public class SettingsTabViewModel: BaseViewModel, ICacheable
     {
         #region Fields
 
@@ -49,6 +50,8 @@ namespace TBT.App.ViewModels.MainWindow
             get { return App.EnableGreetingNotification; }
             set { App.EnableGreetingNotification = value; }
         }
+
+        public DateTime ExpiresDate { get; set; }
 
         #endregion
 

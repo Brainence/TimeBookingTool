@@ -24,8 +24,8 @@ using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class ReportingTabViewModel: BaseViewModel, IDisposable
-{
+    public class ReportingTabViewModel: BaseViewModel, ICacheable
+    {
         #region Fields
 
 
@@ -142,6 +142,8 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _isEnable; }
             set { SetProperty(ref _isEnable, value); }
         }
+
+        public DateTime ExpiresDate { get; set; }
 
         public ICommand RefreshReportTimeEntiresCommand { get; set; }
         public ICommand CreateCompanyReportCommand { get; set; }

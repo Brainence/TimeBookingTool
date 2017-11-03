@@ -15,7 +15,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class PeopleTabViewModel: BaseViewModel, IDisposable
+    public class PeopleTabViewModel: BaseViewModel, ICacheable
     {
         #region Fields
 
@@ -80,6 +80,8 @@ namespace TBT.App.ViewModels.MainWindow
                 SetProperty(ref _users, value);
             }
         }
+
+        public DateTime ExpiresDate { get; set; }
 
         public ICommand RemoveUserCommand { get; set; }
         public ICommand EditUserCommand { get; set; }

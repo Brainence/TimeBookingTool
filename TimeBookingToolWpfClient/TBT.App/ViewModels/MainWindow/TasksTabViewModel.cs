@@ -16,7 +16,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class TasksTabViewModel: BaseViewModel, IDisposable
+    public class TasksTabViewModel: BaseViewModel, ICacheable
     {
         #region Fields
 
@@ -66,6 +66,8 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _selectedProjectIndex; }
             set { SetProperty(ref _selectedProjectIndex, value); }
         }
+
+        public DateTime ExpiresDate { get; set; }
 
         public ICommand CreateNewTaskCommand { get; set; }
         public ICommand RefreshTasksCommand { get; set; }

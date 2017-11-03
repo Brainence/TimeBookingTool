@@ -14,10 +14,11 @@ using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
 using TBT.App.Views.Controls;
+using System.ComponentModel;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class CalendarTabViewModel:BaseViewModel, IDisposable
+    public class CalendarTabViewModel:BaseViewModel, ICacheable
     {
         #region Fields
 
@@ -27,8 +28,8 @@ namespace TBT.App.ViewModels.MainWindow
         private User _user;
         private string _weekTime;
         private int _selectedIndex;
-        private BaseViewModel _editTimeEntryViewModel;
-        private BaseViewModel _timeEntryItems;
+        private EditTimeEntryViewModel _editTimeEntryViewModel;
+        private TimeEntryItemsViewModel _timeEntryItems;
         private bool _isLoading;
 
         #endregion
@@ -85,13 +86,13 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _weekTime, value); }
         }
 
-        public BaseViewModel EditTimeEntryViewModel
+        public EditTimeEntryViewModel EditTimeEntryViewModel
         {
             get { return _editTimeEntryViewModel; }
             set { SetProperty(ref _editTimeEntryViewModel, value); }
         }
 
-        public BaseViewModel TimeEntryItems
+        public TimeEntryItemsViewModel TimeEntryItems
         {
             get { return _timeEntryItems; }
             set { SetProperty(ref _timeEntryItems, value); }
@@ -102,6 +103,8 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _isLoading; }
             set { SetProperty(ref _isLoading, value); }
         }
+
+        public DateTime ExpiresDate { get; set; }
 
         public ICommand BackTodayCommand { get; set; }
         public ICommand GoToSelectedDayCommand { get; set; }
@@ -119,21 +122,29 @@ namespace TBT.App.ViewModels.MainWindow
             Week = GetWeekOfDay(DateTime.Now);
             IsDateNameShort = true;
             TimeEntryItems = new TimeEntryItemsViewModel() { TimeEntries = User?.TimeEntries, };
-            ((TimeEntryItemsViewModel)TimeEntryItems).RefreshTimeEntries += (async () => await RefreshTimeEntries(Week));
+            TimeEntryItems.RefreshTimeEntries += (async () => await RefreshTimeEntries(Week));
             EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, SelectedDay = SelectedDay };
-            EditTimeEntryViewModel tempVM = (EditTimeEntryViewModel)_editTimeEntryViewModel;
             //PropertyChanged += tempVM.ShowLimit;
-            PropertyChanged += tempVM.ChangeButtonName;
-            PropertyChanged += tempVM.ClearError;
-            ChangeUserForNested += tempVM.RefreshCurrentUser;
+            PropertyChanged += _editTimeEntryViewModel.ChangeButtonName;
+            PropertyChanged += _editTimeEntryViewModel.ClearError;
+            ChangeUserForNested += _editTimeEntryViewModel.RefreshCurrentUser;
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
             SelectedDay = DateTime.Now.Date;
-            tempVM.RefreshTimeEntries += async () => await RefreshTimeEntries(Week);
+            _editTimeEntryViewModel.RefreshTimeEntries += async () => await RefreshTimeEntries(Week);
+            //_editTimeEntryViewModel.PropertyChanged += CacheEditTimeEntry;
             ChangeWeekCommand = new RelayCommand(obj => ChangeWeek(Convert.ToInt32(obj)), null);
             GoToSelectedDayCommand = new RelayCommand(obj => GoToDefaultWeek(true, false), obj => SelectedDay.HasValue && SelectedDay.Value.StartOfWeek(DayOfWeek.Monday) != Week.FirstOrDefault());
             BackTodayCommand = new RelayCommand(obj => GoToDefaultWeek(false, true), obj => SelectedDay.HasValue && SelectedDay.Value.Date != DateTime.Now.Date);
             GoToCurrentWeekCommand = new RelayCommand(obj => GoToDefaultWeek(false, false), obj => SelectedDay.HasValue && !Week.Contains(DateTime.Now.Date));
             GetTimeEnteredForWeek(Week);
+        }
+
+        private void CacheEditTimeEntry(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "EditTimeEntry")
+            {
+                _editTimeEntryViewModel = (EditTimeEntryViewModel)sender;
+            }
         }
 
         #endregion
@@ -184,7 +195,7 @@ namespace TBT.App.ViewModels.MainWindow
                 }
 
                 User.TimeEntries = new ObservableCollection<TimeEntry>(timeEntries);
-                ((TimeEntryItemsViewModel)TimeEntryItems).TimeEntries = User.TimeEntries;
+                TimeEntryItems.TimeEntries = User.TimeEntries;
             }
             catch (Exception ex)
             {
@@ -253,7 +264,6 @@ namespace TBT.App.ViewModels.MainWindow
                 User = user;
             }
         }
-
 
         #region IDisposable
 

@@ -168,6 +168,7 @@
     <Compile Include="Helpers\AuthenticationControlClosePararmeters.cs" />
     <Compile Include="Helpers\Enums.cs" />
     <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\ICacheable.cs" />
     <Compile Include="Helpers\LanguageItem.cs" />
     <Compile Include="Helpers\MainWindowTabItem.cs" />
     <Compile Include="Helpers\RefreshEvents.cs" />
