@@ -18,6 +18,7 @@ namespace TBT.App.Models.AppModels
         private ObservableCollection<TimeEntry> _timeEntries;
         private int? _timeLimit;
         private TimeSpan? _currentTimeZone;
+        private Company _company;
 
         public User()
         {
@@ -90,6 +91,12 @@ namespace TBT.App.Models.AppModels
         {
             get { return _currentTimeZone; }
             set { SetProperty(ref _currentTimeZone, value); }
+        }
+
+        public Company Company
+        {
+            get { return _company; }
+            set { SetProperty(ref _company, value); }
         }
 
         public string FullName => $"{FirstName} {LastName}";

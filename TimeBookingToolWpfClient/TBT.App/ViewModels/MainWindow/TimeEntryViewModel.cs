@@ -239,9 +239,9 @@ namespace TBT.App.ViewModels.MainWindow
                 var from = new DateTime(now.Year, now.Month, 1);
                 var to = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
 
-                return await App.CanStartOrEditTimeEntry(TimeEntry.User.Id, TimeEntry.User.TimeLimit.Value, from, to, duration);
+                return await App.CanStartOrEditTimeEntry(TimeEntry.User.Id, TimeEntry.User.TimeLimit, from, to, duration);
             }
-            catch
+            catch(Exception ex)
             {
                 return await Task.FromResult(false);
             }

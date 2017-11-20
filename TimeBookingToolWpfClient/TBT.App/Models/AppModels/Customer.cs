@@ -9,6 +9,7 @@ namespace TBT.App.Models.AppModels
         private string _name;
         private ObservableCollection<Project> _projects;
         private bool _isActive;
+        private Company _company;
 
         public Customer()
         {
@@ -37,6 +38,12 @@ namespace TBT.App.Models.AppModels
         {
             get { return _isActive; }
             set { SetProperty(ref _isActive, value); }
+        }
+
+        public Company Company
+        {
+            get { return _company; }
+            set { SetProperty(ref _company, value); }
         }
 
         public override string ToString()

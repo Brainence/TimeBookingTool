@@ -179,8 +179,8 @@ namespace TBT.App.ViewModels.MainWindow
                 RefreshAllCommand = new RelayCommand(obj => RefreshAll(), null);
                 try
                 {
-                    RefreshEvents.RefreshCurrentUser(null);
                     InitTabs();
+                    RefreshEvents.RefreshCurrentUser(null);
                     RefreshAll();
                 }
                 catch (Exception) { }
@@ -230,7 +230,6 @@ namespace TBT.App.ViewModels.MainWindow
             ViewModelCache.Clear();
             if (!OpenAuthenticationWindow(false))
             {
-                ViewModelCache = null;
                 LoggedOut = false;
                 try
                 {

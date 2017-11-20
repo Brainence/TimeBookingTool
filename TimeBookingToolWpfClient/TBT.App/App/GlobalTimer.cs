@@ -10,6 +10,7 @@ namespace TBT.App
     {
         private DispatcherTimer _timer;
         private DateTime _cacheTickInterval;
+        private DateTime _midnightTickTime;
         public GlobalTimer()
         {
             _timer = new DispatcherTimer();
@@ -32,12 +33,12 @@ namespace TBT.App
         {
             try
             {
-                //if (_timer.IsEnabled) _timer.Stop();
+                if (_timer.IsEnabled) _timer.Stop();
 
                 var result = JsonConvert.DeserializeObject<bool>(
                     await App.CommunicationService.GetAsJson($"TimeEntry/Start/{id}"));
 
-                //if (result) _timer.Start();
+                if (result) _timer.Start();
 
                 return await Task.FromResult(result);
             }
@@ -54,7 +55,7 @@ namespace TBT.App
                 var result = JsonConvert.DeserializeObject<bool>(
                     await App.CommunicationService.GetAsJson($"TimeEntry/Stop/{id}"));
 
-                //if (result) _timer.Stop();
+                if (result) _timer.Stop();
 
                 return await Task.FromResult(result);
             }

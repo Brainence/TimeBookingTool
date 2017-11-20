@@ -490,17 +490,17 @@ namespace TBT.App
             _openWindow?.Invoke();
         }
 
-        public static async Task<bool> CanStartOrEditTimeEntry(int userId, int userTimeLimit, DateTime from, DateTime to, TimeSpan? duration)
+        public static async Task<bool> CanStartOrEditTimeEntry(int userId, int? userTimeLimit, DateTime from, DateTime to, TimeSpan? duration)
         {
             try
             {
-                if (userId <= 0 || userTimeLimit <= 0) return await Task.FromResult(false);
+                if (userId <= 0 || (userTimeLimit <= 0 && !userTimeLimit.HasValue)) return await Task.FromResult(false);
 
                 var sum = JsonConvert.DeserializeObject<TimeSpan?>(
                     await CommunicationService.GetAsJson($"TimeEntry/GetDuration/{userId}/{UrlSafeDateToString(from)}/{UrlSafeDateToString(to)}"));
 
                 if (sum.HasValue)
-                    return await Task.FromResult(sum.Value.TotalHours + (duration.HasValue ? duration.Value.TotalHours : 0.0) < userTimeLimit);
+                    return await Task.FromResult(!userTimeLimit.HasValue || (sum.Value.TotalHours + (duration.HasValue ? duration.Value.TotalHours : 0.0) < userTimeLimit));
                 else
                     return await Task.FromResult(true);
             }
