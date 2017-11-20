@@ -117,7 +117,6 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                 else
                 {
                     if (EditingUser == null || (EditingUser != null && string.IsNullOrEmpty(EditingUser.Username))) return;
-
                     var x = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={EditingUser.Username}"));
                     if (x == null)
                     {

@@ -101,7 +101,7 @@ namespace TBT.App.ViewModels.MainWindow
                 ShowAdmin = true,
                 ShowPassword = true,
                 ForSaving = false,
-                EditingUser = new User()
+                EditingUser = new User() { Company = CurrentUser.Company }
             };
             ((EditUserViewModel)CreateNewUserViewModel).SavingUserAction += SaveUserEditingAction;
 

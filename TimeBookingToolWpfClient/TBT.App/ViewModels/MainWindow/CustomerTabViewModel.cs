@@ -25,6 +25,7 @@ namespace TBT.App.ViewModels.MainWindow
         private ObservableCollection<Customer> _customers;
         private bool _isExpanded;
         private bool _isAdmin;
+        private Company _currentCompany;
 
         #endregion
 
@@ -90,6 +91,7 @@ namespace TBT.App.ViewModels.MainWindow
                 IsAdmin = user.IsAdmin;
             }
             RefreshEvents.ChangeCustomersList += RefreshCustomersList;
+            RefreshEvents.ChangeCurrentUser += RefreshCompanyId;
             CreateNewCustomerCommand = new RelayCommand(obj => CreateNewCustomer(), null);
             RefreshCustomersCommand = new RelayCommand(async obj => { Customers = null; await RefreshEvents.RefreshCustomersList(null); }, null);
             EditCustomerCommand = new RelayCommand(obj => EditCustomer(obj as Customer), obj => { return IsAdmin; });
@@ -117,7 +119,7 @@ namespace TBT.App.ViewModels.MainWindow
                     return;
                 }
 
-                customer = new Customer() { Name = name, IsActive = true };
+                customer = new Customer() { Name = name, IsActive = true, Company = _currentCompany };
 
                 await App.CommunicationService.PostAsJson("Customer", customer);
 
@@ -202,6 +204,11 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 Customers = customers;
             }
+        }
+
+        public void RefreshCompanyId(object sender, User currentUser)
+        {
+            if (sender != this) { _currentCompany = currentUser.Company; }
         }
 
         #endregion
