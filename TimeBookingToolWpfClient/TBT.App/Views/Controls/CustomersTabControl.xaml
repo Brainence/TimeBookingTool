@@ -89,7 +89,7 @@
 
                                     <Expander Grid.Column="1" 
                                               Width="310"
-                                              Margin="5 5 15 5" 
+                                              Margin="5 5 0 5" 
                                               Header="{x:Static p:Resources.Projects}"
                                               IsExpanded="{Binding IsExpanded}">
 

@@ -78,8 +78,8 @@
                                                 <ColumnDefinition SharedSizeGroup="FullName" Width="155"/>
                                                 <ColumnDefinition SharedSizeGroup="Username" Width="215"/>
                                                 <ColumnDefinition SharedSizeGroup="Project" Width="40"/>
-                                                <ColumnDefinition SharedSizeGroup="Remove" Width="30"/>
-                                                <ColumnDefinition SharedSizeGroup="Edit" Width="25"/>
+                                                <ColumnDefinition SharedSizeGroup="Remove"/>
+                                                <ColumnDefinition SharedSizeGroup="Edit"/>
                                             </Grid.ColumnDefinitions>
 
                                             <Image Height="16" Grid.Column="0" Margin="0 5" Source="../../Resources/Icons/administrator.png" ToolTip="{x:Static p:Resources.Admin}">
@@ -128,7 +128,8 @@
                                             <Button Command="{Binding ElementName=PeopleTab, Path=DataContext.EditUserCommand}"
                                                     CommandParameter="{Binding}"
                                                     Visibility="{Binding ElementName=PeopleTab, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                    Background="Transparent" Grid.Column="4" Margin="5">
+                                                    Grid.Column="4" Margin="5"
+                                                    VerticalAlignment="Top" >
                                                 <Image Height="20" 
                                                        Source="../../Resources/Icons/editing.png" Width="20"
                                                        Cursor="Hand"/>
@@ -137,7 +138,8 @@
                                             <Button Command="{Binding ElementName=PeopleTab, Path=DataContext.RemoveUserCommand}"
                                                     CommandParameter="{Binding}"
                                                     Visibility="{Binding ElementName=PeopleTab, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                    Background="Transparent" Grid.Column="5" Margin="0 5 5 5" >
+                                                    Grid.Column="5" Margin="0 5 5 5"
+                                                    VerticalAlignment="Top" >
                                                 <Image Height="20"  
                                                        Source="../../Resources/Icons/bin.png" Width="20"
                                                        Cursor="Hand"/>
