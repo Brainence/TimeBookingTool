@@ -204,7 +204,7 @@ namespace TBT.App.ViewModels.MainWindow
 
             SayBye();
             IsVisible = false;
-            ViewModelCache.Clear();
+            ViewModelCache?.Clear();
         }
 
         private async void RefreshAll()
@@ -227,7 +227,7 @@ namespace TBT.App.ViewModels.MainWindow
 
             IsVisible = false;
             SelectedTab = Tabs[0];
-            ViewModelCache.Clear();
+            ViewModelCache?.Clear();
             if (!OpenAuthenticationWindow(false))
             {
                 LoggedOut = false;
