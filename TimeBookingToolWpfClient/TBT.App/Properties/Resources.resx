@@ -506,4 +506,22 @@
   <data name="YouCantRemoveLastAdmin" xml:space="preserve">
     <value>You can't remove last admin.</value>
   </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Company name</value>
+  </data>
+  <data name="CompanyRegistered" xml:space="preserve">
+    <value>Company was successfully registered</value>
+  </data>
+  <data name="CompanyRegistration" xml:space="preserve">
+    <value>Company registration</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="RegisterNewCompany" xml:space="preserve">
+    <value>Register new company</value>
+  </data>
+  <data name="UsernameMustBeEmail" xml:space="preserve">
+    <value>Username must be email</value>
+  </data>
 </root>

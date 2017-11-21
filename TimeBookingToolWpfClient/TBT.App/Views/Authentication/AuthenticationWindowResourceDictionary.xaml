@@ -13,4 +13,8 @@
     <DataTemplate DataType="{x:Type vm:ResetPasswordControlViewModel}">
         <local:ResetPasswordControl/>
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:CompanyRegistrationControlViewModel}">
+        <local:CompanyRegistrationControl/>
+    </DataTemplate>
 </ResourceDictionary>

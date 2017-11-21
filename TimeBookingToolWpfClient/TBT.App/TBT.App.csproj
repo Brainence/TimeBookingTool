@@ -198,6 +198,7 @@
     <Compile Include="Services\Encryption\Interfaces\IEncryptionService.cs" />
     <Compile Include="ViewModels\Authentication\AuthenticationControlViewModel.cs" />
     <Compile Include="ViewModels\Authentication\AuthenticationWindowViewModel.cs" />
+    <Compile Include="ViewModels\Authentication\CompanyRegistrationControlViewModel.cs" />
     <Compile Include="ViewModels\Authentication\ForgotPasswordControlViewModel.cs" />
     <Compile Include="ViewModels\Authentication\ResetPasswordControlViewModel.cs" />
     <Compile Include="ViewModels\EditWindowsViewModels\EditActivityViewModel.cs" />
@@ -220,6 +221,9 @@
     <Compile Include="ViewModels\MainWindow\TimeEntryViewModel.cs" />
     <Compile Include="Views\Authentication\AuthenticationControl.xaml.cs">
       <DependentUpon>AuthenticationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Authentication\CompanyRegistrationControl.xaml.cs">
+      <DependentUpon>CompanyRegistrationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Authentication\ForgotPasswordControl.xaml.cs">
       <DependentUpon>ForgotPasswordControl.xaml</DependentUpon>
@@ -362,6 +366,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Authentication\AuthenticationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Authentication\CompanyRegistrationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

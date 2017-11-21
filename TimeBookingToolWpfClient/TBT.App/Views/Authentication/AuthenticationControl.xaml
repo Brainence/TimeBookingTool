@@ -62,15 +62,20 @@
                             </KeyBinding>
                         </PasswordBox.InputBindings>
                     </PasswordBox>
-                    <Grid Height="30">
+                    <Grid Height="60">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="signInButton" Content="{x:Static p:Resources.SignIn}" Margin="4" 
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Button x:Name="signInButton" Content="{x:Static p:Resources.SignIn}" 
+                                Margin="4,4,0,4" 
+                                HorizontalAlignment="Left"
                                 Command="{Binding Path=LoginClick}" 
-                                Template="{StaticResource HyperlinkAuthButtonTemplate}"
-                                HorizontalAlignment="Left">
+                                Template="{StaticResource HyperlinkAuthButtonTemplate}">
                             <Button.CommandParameter>
                                 <MultiBinding Converter="{StaticResource AuthenticationControlMultiConverter}">
                                     <Binding ElementName="passwordBox" Path="(helpers:PasswordHelper.Password)"/>
@@ -79,13 +84,20 @@
                             </Button.CommandParameter>
                         </Button>
 
-                        <controls:SpinnersApple HorizontalAlignment="Right"
+                        <!--<controls:SpinnersApple HorizontalAlignment="Right"
                                                 Margin="4" 
                                                 Visibility="{Binding ElementName=signInButton, Path=IsEnabled, Converter={StaticResource BoolToNotVisibilityConverter}}"
-                                                />
+                                                />-->
 
                         <Button x:Name="forgotPasswordButton" Content="{x:Static p:Resources.ForgotPassword}" Margin="4" Grid.Column="1" 
                                 Command="{Binding Path=ForgotPasswordClick}" Template="{StaticResource HyperlinkAuthButtonTemplate}"
+                                HorizontalAlignment="Right"/>
+                        
+                        <Button x:Name="registerCompanyButton" 
+                                Content="{x:Static p:Resources.RegisterNewCompany}" 
+                                Margin="4" 
+                                Grid.Column="1" Grid.Row="1"
+                                Command="{Binding Path=RegisterCompanyClick}" Template="{StaticResource HyperlinkAuthButtonTemplate}"
                                 HorizontalAlignment="Right"/>
                     </Grid>
                 </StackPanel>

@@ -241,6 +241,33 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company name.
+        /// </summary>
+        public static string CompanyName {
+            get {
+                return ResourceManager.GetString("CompanyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company was successfully registered.
+        /// </summary>
+        public static string CompanyRegistered {
+            get {
+                return ResourceManager.GetString("CompanyRegistered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company registration.
+        /// </summary>
+        public static string CompanyRegistration {
+            get {
+                return ResourceManager.GetString("CompanyRegistration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company report.
         /// </summary>
         public static string CompanyReport {
@@ -808,6 +835,24 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Register.
+        /// </summary>
+        public static string Register {
+            get {
+                return ResourceManager.GetString("Register", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register new company.
+        /// </summary>
+        public static string RegisterNewCompany {
+            get {
+                return ResourceManager.GetString("RegisterNewCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
         public static string Remove {
@@ -1156,6 +1201,15 @@ namespace TBT.App.Properties {
         public static string UserNameIsRequierd {
             get {
                 return ResourceManager.GetString("UserNameIsRequierd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username must be email.
+        /// </summary>
+        public static string UsernameMustBeEmail {
+            get {
+                return ResourceManager.GetString("UsernameMustBeEmail", resourceCulture);
             }
         }
         

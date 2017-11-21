@@ -48,6 +48,7 @@ namespace TBT.App.ViewModels.Authentication
 
         public ICommand LoginClick { get; private set; }
         public ICommand ForgotPasswordClick { get; private set; }
+        public ICommand RegisterCompanyClick { get; private set; }
 
         #endregion
 
@@ -57,7 +58,8 @@ namespace TBT.App.ViewModels.Authentication
         {
             _mainVM = mainVm;
             LoginClick = new RelayCommand(obj => LoginMe(obj as AuthenticationControlClosePararmeters), null);
-            ForgotPasswordClick = new RelayCommand(obj => GoToForgotPasswordControl(), null);
+            ForgotPasswordClick = new RelayCommand(obj => ChangeCurrentViewModel(new ForgotPasswordControlViewModel(_mainVM)), null);
+            RegisterCompanyClick = new RelayCommand(obj => ChangeCurrentViewModel(new CompanyRegistrationControlViewModel(_mainVM)), null);
         }
 
         #endregion
@@ -130,10 +132,10 @@ namespace TBT.App.ViewModels.Authentication
             }
         }
 
-        private void GoToForgotPasswordControl()
+        private void ChangeCurrentViewModel(BaseViewModel newCurrentViewModel)
         {
             _mainVM.ErrorMsg = string.Empty;
-            _mainVM.CurrentViewModel = new ForgotPasswordControlViewModel(_mainVM);
+            _mainVM.CurrentViewModel = newCurrentViewModel;
         }
     }
 

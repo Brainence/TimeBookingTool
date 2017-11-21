@@ -509,4 +509,22 @@
   <data name="YouCantRemoveLastAdmin" xml:space="preserve">
     <value>Ви не можете видалити останнього адміністратора.</value>
   </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Назва компанії</value>
+  </data>
+  <data name="CompanyRegistration" xml:space="preserve">
+    <value>Реєстрація компанії</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Зареєструвати</value>
+  </data>
+  <data name="CompanyRegistered" xml:space="preserve">
+    <value>Компанія успішно зареєстрована</value>
+  </data>
+  <data name="RegisterNewCompany" xml:space="preserve">
+    <value>Зареєструвати нову компанію</value>
+  </data>
+  <data name="UsernameMustBeEmail" xml:space="preserve">
+    <value>Логін повинен бути адресою електронної пошти</value>
+  </data>
 </root>
