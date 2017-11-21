@@ -226,7 +226,6 @@ namespace TBT.App.ViewModels.MainWindow
             App.Username = string.Empty;
 
             IsVisible = false;
-            SelectedTab = Tabs[0];
             ViewModelCache?.Clear();
             if (!OpenAuthenticationWindow(false))
             {
@@ -235,7 +234,8 @@ namespace TBT.App.ViewModels.MainWindow
                 {
                     await RefreshEvents.RefreshCurrentUser(null);
                 }
-                catch (Exception) { } 
+                catch (Exception) { }
+                SelectedTab = Tabs[0];
                 IsVisible = true;
                 App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
             }
