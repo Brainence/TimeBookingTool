@@ -96,7 +96,8 @@
                         <Button x:Name="registerCompanyButton" 
                                 Content="{x:Static p:Resources.RegisterNewCompany}" 
                                 Margin="4" 
-                                Grid.Column="1" Grid.Row="1"
+                                Grid.ColumnSpan="2"
+                                Grid.Column="0" Grid.Row="1"
                                 Command="{Binding Path=RegisterCompanyClick}" Template="{StaticResource HyperlinkAuthButtonTemplate}"
                                 HorizontalAlignment="Right"/>
                     </Grid>

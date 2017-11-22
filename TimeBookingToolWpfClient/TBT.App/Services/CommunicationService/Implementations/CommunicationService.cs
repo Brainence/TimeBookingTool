@@ -67,6 +67,7 @@ namespace TBT.App.Services.CommunicationService.Implementations
 
         public async Task<string> SendRequest(Func<string, object, Task<HttpResponseMessage>> serverResponse, string url, object data)
         {
+            var response = default(HttpResponseMessage);
             try
             {
                 StringContent content = null;
@@ -76,8 +77,9 @@ namespace TBT.App.Services.CommunicationService.Implementations
                     content = new StringContent(data == null ? "" : json, Encoding.UTF8, "application/json");
                 }
 
-                HttpResponseMessage response = await serverResponse(url, content);
+                response = await serverResponse(url, content);
 
+                
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     var updated = await App.UpdateTokens();
@@ -92,18 +94,21 @@ namespace TBT.App.Services.CommunicationService.Implementations
                     ConnectionChanged?.Invoke(false);
                     throw new HttpResponseException(response);
                 }
-                else response.EnsureSuccessStatusCode();
+                else if(!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(await response.Content.ReadAsStringAsync());
+                }
 
                 var responseString = await response.Content.ReadAsStringAsync();
                 return responseString;
             }
-            catch (HttpResponseException httpException)
+            catch (HttpResponseException ex)
             {
-                throw new Exception("HttpResonseException: ", httpException);
+                throw new Exception($"HttpResonseException: {ex.Message}");
             }
-            catch (HttpRequestException httpException)
+            catch (HttpRequestException ex)
             {
-                throw new Exception("HttpRequestException: ", httpException);
+                throw new Exception($"HttpRequestException: {ex.Message}");
             }
             catch (Exception ex)
             {

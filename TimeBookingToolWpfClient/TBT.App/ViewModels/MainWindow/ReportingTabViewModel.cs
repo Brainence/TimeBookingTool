@@ -191,8 +191,8 @@ namespace TBT.App.ViewModels.MainWindow
             switch (SelectedTipIndex)
             {
                 case 0:
-                    From = now.StartOfWeek(DayOfWeek.Monday);
-                    To = From.AddDays(6);
+                    To = now.StartOfWeek(DayOfWeek.Monday).AddDays(6);
+                    From = To.AddDays(-6);
                     break;
                 case 1:
                     From = now.StartOfWeek(DayOfWeek.Monday).AddDays(-7);

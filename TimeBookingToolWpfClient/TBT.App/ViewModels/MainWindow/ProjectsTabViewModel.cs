@@ -121,10 +121,10 @@ namespace TBT.App.ViewModels.MainWindow
                     IsActive = true
                 };
 
-                await App.CommunicationService.PostAsJson("Project", project);
+                project = JsonConvert.DeserializeObject<Project>(
+                    await App.CommunicationService.PostAsJson("Project", project));
 
                 await RefreshEvents.RefreshProjectsList(this);
-                project.Id = -1;
                 Projects.Add(project);
                 NewProjectName = "";
             }

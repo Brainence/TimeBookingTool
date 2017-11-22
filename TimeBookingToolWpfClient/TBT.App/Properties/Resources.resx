@@ -524,4 +524,7 @@
   <data name="UsernameMustBeEmail" xml:space="preserve">
     <value>Username must be email</value>
   </data>
+  <data name="AllPasswordFieldsRequired" xml:space="preserve">
+    <value>All password fields are required</value>
+  </data>
 </root>

@@ -97,6 +97,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All password fields are required.
+        /// </summary>
+        public static string AllPasswordFieldsRequired {
+            get {
+                return ResourceManager.GetString("AllPasswordFieldsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All time.
         /// </summary>
         public static string AllTime {

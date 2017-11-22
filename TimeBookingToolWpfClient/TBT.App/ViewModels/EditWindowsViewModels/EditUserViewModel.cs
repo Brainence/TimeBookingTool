@@ -87,6 +87,13 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                     if (string.IsNullOrEmpty(EditingUser?.Username)) return;
                     if (changePasswordParameters != null && ChangePassword)
                     {
+                        if(string.IsNullOrWhiteSpace(changePasswordParameters.TokenPassword)
+                            || string.IsNullOrWhiteSpace(changePasswordParameters.NewPassword)
+                            || string.IsNullOrWhiteSpace(changePasswordParameters.ConfirmPassword))
+                        {
+                            MessageBox.Show(Properties.Resources.AllPasswordFieldsRequired);
+                            return;
+                        }
                         if(changePasswordParameters.NewPassword != changePasswordParameters.ConfirmPassword)
                         {
                             MessageBox.Show(Properties.Resources.ConfirmYourPassword);
@@ -95,7 +102,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                         var isValid = JsonConvert.DeserializeObject<bool?>(
                         await App.CommunicationService.GetAsJson($"User/ValidatePassword/{EditingUser.Id}/{Uri.EscapeUriString(changePasswordParameters.TokenPassword)}"));
 
-                        if (!isValid.HasValue && !isValid.Value)
+                        if (isValid.HasValue && !isValid.Value)
                         {
                             MessageBox.Show(Properties.Resources.IncorrectPasswordEntered);
                             return;
@@ -112,6 +119,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                     EditingUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", EditingUser));
 
                     MessageBox.Show(Properties.Resources.UserWasSaved);
+                    App.Username = EditingUser.Username;
                     userChanged = true;
                 }
                 else
@@ -121,7 +129,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                     if (x == null)
                     {
                         await App.CommunicationService.PostAsJson("User/NewUser", EditingUser);
-                        EditingUser = new User();
+                        EditingUser = new User() { Company = EditingUser.Company };
                         MessageBox.Show(Properties.Resources.UserAccountCreated);
                         usersListChanged = true;
                     }

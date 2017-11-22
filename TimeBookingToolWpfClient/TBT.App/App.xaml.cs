@@ -116,30 +116,6 @@ namespace TBT.App
                 OnStaticPropertyChanged(nameof(App.RunOnStartup));
             }
         }
-        public static string Greeting
-        {
-            get
-            {
-                return $"{TBT.App.Properties.Resources.Greetings} {(string)AppSettings[Constants.Username]}!";
-            }
-            set
-            {
-                AppSettings[Constants.Greeting] = value;
-                AppSettings.Save();
-            }
-        }
-        public static string Farewell
-        {
-            get
-            {
-                return $"{TBT.App.Properties.Resources.Farewell} {(string)AppSettings[Constants.Username]}!";
-            }
-            set
-            {
-                AppSettings[Constants.Farewell] = value;
-                AppSettings.Save();
-            }
-        }
         public static string Username
         {
             get

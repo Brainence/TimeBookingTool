@@ -8,8 +8,6 @@ namespace TBT.App.Common
         public static string ServerBaseUrl => "ServerBaseUrl";
         public static string LoginUrl => "LoginUrl";
         public static string EnableNotification => "EnableNotification";
-        public static string Greeting => "Greeting"; 
-        public static string Farewell => "Farewell"; 
         public static string Username => "Username"; 
         public static string AuthenticationUsername => "AuthenticationUsername"; 
         public static string RunOnStartup => "RunOnStartup"; 

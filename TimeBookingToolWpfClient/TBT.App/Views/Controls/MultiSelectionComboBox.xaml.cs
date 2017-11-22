@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 
 namespace TBT.App.Views.Controls
@@ -17,7 +18,15 @@ namespace TBT.App.Views.Controls
         public MultiSelectionComboBox()
         {
             InitializeComponent();
+            RefreshEvents.ChangeCurrentUser += CurrentUserChanged;
         }
+
+        private void CurrentUserChanged(object sender, User value)
+        {
+            _companyId = value?.Company?.Id ?? 0;
+        }
+
+        private static int _companyId;
 
         public string PropertyPath { get; set; }
 
@@ -86,7 +95,8 @@ namespace TBT.App.Views.Controls
 
             try
             {
-                var allProjects = JsonConvert.DeserializeObject<List<Project>>(await App.CommunicationService.GetAsJson("Project"));
+                await RefreshEvents.RefreshCurrentUser(null);
+                var allProjects = JsonConvert.DeserializeObject<List<Project>>(await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId}"));
                 var userProjects = (ObservableCollection<Project>)e.NewValue;
 
                 foreach (var elem in allProjects)

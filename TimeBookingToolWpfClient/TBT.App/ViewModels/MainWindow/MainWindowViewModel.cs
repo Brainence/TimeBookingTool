@@ -48,7 +48,11 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _currentUser; }
             set
             {
-                if (SetProperty(ref _currentUser, value))
+                if(value != _currentUser && _currentUser == null)
+                {
+                    App.ShowBalloon($"{Resources.Greetings} {value.FirstName} !", " ", 30000, App.EnableGreetingNotification);
+                }
+                if (SetProperty(ref _currentUser, value) && value != null)
                 {
                     RefreshEvents.RefreshCurrentUser(this);
                 }
@@ -186,7 +190,6 @@ namespace TBT.App.ViewModels.MainWindow
                 catch (Exception) { }
                 WindowState = true;
                 App.GlobalTimer.StartTimer();
-                App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
             }
         }
 
@@ -224,9 +227,9 @@ namespace TBT.App.ViewModels.MainWindow
         {
             LoggedOut = true;
             App.Username = string.Empty;
-
             IsVisible = false;
             ViewModelCache?.Clear();
+            CurrentUser = null;
             if (!OpenAuthenticationWindow(false))
             {
                 LoggedOut = false;
@@ -237,7 +240,6 @@ namespace TBT.App.ViewModels.MainWindow
                 catch (Exception) { }
                 SelectedTab = Tabs[0];
                 IsVisible = true;
-                App.ShowBalloon(App.Greeting, " ", 30000, App.EnableGreetingNotification);
             }
         }
 
@@ -321,7 +323,7 @@ namespace TBT.App.ViewModels.MainWindow
         private void SayBye()
         {
             var userfirstname = CurrentUser?.FirstName ?? "";
-            App.ShowBalloon($"{Resources.NiceWishToNotification} !", " ", 30000, App.EnableNotification);
+            App.ShowBalloon($"{Resources.NiceWishToNotification}!", " ", 30000, App.EnableNotification);
         }
 
         private static bool IsShuttingDown()
@@ -365,7 +367,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void ExitApplication()
         {
-            App.ShowBalloon(App.Farewell, " ", 30000, App.EnableGreetingNotification);
+            App.ShowBalloon($"{Resources.Farewell} {CurrentUser?.FirstName} !", " ", 30000, App.EnableGreetingNotification);
 
             if (App.GlobalNotification != null)
             {

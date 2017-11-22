@@ -56,7 +56,7 @@ namespace TBT.App.ViewModels.Authentication
 
         private void ExitApplication()
         {
-            App.ShowBalloon(App.Farewell, " ", 30000, App.EnableGreetingNotification);
+            App.ShowBalloon($"{Properties.Resources.Farewell} !", " ", 30000, App.EnableGreetingNotification);
 
             if (App.GlobalNotification != null)
             {
