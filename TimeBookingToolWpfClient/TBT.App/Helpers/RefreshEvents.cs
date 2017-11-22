@@ -25,10 +25,16 @@ namespace TBT.App.Helpers
         public static event Action<object, ObservableCollection<Activity>> ChangeTasksList;
         public static event Action<object, ObservableCollection<Project>> ChangeProjectsList;
         public static event Action<object, User> ChangeCurrentUser;
+        public static event Action ScrollTimeEntryItemsToTop;
 
         #endregion
 
         #region Refresh data methods
+
+        public static void ScrolTimeEntriesToTop()
+        {
+            ScrollTimeEntryItemsToTop?.Invoke();
+        }
 
         public static async Task RefreshCurrentUser(object sender)
         {

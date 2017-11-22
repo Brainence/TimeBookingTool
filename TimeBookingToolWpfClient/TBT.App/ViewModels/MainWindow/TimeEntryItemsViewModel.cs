@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 
@@ -24,7 +25,14 @@ namespace TBT.App.ViewModels.MainWindow
         public ObservableCollection<TimeEntry> TimeEntries
         {
             get { return _timeEntries; }
-            set { SetProperty(ref _timeEntries, value); }
+            set
+            {
+                if(SetProperty(ref _timeEntries, value))
+                {
+                    if(_timeEntries.Any(x => x.IsRunning))
+                    { RefreshEvents.ScrolTimeEntriesToTop(); }
+                }
+            }
         }
 
         public event Action RefreshTimeEntries;

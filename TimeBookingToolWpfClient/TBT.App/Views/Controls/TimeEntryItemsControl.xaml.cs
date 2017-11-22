@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TBT.App.Helpers;
 
 namespace TBT.App.Views.Controls
 {
@@ -29,6 +30,7 @@ namespace TBT.App.Views.Controls
             _timeEntryControlHeight = tempControl.DesiredSize.Height - 
                 tempControl.timerTextBlock.DesiredSize.Height - tempControl.commentArea.DesiredSize.Height
                 - tempControl.saveButton.DesiredSize.Height - tempControl.spinnerControl.DesiredSize.Height;
+            RefreshEvents.ScrollTimeEntryItemsToTop += () => { RefreshScrollView(0); };
             InitializeComponent();
         }
 
