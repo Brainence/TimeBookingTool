@@ -422,7 +422,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (value as IEnumerable<TimeEntry>)?.Reverse();
+            return (value as IEnumerable<TimeEntry>)?.Reverse().OrderByDescending(x => x.IsRunning);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -440,7 +440,20 @@ namespace TBT.App.Models.Tools
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return null;
+        }
+    }
+
+    public class EnumerableToBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((value as IList)?.Count ?? 0) > 0;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
         }
     }
 }

@@ -185,6 +185,7 @@ namespace TBT.App.ViewModels.MainWindow
                 foreach (var activity in project.Activities)
                 {
                     activity.IsActive = false;
+                    activity.Project = project;
                     await App.CommunicationService.PutAsJson("Activity", activity);
                 }
 

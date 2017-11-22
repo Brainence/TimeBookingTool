@@ -13,7 +13,8 @@ namespace TBT.App.Views.Controls
 
         private void CheckInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !Common.Constants.TimeRegex.IsMatch((sender as TextControl).TextArea.Text + e.Text);
+            var source = (sender as TextControl).TextArea;
+            e.Handled = !Common.Constants.TimeRegex.IsMatch(source.Text.Insert(source.CaretIndex, e.Text));
         }
     }
 }

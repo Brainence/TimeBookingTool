@@ -38,7 +38,8 @@
 
                 <Button Command="{Binding CreateNewTaskCommand}" 
                         Template="{StaticResource HyperlinkButtonTemplate}" 
-                        Margin="0 5 5 5" VerticalAlignment="Center">
+                        Margin="0 5 5 5" VerticalAlignment="Center"
+                        IsEnabled="{Binding Path=Projects, Converter={StaticResource EnumerableToBoolConverter}}">
                     <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="{x:Static p:Resources.CreateTask}" />
                 </Button>
             </StackPanel>

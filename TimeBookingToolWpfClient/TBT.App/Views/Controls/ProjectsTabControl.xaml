@@ -33,7 +33,8 @@
                           Margin="5 5 0 5" Foreground="#c2422b" FontWeight="Bold" />
 
                 <Button Command="{Binding CreateNewProjectCommand}" Template="{StaticResource HyperlinkButtonTemplate}" Margin="5" Width="Auto" 
-                                HorizontalAlignment="Right" VerticalAlignment="Center" Height="20">
+                                HorizontalAlignment="Right" VerticalAlignment="Center" Height="20"
+                        IsEnabled="{Binding Path=Customers, Converter={StaticResource EnumerableToBoolConverter}}">
                     <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="{x:Static p:Resources.CreateProject}" />
                 </Button>
             </StackPanel>

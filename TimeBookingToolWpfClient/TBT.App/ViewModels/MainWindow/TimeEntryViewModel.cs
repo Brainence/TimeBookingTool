@@ -138,7 +138,10 @@ namespace TBT.App.ViewModels.MainWindow
             if (TimeEntry.IsRunning)
                 refresh = await Stop();
             else
+            {
                 refresh = await Start();
+                ScrollToEdited?.Invoke(0);
+            }
 
             if (refresh)
                 RefreshTimeEntries?.Invoke();
