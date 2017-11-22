@@ -24,7 +24,6 @@
             FontWeight="Bold"
             SelectedItem="{Binding ElementName=This, Path=SelectedItem, Mode=TwoWay}" 
             ItemsSource="{Binding ElementName=This, Path=ItemsSource, Mode=TwoWay}" 
-            SelectedIndex="{Binding ElementName=This, Path=SelectedIndex, Mode=TwoWay}"
             IsEditable="True"
             MouseDown="ComboBox_MouseDown"
             GotFocus="ComboBox_GotFocus"
