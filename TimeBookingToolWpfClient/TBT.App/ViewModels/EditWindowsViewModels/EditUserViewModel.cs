@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TBT.App.Helpers;
@@ -119,7 +115,6 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                     EditingUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", EditingUser));
 
                     MessageBox.Show(Properties.Resources.UserWasSaved);
-                    App.Username = EditingUser.Username;
                     userChanged = true;
                 }
                 else

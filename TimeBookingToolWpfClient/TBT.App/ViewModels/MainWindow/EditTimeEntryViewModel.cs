@@ -1,11 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -150,10 +147,7 @@ namespace TBT.App.ViewModels.MainWindow
                         ErrorMessage = $"{Properties.Resources.YouHaveToInputTheTime}.";
                         return;
                     }
-                    else
-                    {
-                        duration = new TimeSpan();
-                    }
+                    duration = new TimeSpan();
                 }
                 else
                 {
@@ -206,7 +200,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             try
             {
-                if (User == null || User.TimeLimit == null) return await Task.FromResult(false);
+                if (User?.TimeLimit == null) return await Task.FromResult(false);
 
                 var now = DateTime.Now;
 

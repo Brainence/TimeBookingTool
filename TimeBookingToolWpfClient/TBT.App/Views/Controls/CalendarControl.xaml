@@ -217,16 +217,6 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <!--<TextBlock FontSize="14" 
-                           FontWeight="Bold"
-                           VerticalAlignment="Center">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{}{0}\: {1}}" Mode="OneWay" UpdateSourceTrigger="PropertyChanged">
-                            <Binding Source="{x:Static p:Resources.TimeEnteredForDay}"/>
-                            <Binding Path="User.TimeEntries"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>-->
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                     <TextBlock FontSize="13" 
                            FontWeight="Bold"
@@ -248,18 +238,6 @@
                                VerticalAlignment="Center"
                                Text="{Binding Path=WeekTime, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}\: {0}}"/>
                 </StackPanel>
-
-
-                <!--<TextBlock FontSize="14" 
-                           FontWeight="Bold"
-                           VerticalAlignment="Center">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{}{0}\: {1}}" Mode="OneWay"  UpdateSourceTrigger="PropertyChanged">
-                            <Binding Source="{x:Static p:Resources.TimeEnteredForWeek}"/>
-                            <Binding Path="WeekTime"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>-->
             </Grid>
 
             <StackPanel Grid.Row="1" Margin="20" VerticalAlignment="Top" HorizontalAlignment="Stretch"

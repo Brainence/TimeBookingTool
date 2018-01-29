@@ -121,10 +121,7 @@ namespace TBT.App.Views.Controls
         public event Action Checked;
         protected void ItemChecked()
         {
-            if (Checked != null)
-            {
-                Checked();
-            }
+            Checked?.Invoke();
             try
             {
                 SelectionBoxText = SelectedItems.Any()
@@ -236,17 +233,11 @@ namespace TBT.App.Views.Controls
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         protected void OnIsCheckedPropertyChanged()
         {
-            if (IsCheckedPropertyChanged != null)
-            {
-                IsCheckedPropertyChanged();
-            }
+            IsCheckedPropertyChanged?.Invoke();
         }
     }
 }

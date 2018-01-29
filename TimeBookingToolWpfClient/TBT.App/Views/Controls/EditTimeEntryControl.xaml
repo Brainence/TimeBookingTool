@@ -67,20 +67,6 @@
                            TextAlignment="Left"
                            PreviewTextInput="CheckInput"
                            Text="{Binding TimeText, Mode=TwoWay}"/>
-
-            <!--<local:TextControl x:Name="timelimitTextBox"
-                           Text="{Binding TimeLimit, Mode=TwoWay}"
-                           Visibility="{Binding IsLimitVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Label="{x:Static p:Resources.Limit}"
-                           Margin="5 4" FontSize="13"
-                           Width="468" 
-                           Height="20"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Top"
-                           VerticalTextAlignment="Center"
-                           PreviewTextInput="CheckInput"
-                           TextAlignment="Left"/>-->
-
         </StackPanel>
 
         <StackPanel Grid.Row="4">

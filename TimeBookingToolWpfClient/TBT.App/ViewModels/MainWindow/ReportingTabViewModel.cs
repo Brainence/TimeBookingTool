@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
@@ -19,7 +18,6 @@ using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
 using TBT.App.Views.Controls;
-using TBT.App.Views.Windows;
 using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.MainWindow
@@ -164,6 +162,7 @@ namespace TBT.App.ViewModels.MainWindow
         public ReportingTabViewModel(User currentUser)
         {
             User = currentUser;
+            ReportingUser = User;
             Users = null;
             IntervalTips = new ObservableCollection<string>() {
                 Resources.ThisWeek, Resources.LastWeek, Resources.ThisMonth,
@@ -172,11 +171,10 @@ namespace TBT.App.ViewModels.MainWindow
             };
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
             RefreshEvents.ChangeUsersList += RefreshUsersList;
-            SelectedTipIndex = 0;
             RefreshReportTimeEntiresCommand = new RelayCommand(async obj => await RefreshReportTimeEntires(ReportingUser.Id), null);
-            CreateCompanyReportCommand = new RelayCommand(async obj => await SaveCompanyReport(), obj => { return User.IsAdmin; });
+            CreateCompanyReportCommand = new RelayCommand(async obj => await SaveCompanyReport(), obj => User.IsAdmin);
             CreateUserReportCommand = new RelayCommand(async obj => await SaveUserReport(), null);
-            SaveToClipboardCommand = new RelayCommand(obj => SaveTotalTimeToClipboard(), obj => { return TimeEntries?.Any() == true; });
+            SaveToClipboardCommand = new RelayCommand(obj => SaveTotalTimeToClipboard(), obj => TimeEntries?.Any() == true);
             SelectedTipIndex = 0;
         }
 
@@ -330,7 +328,6 @@ namespace TBT.App.ViewModels.MainWindow
             try
             {
                 control.TimeEntryItemsControl.UpdateLayout();
-                //control.Measure(new Size(int.MaxValue, int.MaxValue));
                 
                 fixedPage.Height = control.TimeEntryItemsControl.DesiredSize.Height + control.TimeEntryItemsControl.Margin.Top
                                                                                     + control.TimeEntryItemsControl.Margin.Bottom
@@ -361,8 +358,8 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 SaveFileDialog dlg = new SaveFileDialog();
                 dlg.FileName = isUserReport
-                    ? $"{User.FullName} report {From.ToString("yyyy-MM-dd")} {To.ToString("yyyy-MM-dd")}"
-                    : $"Company report {From.ToString("yyyy-MM-dd")} {To.ToString("yyyy-MM-dd")}";
+                    ? $"{User.FullName} report {From:yyyy-MM-dd} {To:yyyy-MM-dd}"
+                    : $"Company report {From:yyyy-MM-dd} {To:yyyy-MM-dd}";
 
                 dlg.DefaultExt = ".xps";
                 dlg.Filter = "XPS Documents (.xps)|*.xps";
@@ -495,7 +492,7 @@ namespace TBT.App.ViewModels.MainWindow
             var timeEntries = TimeEntries.Where(t => !t.IsRunning).ToList();
 
             var sum = timeEntries.Any() ? timeEntries.Select(t => t.Duration).Aggregate((t1, t2) => t1.Add(t2)) : new TimeSpan();
-            Clipboard.SetText($"{Resources.TotalTime}: {sum.TotalHours.ToString("N2")}");
+            Clipboard.SetText($"{Resources.TotalTime}: {sum.TotalHours:N2}");
         }
 
         public void RefreshCurrentUser(object sender, User user)

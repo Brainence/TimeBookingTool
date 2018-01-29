@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TBT.App.Helpers;
@@ -156,7 +153,7 @@ namespace TBT.App.ViewModels.MainWindow
                 activity.Project = tempContext.SelectedProject ?? activity.Project;
                 try
                 {
-                    activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.PutAsJson("Activity", activity));
+                    JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.PutAsJson("Activity", activity));
 
                     await RefreshEvents.RefreshTasksList(this);
                 }
@@ -179,7 +176,7 @@ namespace TBT.App.ViewModels.MainWindow
                     activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.GetAsJson($"Activity/GetByName/{Uri.EscapeUriString(activity.Name)}/{Uri.EscapeUriString(activity.Project.Id.ToString())}"));
                 }
                 activity.IsActive = false;
-                var x = await App.CommunicationService.PutAsJson("Activity", activity);
+                await App.CommunicationService.PutAsJson("Activity", activity);
 
                 await RefreshEvents.RefreshTasksList(this);
                 Activities.Remove(Activities?.FirstOrDefault(item => item.Name == activity.Name &&

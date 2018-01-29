@@ -25,7 +25,6 @@
                                   Style="{StaticResource ComboBoxFlatStyle}"
                                   ItemsSource="{Binding Users}"
                                   SelectedIndex="{Binding SelectedUserIndex}"/>
-            <!--SelectedValue="{Binding ReportingUser, Mode=TwoWay}"-->
         </StackPanel>
         <Grid Grid.Row="1" Margin="20">
             <Grid.RowDefinitions>

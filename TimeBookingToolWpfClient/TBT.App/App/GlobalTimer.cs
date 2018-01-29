@@ -77,18 +77,6 @@ namespace TBT.App
                 _timer.Stop();
         }
 
-        //public void StartTimeEntryTimer()
-        //{
-        //    if (_timer != null && !_timer.IsEnabled)
-        //        _timer.Start();
-        //}
-
-        //public void StopTimeEntryTimer()
-        //{
-        //    if (_timer != null && _timer.IsEnabled)
-        //        _timer.Stop();
-        //}
-
         public event Action CacheTimerTick;
         private Action _timerTick;
         public event Action TimerTick

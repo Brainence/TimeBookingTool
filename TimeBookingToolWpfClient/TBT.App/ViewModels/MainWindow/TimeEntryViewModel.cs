@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -154,7 +151,6 @@ namespace TBT.App.ViewModels.MainWindow
 
             var result = await App.GlobalTimer.Stop(TimeEntry.Id);
             if (result) { App.GlobalTimer.TimerTick -= TimerTick; }
-            //if (result) App.GlobalTimer.StartTimer();
 
             return result;
         }
@@ -255,7 +251,6 @@ namespace TBT.App.ViewModels.MainWindow
             var currentDuration = TimeEntry.Duration + DateTime.UtcNow.TimeOfDay - _startDate.TimeOfDay;
             if (currentDuration >= _dayLimit)
             {
-                //App.GlobalTimer.StopTimeEntryTimer();
                 await Stop();
             }
             try
@@ -284,14 +279,13 @@ namespace TBT.App.ViewModels.MainWindow
             if (TimeEntry != null)
             {
                 var canStartOrEdit = await CanStartOrEditTimeEntry(TimeEntry.IsRunning ? TimeEntry.Duration : (TimeSpan?)null);
-                CanEdit = TimeEntry.IsRunning ? true : canStartOrEdit;
-                CanStart = TimeEntry.IsRunning ? true : canStartOrEdit && TimeEntry != null && TimeEntry.Duration < _dayLimit;
+                CanEdit = TimeEntry.IsRunning || canStartOrEdit;
+                CanStart = TimeEntry.IsRunning || canStartOrEdit && TimeEntry != null && TimeEntry.Duration < _dayLimit;
 
                 if (TimeEntry.IsRunning && canStartOrEdit)
                 {
                     App.GlobalTimer.TimerTick += TimerTick;
                     _startDate = DateTime.UtcNow;
-                    //App.GlobalTimer.StartTimeEntryTimer();
                 }
             }
         }
@@ -308,14 +302,7 @@ namespace TBT.App.ViewModels.MainWindow
                     return;
                 }
 
-                if (string.IsNullOrEmpty(TimerTextBox))
-                {
-                    TimeEntry.Duration = new TimeSpan();
-                }
-                else
-                {
-                    TimeEntry.Duration = TimerTextBox.ToTimespan();
-                }
+                TimeEntry.Duration = string.IsNullOrEmpty(TimerTextBox) ? new TimeSpan() : TimerTextBox.ToTimespan();
 
                 if (TimeEntry.Activity != null)
                 {
@@ -344,13 +331,6 @@ namespace TBT.App.ViewModels.MainWindow
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
         }
-
-        //public void CancelEditButton_Click()
-        //{
-        //    IsEditing = !IsEditing;
-
-        //    Comment = string.Empty;
-        //}
 
         #endregion
     }

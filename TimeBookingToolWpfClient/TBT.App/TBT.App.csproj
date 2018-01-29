@@ -205,7 +205,6 @@
     <Compile Include="ViewModels\EditWindowsViewModels\EditCustomerViewModel.cs" />
     <Compile Include="ViewModels\EditWindowsViewModels\EditProjectViewModel.cs" />
     <Compile Include="ViewModels\EditWindowsViewModels\EditWindowViewModel.cs" />
-    <Compile Include="ViewModels\EtcViewModels\ComboBoxControlViewModel.cs" />
     <Compile Include="ViewModels\EtcViewModels\LanguageControlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\CalendarTabViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\CustomerTabViewModel.cs" />

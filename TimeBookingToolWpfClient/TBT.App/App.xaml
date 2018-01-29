@@ -1,9 +1,7 @@
 ﻿<Application x:Class="TBT.App.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TBT.App"
              xmlns:tools="clr-namespace:TBT.App.Models.Tools"
-             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              Startup="Application_Startup">
     
     <Application.Resources>

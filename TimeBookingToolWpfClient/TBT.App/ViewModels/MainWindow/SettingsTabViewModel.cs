@@ -1,14 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TBT.App.Common;
 using TBT.App.Helpers;
-using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 
 namespace TBT.App.ViewModels.MainWindow

@@ -84,11 +84,6 @@
                             </Button.CommandParameter>
                         </Button>
 
-                        <!--<controls:SpinnersApple HorizontalAlignment="Right"
-                                                Margin="4" 
-                                                Visibility="{Binding ElementName=signInButton, Path=IsEnabled, Converter={StaticResource BoolToNotVisibilityConverter}}"
-                                                />-->
-
                         <Button x:Name="forgotPasswordButton" Content="{x:Static p:Resources.ForgotPassword}" Margin="4" Grid.Column="1" 
                                 Command="{Binding Path=ForgotPasswordClick}" Template="{StaticResource HyperlinkAuthButtonTemplate}"
                                 HorizontalAlignment="Right"/>

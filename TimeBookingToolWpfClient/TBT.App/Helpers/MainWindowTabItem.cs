@@ -1,6 +1,4 @@
-﻿using TBT.App.Models.Base;
-
-namespace TBT.App.Helpers
+﻿namespace TBT.App.Helpers
 {
     public class MainWindowTabItem
     {

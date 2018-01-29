@@ -1,8 +1,6 @@
-﻿using Microsoft.Win32;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
@@ -21,7 +19,6 @@ using TBT.App.Services.CommunicationService.Implementations;
 using TBT.App.Services.Encryption.Implementations;
 using TBT.App.ViewModels.MainWindow;
 using TBT.App.Views.Windows;
-using TBT.App.Properties;
 using WF = System.Windows.Forms;
 
 namespace TBT.App
@@ -50,7 +47,7 @@ namespace TBT.App
             {
                 AppSettings[Constants.AccessToken] = EncryptionService.Encrypt(value);
                 AppSettings.Save();
-                OnStaticPropertyChanged(nameof(App.AccessToken));
+                OnStaticPropertyChanged(nameof(AccessToken));
             }
         }
         public static string RefreshToken
@@ -216,7 +213,7 @@ namespace TBT.App
         {
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-            Process thisProc = Process.GetCurrentProcess();
+            var thisProc = Process.GetCurrentProcess();
 
             if (!IsProcessOpen("TimeBookingTool.exe"))
             {
@@ -237,26 +234,6 @@ namespace TBT.App
             var shortcutPath = Path.Combine(allProgramsPath, PublisherName);
             return Path.Combine(shortcutPath, ProductName, FileName);
         }
-
-        //private static string GetStartupShortcutPath()
-        //{
-        //    var startupPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-        //    return Path.Combine(startupPath, FileName);
-        //}
-
-        //public static void AddShortcutToStartup()
-        //{
-        //    RegistryKey rk = Registry.CurrentUser.OpenSubKey
-        //        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-        //    rk.SetValue(System.Reflection.Assembly.GetEntryAssembly().FullName, System.Reflection.Assembly.GetEntryAssembly().Location);
-        //}
-
-        //public static void RemoveShortcutFromStartup()
-        //{
-        //    RegistryKey rk = Registry.CurrentUser.OpenSubKey
-        //        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-        //    rk.DeleteValue(System.Reflection.Assembly.GetEntryAssembly().FullName, false);
-        //}
 
         public static string UrlSafeDateToString(DateTime date)
         {
@@ -290,7 +267,7 @@ namespace TBT.App
 
                         return await Task.FromResult(true);
                     }
-                    else return await Task.FromResult(false);
+                    return await Task.FromResult(false);
                 }
                 catch
                 {
@@ -470,15 +447,14 @@ namespace TBT.App
         {
             try
             {
-                if (userId <= 0 || (userTimeLimit <= 0 && !userTimeLimit.HasValue)) return await Task.FromResult(false);
+                if (userId <= 0 || userTimeLimit <= 0 && !userTimeLimit.HasValue) return await Task.FromResult(false);
 
                 var sum = JsonConvert.DeserializeObject<TimeSpan?>(
                     await CommunicationService.GetAsJson($"TimeEntry/GetDuration/{userId}/{UrlSafeDateToString(from)}/{UrlSafeDateToString(to)}"));
 
                 if (sum.HasValue)
                     return await Task.FromResult(!userTimeLimit.HasValue || (sum.Value.TotalHours + (duration.HasValue ? duration.Value.TotalHours : 0.0) < userTimeLimit));
-                else
-                    return await Task.FromResult(true);
+                return await Task.FromResult(true);
             }
             catch (Exception ex)
             {

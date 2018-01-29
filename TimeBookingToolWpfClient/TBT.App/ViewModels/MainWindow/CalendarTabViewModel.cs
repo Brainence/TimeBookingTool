@@ -2,18 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
-using TBT.App.Views.Controls;
 using System.ComponentModel;
 
 namespace TBT.App.ViewModels.MainWindow
@@ -124,14 +120,12 @@ namespace TBT.App.ViewModels.MainWindow
             TimeEntryItems = new TimeEntryItemsViewModel() { TimeEntries = User?.TimeEntries, };
             TimeEntryItems.RefreshTimeEntries += (async () => await RefreshTimeEntries(Week));
             EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, SelectedDay = SelectedDay };
-            //PropertyChanged += tempVM.ShowLimit;
             PropertyChanged += _editTimeEntryViewModel.ChangeButtonName;
             PropertyChanged += _editTimeEntryViewModel.ClearError;
             ChangeUserForNested += _editTimeEntryViewModel.RefreshCurrentUser;
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
             SelectedDay = DateTime.Now.Date;
             _editTimeEntryViewModel.RefreshTimeEntries += async () => await RefreshTimeEntries(Week);
-            //_editTimeEntryViewModel.PropertyChanged += CacheEditTimeEntry;
             ChangeWeekCommand = new RelayCommand(obj => ChangeWeek(Convert.ToInt32(obj)), null);
             GoToSelectedDayCommand = new RelayCommand(obj => GoToDefaultWeek(true, false), obj => SelectedDay.HasValue && SelectedDay.Value.StartOfWeek(DayOfWeek.Monday) != Week.FirstOrDefault());
             BackTodayCommand = new RelayCommand(obj => GoToDefaultWeek(false, true), obj => SelectedDay.HasValue && SelectedDay.Value.Date != DateTime.Now.Date);
@@ -277,41 +271,6 @@ namespace TBT.App.ViewModels.MainWindow
             disposed = true;
         }
 
-        #endregion
-
-        #region IDisposable Support
-        //private bool disposedValue = false; // To detect redundant calls
-
-        //protected virtual void Dispose(bool disposing)
-        //{
-        //    if (!disposedValue)
-        //    {
-        //        if (disposing)
-        //        {
-        //            // TODO: dispose managed state (managed objects).
-        //        }
-
-        //        // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-        //        // TODO: set large fields to null.
-
-        //        disposedValue = true;
-        //    }
-        //}
-
-        //// TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        //// ~CalendarTabViewModel() {
-        ////   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        ////   Dispose(false);
-        //// }
-
-        //// This code added to correctly implement the disposable pattern.
-        //public void Dispose()
-        //{
-        //    // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //    Dispose(true);
-        //    // TODO: uncomment the following line if the finalizer is overridden above.
-        //    //GC.SuppressFinalize(this);
-        //}
         #endregion
 
         #endregion

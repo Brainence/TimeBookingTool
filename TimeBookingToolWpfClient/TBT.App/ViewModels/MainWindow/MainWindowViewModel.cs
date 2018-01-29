@@ -1,22 +1,16 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
-using TBT.App.Services.CommunicationService.Implementations;
 using TBT.App.ViewModels.Authentication;
 using TBT.App.Properties;
-using System.Threading;
-using System.Globalization;
 using TBT.App.ViewModels.EtcViewModels;
 
 namespace TBT.App.ViewModels.MainWindow
@@ -101,7 +95,6 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _viewModelCache; }
             set
             {
-                //if(value != _viewModelCache) { _viewModelCache?.Dispose(); }
                 SetProperty(ref _viewModelCache, value);
             }
         }
@@ -123,11 +116,8 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _width; }
             set
             {
-                if(SetProperty(ref _width, value))
-                {
-                    if (value >= 1250) { ChangeDateSize?.Invoke(false); }
-                    else { ChangeDateSize?.Invoke(true); }
-                }
+                if (!SetProperty(ref _width, value)) return;
+                ChangeDateSize?.Invoke(!(value >= 1250));
             }
         }
 
@@ -171,9 +161,6 @@ namespace TBT.App.ViewModels.MainWindow
             RefreshEvents.ChangeCurrentUser += ChangeCurrentUser;
             if (!OpenAuthenticationWindow(authorized))
             {
-                //IsConnected = CommunicationService.CheckConnection();
-                //CommunicationService.ConnectionChanged += RefreshIsConnected;
-                //CommunicationService.ConnectionChanged += CommunicationService.ListenConnection;
                 App.GlobalTimer = new GlobalTimer();
                 InitNotifyIcon();
                 Width = 600;
@@ -322,7 +309,6 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void SayBye()
         {
-            var userfirstname = CurrentUser?.FirstName ?? "";
             App.ShowBalloon($"{Resources.NiceWishToNotification}!", " ", 30000, App.EnableNotification);
         }
 

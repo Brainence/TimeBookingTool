@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TBT.App.Helpers;
@@ -87,7 +84,6 @@ namespace TBT.App.ViewModels.MainWindow
         public ICommand EditUserCommand { get; set; }
 
         public event Action<object, User> ChangeUserForNested;
-        //public event Action<ObservableCollection<User>> ChangeUsersListForNested;
 
         #endregion
 
@@ -159,7 +155,7 @@ namespace TBT.App.ViewModels.MainWindow
             try
             {
                 if (user == null) return;
-                if (user.IsAdmin && Users.Where(item => item.IsAdmin).Count() == 1)
+                if (user.IsAdmin && Users.Count(item => item.IsAdmin) == 1)
                 {
                     MessageBox.Show(Properties.Resources.YouCantRemoveLastAdmin);
                     return;

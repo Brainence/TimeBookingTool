@@ -2,15 +2,12 @@
 using System;
 using System.ComponentModel;
 using System.Configuration;
-using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Windows;
 using TBT.App.Common;
 using TBT.App.Services.CommunicationService.Interfaces;
 

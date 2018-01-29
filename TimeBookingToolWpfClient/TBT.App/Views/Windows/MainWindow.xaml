@@ -45,23 +45,6 @@
             <ContentControl Grid.Row="1" Margin="0 5 0 0" Content="{Binding SelectedViewModel}"/>
         </Grid>
 
-
-        <!--<TabControl Grid.Row="0" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}" ItemsSource="{Binding Tabs, Mode=TwoWay}">
-            <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <ContentControl HorizontalAlignment="Stretch"  
-                                    Content="{Binding Control}">
-                        <ContentControl.Visibility>
-                            <MultiBinding Converter="{StaticResource OnlyForAdminsVisibleConverter}" Mode="TwoWay">
-                                <Binding ElementName="mainWindow"  Path="DataContext.CurrentUser.IsAdmin"/>
-                                <Binding Path="OnlyForAdmins"/>
-                            </MultiBinding>
-                        </ContentControl.Visibility>
-                    </ContentControl>
-                </DataTemplate>
-            </TabControl.ContentTemplate>
-        </TabControl>-->
-
         <Grid Grid.Row="1">
             <ContentControl Content="{Binding LanguageControl}" 
                             HorizontalAlignment="Left" 

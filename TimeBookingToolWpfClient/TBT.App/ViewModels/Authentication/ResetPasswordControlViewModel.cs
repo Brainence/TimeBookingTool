@@ -3,7 +3,6 @@ using System.Windows.Input;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
 using TBT.App.Properties;
-using System.Windows.Media;
 using TBT.App.Helpers;
 
 namespace TBT.App.ViewModels.Authentication

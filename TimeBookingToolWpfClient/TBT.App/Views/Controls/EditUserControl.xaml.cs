@@ -1,9 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using TBT.App.Models.AppModels;
+﻿using System.Windows.Controls;
 
 namespace TBT.App.Views.Controls
 {

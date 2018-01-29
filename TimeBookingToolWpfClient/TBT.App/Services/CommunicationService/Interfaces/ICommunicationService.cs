@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using TBT.App.Models.AppModels;
 
 namespace TBT.App.Services.CommunicationService.Interfaces
 {
