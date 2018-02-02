@@ -64,8 +64,6 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _itemsLoading, value); }
         }
 
-        public DateTime ExpiresDate { get; set; }
-
         public ICommand CreateNewProjectCommand { get; set; }
         public ICommand RefreshProjectsCommand { get; set; }
         public ICommand EditProjectCommand { get; set; }
@@ -78,11 +76,9 @@ namespace TBT.App.ViewModels.MainWindow
         public ProjectsTabViewModel()
         {
             CreateNewProjectCommand = new RelayCommand(obj => CreateNewProject(), null);
-            RefreshProjectsCommand = new RelayCommand(async obj => { Projects = null; await RefreshEvents.RefreshProjectsList(null); }, null);
+            RefreshProjectsCommand = new RelayCommand(async obj => { Projects = await RefreshEvents.RefreshProjectsList(); }, null);
             EditProjectCommand = new RelayCommand(obj => EditProject(obj as Project), null);
             RemoveProjectCommand = new RelayCommand(obj => RemoveProject(obj as Project), null);
-            RefreshEvents.ChangeProjectsList += RefreshProjectsList;
-            RefreshEvents.ChangeCustomersList += RefreshCustomersList;
             SelectedCustomerIndex = 0;
         }
 
@@ -121,8 +117,8 @@ namespace TBT.App.ViewModels.MainWindow
                 project = JsonConvert.DeserializeObject<Project>(
                     await App.CommunicationService.PostAsJson("Project", project));
 
-                await RefreshEvents.RefreshProjectsList(this);
                 Projects.Add(project);
+                Projects = new ObservableCollection<Project>(_projects.OrderBy(p => p.Name));
                 NewProjectName = "";
             }
             catch (Exception ex)
@@ -135,6 +131,7 @@ namespace TBT.App.ViewModels.MainWindow
         private async void EditProject(Project project)
         {
             if (project == null) return;
+            var tempProjectCustomer = project.Customer;
             var window = new EditWindow()
             {
                 DataContext = new EditWindowViewModel()
@@ -157,7 +154,11 @@ namespace TBT.App.ViewModels.MainWindow
                 {
                     project = JsonConvert.DeserializeObject<Project>(await App.CommunicationService.PutAsJson("Project", project));
 
-                    await RefreshEvents.RefreshProjectsList(this);
+                    Projects = await RefreshEvents.RefreshProjectsList();
+                    if (tempProjectCustomer.Name == project.Customer.Name)
+                    {
+                        Projects = new ObservableCollection<Project>(_projects.OrderBy(p => p.Customer.Name));
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -187,10 +188,8 @@ namespace TBT.App.ViewModels.MainWindow
                 }
 
                 project.IsActive = false;
-                var x = await App.CommunicationService.PutAsJson("Project", project);
 
-                await RefreshEvents.RefreshProjectsList(this);
-                Projects.Remove(Projects?.FirstOrDefault(item => item.Name == project.Name));
+                Projects.Remove(Projects?.FirstOrDefault(item => item.Id == project.Id));
             }
             catch (Exception ex)
             {
@@ -218,18 +217,27 @@ namespace TBT.App.ViewModels.MainWindow
 
         #endregion
 
+        #region Interface members
+
+        public DateTime ExpiresDate { get; set; }
+        public async void OpenTab(User current)
+        {
+            Projects = await RefreshEvents.RefreshProjectsList();
+            Customers = await RefreshEvents.RefreshCustomersList();
+        }
+
+        public void CloseTab()
+        {
+            Projects?.Clear();
+            Customers?.Clear();
+        }
+
         #region IDisposable
 
-        private bool disposed = false;
+        public void Dispose()
+        { }
 
-        public virtual void Dispose()
-        {
-            if (disposed) { return; }
-
-            RefreshEvents.ChangeProjectsList += RefreshProjectsList;
-            RefreshEvents.ChangeCustomersList += RefreshCustomersList;
-            disposed = true;
-        }
+        #endregion
 
         #endregion
     }

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using TBT.App.Helpers;
@@ -19,14 +20,15 @@ namespace TBT.App.Views.Controls
         {
             InitializeComponent();
             RefreshEvents.ChangeCurrentUser += CurrentUserChanged;
+            if(!_companyId.HasValue) { Task.Run(() => RefreshEvents.RefreshCurrentUser(null)).Wait(); }
         }
 
         private void CurrentUserChanged(object sender, User value)
         {
-            _companyId = value?.Company?.Id ?? 0;
+            _companyId = !_companyId.HasValue && value?.Company?.Id > 0 ? value.Company?.Id : _companyId;
         }
 
-        private static int _companyId;
+        private static int? _companyId;
 
         public string PropertyPath { get; set; }
 
@@ -69,7 +71,7 @@ namespace TBT.App.Views.Controls
         {
             get
             {
-                return ItemsSource == null ? null : ItemsSource.Cast<CheckableObject>()
+                return ItemsSource?.Cast<CheckableObject>()
                     .Where(x => x.IsChecked)
                     .Select(y => y.Obj);
             }
@@ -87,7 +89,7 @@ namespace TBT.App.Views.Controls
             }
         }
 
-        public async static void ItemsSourceMultiple_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public static async void ItemsSourceMultiple_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var x = (MultiSelectionComboBox)d;
 
@@ -95,8 +97,7 @@ namespace TBT.App.Views.Controls
 
             try
             {
-                await RefreshEvents.RefreshCurrentUser(null);
-                var allProjects = JsonConvert.DeserializeObject<List<Project>>(await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId}"));
+                var allProjects = JsonConvert.DeserializeObject<List<Project>>(await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId ?? 0}"));
                 var userProjects = (ObservableCollection<Project>)e.NewValue;
 
                 foreach (var elem in allProjects)
@@ -112,10 +113,10 @@ namespace TBT.App.Views.Controls
                 }
                 x.ItemsSource = list;
             }
-                            catch (Exception ex)
-                {
-                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-                }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         public event Action Checked;

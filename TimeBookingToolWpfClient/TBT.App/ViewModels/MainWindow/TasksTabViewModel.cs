@@ -64,8 +64,6 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _selectedProjectIndex, value); }
         }
 
-        public DateTime ExpiresDate { get; set; }
-
         public ICommand CreateNewTaskCommand { get; set; }
         public ICommand RefreshTasksCommand { get; set; }
         public ICommand EditTaskCommand { get; set; }
@@ -79,11 +77,9 @@ namespace TBT.App.ViewModels.MainWindow
         public TasksTabViewModel()
         {
             CreateNewTaskCommand = new RelayCommand(obj => CreateNewtask(), null);
-            RefreshTasksCommand = new RelayCommand(async obj => { Activities = null; await RefreshEvents.RefreshTasksList(null); }, null);
+            RefreshTasksCommand = new RelayCommand(async obj => { Activities = await RefreshEvents.RefreshTasksList(); }, null);
             EditTaskCommand = new RelayCommand(obj => EditTask(obj as Activity), null);
             RemoveTaskCommand = new RelayCommand(obj => RemoveTask(obj as Activity), null);
-            RefreshEvents.ChangeProjectsList += RefreshProjectsList;
-            RefreshEvents.ChangeTasksList += RefreshTasksList;
             SelectedProjectIndex = 0;
         }
 
@@ -117,10 +113,9 @@ namespace TBT.App.ViewModels.MainWindow
                     IsActive = true
                 };
 
-                await App.CommunicationService.PostAsJson("Activity", activity);
-                await RefreshEvents.RefreshTasksList(this);
-                activity.Id = -1;
+                activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.PostAsJson("Activity", activity));
                 Activities.Add(activity);
+                Activities = new ObservableCollection<Activity>(_activities.OrderBy(x => x.Project.Name));
                 NewTaskName = "";
             }
             catch (Exception ex)
@@ -132,6 +127,8 @@ namespace TBT.App.ViewModels.MainWindow
         private async void EditTask(Activity activity)
         {
             if (activity == null) return;
+
+            var tempActivityProjectName = activity.Project.Name;
 
             var window = new EditWindow()
             {
@@ -153,9 +150,10 @@ namespace TBT.App.ViewModels.MainWindow
                 activity.Project = tempContext.SelectedProject ?? activity.Project;
                 try
                 {
-                    JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.PutAsJson("Activity", activity));
+                    activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.PutAsJson("Activity", activity));
 
-                    await RefreshEvents.RefreshTasksList(this);
+                    if (activity.Project.Name != tempActivityProjectName)
+                    { Activities = new ObservableCollection<Activity>(_activities.OrderBy(x => x.Project.Name)); }
                 }
                 catch (Exception ex)
                 {
@@ -178,9 +176,7 @@ namespace TBT.App.ViewModels.MainWindow
                 activity.IsActive = false;
                 await App.CommunicationService.PutAsJson("Activity", activity);
 
-                await RefreshEvents.RefreshTasksList(this);
-                Activities.Remove(Activities?.FirstOrDefault(item => item.Name == activity.Name &&
-                                                                     item.Project.Id == activity.Project.Id));
+                Activities.Remove(Activities?.FirstOrDefault(item => item.Id == activity.Id));
             }
             catch (Exception ex)
             {
@@ -188,22 +184,21 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public void RefreshProjectsList(object sender, ObservableCollection<Project> projects)
+        #endregion
+
+        #region Interface members
+
+        public DateTime ExpiresDate { get; set; }
+        public async void OpenTab(User currentUser)
         {
-            if (sender != this)
-            {
-                var tempIndex = SelectedProjectIndex;
-                Projects = projects;
-                SelectedProjectIndex = tempIndex;
-            }
+            Projects = await RefreshEvents.RefreshProjectsList();
+            Activities = await RefreshEvents.RefreshTasksList();
         }
 
-        public void RefreshTasksList(object sender, ObservableCollection<Activity> activities)
+        public void CloseTab()
         {
-            if (sender != this)
-            {
-                Activities = activities;
-            }
+            Projects.Clear();
+            Activities.Clear();
         }
 
         #endregion
@@ -216,8 +211,6 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (disposed) { return; }
 
-            RefreshEvents.ChangeProjectsList -= RefreshProjectsList;
-            RefreshEvents.ChangeTasksList -= RefreshTasksList;
             disposed = true;
         }
 

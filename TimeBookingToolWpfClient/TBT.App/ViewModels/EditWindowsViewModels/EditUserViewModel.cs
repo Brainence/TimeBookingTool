@@ -10,7 +10,7 @@ using TBT.App.ViewModels.MainWindow;
 
 namespace TBT.App.ViewModels.EditWindowsViewModels
 {
-    public class EditUserViewModel: BaseViewModel
+    public class EditUserViewModel : BaseViewModel
     {
         #region Fields
 
@@ -56,7 +56,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
 
         public ICommand AddSaveCommand { get; set; }
 
-        public event Action<bool, bool> SavingUserAction;
+        public event Action<User> NewUserAdded;
         public event Action CloseWindow;
 
 
@@ -83,14 +83,14 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                     if (string.IsNullOrEmpty(EditingUser?.Username)) return;
                     if (changePasswordParameters != null && ChangePassword)
                     {
-                        if(string.IsNullOrWhiteSpace(changePasswordParameters.TokenPassword)
+                        if (string.IsNullOrWhiteSpace(changePasswordParameters.TokenPassword)
                             || string.IsNullOrWhiteSpace(changePasswordParameters.NewPassword)
                             || string.IsNullOrWhiteSpace(changePasswordParameters.ConfirmPassword))
                         {
                             MessageBox.Show(Properties.Resources.AllPasswordFieldsRequired);
                             return;
                         }
-                        if(changePasswordParameters.NewPassword != changePasswordParameters.ConfirmPassword)
+                        if (changePasswordParameters.NewPassword != changePasswordParameters.ConfirmPassword)
                         {
                             MessageBox.Show(Properties.Resources.ConfirmYourPassword);
                             return;
@@ -103,13 +103,10 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                             MessageBox.Show(Properties.Resources.IncorrectPasswordEntered);
                             return;
                         }
-                        else
-                        {
-                            await App.CommunicationService.GetAsJson(
-                                $"User/ChangePassword/{EditingUser.Id}/{Uri.EscapeUriString(changePasswordParameters.TokenPassword)}/{Uri.EscapeUriString(changePasswordParameters.ConfirmPassword)}");
+                        await App.CommunicationService.GetAsJson(
+                            $"User/ChangePassword/{EditingUser.Id}/{Uri.EscapeUriString(changePasswordParameters.TokenPassword)}/{Uri.EscapeUriString(changePasswordParameters.ConfirmPassword)}");
 
-                            MessageBox.Show(Properties.Resources.PasswordBeenChanged);
-                        }
+                        MessageBox.Show(Properties.Resources.PasswordBeenChanged);
                     }
 
                     EditingUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", EditingUser));
@@ -123,15 +120,13 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                     var x = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={EditingUser.Username}"));
                     if (x == null)
                     {
-                        await App.CommunicationService.PostAsJson("User/NewUser", EditingUser);
-                        EditingUser = new User() { Company = EditingUser.Company };
+                        EditingUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PostAsJson("User/NewUser", EditingUser));
                         MessageBox.Show(Properties.Resources.UserAccountCreated);
-                        usersListChanged = true;
+                        NewUserAdded?.Invoke(EditingUser);
                     }
                     else
                         MessageBox.Show(Properties.Resources.UsernameAlreadyExists);
                 }
-                SavingUserAction?.Invoke(userChanged, usersListChanged);
                 CloseWindow?.Invoke();
             }
             catch (Exception ex)
@@ -142,7 +137,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
 
         public void RefreshCurrentUser(object sender, User user)
         {
-            if(!(sender is MainWindowViewModel)) EditingUser = user;
+            if (!(sender is MainWindowViewModel)) EditingUser = user;
             ChangePassword = false;
         }
 

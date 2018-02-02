@@ -36,7 +36,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                 {
                     SaveActivity = false;
                     SelectedProjectIndex = Projects.Select((item, index) => new { Item = item, Index = index }).
-                                                    First(x => x.Item.Id == value.Id).Index;
+                                                    FirstOrDefault(x => x.Item.Id == value.Id)?.Index ?? 0;
                 }
             }
         }

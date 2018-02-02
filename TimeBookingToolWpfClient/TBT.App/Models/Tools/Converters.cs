@@ -5,9 +5,6 @@ using System.Windows;
 using System.Windows.Data;
 using TBT.App.Models.AppModels;
 using System.Collections.ObjectModel;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Controls;
 using TBT.App.Helpers;
 using TBT.App.ViewModels.MainWindow;
 using TBT.App.Views.Controls;
@@ -349,7 +346,8 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (value as IEnumerable) != null ? Visibility.Visible : Visibility.Collapsed;
+            var temp = value as IEnumerable;
+            return temp != null && temp.GetEnumerator().MoveNext() ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -362,7 +360,8 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (value as IEnumerable) != null ? Visibility.Collapsed : Visibility.Visible;
+            var temp = value as IEnumerable;
+            return temp != null && temp.GetEnumerator().MoveNext() ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
