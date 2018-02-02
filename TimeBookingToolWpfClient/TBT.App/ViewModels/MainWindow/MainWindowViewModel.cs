@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -15,7 +16,7 @@ using TBT.App.ViewModels.EtcViewModels;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class MainWindowViewModel : BaseViewModel
+    public class MainWindowViewModel : BaseViewModel, IDisposable
     {
         #region Fields
 
@@ -45,11 +46,9 @@ namespace TBT.App.ViewModels.MainWindow
                 if(value != _currentUser && _currentUser == null)
                 {
                     App.ShowBalloon($"{Resources.Greetings} {value.FirstName} !", " ", 30000, App.EnableGreetingNotification);
+                    Task.Run(() => RefreshEvents.RefreshCurrentUser(this)).Wait();
                 }
-                if (SetProperty(ref _currentUser, value) && value != null)
-                {
-                    RefreshEvents.RefreshCurrentUser(this);
-                }
+                SetProperty(ref _currentUser, value);
             }
         }
 
@@ -67,6 +66,7 @@ namespace TBT.App.ViewModels.MainWindow
                 if (SetProperty(ref _selectedTab, value) && value != null)
                 {
                     var temp = GetViewModelFromEnum(value.Control);
+                    SelectedViewModel?.CloseTab();
                     ViewModelCache.Remove(temp);
                     SelectedViewModel = temp;
                 }
@@ -85,7 +85,7 @@ namespace TBT.App.ViewModels.MainWindow
                 }
                 if(SetProperty(ref _selectedViewModel, value))
                 {
-                    RefreshAll();
+                    _selectedViewModel.OpenTab(CurrentUser);
                 }
             }
         }
@@ -170,9 +170,8 @@ namespace TBT.App.ViewModels.MainWindow
                 RefreshAllCommand = new RelayCommand(obj => RefreshAll(), null);
                 try
                 {
+                    Task.Run(() => RefreshEvents.RefreshCurrentUser(null)).Wait();
                     InitTabs();
-                    RefreshEvents.RefreshCurrentUser(null);
-                    RefreshAll();
                 }
                 catch (Exception) { }
                 WindowState = true;
@@ -202,10 +201,7 @@ namespace TBT.App.ViewModels.MainWindow
             try
             {
                 await RefreshEvents.RefreshCurrentUser(this);
-                await RefreshEvents.RefreshUsersList(this);
-                await RefreshEvents.RefreshCustomersList(this);
-                await RefreshEvents.RefreshProjectsList(this);
-                await RefreshEvents.RefreshTasksList(this);
+                
             }
             catch(Exception) { }
         }
@@ -392,6 +388,15 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (_viewModelCache?.Any() != true) { return; }
             _viewModelCache.RemoveWhere(x => x.ExpiresDate < DateTime.Now);
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            RefreshEvents.ChangeCurrentUser -= ChangeCurrentUser;
         }
 
         #endregion

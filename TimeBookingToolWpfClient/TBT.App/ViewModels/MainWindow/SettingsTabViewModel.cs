@@ -2,6 +2,7 @@
 using System;
 using TBT.App.Common;
 using TBT.App.Helpers;
+using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 
 namespace TBT.App.ViewModels.MainWindow
@@ -44,7 +45,6 @@ namespace TBT.App.ViewModels.MainWindow
             set { App.EnableGreetingNotification = value; }
         }
 
-        public DateTime ExpiresDate { get; set; }
 
         #endregion
 
@@ -75,9 +75,18 @@ namespace TBT.App.ViewModels.MainWindow
 
         #endregion
 
+        #region Interface members
+
+        public DateTime ExpiresDate { get; set; }
+        public void OpenTab(User currentUser) { }
+
+        public void CloseTab() { }
+
         #region IDisposable
 
         public virtual void Dispose() { }
+
+        #endregion
 
         #endregion
     }

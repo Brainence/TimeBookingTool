@@ -22,7 +22,7 @@ using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class ReportingTabViewModel: BaseViewModel, ICacheable
+    public class ReportingTabViewModel : BaseViewModel, ICacheable
     {
         #region Fields
 
@@ -56,7 +56,7 @@ namespace TBT.App.ViewModels.MainWindow
             set
             {
                 SetProperty(ref _users, value);
-                if(_users?.Any() == true)
+                if (_users?.Any() == true)
                 {
                     IsEnable = true;
                 }
@@ -68,7 +68,7 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _reportingUser; }
             set
             {
-                if(SetProperty(ref _reportingUser, value))
+                if (SetProperty(ref _reportingUser, value))
                 {
                     _savedreportingUserId = value?.Id;
                 }
@@ -80,7 +80,7 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _from; }
             set
             {
-                if(SetProperty(ref _from, value))
+                if (SetProperty(ref _from, value))
                 {
                     RefreshReportTimeEntires(ReportingUser?.Id);
                 }
@@ -92,7 +92,7 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _to; }
             set
             {
-                if(SetProperty(ref _to, value))
+                if (SetProperty(ref _to, value))
                 {
                     RefreshReportTimeEntires(ReportingUser?.Id);
                 }
@@ -148,8 +148,6 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _isEnable, value); }
         }
 
-        public DateTime ExpiresDate { get; set; }
-
         public ICommand RefreshReportTimeEntiresCommand { get; set; }
         public ICommand CreateCompanyReportCommand { get; set; }
         public ICommand CreateUserReportCommand { get; set; }
@@ -169,13 +167,13 @@ namespace TBT.App.ViewModels.MainWindow
                 Resources.LastMonth, Resources.ThisYear, Resources.LastYear,
                 Resources.AllTime
             };
-            RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
-            RefreshEvents.ChangeUsersList += RefreshUsersList;
             RefreshReportTimeEntiresCommand = new RelayCommand(async obj => await RefreshReportTimeEntires(ReportingUser.Id), null);
             CreateCompanyReportCommand = new RelayCommand(async obj => await SaveCompanyReport(), obj => User.IsAdmin);
             CreateUserReportCommand = new RelayCommand(async obj => await SaveUserReport(), null);
             SaveToClipboardCommand = new RelayCommand(obj => SaveTotalTimeToClipboard(), obj => TimeEntries?.Any() == true);
-            SelectedTipIndex = 0;
+            _selectedTipIndex = 0;
+            _to = DateTime.Now.StartOfWeek(DayOfWeek.Monday).AddDays(6);
+            _from = To.AddDays(-6);
         }
 
         #endregion
@@ -328,7 +326,7 @@ namespace TBT.App.ViewModels.MainWindow
             try
             {
                 control.TimeEntryItemsControl.UpdateLayout();
-                
+
                 fixedPage.Height = control.TimeEntryItemsControl.DesiredSize.Height + control.TimeEntryItemsControl.Margin.Top
                                                                                     + control.TimeEntryItemsControl.Margin.Bottom
                                                                                     + control.Header.DesiredSize.Height
@@ -503,18 +501,32 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public void RefreshUsersList(object sender, ObservableCollection<User> users)
+        public async Task RefreshUsersList()
         {
-            if (sender != null)
-            {
-                Users = users;
-                ReportingUser = _savedreportingUserId.HasValue ? Users?.FirstOrDefault(x=> x.Id == _savedreportingUserId.Value) : Users?.FirstOrDefault(x => x.Id == User.Id);
-                SelectedUserIndex = Users.IndexOf(ReportingUser);
-            }
+            Users = await RefreshEvents.RefreshUsersList();
+            ReportingUser = _savedreportingUserId.HasValue ? Users?.FirstOrDefault(x => x.Id == _savedreportingUserId.Value) : Users?.FirstOrDefault(x => x.Id == User.Id);
+            SelectedUserIndex = Users?.IndexOf(ReportingUser) ?? -1;
         }
 
         #endregion
 
+        #region Interface members
+
+        public DateTime ExpiresDate { get; set; }
+        public async void OpenTab(User currentUser)
+        {
+            RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
+            await RefreshUsersList();
+            await RefreshReportTimeEntires(ReportingUser?.Id);
+        }
+
+        public void CloseTab()
+        {
+            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
+            TimeEntries?.Clear();
+            Users = null;
+            ReportingUser = null;
+        }
 
         #region IDisposable
 
@@ -525,9 +537,10 @@ namespace TBT.App.ViewModels.MainWindow
             if (disposed) { return; }
 
             RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
-            RefreshEvents.ChangeUsersList -= RefreshUsersList;
             disposed = true;
         }
+
+        #endregion
 
         #endregion
     }

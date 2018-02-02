@@ -12,7 +12,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class PeopleTabViewModel: BaseViewModel, ICacheable
+    public class PeopleTabViewModel : BaseViewModel, ICacheable
     {
         #region Fields
 
@@ -50,7 +50,7 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _isExpandenNewUser; }
             set
             {
-                if(SetProperty(ref _isExpandenNewUser, value) && value)
+                if (SetProperty(ref _isExpandenNewUser, value) && value)
                 {
                     IsExpandedEdit = false;
                 }
@@ -78,8 +78,6 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public DateTime ExpiresDate { get; set; }
-
         public ICommand RemoveUserCommand { get; set; }
         public ICommand EditUserCommand { get; set; }
 
@@ -99,7 +97,7 @@ namespace TBT.App.ViewModels.MainWindow
                 ForSaving = false,
                 EditingUser = new User() { Company = CurrentUser.Company }
             };
-            ((EditUserViewModel)CreateNewUserViewModel).SavingUserAction += SaveUserEditingAction;
+            ((EditUserViewModel)CreateNewUserViewModel).NewUserAdded += AddNewUser;
 
             EditMyProfileViewModel = new EditUserViewModel()
             {
@@ -108,29 +106,24 @@ namespace TBT.App.ViewModels.MainWindow
                 ForSaving = true,
                 EditingUser = CurrentUser
             };
-            ((EditUserViewModel)EditMyProfileViewModel).SavingUserAction += SaveUserEditingAction;
-            RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
-            RefreshEvents.ChangeUsersList += RefreshUsersList;
             EditUserCommand = new RelayCommand(obj => EditUser(obj as User), null);
             RemoveUserCommand = new RelayCommand(obj => RemoveUser(obj as User), null);
-            ChangeUserForNested += ((EditUserViewModel)EditMyProfileViewModel).RefreshCurrentUser;
-
         }
 
         #endregion
 
         #region Methods
 
-
-        private void SaveUserEditingAction(bool userChanged, bool usersListChanged)
+        private void AddNewUser(User newUser)
         {
-            if(userChanged) { RefreshEvents.RefreshCurrentUser(this); }
-            RefreshEvents.RefreshUsersList(null);
+            Users.Add(newUser);
+            Users = new ObservableCollection<User>(Users.OrderBy(user => user.FirstName).ThenBy(user => user.LastName));
         }
 
         private void EditUser(User user)
         {
             if (user == null) return;
+            var tempUserInfo = new { user.FirstName, user.LastName };
 
             EditWindow euw = new EditWindow()
             {
@@ -147,7 +140,10 @@ namespace TBT.App.ViewModels.MainWindow
             };
             ((EditUserViewModel)((EditWindowViewModel)euw.DataContext).EditControl).CloseWindow += () => euw.Close();
             euw.ShowDialog();
-            SaveUserEditingAction(true, true);
+            if (user.FirstName != tempUserInfo.FirstName || user.LastName != tempUserInfo.LastName)
+            {
+                Users = new ObservableCollection<User>(Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName));
+            }
         }
 
         private async void RemoveUser(User user)
@@ -166,7 +162,6 @@ namespace TBT.App.ViewModels.MainWindow
 
                 var x = await App.CommunicationService.PutAsJson("User", user);
 
-                await RefreshEvents.RefreshUsersList(this);
                 Users.Remove(user);
             }
             catch (Exception ex)
@@ -184,15 +179,27 @@ namespace TBT.App.ViewModels.MainWindow
             ChangeUserForNested?.Invoke(sender, user);
         }
 
-        public void RefreshUsersList(object sender, ObservableCollection<User> users)
+        #endregion
+
+        #region Interface members
+
+        public DateTime ExpiresDate { get; set; }
+        public async void OpenTab(User currentUser)
         {
-            if (sender != this)
-            {
-                Users = users;
-            }
+            RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
+            CurrentUser = currentUser;
+            ((EditUserViewModel)CreateNewUserViewModel).NewUserAdded += AddNewUser;
+            ChangeUserForNested += ((EditUserViewModel)EditMyProfileViewModel).RefreshCurrentUser;
+            Users = await RefreshEvents.RefreshUsersList();
         }
 
-        #endregion
+        public void CloseTab()
+        {
+            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
+            ((EditUserViewModel)CreateNewUserViewModel).NewUserAdded -= AddNewUser;
+            ChangeUserForNested -= ((EditUserViewModel)EditMyProfileViewModel).RefreshCurrentUser;
+            Users?.Clear();
+        }
 
         #region IDisposable
 
@@ -203,10 +210,12 @@ namespace TBT.App.ViewModels.MainWindow
             if (disposed) { return; }
 
             RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
-            RefreshEvents.ChangeUsersList -= RefreshUsersList;
             disposed = true;
         }
 
         #endregion
+
+        #endregion
+
     }
 }

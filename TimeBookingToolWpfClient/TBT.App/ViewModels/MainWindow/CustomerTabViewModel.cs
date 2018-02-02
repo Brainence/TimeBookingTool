@@ -56,12 +56,25 @@ namespace TBT.App.ViewModels.MainWindow
                     SetProperty(ref _isExpanded, false);
                 }
                 SetProperty(ref _isExpanded, value);
-                if (value)
-                {
-                    RefreshEvents.RefreshCustomersList(this);
-                }
 
             }
+        }
+
+        public Company CurrentCompany
+        {
+            get
+            {
+                return _currentCompany;
+            }
+            set
+            {
+                if (_currentCompany.Id != value.Id)
+                {
+                    Customers = RefreshEvents.RefreshCustomersList().Result;
+                }
+                SetProperty(ref _currentCompany, value);
+            }
+
         }
 
         public bool IsAdmin
@@ -69,8 +82,6 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _isAdmin; }
             set { SetProperty(ref _isAdmin, value); }
         }
-
-        public DateTime ExpiresDate { get; set; }
 
         public ICommand CreateNewCustomerCommand { get; set; }
         public ICommand RefreshCustomersCommand { get; set; }
@@ -87,12 +98,10 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 IsAdmin = user.IsAdmin;
             }
-            RefreshEvents.ChangeCustomersList += RefreshCustomersList;
-            RefreshEvents.ChangeCurrentUser += RefreshCompanyId;
             CreateNewCustomerCommand = new RelayCommand(obj => CreateNewCustomer(), null);
-            RefreshCustomersCommand = new RelayCommand(async obj => { Customers = null; await RefreshEvents.RefreshCustomersList(null); }, null);
-            EditCustomerCommand = new RelayCommand(obj => EditCustomer(obj as Customer), obj => { return IsAdmin; });
-            RemoveCustomerCommand = new RelayCommand(obj => RemoveCustomer(obj as Customer), obj => { return IsAdmin; });
+            RefreshCustomersCommand = new RelayCommand(async obj => { Customers = await RefreshEvents.RefreshCustomersList(); }, null);
+            EditCustomerCommand = new RelayCommand(obj => EditCustomer(obj as Customer), obj => IsAdmin);
+            RemoveCustomerCommand = new RelayCommand(obj => RemoveCustomer(obj as Customer), obj => IsAdmin);
         }
 
         #endregion
@@ -118,7 +127,6 @@ namespace TBT.App.ViewModels.MainWindow
 
                 await App.CommunicationService.PostAsJson("Customer", customer);
 
-                await RefreshEvents.RefreshCustomersList(this);
                 customer.Id = -1;
                 Customers.Add(customer);
                 NewCustomersName = "";
@@ -148,7 +156,6 @@ namespace TBT.App.ViewModels.MainWindow
                 try
                 {
                     customer = JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.PutAsJson("Customer", customer));
-                    await RefreshEvents.RefreshCustomersList(this);
                 }
                 catch (Exception ex)
                 {
@@ -186,7 +193,6 @@ namespace TBT.App.ViewModels.MainWindow
 
                 var x = await App.CommunicationService.PutAsJson("Customer", customer);
 
-                await RefreshEvents.RefreshCustomersList(this);
                 Customers.Remove(Customers?.FirstOrDefault(item => item.Name == customer.Name));
             }
             catch (Exception ex)
@@ -195,33 +201,32 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers)
-        {
-            if (sender != this)
-            {
-                Customers = customers;
-            }
-        }
-
         public void RefreshCompanyId(object sender, User currentUser)
         {
-            if (sender != this) { _currentCompany = currentUser.Company; }
+            if (sender != this) { CurrentCompany = currentUser.Company; }
         }
 
         #endregion
 
-        #region IDisposable
+        #region Interface members
 
-        private bool disposed = false;
-
-        public virtual void Dispose()
+        public DateTime ExpiresDate { get; set; }
+        public async void OpenTab(User currentUser)
         {
-            if (disposed) { return; }
-
-            RefreshEvents.ChangeCustomersList -= RefreshCustomersList;
-            disposed = true;
+            RefreshEvents.ChangeCurrentUser += RefreshCompanyId;
+            Customers = await RefreshEvents.RefreshCustomersList();
         }
 
+        public void CloseTab()
+        {
+            RefreshEvents.ChangeCurrentUser -= RefreshCompanyId;
+            Customers?.Clear();
+        }
+
+        public void Dispose()
+        { }
+
         #endregion
+
     }
 }
