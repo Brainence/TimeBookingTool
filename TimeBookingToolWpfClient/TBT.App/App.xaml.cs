@@ -228,16 +228,9 @@ namespace TBT.App
             base.OnStartup(e);
         }
 
-        private static string GetShortcutPath()
-        {
-            var allProgramsPath = Environment.GetFolderPath(Environment.SpecialFolder.Programs);
-            var shortcutPath = Path.Combine(allProgramsPath, PublisherName);
-            return Path.Combine(shortcutPath, ProductName, FileName);
-        }
-
         public static string UrlSafeDateToString(DateTime date)
         {
-            string urlSafeDateString = date.ToUniversalTime().ToString("yyyyMMddTHHmmss", System.Globalization.CultureInfo.InvariantCulture);
+            string urlSafeDateString = date.ToUniversalTime().ToString("yyyyMMddTHHmmss", CultureInfo.InvariantCulture);
             return urlSafeDateString;
         }
 
@@ -285,8 +278,8 @@ namespace TBT.App
                 var res = await UpdateTokens();
                 authorized = res && !string.IsNullOrEmpty(Username);
             }
-            Thread.CurrentThread.CurrentCulture = new CultureInfo(CultureTag);
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo(CultureTag);
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(CultureTag);
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(CultureTag);
             InitNotifyIcon();
             var mainWindow = new MainWindow() { DataContext = new MainWindowViewModel(authorized && RememberMe) };
             if (mainWindow.Visibility != Visibility.Collapsed) { mainWindow.ShowDialog(); }

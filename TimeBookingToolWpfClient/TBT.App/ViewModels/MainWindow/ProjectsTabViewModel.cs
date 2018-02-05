@@ -224,12 +224,16 @@ namespace TBT.App.ViewModels.MainWindow
         {
             Projects = await RefreshEvents.RefreshProjectsList();
             Customers = await RefreshEvents.RefreshCustomersList();
+            SelectedCustomer = Customers.FirstOrDefault(c => c.Id == _selectedCustomerIndex) ?? Customers.FirstOrDefault();
+            SelectedCustomerIndex = Customers.IndexOf(SelectedCustomer);
         }
 
         public void CloseTab()
         {
+            var temp = SelectedCustomer?.Id ?? 0;
             Projects?.Clear();
             Customers?.Clear();
+            _selectedCustomerIndex = temp;
         }
 
         #region IDisposable

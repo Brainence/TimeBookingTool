@@ -30,7 +30,7 @@ namespace TBT.App.ViewModels.MainWindow
         private User _user;
         private ObservableCollection<User> _users;
         private User _reportingUser;
-        private int? _savedreportingUserId;
+        private int? _savedReportingUserId;
         private DateTime _from;
         private DateTime _to;
         private ObservableCollection<string> _itervalTips;
@@ -65,7 +65,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (SetProperty(ref _reportingUser, value))
                 {
-                    _savedreportingUserId = value?.Id;
+                    _savedReportingUserId = value?.Id;
                 }
             }
         }
@@ -494,8 +494,8 @@ namespace TBT.App.ViewModels.MainWindow
             if (User.IsAdmin)
             {
                 Users = await RefreshEvents.RefreshUsersList();
-                ReportingUser = _savedreportingUserId.HasValue
-                    ? Users?.FirstOrDefault(x => x.Id == _savedreportingUserId.Value)
+                ReportingUser = _savedReportingUserId.HasValue
+                    ? Users?.FirstOrDefault(x => x.Id == _savedReportingUserId.Value)
                     : Users?.FirstOrDefault(x => x.Id == User.Id);
                 SelectedUserIndex = Users?.IndexOf(ReportingUser) ?? -1;
             }

@@ -193,12 +193,16 @@ namespace TBT.App.ViewModels.MainWindow
         {
             Projects = await RefreshEvents.RefreshProjectsList();
             Activities = await RefreshEvents.RefreshTasksList();
+            SelectedProject = Projects.FirstOrDefault(p => p.Id == _selectedProjectIndex) ?? Projects.FirstOrDefault();
+            SelectedProjectIndex = Projects.IndexOf(SelectedProject);
         }
 
         public void CloseTab()
         {
+            var temp = SelectedProject?.Id ?? 0;
             Projects.Clear();
             Activities.Clear();
+            _selectedProjectIndex = temp;
         }
 
         #endregion
