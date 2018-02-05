@@ -19,11 +19,10 @@ namespace TBT.App.Views.Controls
         public MultiSelectionComboBox()
         {
             InitializeComponent();
-            RefreshEvents.ChangeCurrentUser += CurrentUserChanged;
             if(!_companyId.HasValue) { Task.Run(() => RefreshEvents.RefreshCurrentUser(null)).Wait(); }
         }
 
-        private void CurrentUserChanged(object sender, User value)
+        public static void CurrentUserChanged(object sender, User value)
         {
             _companyId = !_companyId.HasValue && value?.Company?.Id > 0 ? value.Company?.Id : _companyId;
         }

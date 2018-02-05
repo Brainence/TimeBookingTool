@@ -254,7 +254,6 @@ namespace TBT.App.ViewModels.MainWindow
         {
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
             await RefreshEvents.RefreshCurrentUser(null);
-            User = currentUser;
             await SelectedDayChanged();
         }
 

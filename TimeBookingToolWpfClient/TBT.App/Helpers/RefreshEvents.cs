@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using TBT.App.Models.AppModels;
+using TBT.App.Views.Controls;
 
 namespace TBT.App.Helpers
 {
@@ -14,6 +15,15 @@ namespace TBT.App.Helpers
         #region Fields
 
         private static int _companyId;
+
+        #endregion
+
+        #region Constructors
+
+        static RefreshEvents()
+        {
+            ChangeCurrentUser += MultiSelectionComboBox.CurrentUserChanged;
+        }
 
         #endregion
 

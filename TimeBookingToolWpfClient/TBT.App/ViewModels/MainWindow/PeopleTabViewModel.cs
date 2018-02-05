@@ -97,8 +97,6 @@ namespace TBT.App.ViewModels.MainWindow
                 ForSaving = false,
                 EditingUser = new User() { Company = CurrentUser.Company }
             };
-            ((EditUserViewModel)CreateNewUserViewModel).NewUserAdded += AddNewUser;
-
             EditMyProfileViewModel = new EditUserViewModel()
             {
                 ShowAdmin = false,

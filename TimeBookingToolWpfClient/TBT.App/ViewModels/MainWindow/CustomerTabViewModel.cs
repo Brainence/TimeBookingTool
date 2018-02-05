@@ -201,7 +201,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public void RefreshCompanyId(object sender, User currentUser)
+        public void RefreshCompany(object sender, User currentUser)
         {
             if (sender != this) { CurrentCompany = currentUser.Company; }
         }
@@ -213,13 +213,13 @@ namespace TBT.App.ViewModels.MainWindow
         public DateTime ExpiresDate { get; set; }
         public async void OpenTab(User currentUser)
         {
-            RefreshEvents.ChangeCurrentUser += RefreshCompanyId;
+            RefreshEvents.ChangeCurrentUser += RefreshCompany;
             Customers = await RefreshEvents.RefreshCustomersList();
         }
 
         public void CloseTab()
         {
-            RefreshEvents.ChangeCurrentUser -= RefreshCompanyId;
+            RefreshEvents.ChangeCurrentUser -= RefreshCompany;
             Customers?.Clear();
         }
 

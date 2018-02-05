@@ -46,7 +46,6 @@ namespace TBT.App.ViewModels.MainWindow
                 if (value != _currentUser && _currentUser == null)
                 {
                     App.ShowBalloon($"{Resources.Greetings} {value.FirstName} !", " ", 30000, App.EnableGreetingNotification);
-                    Task.Run(() => RefreshEvents.RefreshCurrentUser(this)).Wait();
                 }
                 SetProperty(ref _currentUser, value);
             }
