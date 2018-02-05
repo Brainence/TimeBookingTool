@@ -37,7 +37,6 @@ namespace TBT.App.ViewModels.MainWindow
         private int? _selectedTipIndex;
         private bool _itemsLoading;
         private ObservableCollection<TimeEntry> _timeEntries;
-        private bool _isEnable;
         private int _selectedUserIndex;
 
         #endregion
@@ -56,10 +55,6 @@ namespace TBT.App.ViewModels.MainWindow
             set
             {
                 SetProperty(ref _users, value);
-                if (_users?.Any() == true)
-                {
-                    IsEnable = true;
-                }
             }
         }
 
@@ -125,7 +120,7 @@ namespace TBT.App.ViewModels.MainWindow
                 if (SetProperty(ref _selectedUserIndex, value) && value >= 0)
                 {
                     ReportingUser = Users[value];
-                    RefreshReportTimeEntires(ReportingUser?.Id);
+                    Task.Run(() => RefreshReportTimeEntires(ReportingUser?.Id)).Wait();
                 }
             }
         }
@@ -140,12 +135,6 @@ namespace TBT.App.ViewModels.MainWindow
         {
             get { return _timeEntries; }
             set { SetProperty(ref _timeEntries, value); }
-        }
-
-        public bool IsEnable
-        {
-            get { return _isEnable; }
-            set { SetProperty(ref _isEnable, value); }
         }
 
         public ICommand RefreshReportTimeEntiresCommand { get; set; }
@@ -328,10 +317,10 @@ namespace TBT.App.ViewModels.MainWindow
                 control.TimeEntryItemsControl.UpdateLayout();
 
                 fixedPage.Height = control.TimeEntryItemsControl.DesiredSize.Height + control.TimeEntryItemsControl.Margin.Top
-                                                                                    + control.TimeEntryItemsControl.Margin.Bottom
-                                                                                    + control.Header.DesiredSize.Height
-                                                                                    + control.Header.Margin.Top
-                                                                                    + control.Header.Margin.Bottom;
+                                   + control.TimeEntryItemsControl.Margin.Bottom
+                                   + control.Header.DesiredSize.Height
+                                   + control.Header.Margin.Top
+                                   + control.Header.Margin.Bottom;
                 fixedPage.Width = 1100;
 
                 control.Height = fixedPage.Height;
@@ -394,12 +383,11 @@ namespace TBT.App.ViewModels.MainWindow
 
             try
             {
-                var users = JsonConvert.DeserializeObject<List<User>>(await App.CommunicationService.GetAsJson("User"));
 
                 Dictionary<int, ObservableCollection<TimeEntry>> timeEntries = new Dictionary<int, ObservableCollection<TimeEntry>>();
 
                 var result = new ObservableCollection<TimeEntry>();
-                foreach (var u in users)
+                foreach (var u in Users)
                 {
                     if (From == DateTime.MinValue && To == DateTime.MaxValue)
                     {
@@ -430,7 +418,7 @@ namespace TBT.App.ViewModels.MainWindow
                 foreach (var t in timeEntries)
                     durations.Add(t.Key, dc.Convert(t.Value, typeof(TimeSpan), null, CultureInfo.InvariantCulture).ToString());
 
-                var Users = users.Select(u => new
+                var users = Users.Select(u => new
                 {
                     u.FullName,
                     u.Username,
@@ -441,7 +429,7 @@ namespace TBT.App.ViewModels.MainWindow
 
                 AllUsersReportPage.DataContext = new
                 {
-                    Users = Users,
+                    Users = users,
                     From = From,
                     To = To
                 };
@@ -503,9 +491,18 @@ namespace TBT.App.ViewModels.MainWindow
 
         public async Task RefreshUsersList()
         {
-            Users = await RefreshEvents.RefreshUsersList();
-            ReportingUser = _savedreportingUserId.HasValue ? Users?.FirstOrDefault(x => x.Id == _savedreportingUserId.Value) : Users?.FirstOrDefault(x => x.Id == User.Id);
-            SelectedUserIndex = Users?.IndexOf(ReportingUser) ?? -1;
+            if (User.IsAdmin)
+            {
+                Users = await RefreshEvents.RefreshUsersList();
+                ReportingUser = _savedreportingUserId.HasValue
+                    ? Users?.FirstOrDefault(x => x.Id == _savedreportingUserId.Value)
+                    : Users?.FirstOrDefault(x => x.Id == User.Id);
+                SelectedUserIndex = Users?.IndexOf(ReportingUser) ?? -1;
+            }
+            else
+            {
+                ReportingUser = User;
+            }
         }
 
         #endregion
@@ -516,6 +513,7 @@ namespace TBT.App.ViewModels.MainWindow
         public async void OpenTab(User currentUser)
         {
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
+            User = currentUser;
             await RefreshUsersList();
             await RefreshReportTimeEntires(ReportingUser?.Id);
         }
@@ -544,4 +542,5 @@ namespace TBT.App.ViewModels.MainWindow
 
         #endregion
     }
+
 }
