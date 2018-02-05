@@ -168,7 +168,7 @@
                                  PreviewTextInput="CheckInput"/>
                         <TextBox Name="commentArea"
                                  Text="{Binding Path=Comment, Mode=TwoWay}" 
-                                 Width="370" Height="32"
+                                 Width="370" Height="80"
                                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                                  HorizontalAlignment="Left" VerticalAlignment="Top"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 2 0 0" >

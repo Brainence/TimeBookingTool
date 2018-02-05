@@ -203,8 +203,8 @@ namespace TBT.App.ViewModels.MainWindow
                     To = new DateTime(now.Year - 1, 12, 31);
                     break;
                 case 6:
-                    From = DateTime.MinValue;
-                    To = DateTime.MaxValue;
+                    From = new DateTime(1950, 1, 1);
+                    To = DateTime.Now.Date;
                     break;
                 default:
                     break;
