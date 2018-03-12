@@ -6,8 +6,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 
 namespace TBT.App.Views.Controls
@@ -17,7 +19,15 @@ namespace TBT.App.Views.Controls
         public MultiSelectionComboBox()
         {
             InitializeComponent();
+            if(!_companyId.HasValue) { Task.Run(() => RefreshEvents.RefreshCurrentUser(null)).Wait(); }
         }
+
+        public static void CurrentUserChanged(object sender, User value)
+        {
+            _companyId = !_companyId.HasValue && value?.Company?.Id > 0 ? value.Company?.Id : _companyId;
+        }
+
+        private static int? _companyId;
 
         public string PropertyPath { get; set; }
 
@@ -60,7 +70,7 @@ namespace TBT.App.Views.Controls
         {
             get
             {
-                return ItemsSource == null ? null : ItemsSource.Cast<CheckableObject>()
+                return ItemsSource?.Cast<CheckableObject>()
                     .Where(x => x.IsChecked)
                     .Select(y => y.Obj);
             }
@@ -78,36 +88,40 @@ namespace TBT.App.Views.Controls
             }
         }
 
-        public async static void ItemsSourceMultiple_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public static async void ItemsSourceMultiple_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var x = (MultiSelectionComboBox)d;
 
             var list = new List<object>();
 
-            var allProjects = JsonConvert.DeserializeObject<List<Project>>(await App.CommunicationService.GetAsJson("Project"));
-            var userProjects = (ObservableCollection<Project>)e.NewValue;
-
-            foreach (var elem in allProjects)
+            try
             {
-                var item = new CheckableObject(x.PropertyPath);
-                item.Obj = elem;
-                item.IsChecked = userProjects == null ? false : userProjects.Select(t => t.Id).Contains(elem.Id);
-                item.IsCheckedPropertyChanged += () =>
+                var allProjects = JsonConvert.DeserializeObject<List<Project>>(await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId ?? 0}"));
+                var userProjects = (ObservableCollection<Project>)e.NewValue;
+
+                foreach (var elem in allProjects)
                 {
-                    x.ItemChecked();
-                };
-                list.Add(item);
+                    var item = new CheckableObject(x.PropertyPath);
+                    item.Obj = elem;
+                    item.IsChecked = userProjects == null ? false : userProjects.Select(t => t.Id).Contains(elem.Id);
+                    item.IsCheckedPropertyChanged += () =>
+                    {
+                        x.ItemChecked();
+                    };
+                    list.Add(item);
+                }
+                x.ItemsSource = list;
             }
-            x.ItemsSource = list;
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+            }
         }
 
         public event Action Checked;
         protected void ItemChecked()
         {
-            if (Checked != null)
-            {
-                Checked();
-            }
+            Checked?.Invoke();
             try
             {
                 SelectionBoxText = SelectedItems.Any()
@@ -134,9 +148,9 @@ namespace TBT.App.Views.Controls
                     await App.CommunicationService.PostAsJson($"UserProject/Add/{user.Id}/{project.Id}", null);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred while assigning user to project.");
+                MessageBox.Show($"Error occurred while assigning user to project. {ex.Message} {ex.InnerException?.Message}");
             }
         }
 
@@ -153,9 +167,9 @@ namespace TBT.App.Views.Controls
                     await App.CommunicationService.Delete($"UserProject/Remove/{user.Id}/{project.Id}");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred while dissociating user from project.");
+                MessageBox.Show($"Error occurred while assigning user to project. {ex.Message} {ex.InnerException?.Message}");
             }
         }
 
@@ -219,17 +233,11 @@ namespace TBT.App.Views.Controls
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         protected void OnIsCheckedPropertyChanged()
         {
-            if (IsCheckedPropertyChanged != null)
-            {
-                IsCheckedPropertyChanged();
-            }
+            IsCheckedPropertyChanged?.Invoke();
         }
     }
 }

@@ -4,44 +4,68 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:p="clr-namespace:TBT.App.Properties"
              xmlns:local="clr-namespace:TBT.App.Views.Controls"
+             xmlns:helpers="clr-namespace:TBT.App.Helpers"
              mc:Ignorable="d" 
-             d:DesignHeight="300">
+             MinWidth="300">
 
     <Grid>
         <StackPanel Grid.IsSharedSizeScope="True">
-            <local:TextControl Margin="0 0 0 5" Label="First name" Text="{Binding ElementName=this, Path=User.FirstName, Mode=TwoWay}"/>
-            <local:TextControl Margin="0 0 0 5" Label="Last Name" Text="{Binding ElementName=this, Path=User.LastName, Mode=TwoWay}"/>
-            <local:TextControl Margin="0 0 0 5" Label="Username" Text="{Binding ElementName=this, Path=User.Username, Mode=TwoWay}"/>
-            <local:TextControl Margin="0 0 0 5" Label="Password" Text="{Binding ElementName=this, Path=User.Password, Mode=TwoWay}"
-                               Visibility="{Binding ElementName=this, Path=ShowPassword, Converter={StaticResource BoolToVisibilityConverter}}"/>
-            <local:TextControl Margin="0 0 0 5" Label="Time limit" Text="{Binding ElementName=this, Path=User.TimeLimit, Mode=TwoWay}"
-                               Visibility="{Binding ElementName=this, Path=ShowAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Text="{Binding Path=ErrorMsg, Mode=TwoWay}" 
+                       Margin="4"  Height="20" Foreground="#660000" Visibility="{Binding ErrorMsg, Converter={StaticResource StringToVisibilityConverter}}"/>
+            <local:TextControl Margin="0 0 0 5" Label="{x:Static p:Resources.FirstName}" Text="{Binding Path=EditingUser.FirstName, Mode=TwoWay}"/>
+            <local:TextControl Margin="0 0 0 5" Label="{x:Static p:Resources.LastName}" Text="{Binding Path=EditingUser.LastName, Mode=TwoWay}"/>
+            <local:TextControl Margin="0 0 0 5" Label="{x:Static p:Resources.Username}" Text="{Binding Path=EditingUser.Username, Mode=TwoWay}"/>
+            <local:TextControl Margin="0 0 0 5" Label="{x:Static p:Resources.Password}" Text="{Binding Path=EditingUser.Password, Mode=TwoWay}"
+                               Visibility="{Binding ShowPassword, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <local:TextControl Margin="0 0 0 5" Label="{x:Static p:Resources.TimeLimit}" Text="{Binding Path=EditingUser.TimeLimit, Mode=TwoWay}"
+                               Visibility="{Binding ShowAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-            <local:CheckBoxControl Margin="0 0 0 5" Label="Admin" IsChecked="{Binding ElementName=this, Path=User.IsAdmin, Mode=TwoWay}" 
-                               Visibility="{Binding ElementName=this, Path=ShowAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <local:CheckBoxControl Margin="0 0 0 5" Label="{x:Static p:Resources.Admin}" IsChecked="{Binding Path=EditingUser.IsAdmin, Mode=TwoWay}" 
+                               Visibility="{Binding Path=ShowAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <local:CheckBoxControl Margin="0 0 0 5" Label="{x:Static p:Resources.ChangePassword}" IsChecked="{Binding Path=ChangePassword, Mode=TwoWay}" 
+                               Visibility="{Binding Path=ShowPassword, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
+            <Grid Visibility="{Binding ChangePassword, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static p:Resources.OldPassword}" HorizontalAlignment="Left" Margin="10 0 0 5"  FontSize="13" FontWeight="Normal"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static p:Resources.NewPassword}" HorizontalAlignment="Left" Margin="10 0 0 5" FontSize="13" FontWeight="Normal"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static p:Resources.ConfirmPassword}" HorizontalAlignment="Left" Margin="10 0 0 5" FontSize="13" FontWeight="Normal"/>
 
+                <PasswordBox x:Name="oldPassword" helpers:PasswordHelper.Attach="True" Grid.Row="0" Grid.Column="1" Margin="2 0 10 5" Height="20" FontSize="13" FontWeight="Normal"/>
+                <PasswordBox x:Name="newPassword" helpers:PasswordHelper.Attach="True" Grid.Row="1" Grid.Column="1" Margin="2 0 10 5" Height="20" FontSize="13" FontWeight="Normal"/>
+                <PasswordBox x:Name="confirmPassword" helpers:PasswordHelper.Attach="True" Grid.Row="2" Grid.Column="1" Margin="2 0 10 5" Height="20" FontSize="13" FontWeight="Normal"/>
+            </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Margin="0 0 0 0" Click="AddSaveUser_ButtonClick" Template="{StaticResource HyperlinkButtonTemplate}">
+                <Button Margin="0 0 0 0" Command="{Binding AddSaveCommand}" Template="{StaticResource HyperlinkButtonTemplate}">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=this, Path=ForSaving}" Value="True">
-                                    <Setter Property="Content" Value="Save"/>
+                                <DataTrigger Binding="{Binding Path=ForSaving}" Value="True">
+                                    <Setter Property="Content" Value="{x:Static p:Resources.Save}"/>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding ElementName=this, Path=ForSaving}" Value="False">
-                                    <Setter Property="Content" Value="Create new"/>
+                                <DataTrigger Binding="{Binding Path=ForSaving}" Value="False">
+                                    <Setter Property="Content" Value="{x:Static p:Resources.CreateNew}"/>
                                 </DataTrigger>
                             </Style.Triggers>
-
                         </Style>
                     </Button.Style>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource ResetPasswordMultiConverter}">
+                            <Binding ElementName="oldPassword" Path="(helpers:PasswordHelper.Password)"/>
+                            <Binding ElementName="newPassword" Path="(helpers:PasswordHelper.Password)"/>
+                            <Binding ElementName="confirmPassword" Path="(helpers:PasswordHelper.Password)"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
                 </Button>
-                
-                <Button Margin="10 0 0 0" Content="Cancel" 
-                        Visibility="{Binding ElementName=this, Path=ForSaving, Converter={StaticResource BoolToVisibilityConverter}}"
-                        Command="{Binding ElementName=this, Path=CancelCommand, Mode=TwoWay}" 
-                        Template="{StaticResource HyperlinkButtonTemplate}" />
             </StackPanel>
 
         </StackPanel>

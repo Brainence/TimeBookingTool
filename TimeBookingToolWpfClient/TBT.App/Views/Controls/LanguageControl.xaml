@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="TBT.App.Views.Controls.LanguageControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TBT.App.Views.Controls"
+             xmlns:p="clr-namespace:TBT.App.Properties"
+             mc:Ignorable="d"
+             Name="LanguageItemsControl">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <ItemsControl Visibility="{Binding ShowSelectedLanguage, Converter={StaticResource BoolToNotVisibilityConverter}}"
+                      ItemsSource="{Binding Languages, Mode=TwoWay}" >
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Image Source="{Binding Flag}" Margin="3" ToolTip="{Binding LanguageName}" Cursor="Hand">
+                        <Image.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding ElementName=LanguageItemsControl, Path=DataContext.ChangeLanguageCommand}"
+                                      CommandParameter="{Binding}"/>
+                        </Image.InputBindings>
+                    </Image>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Image Source="{Binding Path=SelectedLanguage.Flag}" 
+               Margin="3"
+               Visibility="{Binding ShowSelectedLanguage, Converter={StaticResource BoolToVisibilityConverter}}"
+               ToolTip="{x:Static p:Resources.ClickToChangeLanguage}"
+               Width="32" Cursor="Hand">
+            <Image.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding ChangeLanguageCommand}"/>
+            </Image.InputBindings>
+        </Image>
+    </Grid>
+</UserControl>

@@ -9,11 +9,7 @@ namespace TBT.App
 {
     public class AppSettings
         : IDictionary<string, object>,
-        ICollection<KeyValuePair<string, object>>,
-        IEnumerable<KeyValuePair<string, object>>,
         IDictionary,
-        ICollection,
-        IEnumerable,
         IDisposable
     {
         private BinaryFormatter _formatter;
@@ -27,50 +23,23 @@ namespace TBT.App
             Load();
         }
 
-        public ICollection<string> Keys
-        {
-            get { return ((IDictionary<string, object>)_settings).Keys; }
-        }
+        public ICollection<string> Keys => ((IDictionary<string, object>)_settings).Keys;
 
-        public ICollection<object> Values
-        {
-            get { return ((IDictionary<string, object>)_settings).Values; }
-        }
+        public ICollection<object> Values => ((IDictionary<string, object>)_settings).Values;
 
-        public int Count
-        {
-            get { return ((IDictionary<string, object>)_settings).Count; }
-        }
+        public int Count => ((IDictionary<string, object>)_settings).Count;
 
-        public bool IsReadOnly
-        {
-            get { return ((IDictionary<string, object>)_settings).IsReadOnly; }
-        }
+        public bool IsReadOnly => ((IDictionary<string, object>)_settings).IsReadOnly;
 
-        ICollection IDictionary.Keys
-        {
-            get { return ((IDictionary)_settings).Keys; }
-        }
+        ICollection IDictionary.Keys => ((IDictionary)_settings).Keys;
 
-        ICollection IDictionary.Values
-        {
-            get { return ((IDictionary)_settings).Values; }
-        }
+        ICollection IDictionary.Values => ((IDictionary)_settings).Values;
 
-        public bool IsFixedSize
-        {
-            get { return ((IDictionary)_settings).IsFixedSize; }
-        }
+        public bool IsFixedSize => ((IDictionary)_settings).IsFixedSize;
 
-        public object SyncRoot
-        {
-            get { return ((IDictionary)_settings).SyncRoot; }
-        }
+        public object SyncRoot => ((IDictionary)_settings).SyncRoot;
 
-        public bool IsSynchronized
-        {
-            get { return ((IDictionary)_settings).IsSynchronized; }
-        }
+        public bool IsSynchronized => ((IDictionary)_settings).IsSynchronized;
 
         public object this[object key]
         {

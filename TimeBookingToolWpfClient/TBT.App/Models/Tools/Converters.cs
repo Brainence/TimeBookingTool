@@ -5,8 +5,13 @@ using System.Windows;
 using System.Windows.Data;
 using TBT.App.Models.AppModels;
 using System.Collections.ObjectModel;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using TBT.App.Helpers;
+using TBT.App.ViewModels.MainWindow;
+using TBT.App.Views.Controls;
+using System.Collections;
+using TBT.App.Properties;
+using System.Threading;
+using System.Collections.Generic;
 
 namespace TBT.App.Models.Tools
 {
@@ -46,20 +51,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int day = ((int)value) % 7;
-
-            switch (day)
-            {
-                case 0: return "Sunday";
-                case 1: return "Monday";
-                case 2: return "Tuesday";
-                case 3: return "Wednesday";
-                case 4: return "Thursday";
-                case 5: return "Friday";
-                case 6: return "Saturday";
-            }
-
-            return "";
+            return Thread.CurrentThread.CurrentUICulture.DateTimeFormat.GetDayName((DayOfWeek)(((int)value) % 7));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -72,20 +64,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int day = ((int)value) % 7;
-
-            switch (day)
-            {
-                case 0: return "Sun";
-                case 1: return "Mon";
-                case 2: return "Tue";
-                case 3: return "Wed";
-                case 4: return "Thu";
-                case 5: return "Fri";
-                case 6: return "Sat";
-            }
-
-            return "";
+            return Thread.CurrentThread.CurrentUICulture.DateTimeFormat.GetAbbreviatedDayName((DayOfWeek)(((int)value) % 7));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -98,25 +77,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int month = ((int)value) % 13;
-
-            switch (month)
-            {
-                case 1: return "January";
-                case 2: return "February";
-                case 3: return "March";
-                case 4: return "April";
-                case 5: return "May";
-                case 6: return "June";
-                case 7: return "July";
-                case 8: return "August";
-                case 9: return "September";
-                case 10: return "October";
-                case 11: return "November";
-                case 12: return "December";
-            }
-
-            return "";
+            return Thread.CurrentThread.CurrentUICulture.DateTimeFormat.GetMonthName(((int)value) % 13);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -129,25 +90,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int month = ((int)value) % 13;
-
-            switch (month)
-            {
-                case 1: return "Jan";
-                case 2: return "Feb";
-                case 3: return "Mar";
-                case 4: return "Apr";
-                case 5: return "May";
-                case 6: return "Jun";
-                case 7: return "Jul";
-                case 8: return "Aug";
-                case 9: return "Sep";
-                case 10: return "Oct";
-                case 11: return "Nov";
-                case 12: return "Dec";
-            }
-
-            return "";
+            return Thread.CurrentThread.CurrentUICulture.DateTimeFormat.GetAbbreviatedMonthName(((int)value) % 13);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -199,7 +142,7 @@ namespace TBT.App.Models.Tools
         {
             TimeEntry timeEntry = (TimeEntry)value;
 
-            if (timeEntry == null || timeEntry.Comment == null) return "";
+            if (string.IsNullOrEmpty(timeEntry?.Comment)) return "";
             return timeEntry.Comment;
         }
 
@@ -329,9 +272,9 @@ namespace TBT.App.Models.Tools
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             DateTime dateTime;
-            var res = DateTime.TryParse(value.ToString(), out dateTime);
+            var res = DateTime.TryParse(value?.ToString(), out dateTime);
 
-            return res ? dateTime.Date == DateTime.Now.Date ? "START" : "CREATE" : "CREATE";
+            return res ? dateTime.Date == DateTime.Now.Date ? Resources.Start.ToUpper() : Resources.Create.ToUpper() : Resources.Create.ToUpper();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -340,4 +283,176 @@ namespace TBT.App.Models.Tools
         }
     }
 
+    public class ResetPasswordMultiConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(!values.Any()) { return null; }
+            return new ResetPasswordParameters() { TokenPassword = values[0]?.ToString(), NewPassword = values[1]?.ToString(), ConfirmPassword = values[2]?.ToString() };
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class AuthenticationControlMultiConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(!values.Any()) { return null; }
+            return new AuthenticationControlClosePararmeters() { Password = values[0]?.ToString(), CurrentWindow = values[1] as Window };
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class NewTimeEntryParamsConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(values?.Count() < 3) { return null; }
+            var temp = new TimeEntryViewModel((int)values[1]) { TimeEntry = (values[0] as TimeEntry) };
+            temp.ScrollToEdited += (values[2] as TimeEntryItemsControl).RefreshScrollView;
+            temp.RefreshTimeEntries += ((values[2] as TimeEntryItemsControl).DataContext as TimeEntryItemsViewModel).RefreshTimeEntriesHandler;
+            temp.EditingTimeEntry += ((values[2] as TimeEntryItemsControl).DataContext as TimeEntryItemsViewModel).ChangeEditingTimeEntry;
+            return temp;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class StringToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return string.IsNullOrEmpty(value?.ToString()) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class EnumerableToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var temp = value as IEnumerable;
+            return temp != null && temp.GetEnumerator().MoveNext() ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class EnumerableToNotVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var temp = value as IEnumerable;
+            return temp != null && temp.GetEnumerator().MoveNext() ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class OnlyForAdminsVisibleConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values?.Count() < 2) return Visibility.Collapsed;
+            var isAdmin = (values[0] as bool?);
+            var onlyForAdmins = (values[1] as bool?);
+            if (!isAdmin.HasValue || !onlyForAdmins.HasValue) return Visibility.Collapsed;
+
+            return (isAdmin.Value) ? Visibility.Visible : (onlyForAdmins.Value) ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ToUpperConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value?.ToString().ToUpper();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class BoolToWindowState : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var x = value as bool?;
+            if (x == null) return WindowState.Minimized;
+
+            return x.Value ? WindowState.Normal : WindowState.Minimized;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((WindowState)value) == WindowState.Minimized ? false : true;
+        }
+    }
+
+    public class ReverseTimeEntryConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (value as IEnumerable<TimeEntry>)?.Reverse().OrderByDescending(x => x.IsRunning);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class BoolToErrorColor : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (bool)value ? Common.MessageColors.Error : Common.MessageColors.Message;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class EnumerableToBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((value as IList)?.Count ?? 0) > 0;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
 }

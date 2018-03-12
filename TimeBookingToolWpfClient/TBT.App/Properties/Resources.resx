@@ -117,8 +117,414 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="AllTime" xml:space="preserve">
+    <value>All time</value>
+  </data>
+  <data name="BackToToday" xml:space="preserve">
+    <value>Back to today</value>
+  </data>
+  <data name="Calendar" xml:space="preserve">
+    <value>Calendar</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="CompanyReport" xml:space="preserve">
+    <value>Company report</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="CopyTotalToClipboard" xml:space="preserve">
+    <value>Copy total time to clipboard</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="CreateCustomer" xml:space="preserve">
+    <value>Create new customer</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Create new</value>
+  </data>
+  <data name="CreateProject" xml:space="preserve">
+    <value>Create new project</value>
+  </data>
+  <data name="CreateTask" xml:space="preserve">
+    <value>Create task</value>
+  </data>
+  <data name="CurrentsWeek" xml:space="preserve">
+    <value>Current week</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="CustomerName" xml:space="preserve">
+    <value>Customer name</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Customers</value>
+  </data>
+  <data name="DisableGreeting" xml:space="preserve">
+    <value>Disable greeting</value>
+  </data>
+  <data name="DisableNotifications" xml:space="preserve">
+    <value>Disable notifications</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EditMyProfile" xml:space="preserve">
+    <value>Edit my profile</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EnableGreeting" xml:space="preserve">
+    <value>Enable greetings</value>
+  </data>
+  <data name="EnableNotifications" xml:space="preserve">
+    <value>Enable notifications</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Full name</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Last month</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+  <data name="LastWeek" xml:space="preserve">
+    <value>Last week</value>
+  </data>
+  <data name="LastYear" xml:space="preserve">
+    <value>Last year</value>
+  </data>
+  <data name="Limit" xml:space="preserve">
+    <value>Limit</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="NewUser" xml:space="preserve">
+    <value>New user</value>
+  </data>
+  <data name="OldPassword" xml:space="preserve">
+    <value>Old password</value>
+  </data>
+  <data name="OpenTimeBookingTool" xml:space="preserve">
+    <value>Open Time Booking Tool</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="People" xml:space="preserve">
+    <value>People</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="ProjectName" xml:space="preserve">
+    <value>Project name</value>
+  </data>
+  <data name="Projects" xml:space="preserve">
+    <value>Projects</value>
+  </data>
+  <data name="Quit" xml:space="preserve">
+    <value>Quit</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh all data</value>
+  </data>
+  <data name="RefreshCustomer" xml:space="preserve">
+    <value>Refresh customers list</value>
+  </data>
+  <data name="RefreshProject" xml:space="preserve">
+    <value>Refresh projects list </value>
+  </data>
+  <data name="RefreshReport" xml:space="preserve">
+    <value>Refresh report data</value>
+  </data>
+  <data name="RefreshTask" xml:space="preserve">
+    <value>Refresh tasks list</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Reporting" xml:space="preserve">
+    <value>Reporting</value>
+  </data>
+  <data name="RunOnStartup" xml:space="preserve">
+    <value>Run on startup</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SelectedWeek" xml:space="preserve">
+    <value>Selected week</value>
+  </data>
+  <data name="SelectTaskFirst" xml:space="preserve">
+    <value>Select task first</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Task" xml:space="preserve">
+    <value>Task</value>
+  </data>
+  <data name="TaskName" xml:space="preserve">
+    <value>Task name</value>
+  </data>
+  <data name="Tasks" xml:space="preserve">
+    <value>Tasks</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>This month</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>This week</value>
+  </data>
+  <data name="ThisYear" xml:space="preserve">
+    <value>This year</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="TimeBookingTool" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TimeBookingTool.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TimeEnteredForDay" xml:space="preserve">
+    <value>Time entered for day</value>
+  </data>
+  <data name="TimeEnteredForWeek" xml:space="preserve">
+    <value>Time entered for week</value>
+  </data>
+  <data name="TimeLimit" xml:space="preserve">
+    <value>Time limit</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="TotalTime" xml:space="preserve">
+    <value>Total time</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="UserReport" xml:space="preserve">
+    <value>User report</value>
+  </data>
+  <data name="AlreadyHaveToken" xml:space="preserve">
+    <value>Already have token</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Forgot your password?</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset password</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Token" xml:space="preserve">
+    <value>Token</value>
+  </data>
+  <data name="ActivityWithName" xml:space="preserve">
+    <value>Activity with name</value>
+  </data>
+  <data name="AllFieldsRequired" xml:space="preserve">
+    <value>All fields are required.</value>
+  </data>
+  <data name="AlreadyExists" xml:space="preserve">
+    <value>already exists</value>
+  </data>
+  <data name="AnEmailHasSent" xml:space="preserve">
+    <value>An email with token has been sent to your email.</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Are you sure?</value>
+  </data>
+  <data name="CannotCreateProjectWithoutCustomer" xml:space="preserve">
+    <value>Cannot create project without customer</value>
+  </data>
+  <data name="CannotCreateTaskWithoutProject" xml:space="preserve">
+    <value>Cannot create task without project</value>
+  </data>
+  <data name="CommentLenghError" xml:space="preserve">
+    <value>Comment length cannot be greater then</value>
+  </data>
+  <data name="ConfirmYourPassword" xml:space="preserve">
+    <value>Please confirm your password.</value>
+  </data>
+  <data name="CustomerWithName" xml:space="preserve">
+    <value>Customer with name</value>
+  </data>
+  <data name="EnteredBigTime" xml:space="preserve">
+    <value>Time entered for day must be less then 24 hours</value>
+  </data>
+  <data name="EnteredSmallTimeLimit" xml:space="preserve">
+    <value>Time limit should bw greater then</value>
+  </data>
+  <data name="ErrorOccuredWhileCreateProject" xml:space="preserve">
+    <value>Error occurred while creating new project</value>
+  </data>
+  <data name="ErrorOccuredWhileCreateTask" xml:space="preserve">
+    <value>Error occurred while creating new task</value>
+  </data>
+  <data name="ErrorOccurredTryAgain" xml:space="preserve">
+    <value>Error occurred, try again.</value>
+  </data>
+  <data name="HourLimit" xml:space="preserve">
+    <value>hour limit</value>
+  </data>
+  <data name="IncorrectTimeInputFormat" xml:space="preserve">
+    <value>Incorrect time input format</value>
+  </data>
+  <data name="IncorrectTimeLimitFormat" xml:space="preserve">
+    <value>Incorrect time limit input format</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="PasswordBeenChanged" xml:space="preserve">
+    <value>Password has been changed.</value>
+  </data>
+  <data name="ProjectWithName" xml:space="preserve">
+    <value>Project with name</value>
+  </data>
+  <data name="UserNameDoesntExist" xml:space="preserve">
+    <value>Username doesn't exist.</value>
+  </data>
+  <data name="UserNameIsRequierd" xml:space="preserve">
+    <value>Username is required.</value>
+  </data>
+  <data name="UserNameOfPasswordEmpty" xml:space="preserve">
+    <value>Username or password is empty.</value>
+  </data>
+  <data name="YouHaveReachedMonthly" xml:space="preserve">
+    <value>You have reached your monthly</value>
+  </data>
+  <data name="YouHaveToInputTheTime" xml:space="preserve">
+    <value>You have to input the time</value>
+  </data>
+  <data name="SelectProject" xml:space="preserve">
+    <value>Select project</value>
+  </data>
+  <data name="SelectTask" xml:space="preserve">
+    <value>Select task</value>
+  </data>
+  <data name="SelectCustomer" xml:space="preserve">
+    <value>Select customer</value>
+  </data>
+  <data name="TimeOverflowed" xml:space="preserve">
+    <value>Entered time is out or range [-256204778.80152154...256204778.80152154] hours</value>
+  </data>
+  <data name="ActivityAlreadyPicked" xml:space="preserve">
+    <value>You already pick this task</value>
+  </data>
+  <data name="EditItInTimeEntryList" xml:space="preserve">
+    <value>You may edit it in Time Entry list</value>
+  </data>
+  <data name="Farewell" xml:space="preserve">
+    <value>Bye</value>
+  </data>
+  <data name="Greetings" xml:space="preserve">
+    <value>Hello</value>
+  </data>
+  <data name="ConnectionLost" xml:space="preserve">
+    <value>Connection lost. Trying to recover.</value>
+  </data>
+  <data name="NiceWishToNotification" xml:space="preserve">
+    <value>Have a nice day</value>
+  </data>
+  <data name="AppWillRestartToChangeLang" xml:space="preserve">
+    <value>App will be restarted to change the language</value>
+  </data>
+  <data name="ClickToChangeLanguage" xml:space="preserve">
+    <value>Click to choose another language</value>
+  </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>Working hours</value>
+  </data>
+  <data name="ShortHours" xml:space="preserve">
+    <value>h</value>
+    <comment>`</comment>
+  </data>
+  <data name="ShortMinutes" xml:space="preserve">
+    <value>m</value>
+  </data>
+  <data name="ShortSeconds" xml:space="preserve">
+    <value>s</value>
+  </data>
+  <data name="IncorrectPasswordEntered" xml:space="preserve">
+    <value>Incorrect password entered.</value>
+  </data>
+  <data name="UserAccountCreated" xml:space="preserve">
+    <value>User account created successfully.</value>
+  </data>
+  <data name="UsernameAlreadyExists" xml:space="preserve">
+    <value>Username already exists.</value>
+  </data>
+  <data name="UserWasSaved" xml:space="preserve">
+    <value>User was saved successfully.</value>
+  </data>
+  <data name="YouCantRemoveLastAdmin" xml:space="preserve">
+    <value>You can't remove last admin.</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Company name</value>
+  </data>
+  <data name="CompanyRegistered" xml:space="preserve">
+    <value>Company was successfully registered</value>
+  </data>
+  <data name="CompanyRegistration" xml:space="preserve">
+    <value>Company registration</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="RegisterNewCompany" xml:space="preserve">
+    <value>Register new company</value>
+  </data>
+  <data name="UsernameMustBeEmail" xml:space="preserve">
+    <value>Username must be email</value>
+  </data>
+  <data name="AllPasswordFieldsRequired" xml:space="preserve">
+    <value>All password fields are required</value>
   </data>
 </root>

@@ -1,0 +1,66 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TBT.App.Views.Controls"
+                    xmlns:vm="clr-namespace:TBT.App.ViewModels.MainWindow"
+                    xmlns:etcvm="clr-namespace:TBT.App.ViewModels.EtcViewModels"
+                    xmlns:editvm="clr-namespace:TBT.App.ViewModels.EditWindowsViewModels">
+    <DataTemplate DataType="{x:Type etcvm:LanguageControlViewModel}">
+        <local:LanguageControl/>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type vm:CalendarTabViewModel}">
+        <local:CalendarControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:EditTimeEntryViewModel}">
+        <local:EditTimeEntryControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:TimeEntryViewModel}">
+        <local:TimeEntryControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:TimeEntryItemsViewModel}">
+        <local:TimeEntryItemsControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ReportingTabViewModel}">
+        <local:ReportingControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:PeopleTabViewModel}">
+        <local:PeopleTabControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type editvm:EditUserViewModel}">
+        <local:EditUserControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:CustomerTabViewModel}">
+        <local:CustomersTabControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type editvm:EditCustomerViewModel}">
+        <local:EditCustomerControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ProjectsTabViewModel}">
+        <local:ProjectsTabControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type editvm:EditProjectViewModel}">
+        <local:EditProjectControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:TasksTabViewModel}">
+        <local:TaskTabControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type editvm:EditActivityViewModel}">
+        <local:EditActivityControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:SettingsTabViewModel}">
+        <local:SettingsControl/>
+    </DataTemplate>
+</ResourceDictionary>

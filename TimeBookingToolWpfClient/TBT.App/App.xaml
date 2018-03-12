@@ -1,7 +1,6 @@
 ﻿<Application x:Class="TBT.App.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TBT.App"
              xmlns:tools="clr-namespace:TBT.App.Models.Tools"
              Startup="Application_Startup">
     
@@ -9,6 +8,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources\Styles\Styles.xaml"/>
+                <ResourceDictionary Source="Views\Authentication\AuthenticationWindowResourceDictionary.xaml" />
+                <ResourceDictionary Source="Views\Windows\MainWindowResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <tools:BoolToNotVisibilityConverter x:Key="BoolToNotVisibilityConverter"/>
@@ -27,6 +28,18 @@
             <tools:EditButtonToVisibilityConverter x:Key="EditButtonToVisibilityConverter"/>
             <tools:TodayToVisibilityConverter x:Key="TodayToVisibilityConverter"/>
             <tools:StartButtonContentConverter x:Key="StartButtonContentConverter"/>
+            <tools:ResetPasswordMultiConverter x:Key="ResetPasswordMultiConverter"/>
+            <tools:AuthenticationControlMultiConverter x:Key = "AuthenticationControlMultiConverter"/>
+            <tools:NewTimeEntryParamsConverter x:Key="NewTimeEntryParamsConverter"/>
+            <tools:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+            <tools:EnumerableToVisibilityConverter x:Key="EnumerableToVisibilityConverter"/>
+            <tools:EnumerableToNotVisibilityConverter x:Key="EnumerableToNotVisibilityConverter"/>
+            <tools:OnlyForAdminsVisibleConverter x:Key="OnlyForAdminsVisibleConverter"/>
+            <tools:ToUpperConverter x:Key="ToUpperConverter"/>
+            <tools:BoolToWindowState x:Key="BoolToWindowState"/>
+            <tools:ReverseTimeEntryConverter x:Key="ReverseTimeEntryConverter"/>
+            <tools:BoolToErrorColor x:Key="BoolToErrorColor"/>
+            <tools:EnumerableToBoolConverter x:Key="EnumerableToBoolConverter"/>
 
             <SolidColorBrush x:Key="CalendarItemBackground" Color="#c2422b"/>
             <SolidColorBrush x:Key="CalendarItemMouseOverBrush" Color="#f77f50"/>
@@ -63,6 +76,21 @@
             <SolidColorBrush x:Key="ChangeWeekButtonBackground" Color="Transparent"/>
             <SolidColorBrush x:Key="ChangeWeekButtonMouseOverBackground" Color="#c2422b"/>
             <SolidColorBrush x:Key="ChangeWeekButtonForeground" Color="#c2422b"/>
+
+            <DataTemplate x:Key="HeaderItemTemplate">
+                <Border Style="{StaticResource HeaderBorderStyle}">
+                    <Grid Style="{StaticResource HeaderGridItemStyle}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Image Height="22" Grid.Row="0" Width="22" Margin="0 0 0 2" Source="{Binding Tag, Mode=TwoWay}" />
+                        <TextBlock Grid.Row="1" x:Name="tabTimeHeader" Text="{Binding Title}" 
+                                   Style="{StaticResource HeaderTextBlockStyle}"/>
+
+                    </Grid>
+                </Border>
+            </DataTemplate>
 
         </ResourceDictionary>
     </Application.Resources>

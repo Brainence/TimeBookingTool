@@ -135,6 +135,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -164,23 +165,73 @@
     <Compile Include="App\AppSettings.cs" />
     <Compile Include="App\GlobalTimer.cs" />
     <Compile Include="Common\Constants.cs" />
+    <Compile Include="Helpers\AuthenticationControlClosePararmeters.cs" />
+    <Compile Include="Helpers\Enums.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\ICacheable.cs" />
+    <Compile Include="Helpers\LanguageItem.cs" />
+    <Compile Include="Helpers\MainWindowTabItem.cs" />
+    <Compile Include="Helpers\RefreshEvents.cs" />
+    <Compile Include="Helpers\ResetPasswordParameters.cs" />
+    <Compile Include="Helpers\PasswordHelper.cs" />
+    <Compile Include="Models\AppModels\Company.cs" />
     <Compile Include="Models\AppModels\Customer.cs" />
     <Compile Include="Models\AppModels\Project.cs" />
     <Compile Include="Models\AppModels\Activity.cs" />
     <Compile Include="Models\AppModels\TimeEntry.cs" />
     <Compile Include="Models\AppModels\User.cs" />
     <Compile Include="Models\Base\BaseViewModel.cs" />
+    <Compile Include="Models\Base\IModelObservableViewModel.cs" />
     <Compile Include="Models\Base\ObservableObject.cs" />
     <Compile Include="Models\Commands\RelayCommand.cs" />
+    <Compile Include="Models\Tools\Bindings.cs" />
     <Compile Include="Models\Tools\Converters.cs" />
     <Compile Include="Models\Tools\AccessToken.cs" />
+    <Compile Include="Properties\Resources.uk-UA.Designer.cs">
+      <DependentUpon>Resources.uk-UA.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Services\CommunicationService\Implementations\CommunicationService.cs" />
     <Compile Include="Services\CommunicationService\Interfaces\ICommunicationService.cs" />
     <Compile Include="Services\Encryption\Implementations\EncryptionService.cs" />
     <Compile Include="Services\Encryption\Interfaces\IEncryptionService.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\Authentication\AuthenticationControlViewModel.cs" />
+    <Compile Include="ViewModels\Authentication\AuthenticationWindowViewModel.cs" />
+    <Compile Include="ViewModels\Authentication\CompanyRegistrationControlViewModel.cs" />
+    <Compile Include="ViewModels\Authentication\ForgotPasswordControlViewModel.cs" />
+    <Compile Include="ViewModels\Authentication\ResetPasswordControlViewModel.cs" />
+    <Compile Include="ViewModels\EditWindowsViewModels\EditActivityViewModel.cs" />
+    <Compile Include="ViewModels\EditWindowsViewModels\EditCustomerViewModel.cs" />
+    <Compile Include="ViewModels\EditWindowsViewModels\EditProjectViewModel.cs" />
+    <Compile Include="ViewModels\EditWindowsViewModels\EditWindowViewModel.cs" />
+    <Compile Include="ViewModels\EtcViewModels\LanguageControlViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\CalendarTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\CustomerTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\EditTimeEntryViewModel.cs" />
+    <Compile Include="ViewModels\EditWindowsViewModels\EditUserViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\PeopleTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ProjectsTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ReportingTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\SettingsTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\TasksTabViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\TimeEntryItemsViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\TimeEntryViewModel.cs" />
+    <Compile Include="Views\Authentication\AuthenticationControl.xaml.cs">
+      <DependentUpon>AuthenticationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Authentication\CompanyRegistrationControl.xaml.cs">
+      <DependentUpon>CompanyRegistrationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Authentication\ForgotPasswordControl.xaml.cs">
+      <DependentUpon>ForgotPasswordControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Authentication\Authentication.xaml.cs">
       <DependentUpon>Authentication.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Authentication\ResetPasswordControl.xaml.cs">
+      <DependentUpon>ResetPasswordControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\AllUsersReportPage.xaml.cs">
       <DependentUpon>AllUsersReportPage.xaml</DependentUpon>
@@ -194,11 +245,23 @@
     <Compile Include="Views\Controls\ComboBoxControl.xaml.cs">
       <DependentUpon>ComboBoxControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\CustomersTabControl.xaml.cs">
+      <DependentUpon>CustomersTabControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\DateTimeControl.xaml.cs">
       <DependentUpon>DateTimeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\DoubleLabelControl.xaml.cs">
       <DependentUpon>DoubleLabelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\EditActivityControl.xaml.cs">
+      <DependentUpon>EditActivityControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\EditCustomerControl.xaml.cs">
+      <DependentUpon>EditCustomerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\EditProjectControl.xaml.cs">
+      <DependentUpon>EditProjectControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\EditTimeEntryControl.xaml.cs">
       <DependentUpon>EditTimeEntryControl.xaml</DependentUpon>
@@ -206,11 +269,17 @@
     <Compile Include="Views\Controls\EditUserControl.xaml.cs">
       <DependentUpon>EditUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\LanguageControl.xaml.cs">
+      <DependentUpon>LanguageControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\MultiSelectionComboBox.xaml.cs">
       <DependentUpon>MultiSelectionComboBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\NewUserControl.xaml.cs">
-      <DependentUpon>NewUserControl.xaml</DependentUpon>
+    <Compile Include="Views\Controls\PeopleTabControl.xaml.cs">
+      <DependentUpon>PeopleTabControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\ProjectsTabControl.xaml.cs">
+      <DependentUpon>ProjectsTabControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\ReportingControl.xaml.cs">
       <DependentUpon>ReportingControl.xaml</DependentUpon>
@@ -218,11 +287,17 @@
     <Compile Include="Views\Controls\ReportPage.xaml.cs">
       <DependentUpon>ReportPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\SettingsControl.xaml.cs">
+      <DependentUpon>SettingsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\SpinnersApple.xaml.cs">
       <DependentUpon>SpinnersApple.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\SpinnersCogs.xaml.cs">
       <DependentUpon>SpinnersCogs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\TaskTabControl.xaml.cs">
+      <DependentUpon>TaskTabControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\TextControl.xaml.cs">
       <DependentUpon>TextControl.xaml</DependentUpon>
@@ -230,17 +305,11 @@
     <Compile Include="Views\Controls\TimeEntryControl.xaml.cs">
       <DependentUpon>TimeEntryControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Windows\EditActivityWindow.xaml.cs">
-      <DependentUpon>EditActivityWindow.xaml</DependentUpon>
+    <Compile Include="Views\Controls\TimeEntryItemsControl.xaml.cs">
+      <DependentUpon>TimeEntryItemsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Windows\EditCustomerWindow.xaml.cs">
-      <DependentUpon>EditCustomerWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Windows\EditProjectWindow.xaml.cs">
-      <DependentUpon>EditProjectWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Windows\EditUserWindow.xaml.cs">
-      <DependentUpon>EditUserWindow.xaml</DependentUpon>
+    <Compile Include="Views\Windows\EditWindow.xaml.cs">
+      <DependentUpon>EditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -260,8 +329,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Properties\Resources.uk-UA.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.uk-UA.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.manifest" />
@@ -287,7 +360,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Authentication\AuthenticationWindowResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Authentication\AuthenticationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Authentication\CompanyRegistrationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Authentication\ForgotPasswordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Authentication\Authentication.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Authentication\ResetPasswordControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -307,11 +400,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controls\CustomersTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controls\DateTimeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\DoubleLabelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\EditActivityControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\EditCustomerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\EditProjectControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -323,11 +432,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controls\LanguageControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controls\MultiSelectionComboBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\NewUserControl.xaml">
+    <Page Include="Views\Controls\PeopleTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\ProjectsTabControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -339,11 +456,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controls\SettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controls\SpinnersApple.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\SpinnersCogs.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\TaskTabControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -355,23 +480,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Windows\EditActivityWindow.xaml">
+    <Page Include="Views\Controls\TimeEntryItemsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Windows\EditCustomerWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Windows\EditProjectWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Windows\EditUserWindow.xaml">
+    <Page Include="Views\Windows\EditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Windows\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Windows\MainWindowResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -444,6 +565,17 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\stop.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TimeBookingTool1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TimeBookingTool2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\en.png" />
+    <Resource Include="Resources\Icons\ukr.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\XamlSpy.3.0.5\build\XamlSpy.targets" Condition="Exists('..\packages\XamlSpy.3.0.5\build\XamlSpy.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

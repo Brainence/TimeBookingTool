@@ -1,23 +1,25 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using TBT.App.Common;
 using TBT.App.Models.AppModels;
 using TBT.App.Services.CommunicationService.Implementations;
 using TBT.App.Services.Encryption.Implementations;
-using TBT.App.Views.Authentication;
+using TBT.App.ViewModels.MainWindow;
 using TBT.App.Views.Windows;
 using WF = System.Windows.Forms;
-using System.ComponentModel;
-using TBT.App.ViewModels;
 
 namespace TBT.App
 {
@@ -45,6 +47,7 @@ namespace TBT.App
             {
                 AppSettings[Constants.AccessToken] = EncryptionService.Encrypt(value);
                 AppSettings.Save();
+                OnStaticPropertyChanged(nameof(AccessToken));
             }
         }
         public static string RefreshToken
@@ -107,30 +110,7 @@ namespace TBT.App
             {
                 AppSettings[Constants.RunOnStartup] = value;
                 AppSettings.Save();
-            }
-        }
-        public static string Greeting
-        {
-            get
-            {
-                return AppSettings.Contains(Constants.Greeting) ? $"Hello, {(string)AppSettings[Constants.Greeting]}!" : "Hello!";
-            }
-            set
-            {
-                AppSettings[Constants.Greeting] = value;
-                AppSettings.Save();
-            }
-        }
-        public static string Farewell
-        {
-            get
-            {
-                return AppSettings.Contains(Constants.Farewell) ? $"Bye, {(string)AppSettings[Constants.Farewell]}!" : "Bye";
-            }
-            set
-            {
-                AppSettings[Constants.Farewell] = value;
-                AppSettings.Save();
+                OnStaticPropertyChanged(nameof(App.RunOnStartup));
             }
         }
         public static string Username
@@ -145,6 +125,20 @@ namespace TBT.App
                 AppSettings.Save();
             }
         }
+
+        public static string CultureTag
+        {
+            get
+            {
+                return AppSettings.Contains(Constants.CultureTag) ? (string)AppSettings[Constants.CultureTag] : "en";
+            }
+            set
+            {
+                AppSettings[Constants.CultureTag] = value;
+                AppSettings.Save();
+            }
+        }
+
         public static string AuthenticationUsername
         {
             get
@@ -175,7 +169,16 @@ namespace TBT.App
             EncryptionService = new EncryptionService();
             CommunicationService = new CommunicationService();
             AppSettings = new AppSettings();
-            InitNotifyIcon();
+        }
+
+        static void InitNotifyIcon()
+        {
+            GlobalNotification = new WF.NotifyIcon();
+            GlobalNotification.DoubleClick += GlobalNotification_DoubleClick;
+            GlobalNotification.Icon = TBT.App.Properties.Resources.TimeBookingTool;
+            GlobalNotification.Visible = true;
+
+            CreateContextMenu();
         }
 
         public static void ShowBalloon(string title, string body, int timeout, bool enabled)
@@ -203,24 +206,16 @@ namespace TBT.App
 
         public bool IsProcessOpen(string name)
         {
-            foreach (Process clsProcess in Process.GetProcesses())
-            {
-                if (clsProcess.ProcessName.Contains(name))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return Process.GetProcessesByName(name).Any();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-            Process thisProc = Process.GetCurrentProcess();
+            var thisProc = Process.GetCurrentProcess();
 
-            if (!IsProcessOpen("TBT.App.exe"))
+            if (!IsProcessOpen("TimeBookingTool.exe"))
             {
                 if (Process.GetProcessesByName(thisProc.ProcessName).Length > 1)
                 {
@@ -233,36 +228,9 @@ namespace TBT.App
             base.OnStartup(e);
         }
 
-        private static string GetShortcutPath()
-        {
-            var allProgramsPath = Environment.GetFolderPath(Environment.SpecialFolder.Programs);
-            var shortcutPath = Path.Combine(allProgramsPath, PublisherName);
-            return Path.Combine(shortcutPath, ProductName, FileName);
-        }
-
-        private static string GetStartupShortcutPath()
-        {
-            var startupPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-            return Path.Combine(startupPath, FileName);
-        }
-
-        public static void AddShortcutToStartup()
-        {
-            var startupPath = GetStartupShortcutPath();
-            if (File.Exists(startupPath)) return;
-
-            File.Copy(GetShortcutPath(), startupPath);
-        }
-
-        public static void RemoveShortcutFromStartup()
-        {
-            var startupPath = GetStartupShortcutPath();
-            if (File.Exists(startupPath)) File.Delete(startupPath);
-        }
-
         public static string UrlSafeDateToString(DateTime date)
         {
-            string urlSafeDateString = date.ToUniversalTime().ToString("yyyyMMddTHHmmss", System.Globalization.CultureInfo.InvariantCulture);
+            string urlSafeDateString = date.ToUniversalTime().ToString("yyyyMMddTHHmmss", CultureInfo.InvariantCulture);
             return urlSafeDateString;
         }
 
@@ -292,7 +260,7 @@ namespace TBT.App
 
                         return await Task.FromResult(true);
                     }
-                    else return await Task.FromResult(false);
+                    return await Task.FromResult(false);
                 }
                 catch
                 {
@@ -303,68 +271,18 @@ namespace TBT.App
 
         private async void Application_Startup(object sender, StartupEventArgs e)
         {
+
+            bool authorized = false;
             if (RememberMe)
             {
                 var res = await UpdateTokens();
-                if (res && !string.IsNullOrEmpty(Username))
-                {
-                    try
-                    {
-                        MainWindow mainWindow = new MainWindow();
-                        mainWindow.InitNotifyIcon();
-
-                        var dataContext = (mainWindow.DataContext as MainWindowViewModel);
-                        if (dataContext == null) throw new Exception("Error occurred while trying to load data.");
-
-                        var user = JsonConvert.DeserializeObject<User>(await CommunicationService.GetAsJson($"User?email={Username}"));
-                        if (user == null) throw new Exception("Error occurred while trying to load user data.");
-
-                        user.CurrentTimeZone = DateTimeOffset.Now.Offset;
-                        user = JsonConvert.DeserializeObject<User>(await CommunicationService.PutAsJson("User", user));
-
-                        dataContext.CurrentUser = user;
-
-                        ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
-                        mainWindow.ShowDialog();
-
-                        if (mainWindow.LoggedOut)
-                        {
-                            Username = string.Empty;
-                            Application_Startup(sender, e);
-                        }
-                        else if (!mainWindow.HideWindow)
-                        {
-                            Current.Shutdown();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
-                    }
-                }
-                else
-                {
-                    Authentication auth = new Authentication();
-                    ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
-                    auth.ShowDialog();
-                }
+                authorized = res && !string.IsNullOrEmpty(Username);
             }
-            else
-            {
-                Authentication auth = new Authentication();
-                ShowBalloon(Greeting, " ", 30000, EnableGreetingNotification);
-                auth.ShowDialog();
-            }
-        }
-
-        static void InitNotifyIcon()
-        {
-            GlobalNotification = new WF.NotifyIcon();
-            GlobalNotification.DoubleClick += GlobalNotification_DoubleClick;
-            GlobalNotification.Icon = TBT.App.Properties.Resources.TimeBookingTool;
-            GlobalNotification.Visible = true;
-
-            CreateContextMenu();
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(CultureTag);
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(CultureTag);
+            InitNotifyIcon();
+            var mainWindow = new MainWindow() { DataContext = new MainWindowViewModel(authorized && RememberMe) };
+            if (mainWindow.Visibility != Visibility.Collapsed) { mainWindow.ShowDialog(); }
         }
 
         static Action _globalNotificationDoubleClick;
@@ -395,13 +313,13 @@ namespace TBT.App
         static void CreateContextMenu()
         {
             GlobalNotification.ContextMenuStrip = new WF.ContextMenuStrip();
-            GlobalNotification.ContextMenuStrip.Items.Add("Open Time Booking Tool").Click += Open_Click;
+            GlobalNotification.ContextMenuStrip.Items.Add(TBT.App.Properties.Resources.OpenTimeBookingTool).Click += Open_Click;
             GlobalNotification.ContextMenuStrip.Items.Add("-");
             GlobalNotification.ContextMenuStrip.Items.Add("").Click += EnableNotifications_Click;
             GlobalNotification.ContextMenuStrip.Items.Add("").Click += EnableGreetingNotifications_Click;
             GlobalNotification.ContextMenuStrip.Items.Add("-");
-            GlobalNotification.ContextMenuStrip.Items.Add("Sign out").Click += SignOut_Click;
-            GlobalNotification.ContextMenuStrip.Items.Add("Quit").Click += Quit_Click;
+            GlobalNotification.ContextMenuStrip.Items.Add(TBT.App.Properties.Resources.SignOut).Click += SignOut_Click;
+            GlobalNotification.ContextMenuStrip.Items.Add(TBT.App.Properties.Resources.Quit).Click += Quit_Click;
 
             GlobalNotification.ContextMenuStrip.Opening += ContextMenuStrip_Opening;
         }
@@ -438,8 +356,8 @@ namespace TBT.App
         }
         static void ContextMenuStrip_Opening(object sender, CancelEventArgs e)
         {
-            GlobalNotification.ContextMenuStrip.Items[2].Text = EnableNotification ? "Disable notifications" : "Enable notifications";
-            GlobalNotification.ContextMenuStrip.Items[3].Text = EnableGreetingNotification ? "Disable greeting" : "Enable greeting";
+            GlobalNotification.ContextMenuStrip.Items[2].Text = EnableNotification ? TBT.App.Properties.Resources.DisableNotifications : TBT.App.Properties.Resources.EnableNotifications;
+            GlobalNotification.ContextMenuStrip.Items[3].Text = EnableGreetingNotification ? TBT.App.Properties.Resources.DisableGreeting : TBT.App.Properties.Resources.EnableGreeting;
             _contextMenuStripOpening?.Invoke();
         }
 
@@ -518,24 +436,32 @@ namespace TBT.App
             _openWindow?.Invoke();
         }
 
-        public static async Task<bool> CanStartOrEditTimeEntry(int userId, int userTimeLimit, DateTime from, DateTime to, TimeSpan? duration)
+        public static async Task<bool> CanStartOrEditTimeEntry(int userId, int? userTimeLimit, DateTime from, DateTime to, TimeSpan? duration)
         {
             try
             {
-                if (userId <= 0 || userTimeLimit <= 0) return await Task.FromResult(false);
+                if (userId <= 0 || userTimeLimit <= 0 && !userTimeLimit.HasValue) return await Task.FromResult(false);
 
                 var sum = JsonConvert.DeserializeObject<TimeSpan?>(
                     await CommunicationService.GetAsJson($"TimeEntry/GetDuration/{userId}/{UrlSafeDateToString(from)}/{UrlSafeDateToString(to)}"));
 
                 if (sum.HasValue)
-                    return await Task.FromResult(sum.Value.TotalHours + (duration.HasValue ? duration.Value.TotalHours : 0.0) < userTimeLimit);
-                else
-                    return await Task.FromResult(true);
+                    return await Task.FromResult(!userTimeLimit.HasValue || (sum.Value.TotalHours + (duration.HasValue ? duration.Value.TotalHours : 0.0) < userTimeLimit));
+                return await Task.FromResult(true);
             }
-            catch
+            catch (Exception ex)
             {
+                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
                 return await Task.FromResult(false);
             }
+        }
+
+        public static event PropertyChangedEventHandler StaticPropertyChanged;
+
+        protected static void OnStaticPropertyChanged(string propertyName)
+        {
+            var e = new PropertyChangedEventArgs(propertyName);
+            StaticPropertyChanged?.Invoke(typeof(App), e);
         }
     }
 }

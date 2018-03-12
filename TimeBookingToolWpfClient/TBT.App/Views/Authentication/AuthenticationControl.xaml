@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="TBT.App.Views.Authentication.AuthenticationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:p="clr-namespace:TBT.App.Properties"
+             xmlns:local="clr-namespace:TBT.App.Views.Authentication"
+             mc:Ignorable="d" 
+             xmlns:controls="clr-namespace:TBT.App.Views.Controls"
+             xmlns:helpers="clr-namespace:TBT.App.Helpers"
+             Height="200" 
+             Width="350" 
+             BorderThickness="0" 
+             BorderBrush="Black">
+    <Grid>
+        <Grid x:Name="login" 
+              Visibility="{Binding ElementName=this, Path=LoginVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+              HorizontalAlignment="Center" 
+              VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="{Binding Source={x:Static p:Resources.Username}, StringFormat={}{0}\: }" Height="20" Margin="4" Foreground="White" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Source={x:Static p:Resources.Password}, StringFormat={}{0}\: }" Height="20" Margin="4" Foreground="White" HorizontalAlignment="Right"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Width="220">
+                    <TextBox x:Name="TextBox" Text="{Binding Path=Username, Mode=TwoWay}"  
+                             Height="20" HorizontalAlignment="Stretch"
+                             Margin="4">
+                        <TextBox.InputBindings>
+                            <KeyBinding
+                                Key="Return"
+                                Command="{Binding Path=LoginClick}">
+                                <KeyBinding.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource AuthenticationControlMultiConverter}">
+                                        <Binding ElementName="passwordBox" Path="(helpers:PasswordHelper.Password)"/>
+                                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
+                                    </MultiBinding>
+                                </KeyBinding.CommandParameter>
+                            </KeyBinding>
+                        </TextBox.InputBindings>
+                    </TextBox>
+                    <PasswordBox x:Name="passwordBox"
+                                 Height="20" PasswordChar="*" 
+                                 HorizontalAlignment="Stretch"
+                                 Margin="4"
+                                 helpers:PasswordHelper.Attach="True">
+                        <PasswordBox.InputBindings>
+                            <KeyBinding
+                                Key="Return"
+                                Command="{Binding Path=LoginClick}">
+                                <KeyBinding.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource AuthenticationControlMultiConverter}">
+                                        <Binding ElementName="passwordBox" Path="(helpers:PasswordHelper.Password)"/>
+                                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
+                                    </MultiBinding>
+                                </KeyBinding.CommandParameter>
+                            </KeyBinding>
+                        </PasswordBox.InputBindings>
+                    </PasswordBox>
+                    <Grid Height="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="75"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Button x:Name="signInButton" Content="{x:Static p:Resources.SignIn}" 
+                                Margin="4,4,0,4" 
+                                HorizontalAlignment="Left"
+                                Command="{Binding Path=LoginClick}" 
+                                Template="{StaticResource HyperlinkAuthButtonTemplate}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource AuthenticationControlMultiConverter}">
+                                    <Binding ElementName="passwordBox" Path="(helpers:PasswordHelper.Password)"/>
+                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button x:Name="forgotPasswordButton" Content="{x:Static p:Resources.ForgotPassword}" Margin="4" Grid.Column="1" 
+                                Command="{Binding Path=ForgotPasswordClick}" Template="{StaticResource HyperlinkAuthButtonTemplate}"
+                                HorizontalAlignment="Right"/>
+                        
+                        <Button x:Name="registerCompanyButton" 
+                                Content="{x:Static p:Resources.RegisterNewCompany}" 
+                                Margin="4" 
+                                Grid.ColumnSpan="2"
+                                Grid.Column="0" Grid.Row="1"
+                                Command="{Binding Path=RegisterCompanyClick}" Template="{StaticResource HyperlinkAuthButtonTemplate}"
+                                HorizontalAlignment="Right"/>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace TBT.App.Views.Controls
 {
@@ -7,7 +8,7 @@ namespace TBT.App.Views.Controls
         public ReportPage()
         {
             InitializeComponent();
-            DataContext = this;
+            Measure(new Size(int.MaxValue, int.MaxValue));
         }
     }
 }
