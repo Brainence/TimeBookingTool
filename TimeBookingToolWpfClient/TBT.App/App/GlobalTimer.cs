@@ -40,11 +40,11 @@ namespace TBT.App
 
                 if (result) _timer.Start();
 
-                return await Task.FromResult(result);
+                return result;
             }
             catch
             {
-                return await Task.FromResult(false);
+                return false;
             }
         }
 

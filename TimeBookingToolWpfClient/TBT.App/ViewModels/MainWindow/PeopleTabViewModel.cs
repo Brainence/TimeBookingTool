@@ -114,11 +114,25 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void AddNewUser(User newUser)
         {
-            Users.Add(newUser);
+            Users.Add(new User
+            {
+                Id = newUser.Id,
+                Company = newUser.Company,
+                CurrentTimeZone = newUser.CurrentTimeZone,
+                FirstName = newUser.FirstName,
+                IsActive = newUser.IsActive,
+                IsAdmin = newUser.IsAdmin,
+                LastName = newUser.LastName,
+                Password = newUser.Password,
+                Projects = newUser.Projects,
+                TimeEntries = newUser.TimeEntries,
+                TimeLimit = newUser.TimeLimit,
+                Username = newUser.Username
+            });
             Users = new ObservableCollection<User>(Users.OrderBy(user => user.FirstName).ThenBy(user => user.LastName));
         }
 
-        private void EditUser(User user)
+        private async void EditUser(User user)
         {
             if (user == null) return;
             var tempUserInfo = new { user.FirstName, user.LastName };
@@ -177,6 +191,15 @@ namespace TBT.App.ViewModels.MainWindow
             ChangeUserForNested?.Invoke(sender, user);
         }
 
+        private void ChangeCurrentUserInfo()
+        {
+            var editingUser = (EditMyProfileViewModel as EditUserViewModel).EditingUser;
+            App.Username = editingUser.Username;
+            int index;
+            if (Users != null && (index = Users.IndexOf(Users.FirstOrDefault(u => u.Id == CurrentUser.Id))) >= 0)
+            { Users[index] = editingUser;}
+        }
+
         #endregion
 
         #region Interface members
@@ -187,7 +210,9 @@ namespace TBT.App.ViewModels.MainWindow
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
             CurrentUser = currentUser;
             ((EditUserViewModel)CreateNewUserViewModel).NewUserAdded += AddNewUser;
-            ChangeUserForNested += ((EditUserViewModel)EditMyProfileViewModel).RefreshCurrentUser;
+            var editMyProfile = EditMyProfileViewModel as EditUserViewModel;
+            ChangeUserForNested += editMyProfile.RefreshCurrentUser;
+            editMyProfile.CloseWindow += ChangeCurrentUserInfo;
             Users = await RefreshEvents.RefreshUsersList();
         }
 
@@ -195,7 +220,9 @@ namespace TBT.App.ViewModels.MainWindow
         {
             RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
             ((EditUserViewModel)CreateNewUserViewModel).NewUserAdded -= AddNewUser;
-            ChangeUserForNested -= ((EditUserViewModel)EditMyProfileViewModel).RefreshCurrentUser;
+            var editMyProfile = EditMyProfileViewModel as EditUserViewModel;
+            ChangeUserForNested -= editMyProfile.RefreshCurrentUser;
+            editMyProfile.CloseWindow -= ChangeCurrentUserInfo;
             Users?.Clear();
         }
 

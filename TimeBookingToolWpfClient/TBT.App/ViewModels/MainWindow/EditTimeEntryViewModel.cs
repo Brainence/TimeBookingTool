@@ -181,8 +181,9 @@ namespace TBT.App.ViewModels.MainWindow
 
                 TimeText = string.Empty;
 
-                User.TimeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{User.Id}/{App.UrlSafeDateToString(SelectedDay.Value.ToUniversalTime())}/{App.UrlSafeDateToString(SelectedDay.Value.ToUniversalTime())}"));
+                //User.TimeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
+                //    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{User.Id}/{App.UrlSafeDateToString(SelectedDay.Value.ToUniversalTime())}/{App.UrlSafeDateToString(SelectedDay.Value.ToUniversalTime())}"));
+                User.TimeEntries.Add(timeEntry);
 
                 RefreshTimeEntries?.Invoke();
             }

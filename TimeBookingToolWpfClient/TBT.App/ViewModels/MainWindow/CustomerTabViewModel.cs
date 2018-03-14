@@ -97,6 +97,7 @@ namespace TBT.App.ViewModels.MainWindow
             if (user != null)
             {
                 IsAdmin = user.IsAdmin;
+                _currentCompany = user.Company;
             }
             CreateNewCustomerCommand = new RelayCommand(obj => CreateNewCustomer(), null);
             RefreshCustomersCommand = new RelayCommand(async obj => { Customers = await RefreshEvents.RefreshCustomersList(); }, null);
@@ -173,7 +174,11 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (customer.Id < 0)
                 {
-                    customer = JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.GetAsJson($"Customer/GetByName/{Uri.EscapeUriString(customer.Name)}"));
+                    var tempCustomer =
+                        JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.GetAsJson(
+                            $"Customer/GetByName/{Uri.EscapeUriString(customer.Name)}"));
+                    if (tempCustomer == null) { throw new Exception(Properties.Resources.CustomerAlreadyRemoved); }
+                    customer.Id = tempCustomer.Id;
                 }
 
                 customer.IsActive = false;
