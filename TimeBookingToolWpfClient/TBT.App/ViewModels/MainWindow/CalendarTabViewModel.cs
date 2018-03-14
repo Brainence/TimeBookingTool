@@ -153,7 +153,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (User != null && User.Id != 0)
             {
-                SelectedDayChanged(false);
+                await SelectedDayChanged(false);
             }
             if (week != null && week.Any())
                 await GetTimeEnteredForWeek(week);
@@ -254,7 +254,6 @@ namespace TBT.App.ViewModels.MainWindow
         {
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
             await RefreshEvents.RefreshCurrentUser(null);
-            await SelectedDayChanged();
         }
 
         public void CloseTab()

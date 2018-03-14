@@ -70,6 +70,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activity already removed.
+        /// </summary>
+        public static string ActivityAlreadyRemoved {
+            get {
+                return ResourceManager.GetString("ActivityAlreadyRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Activity with name.
         /// </summary>
         public static string ActivityWithName {
@@ -381,6 +390,15 @@ namespace TBT.App.Properties {
         public static string Customer {
             get {
                 return ResourceManager.GetString("Customer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customer already removed.
+        /// </summary>
+        public static string CustomerAlreadyRemoved {
+            get {
+                return ResourceManager.GetString("CustomerAlreadyRemoved", resourceCulture);
             }
         }
         
@@ -759,6 +777,15 @@ namespace TBT.App.Properties {
         public static string Project {
             get {
                 return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project already removed.
+        /// </summary>
+        public static string ProjectAlreadyRemoved {
+            get {
+                return ResourceManager.GetString("ProjectAlreadyRemoved", resourceCulture);
             }
         }
         

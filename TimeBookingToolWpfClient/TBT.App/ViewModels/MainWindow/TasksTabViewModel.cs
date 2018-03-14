@@ -171,7 +171,10 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if(activity.Id < 0)
                 {
-                    activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.GetAsJson($"Activity/GetByName/{Uri.EscapeUriString(activity.Name)}/{Uri.EscapeUriString(activity.Project.Id.ToString())}"));
+                    var tempActivity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.GetAsJson(
+                        $"Activity/GetByName/{Uri.EscapeUriString(activity.Name)}/{Uri.EscapeUriString(activity.Project.Id.ToString())}"));
+                    if(tempActivity == null) { throw new Exception(Properties.Resources.ActivityAlreadyRemoved);}
+                    activity.Id = tempActivity.Id;
                 }
                 activity.IsActive = false;
                 await App.CommunicationService.PutAsJson("Activity", activity);

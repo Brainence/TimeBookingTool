@@ -530,4 +530,13 @@
   <data name="AllPasswordFieldsRequired" xml:space="preserve">
     <value>Заповніть всі поля зміни паролю</value>
   </data>
+  <data name="ActivityAlreadyRemoved" xml:space="preserve">
+    <value>Завдання вже видалено</value>
+  </data>
+  <data name="ProjectAlreadyRemoved" xml:space="preserve">
+    <value>Проект вже видалено</value>
+  </data>
+  <data name="CustomerAlreadyRemoved" xml:space="preserve">
+    <value>Замовника вже видалено</value>
+  </data>
 </root>

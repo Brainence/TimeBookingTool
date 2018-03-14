@@ -177,7 +177,12 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if(project.Id < 0)
                 {
-                    project = JsonConvert.DeserializeObject<Project>(await App.CommunicationService.GetAsJson($"Project/GetByName/{Uri.EscapeUriString(project.Name)}"));
+                    var tempProject =
+                        JsonConvert.DeserializeObject<Project>(
+                            await App.CommunicationService.GetAsJson(
+                                $"Project/GetByName/{Uri.EscapeUriString(project.Name)}"));
+                    if (tempProject == null) { throw new Exception(Properties.Resources.ProjectAlreadyRemoved); }
+                    project.Id = tempProject.Id;
                 }
 
                 foreach (var activity in project.Activities)

@@ -63,8 +63,7 @@ namespace TBT.App.Helpers
         {
             try
             {
-                var users = JsonConvert.DeserializeObject<ObservableCollection<User>>(await App.CommunicationService.GetAsJson($"User/GetByCompany/{_companyId}"));
-                return users;
+                return JsonConvert.DeserializeObject<ObservableCollection<User>>(await App.CommunicationService.GetAsJson($"User/GetByCompany/{_companyId}")); ;
             }
             catch (Exception ex)
             {
@@ -77,9 +76,8 @@ namespace TBT.App.Helpers
         {
             try
             {
-                var customers = JsonConvert.DeserializeObject<ObservableCollection<Customer>>(
-                    await App.CommunicationService.GetAsJson($"Customer/GetByCompany/{_companyId}"));
-                return customers;
+                return JsonConvert.DeserializeObject<ObservableCollection<Customer>>(
+                    await App.CommunicationService.GetAsJson($"Customer/GetByCompany/{_companyId}")); ;
             }
             catch (Exception ex)
             {
@@ -92,9 +90,8 @@ namespace TBT.App.Helpers
         {
             try
             {
-                var projects = JsonConvert.DeserializeObject<ObservableCollection<Project>>(
-                    await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId}"));
-                return projects;
+                return JsonConvert.DeserializeObject<ObservableCollection<Project>>(
+                    await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId}")); ;
             }
             catch (Exception ex)
             {
@@ -107,10 +104,9 @@ namespace TBT.App.Helpers
         {
             try
             {
-                var activities = new ObservableCollection<Activity>(JsonConvert.DeserializeObject<List<Activity>>(
-                                await App.CommunicationService.GetAsJson($"Activity/GetByCompany/{_companyId}"))
-                                    .OrderBy(a => a.Project.Name).ThenBy(a => a.Name));
-                return activities;
+                return new ObservableCollection<Activity>(JsonConvert.DeserializeObject<List<Activity>>(
+                        await App.CommunicationService.GetAsJson($"Activity/GetByCompany/{_companyId}"))
+                    .OrderBy(a => a.Project.Name).ThenBy(a => a.Name)); ;
             }
             catch (Exception ex)
             {

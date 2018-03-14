@@ -32,11 +32,11 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
             get { return _selectedCustomer; }
             set
             {
-                if(SetProperty(ref _selectedCustomer, value))
+                if (SetProperty(ref _selectedCustomer, value))
                 {
                     SaveProject = false;
-                    SelectedCustomerIndex = Customers.Select((item, index) => new { Item = item, Index = index }).
-                                                      FirstOrDefault(x => x.Item.Id == value.Id)?.Index ?? 0;
+                    SelectedCustomerIndex =
+                        Customers.IndexOf(Customers.FirstOrDefault(c => c.Id == _selectedCustomer.Id));
                 }
             }
         }
@@ -70,6 +70,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
 
         public EditProjectViewModel(Project project)
         {
+            _selectedCustomerIndex = -1;
             EditingProject = project;
             SaveProject = false;
             SaveCommand = new RelayCommand(obj => Save(), null);

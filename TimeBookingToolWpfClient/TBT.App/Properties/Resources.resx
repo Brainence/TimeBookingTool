@@ -527,4 +527,13 @@
   <data name="AllPasswordFieldsRequired" xml:space="preserve">
     <value>All password fields are required</value>
   </data>
+  <data name="ActivityAlreadyRemoved" xml:space="preserve">
+    <value>Activity already removed</value>
+  </data>
+  <data name="ProjectAlreadyRemoved" xml:space="preserve">
+    <value>Project already removed</value>
+  </data>
+  <data name="CustomerAlreadyRemoved" xml:space="preserve">
+    <value>Customer already removed</value>
+  </data>
 </root>

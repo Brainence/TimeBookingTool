@@ -120,6 +120,7 @@
 
                                     <Button Grid.Column="3" Margin="5" 
                                             VerticalAlignment="Top" Command="{Binding ElementName=ProjectsTab, Path=DataContext.EditProjectCommand}"
+                                            IsEnabled="{Binding ElementName=ProjectsTab, Path=DataContext.Customers, Converter={StaticResource EnumerableToBoolConverter}}"
                                             CommandParameter="{Binding}">
                                         <Image Height="20" Source="../../Resources/Icons/editing.png" Width="20" Cursor="Hand"/>
                                     </Button>
