@@ -39,6 +39,9 @@ namespace TBT.App.ViewModels.MainWindow
         private ObservableCollection<TimeEntry> _timeEntries;
         private int _selectedUserIndex;
 
+
+        private decimal _salary;
+        private decimal _hourlySalary;
         #endregion
 
         #region Properties
@@ -135,6 +138,32 @@ namespace TBT.App.ViewModels.MainWindow
         {
             get { return _timeEntries; }
             set { SetProperty(ref _timeEntries, value); }
+        }
+
+        public decimal Salary
+        {
+            get { return _salary; }
+            set { SetProperty(ref _salary, value); }
+        }
+        public decimal HourlySalary
+        {
+            get { return _hourlySalary; }
+            set { SetProperty(ref _hourlySalary, value); }
+        }
+
+        public void CalcSalary()
+        {
+            var s = TimeEntries;
+            if(s==null || s.Count == 0)
+            {
+                Salary = 0.00M;
+            }
+            else
+            {
+                var sum = s.Where(x => x.IsActive).Aggregate(TimeSpan.Zero, (cur, next) => cur += next.Duration).TotalHours;
+                Salary = (decimal)sum * HourlySalary;
+            }
+            HourlySalary = ReportingUser.MonthlySalary / 168.00M;
         }
 
         public ICommand RefreshReportTimeEntiresCommand { get; set; }
@@ -286,6 +315,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
+            CalcSalary();
         }
 
         private async Task SaveUserReport()

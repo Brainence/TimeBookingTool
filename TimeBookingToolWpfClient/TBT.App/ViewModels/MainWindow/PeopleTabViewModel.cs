@@ -127,7 +127,9 @@ namespace TBT.App.ViewModels.MainWindow
                 Projects = newUser.Projects,
                 TimeEntries = newUser.TimeEntries,
                 TimeLimit = newUser.TimeLimit,
-                Username = newUser.Username
+                Username = newUser.Username,
+                // I
+                MonthlySalary = newUser.MonthlySalary,
             });
             Users = new ObservableCollection<User>(Users.OrderBy(user => user.FirstName).ThenBy(user => user.LastName));
         }
@@ -136,6 +138,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (user == null) return;
             var tempUserInfo = new { user.FirstName, user.LastName };
+            user.Company = CurrentUser.Company;
 
             EditWindow euw = new EditWindow()
             {

@@ -610,6 +610,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to HourlySalary.
+        /// </summary>
+        public static string HourlySalary {
+            get {
+                return ResourceManager.GetString("HourlySalary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incorrect password entered..
         /// </summary>
         public static string IncorrectPasswordEntered {
@@ -687,6 +696,15 @@ namespace TBT.App.Properties {
         public static string Minutes {
             get {
                 return ResourceManager.GetString("Minutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MonthlySalary.
+        /// </summary>
+        public static string MonthlySalary {
+            get {
+                return ResourceManager.GetString("MonthlySalary", resourceCulture);
             }
         }
         

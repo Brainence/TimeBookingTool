@@ -75,7 +75,8 @@
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition SharedSizeGroup="Admin" Width="20"/>
                                                 <ColumnDefinition SharedSizeGroup="FullName" Width="155"/>
-                                                <ColumnDefinition SharedSizeGroup="Username" Width="215"/>
+                                                <ColumnDefinition SharedSizeGroup="Username" Width="156"/>
+                                                <ColumnDefinition SharedSizeGroup="SallaryForMonth" Width="*"/>
                                                 <ColumnDefinition SharedSizeGroup="Project" Width="40"/>
                                                 <ColumnDefinition SharedSizeGroup="Remove"/>
                                                 <ColumnDefinition SharedSizeGroup="Edit"/>
@@ -119,7 +120,18 @@
                                                     </Style>
                                                 </TextBlock.Style>
                                             </TextBlock>
-                                            <controls:MultiSelectionComboBox Grid.Column="3" Margin="0 3 10 3" Height="20"
+
+                                            <TextBlock Grid.Column="3" Margin="5 0" Text="{Binding Path=MonthlySalary, Mode=OneWay}" VerticalAlignment ="Center">
+                                                <TextBlock.Visibility >
+                                                    <MultiBinding Converter="{StaticResource IsAdminVisibilityConverter}">
+                                                        <Binding Path="DataContext.CurrentUser" ElementName="PeopleTab"></Binding>
+                                                        <Binding Path="Id"></Binding>
+                                                    </MultiBinding>
+                                                </TextBlock.Visibility>
+                                            </TextBlock>
+
+
+                                            <controls:MultiSelectionComboBox Grid.Column="4" Margin="0 3 10 3" Height="20"
                                                                                  ItemsSourceMultiple="{Binding Projects}" 
                                                                                  Width="Auto" Style="{StaticResource ComboBoxFlatStyle}"
                                                                                  Visibility="{Binding ElementName=PeopleTab, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -127,7 +139,7 @@
                                             <Button Command="{Binding ElementName=PeopleTab, Path=DataContext.EditUserCommand}"
                                                     CommandParameter="{Binding}"
                                                     Visibility="{Binding ElementName=PeopleTab, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                    Grid.Column="4" Margin="5"
+                                                    Grid.Column="5" Margin="5"
                                                     VerticalAlignment="Top" >
                                                 <Image Height="20" 
                                                        Source="../../Resources/Icons/editing.png" Width="20"
@@ -137,7 +149,7 @@
                                             <Button Command="{Binding ElementName=PeopleTab, Path=DataContext.RemoveUserCommand}"
                                                     CommandParameter="{Binding}"
                                                     Visibility="{Binding ElementName=PeopleTab, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                    Grid.Column="5" Margin="0 5 5 5"
+                                                    Grid.Column="6" Margin="0 5 5 5"
                                                     VerticalAlignment="Top" >
                                                 <Image Height="20"  
                                                        Source="../../Resources/Icons/bin.png" Width="20"

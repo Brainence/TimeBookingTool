@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using TBT.App.Models.Base;
 
@@ -19,6 +20,9 @@ namespace TBT.App.Models.AppModels
         private int? _timeLimit;
         private TimeSpan? _currentTimeZone;
         private Company _company;
+
+        private decimal _monthlySalary;
+       
 
         public User()
         {
@@ -98,6 +102,14 @@ namespace TBT.App.Models.AppModels
             get { return _company; }
             set { SetProperty(ref _company, value); }
         }
+
+        public decimal MonthlySalary
+        {
+            get { return _monthlySalary; }
+            set { SetProperty(ref _monthlySalary, value); }
+        }
+      
+
 
         public string FullName => $"{FirstName} {LastName}";
 
