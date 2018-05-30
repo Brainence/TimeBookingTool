@@ -1,18 +1,32 @@
 ﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 using TBT.App.Common;
 using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
+using TBT.App.Models.Commands;
+using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class SettingsTabViewModel: BaseViewModel, ICacheable
+    public class SettingsTabViewModel : BaseViewModel, ICacheable
     {
         #region Fields
 
         private bool _runOnSturtupCheck;
         private RegistryKey _registryKey;
+
+        private DateTime _date;
+        private string _text;
+        private Absence _selectedIteam;
+        private List<Absence> _iteamList;
+        private User _currentUser;
+
 
         #endregion
 
@@ -45,7 +59,28 @@ namespace TBT.App.ViewModels.MainWindow
             set { App.EnableGreetingNotification = value; }
         }
 
+        public DateTime Date
+        {
+            get { return _date; }
+            set { SetProperty(ref _date, value); }
+        }
+        public string Text
+        {
+            get { return _text; }
+            set { SetProperty(ref _text, value); }
+        }
+        public Absence SelectedItem
+        {
+            get { return _selectedIteam; }
+            set { SetProperty(ref _selectedIteam, value); }
+        }
+        public List<Absence> ItemList
+        {
+            get { return _iteamList; }
+            set { SetProperty(ref _iteamList, value); }
+        }
 
+        public ICommand SendEmail { get; set; }
         #endregion
 
         #region Constructors
@@ -54,7 +89,12 @@ namespace TBT.App.ViewModels.MainWindow
         {
             _registryKey = Registry.CurrentUser.OpenSubKey
                 ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            SendEmail = new RelayCommand(obj => Send(), null);
+            Date = DateTime.Now;
+            ItemList = Enum.GetValues(typeof(Absence)).Cast<Absence>().ToList();
         }
+
+
 
         #endregion
 
@@ -73,14 +113,55 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
+        public void RefreshCurrentUser(object sender, User user)
+        {
+            if (sender != this)
+            {
+                _currentUser = user;
+            }
+        }
+
+        public async void Send()
+        {
+            try
+            {
+                var obj = new
+                {
+                    Text,
+                    Type = _selectedIteam.ToString(),
+                    Date = Date.ToShortDateString(),
+                    Email = _currentUser.Username
+                };
+                var rez = JsonConvert.DeserializeObject<bool>(
+                    await App.CommunicationService.PostAsJson("User/SendEmail", obj));
+                if (rez)
+                {
+                    MessageBox.Show("Sent");
+                }
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message + e.InnerException?.Message);
+            }
+        }
+
+
         #endregion
 
         #region Interface members
 
         public DateTime ExpiresDate { get; set; }
-        public void OpenTab(User currentUser) { }
+        public void OpenTab(User currentUser)
+        {
+            RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
+            _currentUser = currentUser;
+        }
 
-        public void CloseTab() { }
+        public void CloseTab()
+        {
+            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
+        }
 
         #region IDisposable
 
