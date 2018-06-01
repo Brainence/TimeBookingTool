@@ -21,9 +21,8 @@ namespace TBT.App.Models.AppModels
         private TimeSpan? _currentTimeZone;
         private Company _company;
 
-        private decimal _monthlySalary;
+        private decimal? _monthlySalary;
        
-
         public User()
         {
             _projects = new ObservableCollection<Project>();
@@ -103,7 +102,7 @@ namespace TBT.App.Models.AppModels
             set { SetProperty(ref _company, value); }
         }
 
-        public decimal MonthlySalary
+        public decimal? MonthlySalary
         {
             get { return _monthlySalary; }
             set { SetProperty(ref _monthlySalary, value); }

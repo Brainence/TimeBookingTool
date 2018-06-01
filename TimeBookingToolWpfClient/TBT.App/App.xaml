@@ -41,7 +41,7 @@
             <tools:BoolToErrorColor x:Key="BoolToErrorColor"/>
             <tools:EnumerableToBoolConverter x:Key="EnumerableToBoolConverter"/>
             <tools:IsAdminVisibilityConverter x:Key="IsAdminVisibilityConverter"/>
-            <tools:SalaryConverter x:Key="SalaryConverter"/>
+            
 
             
             <SolidColorBrush x:Key="CalendarItemBackground" Color="#c2422b"/>

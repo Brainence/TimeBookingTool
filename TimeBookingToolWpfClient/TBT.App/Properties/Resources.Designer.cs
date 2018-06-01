@@ -610,7 +610,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to HourlySalary.
+        ///   Looks up a localized string similar to Hourly Salary.
         /// </summary>
         public static string HourlySalary {
             get {
@@ -687,6 +687,15 @@ namespace TBT.App.Properties {
         public static string Limit {
             get {
                 return ResourceManager.GetString("Limit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message.
+        /// </summary>
+        public static string Message {
+            get {
+                return ResourceManager.GetString("Message", resourceCulture);
             }
         }
         

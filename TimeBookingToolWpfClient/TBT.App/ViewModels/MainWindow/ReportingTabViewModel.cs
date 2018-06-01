@@ -40,8 +40,8 @@ namespace TBT.App.ViewModels.MainWindow
         private int _selectedUserIndex;
 
 
-        private decimal _salary;
-        private decimal _hourlySalary;
+        private decimal? _salary;
+        private decimal? _hourlySalary;
         #endregion
 
         #region Properties
@@ -140,12 +140,12 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _timeEntries, value); }
         }
 
-        public decimal Salary
+        public decimal? Salary
         {
             get { return _salary; }
             set { SetProperty(ref _salary, value); }
         }
-        public decimal HourlySalary
+        public decimal? HourlySalary
         {
             get { return _hourlySalary; }
             set { SetProperty(ref _hourlySalary, value); }
@@ -192,6 +192,7 @@ namespace TBT.App.ViewModels.MainWindow
             _selectedTipIndex = 0;
             _to = DateTime.Now.StartOfWeek(DayOfWeek.Monday).AddDays(6);
             _from = To.AddDays(-6);
+            CalcSalary();
         }
 
         #endregion

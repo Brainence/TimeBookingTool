@@ -138,6 +138,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (user == null) return;
             var tempUserInfo = new { user.FirstName, user.LastName };
+            // I
             user.Company = CurrentUser.Company;
 
             EditWindow euw = new EditWindow()
