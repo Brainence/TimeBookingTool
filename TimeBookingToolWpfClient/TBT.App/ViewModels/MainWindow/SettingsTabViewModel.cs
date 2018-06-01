@@ -136,9 +136,13 @@ namespace TBT.App.ViewModels.MainWindow
                     await App.CommunicationService.PostAsJson("User/SendEmail", obj));
                 if (rez)
                 {
+                    Text = "";
                     MessageBox.Show("Sent");
                 }
-
+                else
+                {
+                    MessageBox.Show("Error");
+                }
             }
             catch (Exception e)
             {
