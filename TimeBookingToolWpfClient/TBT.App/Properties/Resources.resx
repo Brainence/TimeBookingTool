@@ -536,7 +536,6 @@
   <data name="CustomerAlreadyRemoved" xml:space="preserve">
     <value>Customer already removed</value>
   </data>
-  </data>
   <data name="HourlySalary" xml:space="preserve">
     <value>Hourly Salary</value>
   </data>
