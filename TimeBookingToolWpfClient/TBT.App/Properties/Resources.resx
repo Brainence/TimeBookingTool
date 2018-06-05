@@ -537,7 +537,7 @@
     <value>Customer already removed</value>
   </data>
   <data name="MonthlySalary" xml:space="preserve">
-    <value>MonthlySalary</value>
+    <value>Salary</value>
   </data>
   <data name="HourlySalary" xml:space="preserve">
     <value>HourlySalary</value>

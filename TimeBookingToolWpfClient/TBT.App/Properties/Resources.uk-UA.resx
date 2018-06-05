@@ -540,7 +540,7 @@
     <value>Замовника вже видалено</value>
   </data>
   <data name="MonthlySalary" xml:space="preserve">
-    <value>Місячна зарплата</value>
+    <value>Зарплата</value>
   </data>
   <data name="HourlySalary" xml:space="preserve">
     <value>Зарплата в годину</value>
