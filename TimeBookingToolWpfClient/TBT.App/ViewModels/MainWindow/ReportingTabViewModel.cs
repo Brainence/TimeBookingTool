@@ -3,9 +3,11 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
@@ -13,10 +15,12 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
+using TBT.App.Common;
 using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
+using TBT.App.Models.Tools;
 using TBT.App.Views.Controls;
 using TBT.App.Properties;
 
@@ -39,9 +43,14 @@ namespace TBT.App.ViewModels.MainWindow
         private ObservableCollection<TimeEntry> _timeEntries;
         private int _selectedUserIndex;
 
-
+        
         private decimal? _salary;
         private decimal? _hourlySalary;
+
+       //CalcSalaryInUah
+        private string _salaryUah;
+        private string _hourlySalaryUah;
+        private decimal? _dollarRate;
         #endregion
 
         #region Properties
@@ -150,26 +159,33 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _hourlySalary; }
             set { SetProperty(ref _hourlySalary, value); }
         }
-
-        public void CalcSalary()
+        public string HourUah
         {
-            var s = TimeEntries;
-            if(s==null || s.Count == 0)
-            {
-                Salary = 0.00M;
-            }
-            else
-            {
-                var sum = s.Where(x => x.IsActive).Aggregate(TimeSpan.Zero, (cur, next) => cur += next.Duration).TotalHours;
-                Salary = (decimal)sum * HourlySalary;
-            }
-            HourlySalary = ReportingUser.MonthlySalary / 168.00M;
+            get { return _hourlySalaryUah; }
+            set { SetProperty(ref _hourlySalaryUah, value); }
         }
+        public string FullUah
+        {
+            get { return _salaryUah; }
+            set { SetProperty(ref _salaryUah, value); }
+        }
+
+        public decimal? DollarRate
+        {
+            get { return _dollarRate; }
+            set { SetProperty(ref _dollarRate, value); }
+        }
+
+
+
+        
 
         public ICommand RefreshReportTimeEntiresCommand { get; set; }
         public ICommand CreateCompanyReportCommand { get; set; }
         public ICommand CreateUserReportCommand { get; set; }
         public ICommand SaveToClipboardCommand { get; set; }
+        public ICommand SaveMonthlySalaryToClipboardCommand { get; set; }
+        public ICommand SaveHourlySalaryToClipboardCommand { get; set; }
 
         #endregion
 
@@ -189,10 +205,15 @@ namespace TBT.App.ViewModels.MainWindow
             CreateCompanyReportCommand = new RelayCommand(async obj => await SaveCompanyReport(), obj => User.IsAdmin);
             CreateUserReportCommand = new RelayCommand(async obj => await SaveUserReport(), null);
             SaveToClipboardCommand = new RelayCommand(obj => SaveTotalTimeToClipboard(), obj => TimeEntries?.Any() == true);
+            SaveHourlySalaryToClipboardCommand = new RelayCommand(obj=>SaveHoverlySalaryToClipboard());
+            SaveMonthlySalaryToClipboardCommand = new RelayCommand(obj=>SaveMonthlySalaryToClipboard());
+
             _selectedTipIndex = 0;
             _to = DateTime.Now.StartOfWeek(DayOfWeek.Monday).AddDays(6);
             _from = To.AddDays(-6);
-            CalcSalary();
+            RefreshRate();
+          
+            
         }
 
         #endregion
@@ -316,8 +337,64 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
-            CalcSalary();
+             CalcSalary();
         }
+
+        public  void CalcSalary()
+        {
+            if (ReportingUser.MonthlySalary == null)
+            {
+                Salary = 0;
+                HourlySalary = 0;
+                return;
+            }
+
+            HourlySalary = ReportingUser.MonthlySalary / 168.00M;
+            
+            if (TimeEntries == null || TimeEntries.Count == 0)
+            {
+                Salary = 0.00M;
+            }
+            else
+            {
+                var sum = TimeEntries.Where(x => x.IsActive).Aggregate(TimeSpan.Zero, (cur, next) => cur += next.Duration).TotalHours;
+                Salary = (decimal)sum * HourlySalary;
+            }
+           
+            if (DollarRate != null)
+            {
+                var hour = (HourlySalary * DollarRate).Value.ToString("0.##");
+                var full = (Salary * DollarRate).Value.ToString("0.##");
+                HourUah = $" $    ({hour} ₴)";
+                FullUah = $" $    ({full} ₴)";
+            }
+            else
+            {
+                HourUah = " $";
+                FullUah = " $";
+            }
+        }
+        private  void RefreshRate()
+        {
+            Task.Run(async () =>
+            {
+                var json = await new HttpClient().GetStringAsync(
+                    ConfigurationManager.AppSettings[Constants.ApiUrl] + "pubinfo?json&exchange&coursid=5");
+
+                var usd = JsonConvert.DeserializeObject<List<ApiRate>>(json).FirstOrDefault(x => x.Ccy == "USD");
+
+                DollarRate = usd?.Buy;
+                if (DollarRate != null)
+                {
+                    CalcSalary();
+                }
+            });
+
+           
+          
+           
+        }
+
 
         private async Task SaveUserReport()
         {
@@ -511,6 +588,18 @@ namespace TBT.App.ViewModels.MainWindow
             var sum = timeEntries.Any() ? timeEntries.Select(t => t.Duration).Aggregate((t1, t2) => t1.Add(t2)) : new TimeSpan();
             Clipboard.SetText($"{Resources.TotalTime}: {sum.TotalHours:N2}");
         }
+
+        private void SaveMonthlySalaryToClipboard()
+        {
+            Clipboard.SetText($"{Salary.Value.ToString("0.00")}$");
+        }
+
+        private void SaveHoverlySalaryToClipboard()
+        {
+            Clipboard.SetText($"{HourlySalary.Value.ToString("0.00")}$");
+        }
+
+
 
         public void RefreshCurrentUser(object sender, User user)
         {
