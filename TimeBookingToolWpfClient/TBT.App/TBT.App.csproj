@@ -71,9 +71,11 @@
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>AA795650652920E8997D7D9DBC695D436D283D44</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>6B79CC2D22C6645FE06543D38795D7572CECB3B1</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>TBT.App_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>TBT.App_2_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
