@@ -8,10 +8,5 @@ namespace TBT.App.Views.Controls
         {
             InitializeComponent();
         }
-
-        private void TextControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-
-        }
     }
 }

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
@@ -47,10 +48,21 @@ namespace TBT.App.ViewModels.MainWindow
         private decimal? _salary;
         private decimal? _hourlySalary;
 
-       //CalcSalaryInUah
+       
         private string _salaryUah;
         private string _hourlySalaryUah;
         private decimal? _dollarRate;
+
+
+        
+        private Project _currentProject;
+        private List<Project> _projects;
+        private IEnumerable<TimeEntry> _loadData;
+        private bool isTipChange;
+
+        private string _fullTime;
+
+
         #endregion
 
         #region Properties
@@ -149,6 +161,7 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _timeEntries, value); }
         }
 
+        
         public decimal? Salary
         {
             get { return _salary; }
@@ -169,23 +182,55 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _salaryUah; }
             set { SetProperty(ref _salaryUah, value); }
         }
-
         public decimal? DollarRate
         {
             get { return _dollarRate; }
-            set { SetProperty(ref _dollarRate, value); }
+            set
+            {
+                SetProperty(ref _dollarRate, value);
+                CalcSalaryUah();
+            }
         }
 
+        public Project CurrentProject
+        {
+            get { return _currentProject; }
+            set
+            {
+               SetProperty(ref _currentProject, value);
+               FilterTimeEntry();
+            }
+        }
+        public List<Project> Projects
+        {
+            get { return _projects; }
+            set { SetProperty(ref _projects, value); }
+        }
+        private IEnumerable<TimeEntry> LoadData
+        {
+            get { return _loadData; }
+            set
+            {
+                SetProperty(ref _loadData, value);
+                FilterTimeEntry();
+            }
+        }
+
+        private  Project All =>new Project{Name = "All", Id = -1};
 
 
-        
+        public string FullTime
+        {
+            get { return _fullTime; }
+            set { SetProperty(ref _fullTime, value); }
+        }
 
         public ICommand RefreshReportTimeEntiresCommand { get; set; }
         public ICommand CreateCompanyReportCommand { get; set; }
         public ICommand CreateUserReportCommand { get; set; }
         public ICommand SaveToClipboardCommand { get; set; }
         public ICommand SaveMonthlySalaryToClipboardCommand { get; set; }
-        public ICommand SaveHourlySalaryToClipboardCommand { get; set; }
+      
 
         #endregion
 
@@ -205,15 +250,17 @@ namespace TBT.App.ViewModels.MainWindow
             CreateCompanyReportCommand = new RelayCommand(async obj => await SaveCompanyReport(), obj => User.IsAdmin);
             CreateUserReportCommand = new RelayCommand(async obj => await SaveUserReport(), null);
             SaveToClipboardCommand = new RelayCommand(obj => SaveTotalTimeToClipboard(), obj => TimeEntries?.Any() == true);
-            SaveHourlySalaryToClipboardCommand = new RelayCommand(obj=>SaveHoverlySalaryToClipboard());
+          
             SaveMonthlySalaryToClipboardCommand = new RelayCommand(obj=>SaveMonthlySalaryToClipboard());
 
             _selectedTipIndex = 0;
             _to = DateTime.Now.StartOfWeek(DayOfWeek.Monday).AddDays(6);
             _from = To.AddDays(-6);
-            RefreshRate();
-          
             
+            
+            CurrentProject = All;
+            SetProjectList();
+
         }
 
         #endregion
@@ -223,7 +270,7 @@ namespace TBT.App.ViewModels.MainWindow
         private async void ChangeInterval()
         {
             var now = DateTime.Now;
-
+            isTipChange = true;
             switch (SelectedTipIndex)
             {
                 case 0:
@@ -260,11 +307,18 @@ namespace TBT.App.ViewModels.MainWindow
                 default:
                     break;
             }
+
+            isTipChange = false;
             await RefreshReportTimeEntires(ReportingUser?.Id);
         }
 
         private async Task RefreshReportTimeEntires(int? userId)
         {
+            if (isTipChange)
+            {
+                return;
+            }
+
             if (From == null || To == null || userId == null) return;
 
             if (userId <= 0) return;
@@ -330,17 +384,22 @@ namespace TBT.App.ViewModels.MainWindow
                     result = timeEntries.ToList();
                 }
 
-                TimeEntries = new ObservableCollection<TimeEntry>(result.Where(t => !t.IsRunning));
+               
+
+               
+                SetProjectList(result.Where(t => !t.IsRunning).Select(x => x.Activity.Project));
+
+                LoadData = result.Where(t => !t.IsRunning);
                 ItemsLoading = false;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
             }
-             CalcSalary();
+            
         }
 
-        public  void CalcSalary()
+        private  void CalcSalary()
         {
             if (ReportingUser.MonthlySalary == null)
             {
@@ -357,10 +416,15 @@ namespace TBT.App.ViewModels.MainWindow
             }
             else
             {
-                var sum = TimeEntries.Where(x => x.IsActive).Aggregate(TimeSpan.Zero, (cur, next) => cur += next.Duration).TotalHours;
+                var sum = SumTime().TotalHours;
                 Salary = (decimal)sum * HourlySalary;
             }
            
+            CalcSalaryUah();
+        }
+
+        private void CalcSalaryUah()
+        {
             if (DollarRate != null)
             {
                 var hour = (HourlySalary * DollarRate).Value.ToString("0.##");
@@ -377,7 +441,9 @@ namespace TBT.App.ViewModels.MainWindow
         private  void RefreshRate()
         {
             Task.Run(async () =>
+
             {
+                DollarRate = null;
                 var json = await new HttpClient().GetStringAsync(
                     ConfigurationManager.AppSettings[Constants.ApiUrl] + "pubinfo?json&exchange&coursid=5");
 
@@ -393,6 +459,69 @@ namespace TBT.App.ViewModels.MainWindow
            
           
            
+        }
+
+
+        private void SetProjectList(IEnumerable<Project>mas = null)
+        {
+
+            var temp = new List<Project> {All};
+
+            if (CurrentProject != null)
+            {
+                temp.Add(CurrentProject);
+            }
+            if (mas != null)
+            {
+                temp.AddRange(mas);
+            }
+
+            Projects = temp.Distinct().ToList();
+            
+        }
+        private void FilterTimeEntry()
+        {
+            if (LoadData == null)
+            {
+                TimeEntries =new ObservableCollection<TimeEntry>();
+                return;
+                
+            }
+            
+            if (CurrentProject.Id == All.Id)
+            {
+                TimeEntries = new ObservableCollection<TimeEntry>(LoadData);
+            }
+            else
+            {
+                TimeEntries = new ObservableCollection<TimeEntry>(LoadData.Where(t=>t.Activity.Project == CurrentProject));
+            }
+            CalcSalary();
+            CalcFullTime();
+        }
+
+
+        private void CalcFullTime()
+        {
+
+
+            if (TimeEntries == null || !TimeEntries.Any())
+            {
+                FullTime = ":  00:00 (00.00)";
+                return;
+                
+            }
+
+            
+
+            var sum = SumTime();
+
+            FullTime = $":  {(sum.Hours + sum.Days * 24):00}:{sum.Minutes:00} ({sum.TotalHours:00.00})";
+        }
+
+        private TimeSpan SumTime()
+        {
+            return TimeEntries.Any() ? TimeEntries.Select(t => t.Duration).Aggregate((t1, t2) => t1.Add(t2)) : new TimeSpan();
         }
 
 
@@ -594,10 +723,7 @@ namespace TBT.App.ViewModels.MainWindow
             Clipboard.SetText($"{Salary.Value.ToString("0.00")}$");
         }
 
-        private void SaveHoverlySalaryToClipboard()
-        {
-            Clipboard.SetText($"{HourlySalary.Value.ToString("0.00")}$");
-        }
+
 
 
 
@@ -634,8 +760,10 @@ namespace TBT.App.ViewModels.MainWindow
         {
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
             User = currentUser;
+            RefreshRate();
             await RefreshUsersList();
             await RefreshReportTimeEntires(ReportingUser?.Id);
+           
         }
 
         public void CloseTab()

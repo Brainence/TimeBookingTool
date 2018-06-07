@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TBT.App.Models.Tools
 {
-    class ApiRate
+    public class ApiRate
     {
         public string Ccy { get; set; }
         public string BaseCcy { get; set; }
@@ -14,3 +14,4 @@ namespace TBT.App.Models.Tools
         public decimal Sale { get; set; }
     }
 }
+

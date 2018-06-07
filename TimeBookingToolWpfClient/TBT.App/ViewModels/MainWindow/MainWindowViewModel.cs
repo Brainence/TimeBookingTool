@@ -383,13 +383,18 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void CheckViewModelCache()
         {
+            
             if (_viewModelCache?.Any() != true) { return; }
             var keys = _viewModelCache.Where(i => i.Value.ExpiresDate < DateTime.Now).Select(i => i.Key).ToList();
             foreach (var key in keys)
             {
+                if (key == SelectedViewModel.GetType().Name) continue;
                 _viewModelCache[key].CloseTab();
                 _viewModelCache.Remove(key);
+
             }
+
+          
         }
 
         #endregion

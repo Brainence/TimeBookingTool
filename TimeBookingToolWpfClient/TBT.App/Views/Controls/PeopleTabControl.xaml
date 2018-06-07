@@ -121,7 +121,7 @@
                                                 </TextBlock.Style>
                                             </TextBlock>
 
-                                            <TextBlock Grid.Column="3" Margin="5 0" Text="{Binding MonthlySalary}" VerticalAlignment ="Center">
+                                            <TextBlock Grid.Column="3" Margin="5 0" Text="{Binding MonthlySalary, StringFormat={}{0:0 $}}" VerticalAlignment ="Center">
                                                 <TextBlock.Visibility >
                                                     <MultiBinding Converter="{StaticResource IsAdminVisibilityConverter}">
                                                         <Binding Path="DataContext.CurrentUser" ElementName="PeopleTab"></Binding>
