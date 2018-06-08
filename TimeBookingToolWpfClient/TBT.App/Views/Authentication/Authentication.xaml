@@ -11,12 +11,12 @@
         Height="250" 
         Width="400" 
         WindowStartupLocation="CenterScreen" 
-        BorderThickness="1" 
-        BorderBrush="Black" 
+             
         WindowStyle="None" 
         Title="Time Booking Tool Login Window" 
         ResizeMode="NoResize"
         Style="{StaticResource WindowStyle}">
+
     <Window.InputBindings>
         <KeyBinding
                 Modifiers="Alt"
@@ -24,11 +24,20 @@
                 Command="{Binding Path=CloseButtonClick}"/>
     </Window.InputBindings>
     <Grid>
+        <Border  BorderBrush="#c1412b" BorderThickness="2">
+            <Border.Effect>
+                <DropShadowEffect Color="White"
+                              BlurRadius="20"
+                              ShadowDepth="0"  />
+            </Border.Effect>
+            <Grid/>
+        </Border>
         <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="7" Style="{StaticResource windowsButton}"
                 Command="{Binding Path=CloseButtonClick}">
             <Image Source="../../Resources/Icons/close.png" Width="12"></Image>
         </Button>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Path=ErrorMsg, Mode=TwoWay}" Margin="4"  Height="20" Foreground="{Binding ErrorColor}"/>
         <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=CurrentViewModel}"></ContentControl>
+
     </Grid>
 </Window>
