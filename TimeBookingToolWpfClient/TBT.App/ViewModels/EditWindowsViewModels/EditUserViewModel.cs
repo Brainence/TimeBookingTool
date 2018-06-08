@@ -19,7 +19,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         private bool _showAdmin;
         private bool _forSaving;
         private bool _changePassword;
-
+        private decimal? _salary;
         #endregion
 
         #region Properties
@@ -54,10 +54,21 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
             set { SetProperty(ref _changePassword, value); }
         }
 
+
+        public decimal? Salary
+        {
+            get { return _salary; }
+            set { SetProperty(ref _salary, value); }
+        }
+
+
         public ICommand AddSaveCommand { get; set; }
 
         public event Action<User> NewUserAdded;
         public event Action CloseWindow;
+
+
+
 
 
         #endregion
@@ -67,6 +78,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public EditUserViewModel()
         {
             AddSaveCommand = new RelayCommand(obj => AddSaveUser(obj as ResetPasswordParameters), null);
+          
         }
 
         #endregion
@@ -78,6 +90,13 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
             bool userChanged = false, usersListChanged = false;
             try
             {
+                if (Salary == null || Salary <= 0)
+                {
+                    throw new Exception("Salary must be above 0");
+                }
+
+                EditingUser.MonthlySalary = Salary;
+
                 if (ForSaving)
                 {
                     if (string.IsNullOrEmpty(EditingUser?.Username)) return;
@@ -108,6 +127,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
 
                         MessageBox.Show(Properties.Resources.PasswordBeenChanged);
                     }
+
 
                     EditingUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", EditingUser));
 

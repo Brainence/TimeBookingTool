@@ -447,7 +447,7 @@ namespace TBT.App.ViewModels.MainWindow
                 var json = await new HttpClient().GetStringAsync(
                     ConfigurationManager.AppSettings[Constants.ApiUrl] + "pubinfo?json&exchange&coursid=5");
 
-                var usd = JsonConvert.DeserializeObject<List<ApiRate>>(json).FirstOrDefault(x => x.Ccy == "USD");
+                var usd = JsonConvert.DeserializeObject<List<ApiDollarRate>>(json).FirstOrDefault(x => x.Ccy == "USD");
 
                 DollarRate = usd?.Buy;
                 if (DollarRate != null)

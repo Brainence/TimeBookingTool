@@ -102,7 +102,8 @@ namespace TBT.App.ViewModels.MainWindow
                 ShowAdmin = false,
                 ShowPassword = false,
                 ForSaving = true,
-                EditingUser = CurrentUser
+                EditingUser = CurrentUser,
+                Salary =  CurrentUser.MonthlySalary
             };
             EditUserCommand = new RelayCommand(obj => EditUser(obj as User), null);
             RemoveUserCommand = new RelayCommand(obj => RemoveUser(obj as User), null);
@@ -150,7 +151,8 @@ namespace TBT.App.ViewModels.MainWindow
                         EditingUser = user,
                         ShowAdmin = true,
                         ShowPassword = false,
-                        ForSaving = true
+                        ForSaving = true,
+                        Salary = user.MonthlySalary
                     }
                 }
             };
@@ -160,6 +162,8 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 Users = new ObservableCollection<User>(Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName));
             }
+
+            (EditMyProfileViewModel as EditUserViewModel).Salary = user.MonthlySalary;
         }
 
         private async void RemoveUser(User user)

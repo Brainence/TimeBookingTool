@@ -183,6 +183,7 @@
     <Compile Include="Models\Base\IModelObservableViewModel.cs" />
     <Compile Include="Models\Base\ObservableObject.cs" />
     <Compile Include="Models\Commands\RelayCommand.cs" />
+    <Compile Include="Models\Tools\ApiDollarRate.cs" />
     <Compile Include="Models\Tools\Bindings.cs" />
     <Compile Include="Models\Tools\Converters.cs" />
     <Compile Include="Models\Tools\AccessToken.cs" />
