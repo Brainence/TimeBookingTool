@@ -203,8 +203,8 @@ namespace TBT.App.ViewModels.MainWindow
         public void CloseTab()
         {
             var temp = SelectedProject?.Id ?? 0;
-            Projects.Clear();
-            Activities.Clear();
+            Projects?.Clear();
+            Activities?.Clear();
             _selectedProjectIndex = temp;
         }
 

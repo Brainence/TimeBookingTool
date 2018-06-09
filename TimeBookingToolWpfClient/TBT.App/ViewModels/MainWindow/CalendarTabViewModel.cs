@@ -11,6 +11,7 @@ using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
 using System.ComponentModel;
+using System.Net.Http;
 
 namespace TBT.App.ViewModels.MainWindow
 {
@@ -180,6 +181,9 @@ namespace TBT.App.ViewModels.MainWindow
                 User.TimeEntries = new ObservableCollection<TimeEntry>(timeEntries);
                 TimeEntryItems.TimeEntries = User.TimeEntries;
             }
+            catch (HttpRequestException)
+            {
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
@@ -200,12 +204,18 @@ namespace TBT.App.ViewModels.MainWindow
                 try
                 {
                     var sum = JsonConvert.DeserializeObject<TimeSpan?>(
-                        await App.CommunicationService.GetAsJson($"TimeEntry/GetDuration/{User.Id}/{App.UrlSafeDateToString(mon)}/{App.UrlSafeDateToString(sun)}"));
+                        await App.CommunicationService.GetAsJson(
+                            $"TimeEntry/GetDuration/{User.Id}/{App.UrlSafeDateToString(mon)}/{App.UrlSafeDateToString(sun)}"));
 
                     if (sum.HasValue)
-                        WeekTime = $"{(sum.Value.Hours + sum.Value.Days * 24):00}:{sum.Value.Minutes:00} ({sum.Value.TotalHours:00.00})";
+                        WeekTime =
+                            $"{(sum.Value.Hours + sum.Value.Days * 24):00}:{sum.Value.Minutes:00} ({sum.Value.TotalHours:00.00})";
                     else
                         WeekTime = "00:00 (00.00)";
+                }
+                catch (HttpRequestException)
+                {
+
                 }
                 catch (Exception ex)
                 {

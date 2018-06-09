@@ -24,6 +24,7 @@ using TBT.App.Models.Commands;
 using TBT.App.Models.Tools;
 using TBT.App.Views.Controls;
 using TBT.App.Properties;
+using TBT.App.Services.CommunicationService.Implementations;
 
 namespace TBT.App.ViewModels.MainWindow
 {
@@ -49,8 +50,8 @@ namespace TBT.App.ViewModels.MainWindow
         private decimal? _hourlySalary;
 
        
-        private string _salaryUah;
-        private string _hourlySalaryUah;
+        private decimal? _salaryUah;
+        private decimal? _hourlySalaryUah;
         private decimal? _dollarRate;
 
 
@@ -58,8 +59,8 @@ namespace TBT.App.ViewModels.MainWindow
         private Project _currentProject;
         private List<Project> _projects;
         private IEnumerable<TimeEntry> _loadData;
-        private bool isTipChange;
 
+        private bool changeDateWithCode;
         private string _fullTime;
 
 
@@ -172,12 +173,12 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _hourlySalary; }
             set { SetProperty(ref _hourlySalary, value); }
         }
-        public string HourUah
+        public decimal? HourUah
         {
             get { return _hourlySalaryUah; }
             set { SetProperty(ref _hourlySalaryUah, value); }
         }
-        public string FullUah
+        public decimal? FullUah
         {
             get { return _salaryUah; }
             set { SetProperty(ref _salaryUah, value); }
@@ -270,7 +271,7 @@ namespace TBT.App.ViewModels.MainWindow
         private async void ChangeInterval()
         {
             var now = DateTime.Now;
-            isTipChange = true;
+            changeDateWithCode = true;
             switch (SelectedTipIndex)
             {
                 case 0:
@@ -308,13 +309,13 @@ namespace TBT.App.ViewModels.MainWindow
                     break;
             }
 
-            isTipChange = false;
+            changeDateWithCode = false;
             await RefreshReportTimeEntires(ReportingUser?.Id);
         }
 
         private async Task RefreshReportTimeEntires(int? userId)
         {
-            if (isTipChange)
+            if (changeDateWithCode)
             {
                 return;
             }
@@ -325,16 +326,19 @@ namespace TBT.App.ViewModels.MainWindow
 
             if (From > To)
             {
+                changeDateWithCode = true;
                 var temp = From;
                 From = To;
                 To = temp;
+                changeDateWithCode = false;
             }
+           
 
             ItemsLoading = true;
 
-            var result = new List<TimeEntry>();
             try
             {
+                List<TimeEntry> result;
                 if (From == DateTime.MinValue && To == DateTime.MaxValue)
                 {
                     var timeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
@@ -350,7 +354,8 @@ namespace TBT.App.ViewModels.MainWindow
                 else if (From == DateTime.MinValue)
                 {
                     var timeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserFrom/{userId}/{App.UrlSafeDateToString(From)}"));
+                        await App.CommunicationService.GetAsJson(
+                            $"TimeEntry/GetByUserFrom/{userId}/{App.UrlSafeDateToString(From)}"));
 
                     foreach (var timeEntry in timeEntries)
                     {
@@ -362,7 +367,8 @@ namespace TBT.App.ViewModels.MainWindow
                 else if (To == DateTime.MaxValue)
                 {
                     var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(
-                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserTo/{userId}/{App.UrlSafeDateToString(To)}"));
+                        await App.CommunicationService.GetAsJson(
+                            $"TimeEntry/GetByUserTo/{userId}/{App.UrlSafeDateToString(To)}"));
 
                     foreach (var timeEntry in timeEntries)
                     {
@@ -374,7 +380,8 @@ namespace TBT.App.ViewModels.MainWindow
                 else
                 {
                     var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(
-                        await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{userId}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}"));
+                        await App.CommunicationService.GetAsJson(
+                            $"TimeEntry/GetByUser/{userId}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}"));
 
                     foreach (var timeEntry in timeEntries)
                     {
@@ -384,13 +391,17 @@ namespace TBT.App.ViewModels.MainWindow
                     result = timeEntries.ToList();
                 }
 
-               
 
-               
+
+
                 SetProjectList(result.Where(t => !t.IsRunning).Select(x => x.Activity.Project));
 
                 LoadData = result.Where(t => !t.IsRunning);
                 ItemsLoading = false;
+            }
+            catch (HttpRequestException)
+            {
+
             }
             catch (Exception ex)
             {
@@ -401,18 +412,18 @@ namespace TBT.App.ViewModels.MainWindow
 
         private  void CalcSalary()
         {
-            if (ReportingUser.MonthlySalary == null)
+            if (ReportingUser?.MonthlySalary == null)
             {
                 Salary = 0;
                 HourlySalary = 0;
                 return;
             }
 
-            HourlySalary = ReportingUser.MonthlySalary / 168.00M;
+            HourlySalary = ReportingUser.MonthlySalary / 168;
             
             if (TimeEntries == null || TimeEntries.Count == 0)
             {
-                Salary = 0.00M;
+                Salary = 0;
             }
             else
             {
@@ -427,38 +438,35 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (DollarRate != null)
             {
-                var hour = (HourlySalary * DollarRate).Value.ToString("0.##");
-                var full = (Salary * DollarRate).Value.ToString("0.##");
-                HourUah = $" $    ({hour} ₴)";
-                FullUah = $" $    ({full} ₴)";
+                HourUah = HourlySalary * DollarRate;
+                FullUah = Salary * DollarRate;
             }
             else
             {
-                HourUah = " $";
-                FullUah = " $";
+                HourUah = 0;
+                FullUah = 0;
             }
         }
         private  void RefreshRate()
         {
-            Task.Run(async () =>
-
+            
+            if (CommunicationService.IsConnected)
             {
-                DollarRate = null;
-                var json = await new HttpClient().GetStringAsync(
-                    ConfigurationManager.AppSettings[Constants.ApiUrl] + "pubinfo?json&exchange&coursid=5");
-
-                var usd = JsonConvert.DeserializeObject<List<ApiDollarRate>>(json).FirstOrDefault(x => x.Ccy == "USD");
-
-                DollarRate = usd?.Buy;
-                if (DollarRate != null)
+                Task.Run(async () =>
                 {
-                    CalcSalary();
-                }
-            });
+                    DollarRate = null;
+                    var json = await new HttpClient().GetStringAsync(
+                        ConfigurationManager.AppSettings[Constants.ApiUrl] + "pubinfo?json&exchange&coursid=5");
 
-           
-          
-           
+                    var usd = JsonConvert.DeserializeObject<List<ApiDollarRate>>(json).FirstOrDefault(x => x.Ccy == "USD");
+
+                    DollarRate = usd?.Buy;
+                    if (DollarRate != null)
+                    {
+                        CalcSalary();
+                    }
+                });
+            } 
         }
 
 
@@ -487,7 +495,13 @@ namespace TBT.App.ViewModels.MainWindow
                 return;
                 
             }
-            
+            if (CurrentProject == null)
+            {
+                TimeEntries = new ObservableCollection<TimeEntry>();
+                return;
+
+            }
+
             if (CurrentProject.Id == All.Id)
             {
                 TimeEntries = new ObservableCollection<TimeEntry>(LoadData);
@@ -507,7 +521,7 @@ namespace TBT.App.ViewModels.MainWindow
 
             if (TimeEntries == null || !TimeEntries.Any())
             {
-                FullTime = ":  00:00 (00.00)";
+                FullTime = "00:00 (00.00)";
                 return;
                 
             }
@@ -516,7 +530,7 @@ namespace TBT.App.ViewModels.MainWindow
 
             var sum = SumTime();
 
-            FullTime = $":  {(sum.Hours + sum.Days * 24):00}:{sum.Minutes:00} ({sum.TotalHours:00.00})";
+            FullTime = $"{(sum.Hours + sum.Days * 24):00}:{sum.Minutes:00} ({sum.TotalHours:00.00})";
         }
 
         private TimeSpan SumTime()
@@ -621,7 +635,8 @@ namespace TBT.App.ViewModels.MainWindow
             try
             {
 
-                Dictionary<int, ObservableCollection<TimeEntry>> timeEntries = new Dictionary<int, ObservableCollection<TimeEntry>>();
+                Dictionary<int, ObservableCollection<TimeEntry>> timeEntries =
+                    new Dictionary<int, ObservableCollection<TimeEntry>>();
 
                 var result = new ObservableCollection<TimeEntry>();
                 foreach (var u in Users)
@@ -634,26 +649,31 @@ namespace TBT.App.ViewModels.MainWindow
                     else if (From == DateTime.MinValue)
                     {
                         result = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                            await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserFrom/{u.Id}/{App.UrlSafeDateToString(From)}"));
+                            await App.CommunicationService.GetAsJson(
+                                $"TimeEntry/GetByUserFrom/{u.Id}/{App.UrlSafeDateToString(From)}"));
                     }
                     else if (To == DateTime.MaxValue)
                     {
                         result = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                            await App.CommunicationService.GetAsJson($"TimeEntry/GetByUserTo/{u.Id}/{App.UrlSafeDateToString(To)}"));
+                            await App.CommunicationService.GetAsJson(
+                                $"TimeEntry/GetByUserTo/{u.Id}/{App.UrlSafeDateToString(To)}"));
                     }
                     else
                     {
                         result = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                            await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{u.Id}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}"));
+                            await App.CommunicationService.GetAsJson(
+                                $"TimeEntry/GetByUser/{u.Id}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}"));
                     }
 
                     timeEntries.Add(u.Id, new ObservableCollection<TimeEntry>(result.Where(t => !t.IsRunning)));
                     result.Clear();
                 }
+
                 Dictionary<int, string> durations = new Dictionary<int, string>();
 
                 foreach (var t in timeEntries)
-                    durations.Add(t.Key, dc.Convert(t.Value, typeof(TimeSpan), null, CultureInfo.InvariantCulture).ToString());
+                    durations.Add(t.Key,
+                        dc.Convert(t.Value, typeof(TimeSpan), null, CultureInfo.InvariantCulture).ToString());
 
                 var users = Users.Select(u => new
                 {
@@ -672,6 +692,10 @@ namespace TBT.App.ViewModels.MainWindow
                 };
 
                 SaveXPSDocument(CreateCompanyReport(AllUsersReportPage), isUserReport: false);
+            }
+            catch (HttpRequestException)
+            {
+
             }
             catch (Exception ex)
             {
@@ -720,7 +744,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void SaveMonthlySalaryToClipboard()
         {
-            Clipboard.SetText($"{Salary.Value.ToString("0.00")}$");
+            Clipboard.SetText($"{FullUah.Value.ToString("0.00")} ₴");
         }
 
 
@@ -761,6 +785,7 @@ namespace TBT.App.ViewModels.MainWindow
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
             User = currentUser;
             RefreshRate();
+            CurrentProject = All;
             await RefreshUsersList();
             await RefreshReportTimeEntires(ReportingUser?.Id);
            
@@ -769,7 +794,18 @@ namespace TBT.App.ViewModels.MainWindow
         public void CloseTab()
         {
             RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
-            TimeEntries?.Clear();
+            
+
+            Salary = 0;
+            HourlySalary = 0;
+            FullUah = 0;
+            HourUah = 0;
+            DollarRate = null;
+            FullTime = "00:00 (00.00)";
+            Projects = null;
+
+            TimeEntries = null;
+            LoadData = null;
             Users = null;
             ReportingUser = null;
         }

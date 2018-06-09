@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using TBT.App.Common;
+using TBT.App.Helpers;
 using TBT.App.Services.CommunicationService.Interfaces;
 
 namespace TBT.App.Services.CommunicationService.Implementations
@@ -17,20 +18,21 @@ namespace TBT.App.Services.CommunicationService.Implementations
     {
         private static string baseUrl;
         private static HttpClient _client;
-        private static bool IsConnected;
+        public static bool IsConnected;
 
         static CommunicationService()
         {
             baseUrl = ConfigurationManager.AppSettings[Constants.ServerBaseUrl];
             _client = new HttpClient() { BaseAddress = new Uri(baseUrl) };
             App.StaticPropertyChanged += ListenAccessToken;
-
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All };
+
+            ConnectionChanged += state => IsConnected = state;
         }
 
         public static bool CheckConnection()
         {
-            return (_client.GetAsync("User")).Result.StatusCode != HttpStatusCode.NotFound;
+            return (IsConnected = _client.GetAsync("User").Result.StatusCode != HttpStatusCode.NotFound);
         }
 
         public static event Action<bool> ConnectionChanged;
@@ -50,7 +52,7 @@ namespace TBT.App.Services.CommunicationService.Implementations
             }
         }
 
-        public async static void ListenConnection(bool isConnected)
+        public static async void ListenConnection(bool isConnected)
         {
             if(!isConnected)
             {
@@ -83,6 +85,7 @@ namespace TBT.App.Services.CommunicationService.Implementations
 
                     if (updated)
                     {
+                        ConnectionChanged?.Invoke(true);
                         return await (await serverResponse(url, data)).Content.ReadAsStringAsync();
                     }
                 }
@@ -97,6 +100,7 @@ namespace TBT.App.Services.CommunicationService.Implementations
                 }
 
                 var responseString = await response.Content.ReadAsStringAsync();
+                ConnectionChanged?.Invoke(true);
                 return responseString;
             }
             catch (HttpResponseException ex)
@@ -105,10 +109,12 @@ namespace TBT.App.Services.CommunicationService.Implementations
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"HttpRequestException: {ex.Message}");
+                ConnectionChanged?.Invoke(false);
+                throw;
             }
             catch (Exception ex)
             {
+                ConnectionChanged?.Invoke(false);
                 throw new Exception($"Unknown exception: ", ex);
             }
         }

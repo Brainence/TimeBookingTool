@@ -12,6 +12,7 @@ using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
 using TBT.App.ViewModels.Authentication;
 using TBT.App.Properties;
+using TBT.App.Services.CommunicationService.Implementations;
 using TBT.App.ViewModels.EtcViewModels;
 
 namespace TBT.App.ViewModels.MainWindow
@@ -156,6 +157,7 @@ namespace TBT.App.ViewModels.MainWindow
             IsConnected = true;
             LanguageControl = new LanguageControlViewModel();
             RefreshEvents.ChangeCurrentUser += ChangeCurrentUser;
+            CommunicationService.ConnectionChanged += RefreshIsConnected;
             if (!OpenAuthenticationWindow(authorized))
             {
                 App.GlobalTimer = new GlobalTimer();

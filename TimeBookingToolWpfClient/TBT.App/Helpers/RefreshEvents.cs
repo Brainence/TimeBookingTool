@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using TBT.App.Models.AppModels;
@@ -53,6 +54,10 @@ namespace TBT.App.Helpers
 
                 ChangeCurrentUser?.Invoke(sender, currentUser);
             }
+            catch (HttpRequestException)
+            {
+               
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
@@ -65,11 +70,14 @@ namespace TBT.App.Helpers
             {
                 return JsonConvert.DeserializeObject<ObservableCollection<User>>(await App.CommunicationService.GetAsJson($"User/GetByCompany/{_companyId}")); ;
             }
+            catch (HttpRequestException)
+            {
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-                return new ObservableCollection<User>();
             }
+            return new ObservableCollection<User>();
         }
 
         public static async Task<ObservableCollection<Customer>> RefreshCustomersList()
@@ -79,11 +87,14 @@ namespace TBT.App.Helpers
                 return JsonConvert.DeserializeObject<ObservableCollection<Customer>>(
                     await App.CommunicationService.GetAsJson($"Customer/GetByCompany/{_companyId}")); ;
             }
+            catch (HttpRequestException)
+            {
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-                return new ObservableCollection<Customer>();
             }
+            return new ObservableCollection<Customer>();
         }
 
         public static async Task<ObservableCollection<Project>> RefreshProjectsList()
@@ -93,11 +104,15 @@ namespace TBT.App.Helpers
                 return JsonConvert.DeserializeObject<ObservableCollection<Project>>(
                     await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId}")); ;
             }
+            catch (HttpRequestException)
+            {
+               
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-                return new ObservableCollection<Project>();
             }
+            return new ObservableCollection<Project>();
         }
 
         public static async Task<ObservableCollection<Activity>> RefreshTasksList()
@@ -108,11 +123,15 @@ namespace TBT.App.Helpers
                         await App.CommunicationService.GetAsJson($"Activity/GetByCompany/{_companyId}"))
                     .OrderBy(a => a.Project.Name).ThenBy(a => a.Name)); ;
             }
+            catch (HttpRequestException)
+            {
+              
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-                return new ObservableCollection<Activity>();
             }
+            return new ObservableCollection<Activity>();
         }
 
         #endregion
