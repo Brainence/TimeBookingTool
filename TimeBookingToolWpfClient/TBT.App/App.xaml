@@ -41,7 +41,6 @@
             <tools:BoolToErrorColor x:Key="BoolToErrorColor"/>
             <tools:EnumerableToBoolConverter x:Key="EnumerableToBoolConverter"/>
             <tools:IsAdminVisibilityConverter x:Key="IsAdminVisibilityConverter"/>
-            <tools:IsNotConnectedVisibility x:Key="IsNotConnectedVisibility"/>
 
 
 

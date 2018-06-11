@@ -181,9 +181,6 @@ namespace TBT.App.ViewModels.MainWindow
                 User.TimeEntries = new ObservableCollection<TimeEntry>(timeEntries);
                 TimeEntryItems.TimeEntries = User.TimeEntries;
             }
-            catch (HttpRequestException)
-            {
-            }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
@@ -212,10 +209,6 @@ namespace TBT.App.ViewModels.MainWindow
                             $"{(sum.Value.Hours + sum.Value.Days * 24):00}:{sum.Value.Minutes:00} ({sum.Value.TotalHours:00.00})";
                     else
                         WeekTime = "00:00 (00.00)";
-                }
-                catch (HttpRequestException)
-                {
-
                 }
                 catch (Exception ex)
                 {

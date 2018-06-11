@@ -110,7 +110,7 @@ namespace TBT.App.Services.CommunicationService.Implementations
             catch (HttpRequestException ex)
             {
                 ConnectionChanged?.Invoke(false);
-                throw;
+                return  null;
             }
             catch (Exception ex)
             {

@@ -399,10 +399,6 @@ namespace TBT.App.ViewModels.MainWindow
                 LoadData = result.Where(t => !t.IsRunning);
                 ItemsLoading = false;
             }
-            catch (HttpRequestException)
-            {
-
-            }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
@@ -692,10 +688,6 @@ namespace TBT.App.ViewModels.MainWindow
                 };
 
                 SaveXPSDocument(CreateCompanyReport(AllUsersReportPage), isUserReport: false);
-            }
-            catch (HttpRequestException)
-            {
-
             }
             catch (Exception ex)
             {

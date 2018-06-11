@@ -47,8 +47,8 @@
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Center">
             </ContentControl>
-            <StackPanel  VerticalAlignment="Center" Visibility="{Binding IsConnected, Converter={StaticResource IsNotConnectedVisibility}}">
-                <TextBlock FontSize="20" Background="Transparent" Foreground="White" HorizontalAlignment="Center" Text="{x:Static p:Resources.ConnectionLost}" Visibility="{Binding IsConnected, Converter={StaticResource IsNotConnectedVisibility}}"/>
+            <StackPanel  VerticalAlignment="Center" Visibility="{Binding IsConnected, Converter={StaticResource BoolToNotVisibilityConverter}}">
+                <TextBlock FontSize="20" Background="Transparent" Foreground="White" HorizontalAlignment="Center" Text="{x:Static p:Resources.ConnectionLost}" Visibility="{Binding IsConnected, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
             </StackPanel>
             <StackPanel HorizontalAlignment="Right"  Margin="10 0 0 10" Orientation="Horizontal" 
                         Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">

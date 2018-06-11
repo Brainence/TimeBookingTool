@@ -46,17 +46,18 @@ namespace TBT.App.Helpers
         {
             try
             {
-                var currentUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={App.Username}"));
+                var data = await App.CommunicationService.GetAsJson($"User?email={App.Username}");
+                if (data == null)
+                {
+                    return;
+                }
+                var currentUser = JsonConvert.DeserializeObject<User>(data);
                 if (currentUser == null) throw new Exception("Error occurred while trying to load user data.");
                 currentUser.CurrentTimeZone = DateTimeOffset.Now.Offset;
                 currentUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", currentUser));
                 _companyId = currentUser.Company.Id;
 
                 ChangeCurrentUser?.Invoke(sender, currentUser);
-            }
-            catch (HttpRequestException)
-            {
-               
             }
             catch (Exception ex)
             {
@@ -68,10 +69,13 @@ namespace TBT.App.Helpers
         {
             try
             {
-                return JsonConvert.DeserializeObject<ObservableCollection<User>>(await App.CommunicationService.GetAsJson($"User/GetByCompany/{_companyId}")); ;
-            }
-            catch (HttpRequestException)
-            {
+                var data = await App.CommunicationService.GetAsJson($"User/GetByCompany/{_companyId}");
+
+                if (data != null)
+                {
+                    return JsonConvert.DeserializeObject<ObservableCollection<User>>(data);
+
+                }
             }
             catch (Exception ex)
             {
@@ -84,11 +88,11 @@ namespace TBT.App.Helpers
         {
             try
             {
-                return JsonConvert.DeserializeObject<ObservableCollection<Customer>>(
-                    await App.CommunicationService.GetAsJson($"Customer/GetByCompany/{_companyId}")); ;
-            }
-            catch (HttpRequestException)
-            {
+                var data = await App.CommunicationService.GetAsJson($"Customer/GetByCompany/{_companyId}");
+                if (data != null)
+                {
+                    return JsonConvert.DeserializeObject<ObservableCollection<Customer>>(data);
+                }               
             }
             catch (Exception ex)
             {
@@ -101,11 +105,12 @@ namespace TBT.App.Helpers
         {
             try
             {
-                return JsonConvert.DeserializeObject<ObservableCollection<Project>>(
-                    await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId}")); ;
-            }
-            catch (HttpRequestException)
-            {
+
+                var data = await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId}");
+                if (data != null)
+                {
+                    return JsonConvert.DeserializeObject<ObservableCollection<Project>>(data);
+                }
                
             }
             catch (Exception ex)
@@ -119,13 +124,13 @@ namespace TBT.App.Helpers
         {
             try
             {
-                return new ObservableCollection<Activity>(JsonConvert.DeserializeObject<List<Activity>>(
-                        await App.CommunicationService.GetAsJson($"Activity/GetByCompany/{_companyId}"))
-                    .OrderBy(a => a.Project.Name).ThenBy(a => a.Name)); ;
-            }
-            catch (HttpRequestException)
-            {
-              
+
+                var data = await App.CommunicationService.GetAsJson($"Activity/GetByCompany/{_companyId}");
+                if (data != null)
+                {
+                    return new ObservableCollection<Activity>(JsonConvert.DeserializeObject<List<Activity>>(data)
+                        .OrderBy(a => a.Project.Name).ThenBy(a => a.Name));
+                }
             }
             catch (Exception ex)
             {

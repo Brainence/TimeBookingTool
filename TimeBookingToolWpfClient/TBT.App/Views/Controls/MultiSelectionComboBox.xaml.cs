@@ -112,10 +112,6 @@ namespace TBT.App.Views.Controls
 
                 x.ItemsSource = list;
             }
-            catch (HttpRequestException)
-            {
-
-            }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
