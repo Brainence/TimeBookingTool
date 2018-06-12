@@ -115,8 +115,12 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 var name = NewCustomersName;
 
-                var customer = JsonConvert.DeserializeObject<Customer>(
-                    await App.CommunicationService.GetAsJson($"Customer/GetByName/{Uri.EscapeUriString(name)}"));
+                var data = await App.CommunicationService.GetAsJson($"Customer/GetByName/{Uri.EscapeUriString(name)}");
+                if (data == null)
+                {
+                    return;
+                }
+                var customer = JsonConvert.DeserializeObject<Customer>(data);
 
                 if (customer != null)
                 {

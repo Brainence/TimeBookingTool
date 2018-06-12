@@ -169,9 +169,16 @@ namespace TBT.App.ViewModels.MainWindow
             try
             {
                 if (showLoading) IsLoading = true;
+                var data = await App.CommunicationService.GetAsJson(
+                    $"TimeEntry/GetByUser/{User.Id}/{App.UrlSafeDateToString(SelectedDay.Value)}/{App.UrlSafeDateToString(SelectedDay.Value)}");
 
-                var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(
-                    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{User.Id}/{App.UrlSafeDateToString(SelectedDay.Value)}/{App.UrlSafeDateToString(SelectedDay.Value)}"));
+                if (data == null)
+                {
+                   User.TimeEntries = new ObservableCollection<TimeEntry>();
+                    IsLoading = false;
+                    return;
+                }
+                var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(data);
 
                 foreach (var timeEntry in timeEntries)
                 {
@@ -200,6 +207,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 try
                 {
+
                     var sum = JsonConvert.DeserializeObject<TimeSpan?>(
                         await App.CommunicationService.GetAsJson(
                             $"TimeEntry/GetDuration/{User.Id}/{App.UrlSafeDateToString(mon)}/{App.UrlSafeDateToString(sun)}"));

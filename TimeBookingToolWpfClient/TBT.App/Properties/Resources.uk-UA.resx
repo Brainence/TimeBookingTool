@@ -545,4 +545,7 @@
   <data name="HourlySalary" xml:space="preserve">
     <value>Зарплата в годину</value>
   </data>
+  <data name="SalaryMustBe" xml:space="preserve">
+    <value>Зарплата не може бути вiд`ємною</value>
+  </data>
 </root>

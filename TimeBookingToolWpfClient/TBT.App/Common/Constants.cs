@@ -25,5 +25,8 @@ namespace TBT.App.Common
     {
         public static Brush Error => Brushes.DarkRed;
         public static Brush Message => Brushes.DarkGreen;
+        public static Brush White => Brushes.White;
+        public static Brush Red => Brushes.Red;
+        public static Brush Green => Brushes.Green;
     }
 }

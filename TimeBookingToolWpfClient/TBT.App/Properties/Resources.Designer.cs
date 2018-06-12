@@ -952,6 +952,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Salary must be above 0.
+        /// </summary>
+        public static string SalaryMustBe {
+            get {
+                return ResourceManager.GetString("SalaryMustBe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {

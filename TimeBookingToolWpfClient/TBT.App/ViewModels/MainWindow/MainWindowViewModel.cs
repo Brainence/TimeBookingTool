@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+
 using System.Linq;
+using System.Resources;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
+using TBT.App.Common;
 using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
@@ -34,7 +39,8 @@ namespace TBT.App.ViewModels.MainWindow
         private bool _windowState;
         private bool _isConnected;
         private BaseViewModel _languageControl;
-
+        private string _errorMessage;
+        private Brush _brush;
         #endregion
 
         #region Properties
@@ -134,6 +140,24 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                SetProperty(ref _errorMessage, value);
+            }
+        }
+
+        public Brush Brush
+        {
+            get { return _brush; }
+            set
+            {
+                SetProperty(ref _brush, value);
+            }
+        }
+
         public BaseViewModel LanguageControl
         {
             get { return _languageControl; }
@@ -147,6 +171,7 @@ namespace TBT.App.ViewModels.MainWindow
         public ICommand CloseCommand { get; set; }
 
         public event Action<bool> ChangeDateSize;
+      
 
         #endregion
 
@@ -158,6 +183,7 @@ namespace TBT.App.ViewModels.MainWindow
             LanguageControl = new LanguageControlViewModel();
             RefreshEvents.ChangeCurrentUser += ChangeCurrentUser;
             CommunicationService.ConnectionChanged += RefreshIsConnected;
+            RefreshEvents.ChangeError += NewError;
             if (!OpenAuthenticationWindow(authorized))
             {
                 App.GlobalTimer = new GlobalTimer();
@@ -225,6 +251,11 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
+        private void NewError(string message,bool isError)
+        {
+            SpawnToast(message,isError);
+        }
+
         #region NotifyIcon
         public void InitNotifyIcon()
         {
@@ -268,37 +299,37 @@ namespace TBT.App.ViewModels.MainWindow
             switch (tabType)
             {
                 case TabsType.CalendarTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(CalendarTabViewModel)) ? _viewModelCache[nameof(CalendarTabViewModel)] : new CalendarTabViewModel(CurrentUser);
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(CalendarTabViewModel)) ? _viewModelCache[nameof(CalendarTabViewModel)] : new CalendarTabViewModel(CurrentUser);
+                    }
                 case TabsType.ReportingTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(ReportingTabViewModel)) ? _viewModelCache[nameof(ReportingTabViewModel)] : new ReportingTabViewModel(CurrentUser);
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(ReportingTabViewModel)) ? _viewModelCache[nameof(ReportingTabViewModel)] : new ReportingTabViewModel(CurrentUser);
+                    }
                 case TabsType.PeopleTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(PeopleTabViewModel)) ? _viewModelCache[nameof(PeopleTabViewModel)] : new PeopleTabViewModel(CurrentUser);
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(PeopleTabViewModel)) ? _viewModelCache[nameof(PeopleTabViewModel)] : new PeopleTabViewModel(CurrentUser);
+                    }
                 case TabsType.CustomersTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(CustomerTabViewModel)) ? _viewModelCache[nameof(CustomerTabViewModel)] : new CustomerTabViewModel(CurrentUser);
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(CustomerTabViewModel)) ? _viewModelCache[nameof(CustomerTabViewModel)] : new CustomerTabViewModel(CurrentUser);
+                    }
                 case TabsType.ProjectsTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(ProjectsTabViewModel)) ? _viewModelCache[nameof(ProjectsTabViewModel)] : new ProjectsTabViewModel();
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(ProjectsTabViewModel)) ? _viewModelCache[nameof(ProjectsTabViewModel)] : new ProjectsTabViewModel();
+                    }
                 case TabsType.TasksTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(TasksTabViewModel)) ? _viewModelCache[nameof(TasksTabViewModel)] : new TasksTabViewModel();
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(TasksTabViewModel)) ? _viewModelCache[nameof(TasksTabViewModel)] : new TasksTabViewModel();
+                    }
                 case TabsType.SettingsTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(SettingsTabViewModel)) ? _viewModelCache[nameof(SettingsTabViewModel)] : new SettingsTabViewModel();
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(SettingsTabViewModel)) ? _viewModelCache[nameof(SettingsTabViewModel)] : new SettingsTabViewModel();
+                    }
                 default:
-                {
-                    return null;
-                }
+                    {
+                        return null;
+                    }
             }
         }
 
@@ -380,12 +411,37 @@ namespace TBT.App.ViewModels.MainWindow
 
         public void RefreshIsConnected(bool isConnected)
         {
+            
             IsConnected = isConnected;
+            if (!isConnected)
+            {
+                SpawnToast(Resources.ConnectionLost,true,true);
+            }
+            else
+            {
+                ErrorMessage = "";
+            }
+           
+        }
+
+        public void SpawnToast(string text,bool isError, bool isNotConnected = false)
+        {
+            Brush = isError ? MessageColors.Error : MessageColors.Message;
+            ErrorMessage = text;
+            if (!isNotConnected)
+            {
+                Task.Run(async () =>
+                {
+                    await Task.Delay(10000);
+                    ErrorMessage = "";
+                });
+
+            }
         }
 
         private void CheckViewModelCache()
         {
-            
+
             if (_viewModelCache?.Any() != true) { return; }
             var keys = _viewModelCache.Where(i => i.Value.ExpiresDate < DateTime.Now).Select(i => i.Key).ToList();
             foreach (var key in keys)
@@ -396,7 +452,7 @@ namespace TBT.App.ViewModels.MainWindow
 
             }
 
-          
+
         }
 
         #endregion
@@ -406,6 +462,7 @@ namespace TBT.App.ViewModels.MainWindow
         public void Dispose()
         {
             RefreshEvents.ChangeCurrentUser -= ChangeCurrentUser;
+            RefreshEvents.ChangeError -= NewError;
         }
 
         #endregion

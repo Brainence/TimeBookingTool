@@ -32,6 +32,7 @@ namespace TBT.App.Helpers
 
         public static event Action<object, User> ChangeCurrentUser;
         public static event Action ScrollTimeEntryItemsToTop;
+        public static event Action<string,bool> ChangeError;
 
         #endregion
 
@@ -42,101 +43,59 @@ namespace TBT.App.Helpers
             ScrollTimeEntryItemsToTop?.Invoke();
         }
 
+        public static void ChangeErrorInvoke(string message,bool isError)
+        {
+            ChangeError?.Invoke(message,isError);
+        }
+
         public static async Task RefreshCurrentUser(object sender)
         {
-            try
-            {
+ 
                 var data = await App.CommunicationService.GetAsJson($"User?email={App.Username}");
                 if (data == null)
                 {
                     return;
                 }
                 var currentUser = JsonConvert.DeserializeObject<User>(data);
-                if (currentUser == null) throw new Exception("Error occurred while trying to load user data.");
+               
                 currentUser.CurrentTimeZone = DateTimeOffset.Now.Offset;
                 currentUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", currentUser));
                 _companyId = currentUser.Company.Id;
 
                 ChangeCurrentUser?.Invoke(sender, currentUser);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+
         }
 
         public static async Task<ObservableCollection<User>> RefreshUsersList()
         {
-            try
-            {
+ 
                 var data = await App.CommunicationService.GetAsJson($"User/GetByCompany/{_companyId}");
 
-                if (data != null)
-                {
-                    return JsonConvert.DeserializeObject<ObservableCollection<User>>(data);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
-            return new ObservableCollection<User>();
+                return data != null ? JsonConvert.DeserializeObject<ObservableCollection<User>>(data) : new ObservableCollection<User>();
         }
 
         public static async Task<ObservableCollection<Customer>> RefreshCustomersList()
         {
-            try
-            {
+    
                 var data = await App.CommunicationService.GetAsJson($"Customer/GetByCompany/{_companyId}");
-                if (data != null)
-                {
-                    return JsonConvert.DeserializeObject<ObservableCollection<Customer>>(data);
-                }               
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
-            return new ObservableCollection<Customer>();
+                return data != null ? JsonConvert.DeserializeObject<ObservableCollection<Customer>>(data) : new ObservableCollection<Customer>();
         }
 
         public static async Task<ObservableCollection<Project>> RefreshProjectsList()
         {
-            try
-            {
 
                 var data = await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId}");
-                if (data != null)
-                {
-                    return JsonConvert.DeserializeObject<ObservableCollection<Project>>(data);
-                }
-               
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
-            return new ObservableCollection<Project>();
+                return data != null ? JsonConvert.DeserializeObject<ObservableCollection<Project>>(data) : new ObservableCollection<Project>();
         }
 
         public static async Task<ObservableCollection<Activity>> RefreshTasksList()
         {
-            try
-            {
+            var data = await App.CommunicationService.GetAsJson($"Activity/GetByCompany/{_companyId}");
+            return data == null
+                ? new ObservableCollection<Activity>()
+                : new ObservableCollection<Activity>(JsonConvert.DeserializeObject<List<Activity>>(data)
+                    .OrderBy(a => a.Project.Name).ThenBy(a => a.Name));
 
-                var data = await App.CommunicationService.GetAsJson($"Activity/GetByCompany/{_companyId}");
-                if (data != null)
-                {
-                    return new ObservableCollection<Activity>(JsonConvert.DeserializeObject<List<Activity>>(data)
-                        .OrderBy(a => a.Project.Name).ThenBy(a => a.Name));
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
-            return new ObservableCollection<Activity>();
         }
 
         #endregion

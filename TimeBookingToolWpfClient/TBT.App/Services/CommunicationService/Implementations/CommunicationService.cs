@@ -11,6 +11,7 @@ using System.Web.Http;
 using TBT.App.Common;
 using TBT.App.Helpers;
 using TBT.App.Services.CommunicationService.Interfaces;
+using TBT.App.ViewModels.MainWindow;
 
 namespace TBT.App.Services.CommunicationService.Implementations
 {
@@ -91,7 +92,7 @@ namespace TBT.App.Services.CommunicationService.Implementations
                 }
                 else if(response.StatusCode == HttpStatusCode.NotFound)
                 {
-                    ConnectionChanged?.Invoke(false);
+                    
                     throw new HttpResponseException(response);
                 }
                 else if(!response.IsSuccessStatusCode)
@@ -105,7 +106,9 @@ namespace TBT.App.Services.CommunicationService.Implementations
             }
             catch (HttpResponseException ex)
             {
-                throw new Exception($"HttpResonseException: {ex.Message}");
+                ConnectionChanged?.Invoke(false);
+                
+                return null;
             }
             catch (HttpRequestException ex)
             {

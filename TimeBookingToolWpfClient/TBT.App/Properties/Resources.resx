@@ -542,4 +542,7 @@
   <data name="HourlySalary" xml:space="preserve">
     <value>HourlySalary</value>
   </data>
+  <data name="SalaryMustBe" xml:space="preserve">
+    <value>Salary must be above 0</value>
+  </data>
 </root>
