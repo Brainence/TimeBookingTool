@@ -61,6 +61,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Absence.
+        /// </summary>
+        public static string Absence {
+            get {
+                return ResourceManager.GetString("Absence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You already pick this task.
         /// </summary>
         public static string ActivityAlreadyPicked {
@@ -426,6 +435,15 @@ namespace TBT.App.Properties {
         public static string CustomerWithName {
             get {
                 return ResourceManager.GetString("CustomerWithName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        public static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
             }
         }
         
@@ -1015,6 +1033,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sickness.
+        /// </summary>
+        public static string Sickness {
+            get {
+                return ResourceManager.GetString("Sickness", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sign in.
         /// </summary>
         public static string SignIn {
@@ -1273,6 +1300,15 @@ namespace TBT.App.Properties {
         public static string UserWasSaved {
             get {
                 return ResourceManager.GetString("UserWasSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vacation.
+        /// </summary>
+        public static string Vacation {
+            get {
+                return ResourceManager.GetString("Vacation", resourceCulture);
             }
         }
         

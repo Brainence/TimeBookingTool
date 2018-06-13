@@ -10,4 +10,10 @@
         TasksTab,
         SettingsTab
     }
+    public enum Absence
+    {
+        Absence,
+        Vacation,
+        Sickness       
+    }
 }

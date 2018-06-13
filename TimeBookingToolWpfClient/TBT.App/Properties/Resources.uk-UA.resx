@@ -315,8 +315,8 @@
   <data name="ThisYear" xml:space="preserve">
     <value>Поточний рік</value>
   </data>
-  <data name="Time" xml:space="preserve">
-    <value>Час</value>
+  <data name="Date" xml:space="preserve">
+    <value>Дата</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="TimeBookingTool" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -538,5 +538,26 @@
   </data>
   <data name="CustomerAlreadyRemoved" xml:space="preserve">
     <value>Замовника вже видалено</value>
+  </data>
+  <data name="MonthlySalary" xml:space="preserve">
+    <value>Місячна зарплата</value>
+  </data>
+  <data name="HourlySalary" xml:space="preserve">
+    <value>Зарплата в годину</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Повідомлення</value>
+  </data>
+  <data name="Absence" xml:space="preserve">
+    <value>Вихідний</value>
+  </data>
+  <data name="Scikness" xml:space="preserve">
+    <value>Хворий</value>
+  </data>
+  <data name="Vacation" xml:space="preserve">
+    <value>Відпустка</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Час</value>
   </data>
 </root>
