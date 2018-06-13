@@ -554,4 +554,10 @@
   <data name="Time" xml:space="preserve">
     <value>Time</value>
   </data>
+  <data name="Salary" xml:space="preserve">
+    <value>Salary</value>
+  </data>
+  <data name="SalaryMustBe" xml:space="preserve">
+    <value>Salary mist be above 0</value>
+  </data>
 </root>

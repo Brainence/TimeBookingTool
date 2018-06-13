@@ -19,7 +19,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         private bool _showAdmin;
         private bool _forSaving;
         private bool _changePassword;
-
+        private decimal? _salary;
         #endregion
 
         #region Properties
@@ -54,10 +54,21 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
             set { SetProperty(ref _changePassword, value); }
         }
 
+
+        public decimal? Salary
+        {
+            get { return _salary; }
+            set { SetProperty(ref _salary, value); }
+        }
+
+
         public ICommand AddSaveCommand { get; set; }
 
         public event Action<User> NewUserAdded;
         public event Action CloseWindow;
+
+
+
 
 
         #endregion
@@ -67,6 +78,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public EditUserViewModel()
         {
             AddSaveCommand = new RelayCommand(obj => AddSaveUser(obj as ResetPasswordParameters), null);
+          
         }
 
         #endregion
@@ -78,6 +90,14 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
             bool userChanged = false, usersListChanged = false;
             try
             {
+                if (Salary == null || Salary <= 0)
+                {
+                    RefreshEvents.ChangeErrorInvoke(Properties.Resources.SalaryMustBe, true);
+                    return;
+                }
+
+                EditingUser.MonthlySalary = Salary;
+
                 if (ForSaving)
                 {
                     if (string.IsNullOrEmpty(EditingUser?.Username)) return;
@@ -109,9 +129,11 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                         MessageBox.Show(Properties.Resources.PasswordBeenChanged);
                     }
 
+
                     EditingUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", EditingUser));
 
-                    MessageBox.Show(Properties.Resources.UserWasSaved);
+                    RefreshEvents.ChangeErrorInvoke(Properties.Resources.UserWasSaved, false);
+                    
                     userChanged = true;
                 }
                 else
@@ -121,7 +143,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                     if (x == null)
                     {
                         EditingUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PostAsJson("User/NewUser", EditingUser));
-                        MessageBox.Show(Properties.Resources.UserAccountCreated);
+                        RefreshEvents.ChangeErrorInvoke(Properties.Resources.UserAccountCreated, false);
                         NewUserAdded?.Invoke(EditingUser);
                     }
                     else

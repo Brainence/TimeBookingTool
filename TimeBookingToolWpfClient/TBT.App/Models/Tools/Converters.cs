@@ -135,7 +135,7 @@ namespace TBT.App.Models.Tools
             return null;
         }
     }
-    
+
     public class CommentConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -166,6 +166,31 @@ namespace TBT.App.Models.Tools
             var sum = timeEntries.Count > 0 ? timeEntries.Select(t => t.Duration).Aggregate((t1, t2) => t1.Add(t2)) : new TimeSpan();
 
             return $"{(sum.Hours + sum.Days * 24):00}:{sum.Minutes:00} ({sum.TotalHours:00.00})";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class SalaryConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(value is null)
+            {
+                return "";
+            }
+            var sal = (decimal)value;
+            if(sal==decimal.Zero)
+            {
+                return "";
+            }
+            else
+            {
+                return value;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -267,7 +292,7 @@ namespace TBT.App.Models.Tools
         }
     }
 
-    public class  StartButtonContentConverter : IValueConverter
+    public class StartButtonContentConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -287,7 +312,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if(!values.Any()) { return null; }
+            if (!values.Any()) { return null; }
             return new ResetPasswordParameters() { TokenPassword = values[0]?.ToString(), NewPassword = values[1]?.ToString(), ConfirmPassword = values[2]?.ToString() };
         }
 
@@ -301,8 +326,35 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if(!values.Any()) { return null; }
+            if (!values.Any()) { return null; }
             return new AuthenticationControlClosePararmeters() { Password = values[0]?.ToString(), CurrentWindow = values[1] as Window };
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class IsAdminVisibilityConverter : IMultiValueConverter
+    {
+        public object Convert(object[] value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var user = value[0] as User;
+            var curUser = (int)value[1];
+            if(user == null)
+            {
+                return Visibility.Collapsed;
+            }
+            if(user.IsAdmin)
+            {
+                return Visibility.Visible;
+            }
+            if(user.Id ==curUser)
+            {
+                return Visibility.Visible;
+            }
+            return Visibility.Collapsed;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -315,7 +367,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if(values?.Count() < 3) { return null; }
+            if (values?.Count() < 3) { return null; }
             var temp = new TimeEntryViewModel((int)values[1]) { TimeEntry = (values[0] as TimeEntry) };
             temp.ScrollToEdited += (values[2] as TimeEntryItemsControl).RefreshScrollView;
             temp.RefreshTimeEntries += ((values[2] as TimeEntryItemsControl).DataContext as TimeEntryItemsViewModel).RefreshTimeEntriesHandler;

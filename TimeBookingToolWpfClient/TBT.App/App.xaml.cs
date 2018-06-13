@@ -271,7 +271,7 @@ namespace TBT.App
 
         private async void Application_Startup(object sender, StartupEventArgs e)
         {
-
+           
             bool authorized = false;
             if (RememberMe)
             {

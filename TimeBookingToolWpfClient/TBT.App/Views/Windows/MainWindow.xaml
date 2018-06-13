@@ -26,14 +26,11 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!--Connection lost control-->
 
-        <!--<StackPanel Grid.Row="0" VerticalAlignment="Center">
-            <controls:SpinnersCogs Visibility="{Binding IsConnected, Converter={StaticResource BoolToNotVisibilityConverter}}" Grid.Row="0" />
-            <TextBox FontSize="20" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" Text="{x:Static p:Resources.ConnectionLost}" Foreground="{StaticResource SpinnerForeground}"/>
-        </StackPanel>-->
 
-        <!--Connection lost control-->
+
+
+
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="57"/>
@@ -50,7 +47,10 @@
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Center">
             </ContentControl>
-            <StackPanel HorizontalAlignment="Right" Grid.Column="1" Margin="10 0 0 10" Orientation="Horizontal" 
+            <StackPanel  VerticalAlignment="Center">
+                <TextBlock FontSize="20" Background="Transparent" Foreground="{Binding Brush}" HorizontalAlignment="Center" Text="{Binding ErrorMessage}"/>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Right"  Margin="10 0 0 10" Orientation="Horizontal" 
                         Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">
 
                 <Image Source="../../Resources/Icons/refresh.png" Height="18" Margin="0 5 5 5" Cursor="Hand" ToolTip="{x:Static p:Resources.Refresh}">

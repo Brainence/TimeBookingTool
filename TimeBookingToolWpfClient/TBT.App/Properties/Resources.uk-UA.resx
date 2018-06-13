@@ -560,4 +560,10 @@
   <data name="Time" xml:space="preserve">
     <value>Час</value>
   </data>
+  <data name="Salary" xml:space="preserve">
+    <value>Зарплата</value>
+  </data>
+  <data name="SalaryMustBe" xml:space="preserve">
+    <value>Зарплата повинна бути більше 0</value>
+  </data>
 </root>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -96,20 +97,19 @@ namespace TBT.App.Views.Controls
 
             try
             {
-                var allProjects = JsonConvert.DeserializeObject<List<Project>>(await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId ?? 0}"));
-                var userProjects = (ObservableCollection<Project>)e.NewValue;
+                var allProjects = JsonConvert.DeserializeObject<List<Project>>(
+                    await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId ?? 0}"));
+                var userProjects = (ObservableCollection<Project>) e.NewValue;
 
                 foreach (var elem in allProjects)
                 {
                     var item = new CheckableObject(x.PropertyPath);
                     item.Obj = elem;
                     item.IsChecked = userProjects == null ? false : userProjects.Select(t => t.Id).Contains(elem.Id);
-                    item.IsCheckedPropertyChanged += () =>
-                    {
-                        x.ItemChecked();
-                    };
+                    item.IsCheckedPropertyChanged += () => { x.ItemChecked(); };
                     list.Add(item);
                 }
+
                 x.ItemsSource = list;
             }
             catch (Exception ex)
