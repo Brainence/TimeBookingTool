@@ -43,19 +43,8 @@
             </local:ComboBoxControl.Style>
         </local:ComboBoxControl>
 
-
-        <local:TextControl Grid.Row="2"
-                           Label="{x:Static p:Resources.Comment}" Text="{Binding Path=Comment, Mode=TwoWay}" 
-                           Margin="5 4" FontSize="13" 
-                           TextWrapping="Wrap" AcceptsReturn="True" 
-                           Width="468"
-                           Height="20"
-                           HorizontalAlignment="Left"/>
-
-        <StackPanel Grid.Row="3">
-
-            <local:TextControl x:Name="timeTextBox"
-                           Grid.Row="3"
+        <local:TextControl x:Name="timeTextBox"
+                           Grid.Row="2"
                            Label="{x:Static p:Resources.Time}" 
                            Margin="5 4" FontSize="13"
                            Width="468" 
@@ -67,6 +56,15 @@
                            TextAlignment="Left"
                            PreviewTextInput="CheckInput"
                            Text="{Binding TimeText, Mode=TwoWay}"/>
+
+        <StackPanel Grid.Row="3">
+            <local:TextControl
+                           Label="{x:Static p:Resources.Comment}" Text="{Binding Path=Comment, Mode=TwoWay}" 
+                           Margin="5 4" FontSize="13" 
+                           TextWrapping="Wrap" AcceptsReturn="True" 
+                           Width="468"
+                           Height="60"
+                           HorizontalAlignment="Left"/>
         </StackPanel>
 
         <StackPanel Grid.Row="4">
@@ -131,7 +129,6 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <TextBlock x:Name="errorMsg" Text="{Binding ErrorMessage}" Height="15" Foreground="Red" TextAlignment="Center"/>
         </StackPanel>
     </Grid>
 </UserControl>
