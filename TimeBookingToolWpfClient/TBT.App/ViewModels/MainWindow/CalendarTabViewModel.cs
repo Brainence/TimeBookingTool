@@ -142,12 +142,12 @@ namespace TBT.App.ViewModels.MainWindow
             await RefreshTimeEntries(Week);
         }
 
-        private async void GoToDefaultWeek(bool toSelectedDay, bool changeDay)
+        private void GoToDefaultWeek(bool toSelectedDay, bool changeDay)
         {
             Week = GetWeekOfDay(toSelectedDay ? SelectedDay.Value : DateTime.Now);
             _selectedDay = changeDay ? DateTime.Now.Date : _selectedDay;
             RaisePropertyChanged("SelectedDay");
-            await RefreshTimeEntries(Week);
+            RefreshTimeEntries(Week);
         }
 
         private async Task RefreshTimeEntries(ObservableCollection<DateTime> week)

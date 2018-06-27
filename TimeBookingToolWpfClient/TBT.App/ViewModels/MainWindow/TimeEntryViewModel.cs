@@ -10,7 +10,7 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class TimeEntryViewModel: BaseViewModel
+    public class TimeEntryViewModel : BaseViewModel
     {
         #region Fields
 
@@ -49,7 +49,7 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _comment; }
             set
             {
-                if(SetProperty(ref _comment, value))
+                if (SetProperty(ref _comment, value))
                 {
                     CanSave = true;
                 }
@@ -120,7 +120,7 @@ namespace TBT.App.ViewModels.MainWindow
             StartStopCommand = new RelayCommand(async obj => await StartStop(), null);
             RemoveCommand = new RelayCommand(async obj => await Remove(), null);
             EditCommand = new RelayCommand(async obj => await Edit(), null);
-            SaveTimeEntryCommand = new RelayCommand(obj => SaveTimeEntry() , null);
+            SaveTimeEntryCommand = new RelayCommand(obj => SaveTimeEntry(), null);
             CancelEditTimeEntryCommand = new RelayCommand(async obj => await Edit(), null);
             InitCommand = new RelayCommand(obj => InitLoading(), null);
         }
@@ -194,7 +194,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (TimeEntry == null) return;
 
-            if(IsEditing)
+            if (IsEditing)
             {
                 IsEditing = false;
                 CanStart = !IsEditing;
@@ -217,7 +217,6 @@ namespace TBT.App.ViewModels.MainWindow
 
                 TimerTextBox = $"{TimeEntry.Duration.Hours:00}:{TimeEntry.Duration.Minutes:00}";
                 Comment = TimeEntry.Comment;
-                CanSave = false;
                 ScrollToEdited?.Invoke(_id);
             }
 
@@ -240,7 +239,7 @@ namespace TBT.App.ViewModels.MainWindow
 
                 return await App.CanStartOrEditTimeEntry(TimeEntry.User.Id, TimeEntry.User.TimeLimit, from, to, duration);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return await Task.FromResult(false);
             }
@@ -319,7 +318,7 @@ namespace TBT.App.ViewModels.MainWindow
                 await App.CommunicationService.PutAsJson("TimeEntry/ClientDuration", TimeEntry);
 
                 IsEditing = !IsEditing;
-                if(_temporaryStopped)
+                if (_temporaryStopped)
                 {
                     await Start();
                 }
