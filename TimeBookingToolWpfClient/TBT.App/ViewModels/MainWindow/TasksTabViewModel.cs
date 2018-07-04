@@ -13,7 +13,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class TasksTabViewModel: BaseViewModel, ICacheable
+    public class TasksTabViewModel : BaseViewModel, ICacheable
     {
         #region Fields
 
@@ -21,8 +21,7 @@ namespace TBT.App.ViewModels.MainWindow
         private ObservableCollection<Project> _projects;
         private ObservableCollection<Activity> _activities;
         private Project _selectedProject;
-        private bool _itemsLoading;
-        private int _selectedProjectIndex;
+
 
         #endregion
 
@@ -52,18 +51,6 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _selectedProject, value); }
         }
 
-        public bool ItemsLoading
-        {
-            get { return _itemsLoading; }
-            set { SetProperty(ref _itemsLoading, value); }
-        }
-
-        public int SelectedProjectIndex
-        {
-            get { return _selectedProjectIndex; }
-            set { SetProperty(ref _selectedProjectIndex, value); }
-        }
-
         public ICommand CreateNewTaskCommand { get; set; }
         public ICommand RefreshTasksCommand { get; set; }
         public ICommand EditTaskCommand { get; set; }
@@ -80,7 +67,7 @@ namespace TBT.App.ViewModels.MainWindow
             RefreshTasksCommand = new RelayCommand(async obj => { Activities = await RefreshEvents.RefreshTasksList(); }, null);
             EditTaskCommand = new RelayCommand(obj => EditTask(obj as Activity), null);
             RemoveTaskCommand = new RelayCommand(obj => RemoveTask(obj as Activity), null);
-            SelectedProjectIndex = 0;
+
         }
 
         #endregion
@@ -89,38 +76,31 @@ namespace TBT.App.ViewModels.MainWindow
 
         public async void CreateNewtask()
         {
-            try
+            if (SelectedProject == null)
             {
-                if (SelectedProject == null)
-                {
-                    MessageBox.Show($"{Properties.Resources.CannotCreateTaskWithoutProject}.");
-                    return;
-                }
-
-
-                var activity = JsonConvert.DeserializeObject<Activity>(
-                    await App.CommunicationService.GetAsJson($"Activity/GetByName/{Uri.EscapeUriString(NewTaskName)}/{SelectedProject.Id}"));
-
-                if (activity != null)
-                {
-                    MessageBox.Show($"{Properties.Resources.ActivityWithName} '{NewTaskName}' {Properties.Resources.AlreadyExists}.");
-                    return;
-                }
-                activity = new Activity()
-                {
-                    Name = NewTaskName,
-                    Project = SelectedProject,
-                    IsActive = true
-                };
-
-                activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.PostAsJson("Activity", activity));
-                Activities.Add(activity);
-                Activities = new ObservableCollection<Activity>(_activities.OrderBy(x => x.Project.Name));
-                NewTaskName = "";
+                RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CannotCreateTaskWithoutProject}", ErrorType.Error);
+                return;
             }
-            catch (Exception ex)
+            if (Activities.FirstOrDefault(x => x.Name == NewTaskName) != null)
             {
-                MessageBox.Show($"{Properties.Resources.ErrorOccuredWhileCreateTask}. {ex.Message} {ex.InnerException?.Message}");
+                RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.ActivityWithName} '{NewTaskName}' {Properties.Resources.AlreadyExists}", ErrorType.Error);
+                return;
+            }
+            var newActivity = new Activity
+            {
+                Name = NewTaskName,
+                Project = SelectedProject,
+                IsActive = true
+            };
+
+            var data = await App.CommunicationService.PostAsJson("Activity", newActivity);
+            if (data != null)
+            {
+                newActivity = JsonConvert.DeserializeObject<Activity>(data);
+                Activities.Add(newActivity);
+                Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name));
+                NewTaskName = "";
+                RefreshEvents.ChangeErrorInvoke("Activity created successful", ErrorType.Success);
             }
         }
 
@@ -128,63 +108,66 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (activity == null) return;
 
-            var tempActivityProjectName = activity.Project.Name;
-
+            var tempData = new {activity.Name, ProjectName = activity.Project.Name};
+            var editContext = new EditActivityViewModel(activity) {Projects = Projects};
             var window = new EditWindow()
             {
-                DataContext = new EditWindowViewModel()
-                {
-                    EditControl = new EditActivityViewModel(activity)
-                    {
-                        Projects = Projects,
-                        SelectedProject = activity.Project
-                    }
-                }
+                DataContext = new EditWindowViewModel(editContext)
             };
-            var tempContext = (EditActivityViewModel)((EditWindowViewModel)window.DataContext).EditControl;
-            tempContext.NewItemSaved += () => window.Close();
-            window.ShowDialog();
-            if(tempContext.SaveActivity)
-            {
-                activity = tempContext.EditingActivity;
-                activity.Project = tempContext.SelectedProject ?? activity.Project;
-                try
-                {
-                    activity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.PutAsJson("Activity", activity));
 
-                    if (activity.Project.Name != tempActivityProjectName)
-                    { Activities = new ObservableCollection<Activity>(_activities.OrderBy(x => x.Project.Name)); }
-                }
-                catch (Exception ex)
+            editContext.NewItemSaved += window.Close;
+            window.ShowDialog();
+            editContext.NewItemSaved -= window.Close;
+
+            if (tempData.Name == editContext.EditingActivity.Name && tempData.ProjectName == editContext.SelectedProject.Name)
+            {
+                RefreshEvents.ChangeErrorInvoke("Activity successful edited", ErrorType.Success);
+                return;
+            }
+            if (editContext.SaveActivity)
+            {
+                activity = editContext.EditingActivity;
+                activity.Project = editContext.SelectedProject;
+                if (await App.CommunicationService.PutAsJson("Activity", activity) != null)
                 {
-                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                    Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name));
+                    //TODO Move to recourse 
+                    RefreshEvents.ChangeErrorInvoke("Activity successful edited", ErrorType.Success);
+                }
+                else
+                {
+                    //TODO remove
+                    RefreshEvents.ChangeErrorInvoke("Error deleted Activity", ErrorType.Error);
                 }
             }
         }
 
         private async void RemoveTask(Activity activity)
         {
-            if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
-
             if (activity == null) return;
-            try
+            if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+            //if (activity.Id < 0)
+            //{
+            //    var tempActivity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.GetAsJson(
+            //        $"Activity/GetByName/{Uri.EscapeUriString(activity.Name)}/{Uri.EscapeUriString(activity.Project.Id.ToString())}"));
+            //    if (tempActivity == null) { throw new Exception(Properties.Resources.ActivityAlreadyRemoved); }
+            //    activity.Id = tempActivity.Id;
+            //}
+            activity.IsActive = false;
+            if (await App.CommunicationService.PutAsJson("Activity", activity) !=null)
             {
-                if(activity.Id < 0)
-                {
-                    var tempActivity = JsonConvert.DeserializeObject<Activity>(await App.CommunicationService.GetAsJson(
-                        $"Activity/GetByName/{Uri.EscapeUriString(activity.Name)}/{Uri.EscapeUriString(activity.Project.Id.ToString())}"));
-                    if(tempActivity == null) { throw new Exception(Properties.Resources.ActivityAlreadyRemoved);}
-                    activity.Id = tempActivity.Id;
-                }
-                activity.IsActive = false;
-                await App.CommunicationService.PutAsJson("Activity", activity);
+                Activities.Remove(activity);
+                //TODO Move to recourse
+                RefreshEvents.ChangeErrorInvoke("Activity deleted edited", ErrorType.Success);
+            }
+            else
+            {
+                //TODO remove
+                RefreshEvents.ChangeErrorInvoke("Error deleted Activity", ErrorType.Error);
+            }
 
-                Activities.Remove(Activities?.FirstOrDefault(item => item.Id == activity.Id));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-            }
+           
+
         }
 
         #endregion
@@ -196,30 +179,19 @@ namespace TBT.App.ViewModels.MainWindow
         {
             Projects = await RefreshEvents.RefreshProjectsList();
             Activities = await RefreshEvents.RefreshTasksList();
-            SelectedProject = Projects.FirstOrDefault(p => p.Id == _selectedProjectIndex) ?? Projects.FirstOrDefault();
-            SelectedProjectIndex = Projects.IndexOf(SelectedProject);
+            SelectedProject = Projects.FirstOrDefault();
         }
 
         public void CloseTab()
         {
-            var temp = SelectedProject?.Id ?? 0;
             Projects?.Clear();
             Activities?.Clear();
-            _selectedProjectIndex = temp;
         }
 
         #endregion
 
         #region IDisposable
-
-        private bool disposed = false;
-
-        public virtual void Dispose()
-        {
-            if (disposed) { return; }
-
-            disposed = true;
-        }
+        public virtual void Dispose(){ }
 
         #endregion
     }

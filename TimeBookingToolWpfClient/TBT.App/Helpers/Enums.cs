@@ -16,4 +16,12 @@
         Vacation,
         Sickness       
     }
+
+    public enum ErrorType
+    {
+        Message,
+        Error,
+        NotConnected,
+        Success
+    }
 }

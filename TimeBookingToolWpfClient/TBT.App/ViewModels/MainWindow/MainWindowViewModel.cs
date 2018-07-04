@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 
 using System.Linq;
 using System.Resources;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
@@ -39,8 +40,10 @@ namespace TBT.App.ViewModels.MainWindow
         private bool _windowState;
         private bool _isConnected;
         private BaseViewModel _languageControl;
+
         private string _errorMessage;
         private Brush _brush;
+        private CancellationTokenSource tokenSource;
         #endregion
 
         #region Properties
@@ -171,7 +174,7 @@ namespace TBT.App.ViewModels.MainWindow
         public ICommand CloseCommand { get; set; }
 
         public event Action<bool> ChangeDateSize;
-      
+
 
         #endregion
 
@@ -182,8 +185,11 @@ namespace TBT.App.ViewModels.MainWindow
             IsConnected = true;
             LanguageControl = new LanguageControlViewModel();
             RefreshEvents.ChangeCurrentUser += ChangeCurrentUser;
-            CommunicationService.ConnectionChanged += RefreshIsConnected;
+
             RefreshEvents.ChangeError += NewError;
+            CommunicationService.ConnectionChanged += RefreshIsConnected;
+            tokenSource = new CancellationTokenSource();
+            
             if (!OpenAuthenticationWindow(authorized))
             {
                 App.GlobalTimer = new GlobalTimer();
@@ -251,10 +257,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        private void NewError(string message,bool isError)
-        {
-            SpawnToast(message,isError);
-        }
+
 
         #region NotifyIcon
         public void InitNotifyIcon()
@@ -411,29 +414,56 @@ namespace TBT.App.ViewModels.MainWindow
 
         public void RefreshIsConnected(bool isConnected)
         {
-            
             IsConnected = isConnected;
             if (!isConnected)
             {
-                SpawnToast(Resources.ConnectionLost,true,true);
+                NewError(Resources.ConnectionLost, ErrorType.NotConnected);
             }
             else
             {
                 ErrorMessage = "";
             }
-           
+
         }
 
-        public void SpawnToast(string text,bool isError, bool isNotConnected = false)
+        public void NewError(string text, ErrorType type)
         {
-            Brush = isError ? MessageColors.Error : MessageColors.Message;
-            ErrorMessage = text;
-            if (!isNotConnected)
+            switch (type)
             {
+                case ErrorType.Success:
+                    {
+                        Brush = MessageColors.Green;
+                    }
+                    break;
+                case ErrorType.Error:
+                    {
+                        Brush = MessageColors.Red;
+                    }
+                    break;
+                case ErrorType.NotConnected:
+                    {
+                        Brush = MessageColors.Red;
+                    }
+                    break;
+                case ErrorType.Message:
+                    {
+                        Brush = MessageColors.White;
+                    }
+                    break;
+
+            }
+            ErrorMessage = text;
+            if (type != ErrorType.NotConnected)
+            {
+                tokenSource.Cancel();
+                tokenSource = new CancellationTokenSource();
+
                 Task.Run(async () =>
                 {
-                    await Task.Delay(10000);
-                    ErrorMessage = "";
+                    var token = tokenSource.Token;
+                    await Task.Delay(5000);
+                    token.ThrowIfCancellationRequested();
+                    ErrorMessage = "";    
                 });
 
             }

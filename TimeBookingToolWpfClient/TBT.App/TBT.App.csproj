@@ -173,6 +173,7 @@
     <Compile Include="Helpers\RefreshEvents.cs" />
     <Compile Include="Helpers\ResetPasswordParameters.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
+    <Compile Include="Helpers\TimeEnteredHelper.cs" />
     <Compile Include="Models\AppModels\Company.cs" />
     <Compile Include="Models\AppModels\Customer.cs" />
     <Compile Include="Models\AppModels\Project.cs" />
@@ -187,6 +188,7 @@
     <Compile Include="Models\Tools\Bindings.cs" />
     <Compile Include="Models\Tools\Converters.cs" />
     <Compile Include="Models\Tools\AccessToken.cs" />
+    <Compile Include="Models\Tools\UserReportModel.cs" />
     <Compile Include="Properties\Resources.uk-UA.Designer.cs">
       <DependentUpon>Resources.uk-UA.resx</DependentUpon>
       <AutoGen>True</AutoGen>

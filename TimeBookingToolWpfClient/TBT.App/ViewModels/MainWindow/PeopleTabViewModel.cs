@@ -103,7 +103,7 @@ namespace TBT.App.ViewModels.MainWindow
                 ShowPassword = false,
                 ForSaving = true,
                 EditingUser = CurrentUser,
-                Salary =  CurrentUser.MonthlySalary
+                Salary = CurrentUser.MonthlySalary
             };
             EditUserCommand = new RelayCommand(obj => EditUser(obj as User), null);
             RemoveUserCommand = new RelayCommand(obj => RemoveUser(obj as User), null);
@@ -129,35 +129,31 @@ namespace TBT.App.ViewModels.MainWindow
                 TimeEntries = newUser.TimeEntries,
                 TimeLimit = newUser.TimeLimit,
                 Username = newUser.Username,
-                
                 MonthlySalary = newUser.MonthlySalary,
             });
             Users = new ObservableCollection<User>(Users.OrderBy(user => user.FirstName).ThenBy(user => user.LastName));
         }
 
-        private async void EditUser(User user)
+        private void EditUser(User user)
         {
             if (user == null) return;
             var tempUserInfo = new { user.FirstName, user.LastName };
-            
             user.Company = CurrentUser.Company;
-
-            EditWindow euw = new EditWindow()
+            var editContext = new EditUserViewModel()
             {
-                DataContext = new EditWindowViewModel()
-                {
-                    EditControl = new EditUserViewModel()
-                    {
-                        EditingUser = user,
-                        ShowAdmin = true,
-                        ShowPassword = false,
-                        ForSaving = true,
-                        Salary = user.MonthlySalary
-                    }
-                }
+                EditingUser = user,
+                ShowAdmin = true,
+                ShowPassword = false,
+                ForSaving = true,
+                Salary = user.MonthlySalary
             };
-            ((EditUserViewModel)((EditWindowViewModel)euw.DataContext).EditControl).CloseWindow += () => euw.Close();
-            euw.ShowDialog();
+            var window = new EditWindow()
+            {
+                DataContext = new EditWindowViewModel(editContext)
+            };
+            editContext.CloseWindow += window.Close;
+            window.ShowDialog();
+            editContext.CloseWindow -= window.Close;
             if (user.FirstName != tempUserInfo.FirstName || user.LastName != tempUserInfo.LastName)
             {
                 Users = new ObservableCollection<User>(Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName));
@@ -168,25 +164,27 @@ namespace TBT.App.ViewModels.MainWindow
 
         private async void RemoveUser(User user)
         {
-            try
+
+            if (user == null) return;
+            if (user.IsAdmin && Users.Count(item => item.IsAdmin) == 1)
             {
-                if (user == null) return;
-                if (user.IsAdmin && Users.Count(item => item.IsAdmin) == 1)
-                {
-                    MessageBox.Show(Properties.Resources.YouCantRemoveLastAdmin);
-                    return;
-                }
-                if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
-
-                user.IsActive = false;
-
-                var x = await App.CommunicationService.PutAsJson("User", user);
-
-                Users.Remove(user);
+                RefreshEvents.ChangeErrorInvoke(Properties.Resources.YouCantRemoveLastAdmin, ErrorType.Error);
+                return;
             }
-            catch (Exception ex)
+            if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+
+            user.IsActive = false;
+
+            if (await App.CommunicationService.PutAsJson("User", user) != null)
             {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                Users.Remove(user);
+                //TODO move to resource
+                RefreshEvents.ChangeErrorInvoke("User removed successfully", ErrorType.Success);
+            }
+            else
+            {
+                //Todo remove
+                RefreshEvents.ChangeErrorInvoke("User can`t removed", ErrorType.Error);
             }
         }
 
@@ -205,7 +203,7 @@ namespace TBT.App.ViewModels.MainWindow
             App.Username = editingUser.Username;
             int index;
             if (Users != null && (index = Users.IndexOf(Users.FirstOrDefault(u => u.Id == CurrentUser.Id))) >= 0)
-            { Users[index] = editingUser;}
+            { Users[index] = editingUser; }
         }
 
         #endregion

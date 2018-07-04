@@ -109,7 +109,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (e.PropertyName == "SelectedDay")
             {
-                SelectedDay = (sender as CalendarTabViewModel)?.SelectedDay?.Date;
+                SelectedDay = (sender as CalendarTabViewModel)?.SelectedDay.Date;
             }
         }
 
@@ -181,8 +181,7 @@ namespace TBT.App.ViewModels.MainWindow
 
                 TimeText = string.Empty;
 
-                //User.TimeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(
-                //    await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{User.Id}/{App.UrlSafeDateToString(SelectedDay.Value.ToUniversalTime())}/{App.UrlSafeDateToString(SelectedDay.Value.ToUniversalTime())}"));
+              
                 User.TimeEntries.Add(timeEntry);
 
                 RefreshTimeEntries?.Invoke();

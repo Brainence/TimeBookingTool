@@ -13,7 +13,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class CustomerTabViewModel: BaseViewModel, ICacheable
+    public class CustomerTabViewModel : BaseViewModel, ICacheable
     {
         #region Fields
 
@@ -51,7 +51,7 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _isExpanded; }
             set
             {
-                if(value && _isExpanded)
+                if (value && _isExpanded)
                 {
                     SetProperty(ref _isExpanded, false);
                 }
@@ -111,102 +111,104 @@ namespace TBT.App.ViewModels.MainWindow
 
         public async void CreateNewCustomer()
         {
-            try
+            if (Customers.FirstOrDefault(x => x.Name == NewCustomersName) != null)
             {
-                var name = NewCustomersName;
-
-                var data = await App.CommunicationService.GetAsJson($"Customer/GetByName/{Uri.EscapeUriString(name)}");
-                if (data == null)
-                {
-                    return;
-                }
-                var customer = JsonConvert.DeserializeObject<Customer>(data);
-
-                if (customer != null)
-                {
-                    MessageBox.Show($"{Properties.Resources.CustomerWithName} '{name}' {Properties.Resources.AlreadyExists}.");
-                    return;
-                }
-
-                customer = new Customer() { Name = name, IsActive = true, Company = _currentCompany };
-
-                await App.CommunicationService.PostAsJson("Customer", customer);
-
-                customer.Id = -1;
-                Customers.Add(customer);
-                NewCustomersName = "";
+                RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CustomerWithName} '{NewCustomersName}' {Properties.Resources.AlreadyExists}", ErrorType.Error);
+                return;
             }
-            catch (Exception ex)
+            var customer = new Customer { Name = NewCustomersName, IsActive = true, Company = _currentCompany };
+            var newCustomer = await App.CommunicationService.PostAsJson("Customer", customer);
+
+            if (newCustomer != null)
             {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                NewCustomersName = "";
+                Customers.Add(JsonConvert.DeserializeObject<Customer>(newCustomer));
+                Customers = new ObservableCollection<Customer>(Customers);
+
+                //TODO: Move to Resources
+                RefreshEvents.ChangeErrorInvoke("Client successfully added", ErrorType.Success);
+            }
+            else
+            {
+                RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CustomerWithName} '{NewCustomersName}' {Properties.Resources.AlreadyExists}", ErrorType.Error);
             }
         }
 
         public async void EditCustomer(Customer customer)
         {
             if (customer == null) return;
+
+            var editContext = new EditCustomerViewModel(customer.Name);
             var editWindow = new EditWindow()
             {
-                DataContext = new EditWindowViewModel()
-                {
-                    EditControl = new EditCustomerViewModel() { EditingCustomersName = customer.Name }
-                }
+                DataContext = new EditWindowViewModel(editContext)
             };
-            var tempContext = (EditCustomerViewModel)((EditWindowViewModel)editWindow.DataContext).EditControl;
-            tempContext.CloseWindow += () => editWindow.Close();
-            editWindow.ShowDialog();
-            if(tempContext.SaveChanges && tempContext.EditingCustomersName != customer.Name)
-            {
-                customer.Name = tempContext.EditingCustomersName;
-                try
-                {
-                    customer = JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.PutAsJson("Customer", customer));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-                }
 
+            editContext.CloseWindow += editWindow.Close;
+            editWindow.ShowDialog();
+            editContext.CloseWindow -= editWindow.Close;
+
+            if (editContext.EditingCustomersName == customer.Name)
+            {
+                //Todo Move to Resources
+                RefreshEvents.ChangeErrorInvoke("Client successfully edited", ErrorType.Success);
+                return;
             }
+
+            if (editContext.SaveChanges && editContext.EditingCustomersName != customer.Name)
+            {
+                customer.Name = editContext.EditingCustomersName;
+
+                if (await App.CommunicationService.PutAsJson("Customer", customer) != null)
+                {
+                    //Todo Move to Resources
+                    RefreshEvents.ChangeErrorInvoke("Client successfully edited", ErrorType.Success);
+                }
+                else
+                {
+                    //Todo Move to Resources
+                    //TODO Remove
+                    RefreshEvents.ChangeErrorInvoke("Error Loaded Customer", ErrorType.Error);
+                }
+            }
+
+
+
+
+
+
         }
 
         public async void RemoveCustomer(Customer customer)
         {
-            if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
             if (customer == null) return;
-            try
+            var message = customer.Projects.Any() ? $"\nThis Customer have {customer.Projects.Count} active project" : "";
+            if (MessageBox.Show(Properties.Resources.AreYouSure + message, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+
+            //if (customer.Id <= 0)
+            //{
+            //    var data = await App.CommunicationService.GetAsJson($"Customer/GetByName/{Uri.EscapeUriString(customer.Name)}");
+            //    if (data == null)
+            //    {
+            //        RefreshEvents.ChangeErrorInvoke(Properties.Resources.CustomerAlreadyRemoved, ErrorType.Error);
+            //    }
+            //    else
+            //    {
+            //        var tempCustomer = JsonConvert.DeserializeObject<Customer>(data);
+            //        customer.Id = tempCustomer.Id;
+            //    }
+
+            //}
+            customer.IsActive = false;
+            var data = await App.CommunicationService.PutAsJson("Customer", customer);
+            if (data != null)
             {
-                if (customer.Id < 0)
-                {
-                    var tempCustomer =
-                        JsonConvert.DeserializeObject<Customer>(await App.CommunicationService.GetAsJson(
-                            $"Customer/GetByName/{Uri.EscapeUriString(customer.Name)}"));
-                    if (tempCustomer == null) { throw new Exception(Properties.Resources.CustomerAlreadyRemoved); }
-                    customer.Id = tempCustomer.Id;
-                }
-
-                customer.IsActive = false;
-                foreach (var project in customer.Projects)
-                {
-                    foreach (var activity in project.Activities)
-                    {
-                        activity.IsActive = false;
-                        activity.Project = project;
-                        await App.CommunicationService.PutAsJson("Activity", activity);
-                    }
-
-                    project.IsActive = false;
-                    project.Customer = customer;
-                    await App.CommunicationService.PutAsJson("Project", project);
-                }
-
-                var x = await App.CommunicationService.PutAsJson("Customer", customer);
-
-                Customers.Remove(Customers?.FirstOrDefault(item => item.Name == customer.Name));
+                Customers.Remove(customer);
+                RefreshEvents.ChangeErrorInvoke("Client successfully Removed", ErrorType.Success);//Todo Move to Resources
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                RefreshEvents.ChangeErrorInvoke("Error Removed Customer", ErrorType.Error);//Todo Move to Resources
             }
         }
 

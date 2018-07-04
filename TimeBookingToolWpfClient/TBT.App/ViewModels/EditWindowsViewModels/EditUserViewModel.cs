@@ -92,7 +92,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
             {
                 if (Salary == null || Salary <= 0)
                 {
-                    RefreshEvents.ChangeErrorInvoke(Properties.Resources.SalaryMustBe, true);
+                    RefreshEvents.ChangeErrorInvoke(Properties.Resources.SalaryMustBe, ErrorType.Error);
                     return;
                 }
 
@@ -132,7 +132,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
 
                     EditingUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", EditingUser));
 
-                    RefreshEvents.ChangeErrorInvoke(Properties.Resources.UserWasSaved, false);
+                    RefreshEvents.ChangeErrorInvoke(Properties.Resources.UserWasSaved, ErrorType.Success);
                     
                     userChanged = true;
                 }
@@ -143,7 +143,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                     if (x == null)
                     {
                         EditingUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PostAsJson("User/NewUser", EditingUser));
-                        RefreshEvents.ChangeErrorInvoke(Properties.Resources.UserAccountCreated, false);
+                        RefreshEvents.ChangeErrorInvoke(Properties.Resources.UserAccountCreated, ErrorType.Success);
                         NewUserAdded?.Invoke(EditingUser);
                     }
                     else
