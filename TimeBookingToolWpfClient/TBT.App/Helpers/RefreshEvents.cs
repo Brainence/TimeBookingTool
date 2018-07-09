@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Windows;
 using TBT.App.Models.AppModels;
 using TBT.App.Views.Controls;
 
@@ -32,7 +30,7 @@ namespace TBT.App.Helpers
 
         public static event Action<object, User> ChangeCurrentUser;
         public static event Action ScrollTimeEntryItemsToTop;
-        public static event Action<string,bool> ChangeError;
+        public static event Action<string,ErrorType> ChangeError;
 
         #endregion
 
@@ -43,9 +41,9 @@ namespace TBT.App.Helpers
             ScrollTimeEntryItemsToTop?.Invoke();
         }
 
-        public static void ChangeErrorInvoke(string message,bool isError)
+        public static void ChangeErrorInvoke(string message,ErrorType type)
         {
-            ChangeError?.Invoke(message,isError);
+            ChangeError?.Invoke(message,type);
         }
 
         public static async Task RefreshCurrentUser(object sender)
@@ -56,14 +54,11 @@ namespace TBT.App.Helpers
                 {
                     return;
                 }
-                var currentUser = JsonConvert.DeserializeObject<User>(data);
-               
+                var currentUser = JsonConvert.DeserializeObject<User>(data);               
                 currentUser.CurrentTimeZone = DateTimeOffset.Now.Offset;
                 currentUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", currentUser));
                 _companyId = currentUser.Company.Id;
-
                 ChangeCurrentUser?.Invoke(sender, currentUser);
-
         }
 
         public static async Task<ObservableCollection<User>> RefreshUsersList()

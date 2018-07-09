@@ -260,7 +260,6 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <local:SpinnersApple x:Name="spinnerControl" Margin="10 0 0 0" VerticalAlignment="Center" Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

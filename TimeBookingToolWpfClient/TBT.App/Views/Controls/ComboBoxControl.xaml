@@ -22,8 +22,8 @@
 
         <ComboBox 
             FontWeight="Bold"
-            SelectedItem="{Binding ElementName=This, Path=SelectedItem, Mode=TwoWay}" 
-            ItemsSource="{Binding ElementName=This, Path=ItemsSource, Mode=TwoWay}" 
+            SelectedItem="{Binding ElementName=This, Path=SelectedItem, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+            ItemsSource="{Binding ElementName=This, Path=ItemsSource, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
             IsEditable="True"
             MouseDown="ComboBox_MouseDown"
             GotFocus="ComboBox_GotFocus"

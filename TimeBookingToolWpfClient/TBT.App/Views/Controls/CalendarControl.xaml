@@ -97,7 +97,6 @@
                              ItemsSource="{Binding Path=Week, Mode=TwoWay}" 
                              HorizontalContentAlignment="Stretch"
                              HorizontalAlignment="Stretch"
-                             SelectedIndex="{Binding SelectedIndex}"
                              SelectedItem="{Binding SelectedDay}"
                              BorderBrush="Transparent"
                              Background="Transparent"
@@ -225,7 +224,7 @@
                     <TextBlock FontSize="14" 
                                FontWeight="Bold"
                                VerticalAlignment="Center"
-                               Text="{Binding Path=User.TimeEntries, Converter={StaticResource DurationConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}\: {0}}"/>
+                               Text="{Binding Path=DayTime, StringFormat={}\: {0}}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 5">
@@ -236,7 +235,7 @@
                     <TextBlock FontSize="14" 
                                FontWeight="Bold"
                                VerticalAlignment="Center"
-                               Text="{Binding Path=WeekTime, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}\: {0}}"/>
+                               Text="{Binding Path=WeekTime, StringFormat={}\: {0}}"/>
                 </StackPanel>
             </Grid>
 

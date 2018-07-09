@@ -9,26 +9,38 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using TBT.App.Common;
-using TBT.App.Helpers;
 using TBT.App.Services.CommunicationService.Interfaces;
-using TBT.App.ViewModels.MainWindow;
 
 namespace TBT.App.Services.CommunicationService.Implementations
 {
     public class CommunicationService : ICommunicationService
     {
-        private static string baseUrl;
+        private static string _baseUrl;
         private static HttpClient _client;
-        public static bool IsConnected;
+        private static bool _isConnect;
+
+        public static bool IsConnected
+        {
+            get => _isConnect;
+
+            set
+            {
+                if (_isConnect == value) return;
+
+                _isConnect = value;
+                ConnectionChanged?.Invoke(value);
+               
+            }
+        }
 
         static CommunicationService()
         {
-            baseUrl = ConfigurationManager.AppSettings[Constants.ServerBaseUrl];
-            _client = new HttpClient() { BaseAddress = new Uri(baseUrl) };
+            _baseUrl = ConfigurationManager.AppSettings[Constants.ServerBaseUrl];
+            _client = new HttpClient() { BaseAddress = new Uri(_baseUrl) };
             App.StaticPropertyChanged += ListenAccessToken;
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All };
+            IsConnected = true;
 
-            ConnectionChanged += state => IsConnected = state;
         }
 
         public static bool CheckConnection()
@@ -55,71 +67,74 @@ namespace TBT.App.Services.CommunicationService.Implementations
 
         public static async void ListenConnection(bool isConnected)
         {
-            if(!isConnected)
+            if (!isConnected)
             {
-                while(!CheckConnection())
+                while (!CheckConnection())
                 {
                     await Task.Delay(10000);
                 }
-                ConnectionChanged?.Invoke(true);
+
+                IsConnected = true;
             }
         }
 
+
         public async Task<string> SendRequest(Func<string, object, Task<HttpResponseMessage>> serverResponse, string url, object data)
         {
-            var response = default(HttpResponseMessage);
             try
             {
                 StringContent content = null;
                 if (data != null)
                 {
                     var json = JsonConvert.SerializeObject(data);
-                    content = new StringContent(data == null ? "" : json, Encoding.UTF8, "application/json");
+                    content = new StringContent(json, Encoding.UTF8, "application/json");
                 }
 
-                response = await serverResponse(url, content);
+                var response = await serverResponse(url, content);
 
-                
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
+
+                switch (response.StatusCode)
                 {
-                    var updated = await App.UpdateTokens();
-
-                    if (updated)
+                    case HttpStatusCode.Unauthorized:
                     {
-                        ConnectionChanged?.Invoke(true);
-                        return await (await serverResponse(url, data)).Content.ReadAsStringAsync();
+                        if (await App.UpdateTokens())
+                        {
+                            IsConnected = true;
+                            return await (await serverResponse(url, data)).Content.ReadAsStringAsync();
+                        }
                     }
-                }
-                else if(response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    
-                    throw new HttpResponseException(response);
-                }
-                else if(!response.IsSuccessStatusCode)
-                {
-                    throw new Exception(await response.Content.ReadAsStringAsync());
+                        break;
+                    case HttpStatusCode.NotFound:
+                    {
+                        throw new HttpResponseException(response);
+                    }
+
+                    default:
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            throw new Exception(await response.Content.ReadAsStringAsync());
+                        }
+
+                        break;
                 }
 
                 var responseString = await response.Content.ReadAsStringAsync();
-                ConnectionChanged?.Invoke(true);
+                IsConnected = true;
                 return responseString;
             }
-            catch (HttpResponseException ex)
+            catch (HttpResponseException)
             {
-                ConnectionChanged?.Invoke(false);
-                
-                return null;
+                IsConnected = false;
             }
-            catch (HttpRequestException ex)
+            catch (HttpRequestException)
             {
-                ConnectionChanged?.Invoke(false);
-                return  null;
+                IsConnected = false;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                ConnectionChanged?.Invoke(false);
-                throw new Exception($"Unknown exception: ", ex);
+                //RefreshEvents.ChangeErrorInvoke(ex.Message,ErrorType.Error);
             }
+            return null;
         }
 
         public async Task<string> GetAsJson(string url)

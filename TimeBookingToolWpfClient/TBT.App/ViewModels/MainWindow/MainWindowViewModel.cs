@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
 using System.Linq;
-using System.Resources;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -15,9 +13,9 @@ using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
-using TBT.App.ViewModels.Authentication;
 using TBT.App.Properties;
 using TBT.App.Services.CommunicationService.Implementations;
+using TBT.App.ViewModels.Authentication;
 using TBT.App.ViewModels.EtcViewModels;
 
 namespace TBT.App.ViewModels.MainWindow
@@ -31,16 +29,15 @@ namespace TBT.App.ViewModels.MainWindow
         private MainWindowTabItem _selectedTab;
         private ICacheable _selectedViewModel;
         private Dictionary<string, ICacheable> _viewModelCache;
-        private bool _isShown;
         private bool _loggedOut;
         private bool _isVisible;
-        private DispatcherTimer _dateTimer;
         private double _width;
         private bool _windowState;
         private bool _isConnected;
         private BaseViewModel _languageControl;
         private string _errorMessage;
         private Brush _brush;
+        private CancellationTokenSource _tokenSource;
         #endregion
 
         #region Properties
@@ -171,7 +168,7 @@ namespace TBT.App.ViewModels.MainWindow
         public ICommand CloseCommand { get; set; }
 
         public event Action<bool> ChangeDateSize;
-      
+
 
         #endregion
 
@@ -182,8 +179,11 @@ namespace TBT.App.ViewModels.MainWindow
             IsConnected = true;
             LanguageControl = new LanguageControlViewModel();
             RefreshEvents.ChangeCurrentUser += ChangeCurrentUser;
-            CommunicationService.ConnectionChanged += RefreshIsConnected;
+
             RefreshEvents.ChangeError += NewError;
+            CommunicationService.ConnectionChanged += RefreshIsConnected;
+            _tokenSource = new CancellationTokenSource();
+
             if (!OpenAuthenticationWindow(authorized))
             {
                 App.GlobalTimer = new GlobalTimer();
@@ -251,10 +251,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        private void NewError(string message,bool isError)
-        {
-            SpawnToast(message,isError);
-        }
+
 
         #region NotifyIcon
         public void InitNotifyIcon()
@@ -411,28 +408,55 @@ namespace TBT.App.ViewModels.MainWindow
 
         public void RefreshIsConnected(bool isConnected)
         {
-            
             IsConnected = isConnected;
             if (!isConnected)
             {
-                SpawnToast(Resources.ConnectionLost,true,true);
+                NewError(Resources.ConnectionLost, ErrorType.NotConnected);
             }
             else
             {
                 ErrorMessage = "";
             }
-           
+
         }
 
-        public void SpawnToast(string text,bool isError, bool isNotConnected = false)
+        public void NewError(string text, ErrorType type)
         {
-            Brush = isError ? MessageColors.Error : MessageColors.Message;
-            ErrorMessage = text;
-            if (!isNotConnected)
+            switch (type)
             {
+                case ErrorType.Success:
+                    {
+                        Brush = MessageColors.Green;
+                    }
+                    break;
+                case ErrorType.Error:
+                    {
+                        Brush = MessageColors.Red;
+                    }
+                    break;
+                case ErrorType.NotConnected:
+                    {
+                        Brush = MessageColors.Red;
+                    }
+                    break;
+                case ErrorType.Message:
+                    {
+                        Brush = MessageColors.White;
+                    }
+                    break;
+
+            }
+            ErrorMessage = text;
+            if (type != ErrorType.NotConnected)
+            {
+                _tokenSource.Cancel();
+                _tokenSource = new CancellationTokenSource();
+
                 Task.Run(async () =>
                 {
-                    await Task.Delay(10000);
+                    var token = _tokenSource.Token;
+                    await Task.Delay(5000);
+                    token.ThrowIfCancellationRequested();
                     ErrorMessage = "";
                 });
 

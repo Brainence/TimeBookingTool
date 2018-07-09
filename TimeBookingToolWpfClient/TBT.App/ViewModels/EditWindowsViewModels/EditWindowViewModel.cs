@@ -27,9 +27,10 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
 
         #region Constructors
 
-        public EditWindowViewModel()
+        public EditWindowViewModel(BaseViewModel editControl)
         {
             CloseCommand = new RelayCommand(obj => (obj as Window)?.Close(), null);
+            EditControl = editControl;
         }
 
         #endregion
