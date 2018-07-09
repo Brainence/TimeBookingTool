@@ -119,7 +119,6 @@ namespace TBT.App.ViewModels.MainWindow
             TimeEntryItems.RefreshTimeEntries += Refresh;
             EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, SelectedDay = SelectedDay };
             PropertyChanged += _editTimeEntryViewModel.ChangeButtonName;
-            PropertyChanged += _editTimeEntryViewModel.ClearError;
             ChangeUserForNested += _editTimeEntryViewModel.RefreshCurrentUser;
             SelectedDay = DateTime.Now.Date;
             _editTimeEntryViewModel.RefreshTimeEntries += Refresh;
@@ -150,10 +149,9 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void GoToDefaultWeek(bool toSelectedDay, bool changeDay)
         {
-            Week = GetWeekOfDay(toSelectedDay ? SelectedDay.Value : DateTime.Now);
-            _selectedDay = changeDay ? DateTime.Now.Date : _selectedDay;
+            Week = GetWeekOfDay(toSelectedDay ? SelectedDay : DateTime.Now);
+            SelectedDay = changeDay ? DateTime.Now.Date : SelectedDay;
             RaisePropertyChanged(nameof(SelectedDay));
-            RefreshTimeEntries(Week);
         }
 
         private async Task RefreshTimeEntries(ObservableCollection<DateTime> week)
@@ -189,7 +187,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
             TimeEntryItems.TimeEntries = new ObservableCollection<TimeEntry>(timeEntries);
             User.TimeEntries = TimeEntryItems.TimeEntries;
-            DayTime = TimeEnteredHelper.CalcFullTime(User.TimeEntries.Where(x=>!x.IsRunning).ToList());
+            DayTime = TimeEntriesHelper.CalcFullTime(User.TimeEntries.Where(x=>!x.IsRunning).ToList());
             IsLoading = false;
         }
 
@@ -201,11 +199,11 @@ namespace TBT.App.ViewModels.MainWindow
                     $"TimeEntry/GetDuration/{User.Id}/{App.UrlSafeDateToString(week.FirstOrDefault())}/{App.UrlSafeDateToString(week.LastOrDefault())}");
                 if (data != null)
                 {
-                    WeekTime = TimeEnteredHelper.GetFullTime(JsonConvert.DeserializeObject<TimeSpan>(data));
+                    WeekTime = TimeEntriesHelper.GetFullTime(JsonConvert.DeserializeObject<TimeSpan>(data));
                     return;
                 }
             }
-            WeekTime = TimeEnteredHelper.GetFullTime();
+            WeekTime = TimeEntriesHelper.GetFullTime();
         }
 
         private ObservableCollection<DateTime> WeekOffset(ObservableCollection<DateTime> week, int days)

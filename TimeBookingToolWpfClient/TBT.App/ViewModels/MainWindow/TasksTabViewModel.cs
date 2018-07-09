@@ -63,7 +63,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         public TasksTabViewModel()
         {
-            CreateNewTaskCommand = new RelayCommand(obj => CreateNewtask(), null);
+            CreateNewTaskCommand = new RelayCommand(obj => CreateNewTask(), null);
             RefreshTasksCommand = new RelayCommand(async obj => { Activities = await RefreshEvents.RefreshTasksList(); }, null);
             EditTaskCommand = new RelayCommand(obj => EditTask(obj as Activity), null);
             RemoveTaskCommand = new RelayCommand(obj => RemoveTask(obj as Activity), null);
@@ -74,7 +74,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Methods
 
-        public async void CreateNewtask()
+        public async void CreateNewTask()
         {
             if (SelectedProject == null)
             {
@@ -100,7 +100,7 @@ namespace TBT.App.ViewModels.MainWindow
                 Activities.Add(newActivity);
                 Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name));
                 NewTaskName = "";
-                RefreshEvents.ChangeErrorInvoke("Activity created successful", ErrorType.Success);
+                RefreshEvents.ChangeErrorInvoke("Task created successful", ErrorType.Success);
             }
         }
 

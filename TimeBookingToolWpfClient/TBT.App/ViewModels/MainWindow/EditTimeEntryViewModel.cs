@@ -1,19 +1,17 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
-using TBT.App.Helpers;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class EditTimeEntryViewModel: BaseViewModel
+    public class EditTimeEntryViewModel : BaseViewModel
     {
         #region Fields
 
@@ -23,7 +21,6 @@ namespace TBT.App.ViewModels.MainWindow
         private string _comment;
         private string _timeText;
         private DateTime? _selectedDay;
-        private string _errorMessage;
         private int? _savedProjectId;
         private int? _savedActivityId;
 
@@ -42,7 +39,7 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _selectedProject; }
             set
             {
-                if(SetProperty(ref _selectedProject, value))
+                if (SetProperty(ref _selectedProject, value))
                 {
                     SelectedActivity = null;
                     if (value != null) { _savedProjectId = value?.Id; }
@@ -74,19 +71,11 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _timeText, value); }
         }
 
-
         public DateTime? SelectedDay
         {
             get { return _selectedDay; }
             set { SetProperty(ref _selectedDay, value); }
         }
-
-        public string ErrorMessage
-        {
-            get { return _errorMessage; }
-            set { SetProperty(ref _errorMessage, value); }
-        }
-
         public ICommand CreateStartCommand { get; set; }
 
         public event Action RefreshTimeEntries;
@@ -113,26 +102,16 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public void ClearError(object sender, PropertyChangedEventArgs e)
-        {
-            if(e.PropertyName == "SelectedDay")
-            {
-                ErrorMessage = "";
-            }
-        }
-
-
         private async void CreateNewActivity()
         {
             try
             {
-                ErrorMessage = string.Empty;
 
                 if (User == null) return;
 
                 if (Comment != null && Comment.Length >= 2048)
                 {
-                    MessageBox.Show($"{Properties.Resources.CommentLenghError} 2048.");
+                    RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CommentLenghError} 2048.", ErrorType.Error);
                     return;
                 }
 
@@ -144,7 +123,7 @@ namespace TBT.App.ViewModels.MainWindow
                 {
                     if (notToday)
                     {
-                        ErrorMessage = $"{Properties.Resources.YouHaveToInputTheTime}.";
+                        RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.YouHaveToInputTheTime}", ErrorType.Error);
                         return;
                     }
                     duration = new TimeSpan();
@@ -154,9 +133,9 @@ namespace TBT.App.ViewModels.MainWindow
                     duration = input.ToTimespan();
                 }
 
-                if (!await CanStartOrEditTimeEntry(string.IsNullOrEmpty(input) && !notToday ? duration : (TimeSpan?)null) && User != null && User.TimeLimit.HasValue)
+                if (!await CanStartOrEditTimeEntry(string.IsNullOrEmpty(input) && !notToday ? duration : (TimeSpan?)null) && User?.TimeLimit != null)
                 {
-                    ErrorMessage = $"{Properties.Resources.YouHaveReachedMonthly} {User.TimeLimit.Value}-{Properties.Resources.HourLimit}.";
+                    RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.YouHaveReachedMonthly} {User.TimeLimit.Value}-{Properties.Resources.HourLimit}", ErrorType.Error);
                     return;
                 }
 
@@ -172,27 +151,28 @@ namespace TBT.App.ViewModels.MainWindow
 
                 Comment = string.Empty;
 
-                timeEntry = JsonConvert.DeserializeObject<TimeEntry>(await App.CommunicationService.PostAsJson("TimeEntry", timeEntry));
-
-                if (string.IsNullOrEmpty(input) && !notToday)
+                var data = await App.CommunicationService.PostAsJson("TimeEntry", timeEntry);
+                if (data != null)
                 {
-                    await App.GlobalTimer.Start(timeEntry.Id);
+                    timeEntry = JsonConvert.DeserializeObject<TimeEntry>(data);
+
+                    if (string.IsNullOrEmpty(input) && !notToday)
+                    {
+                        await App.GlobalTimer.Start(timeEntry.Id);
+                    }
+                    TimeText = string.Empty;
+                    User.TimeEntries.Add(timeEntry);
+                    RefreshTimeEntries?.Invoke();
                 }
 
-                TimeText = string.Empty;
-
-              
-                User.TimeEntries.Add(timeEntry);
-
-                RefreshTimeEntries?.Invoke();
             }
-            catch(OverflowException)
+            catch (OverflowException)
             {
-                MessageBox.Show($"{Properties.Resources.TimeOverflowed}.");
+                RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.TimeOverflowed}", ErrorType.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                RefreshEvents.ChangeErrorInvoke($"{ex.Message} {ex.InnerException?.Message}", ErrorType.Error);
             }
         }
 
@@ -200,7 +180,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             try
             {
-                if (User?.TimeLimit == null) return await Task.FromResult(false);
+                if (User?.TimeLimit == null) return false;
 
                 var now = DateTime.Now;
 
@@ -211,7 +191,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
             catch
             {
-                return await Task.FromResult(false);
+                return false;
             }
         }
 
@@ -221,7 +201,7 @@ namespace TBT.App.ViewModels.MainWindow
             if (_savedProjectId.HasValue)
             {
                 SelectedProject = User?.Projects?.FirstOrDefault(x => x.Id == _savedProjectId.Value);
-                if(_savedActivityId.HasValue)
+                if (_savedActivityId.HasValue)
                 {
                     SelectedActivity = SelectedProject?.Activities?.FirstOrDefault(x => x.Id == _savedActivityId);
                 }

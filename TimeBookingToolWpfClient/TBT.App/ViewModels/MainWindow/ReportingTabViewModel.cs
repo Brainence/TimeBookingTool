@@ -359,7 +359,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
             else
             {
-                Salary = (decimal)TimeEnteredHelper.SumTime(TimeEntries.ToList()).TotalHours * HourlySalary;
+                Salary = (decimal)TimeEntriesHelper.SumTime(TimeEntries.ToList()).TotalHours * HourlySalary;
             }
 
             CalcSalaryUah();
@@ -436,7 +436,7 @@ namespace TBT.App.ViewModels.MainWindow
                 new ObservableCollection<TimeEntry>(LoadData.Where(t => t.Activity.Project == CurrentProject));
 
             CalcSalary();
-            FullTime = TimeEnteredHelper.CalcFullTime(TimeEntries.ToList());
+            FullTime = TimeEntriesHelper.CalcFullTime(TimeEntries.ToList());
         }
 
 
@@ -524,7 +524,7 @@ namespace TBT.App.ViewModels.MainWindow
                 };
                 if (user.Id == User.Id)
                 {
-                    reportModel.Duration = TimeEnteredHelper.CalcFullTime(LoadData.ToList());
+                    reportModel.Duration = TimeEntriesHelper.CalcFullTime(LoadData.ToList());
                 }
                 else
                 {
@@ -533,7 +533,7 @@ namespace TBT.App.ViewModels.MainWindow
                     if (data != null)
                     {
                         reportModel.Duration =
-                            TimeEnteredHelper.CalcFullTime(
+                            TimeEntriesHelper.CalcFullTime(
                                 new List<TimeEntry>(JsonConvert.DeserializeObject<List<TimeEntry>>(data)));
                     }
                     else
@@ -589,7 +589,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void SaveTotalTimeToClipboard()
         {
-            Clipboard.SetText($"{Resources.TotalTime}: {TimeEnteredHelper.SumTime(TimeEntries.ToList()).TotalHours:N2}");
+            Clipboard.SetText($"{Resources.TotalTime}: {TimeEntriesHelper.SumTime(TimeEntries.ToList()).TotalHours:N2}");
         }
         private void SaveMonthlySalaryToClipboard()
         {

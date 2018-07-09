@@ -5,33 +5,29 @@ using System.Configuration;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using TBT.App.Common;
-using TBT.App.Helpers;
-using TBT.App.Properties;
 using TBT.App.Services.CommunicationService.Interfaces;
-using TBT.App.ViewModels.MainWindow;
 
 namespace TBT.App.Services.CommunicationService.Implementations
 {
     public class CommunicationService : ICommunicationService
     {
-        private static string baseUrl;
+        private static string _baseUrl;
         private static HttpClient _client;
-        private static bool isConnect;
+        private static bool _isConnect;
 
         public static bool IsConnected
         {
-            get => isConnect;
+            get => _isConnect;
 
             set
             {
-                if (isConnect == value) return;
+                if (_isConnect == value) return;
 
-                isConnect = value;
+                _isConnect = value;
                 ConnectionChanged?.Invoke(value);
                
             }
@@ -39,8 +35,8 @@ namespace TBT.App.Services.CommunicationService.Implementations
 
         static CommunicationService()
         {
-            baseUrl = ConfigurationManager.AppSettings[Constants.ServerBaseUrl];
-            _client = new HttpClient() { BaseAddress = new Uri(baseUrl) };
+            _baseUrl = ConfigurationManager.AppSettings[Constants.ServerBaseUrl];
+            _client = new HttpClient() { BaseAddress = new Uri(_baseUrl) };
             App.StaticPropertyChanged += ListenAccessToken;
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All };
             IsConnected = true;

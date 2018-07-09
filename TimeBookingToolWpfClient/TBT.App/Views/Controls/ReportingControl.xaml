@@ -34,7 +34,7 @@
                 Width="448" FontSize="13" FontWeight="Bold" Foreground="#c2422b"
                 Style="{StaticResource ComboBoxFlatStyle}"
                 ItemsSource="{Binding Projects}"
-                SelectedItem="{Binding  CurrentProject,Mode=TwoWay}" Margin="0,14,0,0"/>
+                SelectedItem="{Binding  CurrentProject,Mode=TwoWay}" Margin="0,43,0,0"/>
 
         </StackPanel>
         

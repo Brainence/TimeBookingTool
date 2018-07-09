@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
@@ -25,7 +24,7 @@ namespace TBT.App.ViewModels.MainWindow
         private bool _canEdit;
         private bool _canStart;
         private bool _canSave;
-      
+
 
         #endregion
 
@@ -163,10 +162,9 @@ namespace TBT.App.ViewModels.MainWindow
         private async Task Remove()
         {
             var data = await App.CommunicationService.GetAsJson($"TimeEntry/Remove/{TimeEntry.Id}");
-            if (data != null)
+            if (data != null && JsonConvert.DeserializeObject<bool>(data))
             {
-                if (JsonConvert.DeserializeObject<bool>(data))
-                    RefreshTimeEntries?.Invoke();
+                RefreshTimeEntries?.Invoke();
             }
         }
 
@@ -189,7 +187,7 @@ namespace TBT.App.ViewModels.MainWindow
                 IsEditing = true;
                 CanStart = !IsEditing;
                 EditingTimeEntry?.Invoke(this);
-                TimerTextBox = TimeEnteredHelper.GetDuration(TimeEntry.Duration);
+                TimerTextBox = TimeEntriesHelper.GetDuration(TimeEntry.Duration);
                 CanSave = false;
                 ScrollToEdited?.Invoke(_id);
             }
@@ -211,12 +209,12 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 await Stop();
             }
-            TimerTextBlock = TimeEnteredHelper.GetShortDuration(currentDuration);
+            TimerTextBlock = TimeEntriesHelper.GetShortDuration(currentDuration);
         }
 
         public async void InitLoading()
         {
-            TimerTextBlock = TimeEnteredHelper.GetShortDuration(TimeEntry.Duration);
+            TimerTextBlock = TimeEntriesHelper.GetShortDuration(TimeEntry.Duration);
             var canStartOrEdit = await CanStartOrEditTimeEntry(TimeEntry.IsRunning ? TimeEntry.Duration : (TimeSpan?)null);
             CanEdit = TimeEntry.IsRunning || canStartOrEdit;
             CanStart = TimeEntry.IsRunning || canStartOrEdit && TimeEntry.Duration < _dayLimit;
@@ -229,7 +227,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         public async void SaveTimeEntry()
         {
-            if (TimeEntry.Comment!=null && TimeEntry.Comment.Length >= 2048)
+            if (TimeEntry.Comment != null && TimeEntry.Comment.Length >= 2048)
             {
                 RefreshEvents.ChangeErrorInvoke("Comment length cannot be greater then 2048", ErrorType.Error);
                 return;

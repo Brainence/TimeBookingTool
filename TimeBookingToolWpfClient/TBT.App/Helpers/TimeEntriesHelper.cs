@@ -5,7 +5,7 @@ using TBT.App.Models.AppModels;
 
 namespace TBT.App.Helpers
 {
-    public static class TimeEnteredHelper
+    public static class TimeEntriesHelper
     {
         public static string CalcFullTime(List<TimeEntry> timeEntries)
         {

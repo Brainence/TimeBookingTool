@@ -126,7 +126,7 @@ namespace TBT.App.ViewModels.MainWindow
                 Customers = new ObservableCollection<Customer>(Customers);
 
                 //TODO: Move to Resources
-                RefreshEvents.ChangeErrorInvoke("Client successfully added", ErrorType.Success);
+                RefreshEvents.ChangeErrorInvoke("Customer successfully added", ErrorType.Success);
             }
             else
             {
@@ -171,34 +171,13 @@ namespace TBT.App.ViewModels.MainWindow
                     RefreshEvents.ChangeErrorInvoke("Error Loaded Customer", ErrorType.Error);
                 }
             }
-
-
-
-
-
-
         }
 
         public async void RemoveCustomer(Customer customer)
         {
-            if (customer == null) return;
             var message = customer.Projects.Any() ? $"\nThis Customer have {customer.Projects.Count} active project" : "";
             if (MessageBox.Show(Properties.Resources.AreYouSure + message, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
 
-            //if (customer.Id <= 0)
-            //{
-            //    var data = await App.CommunicationService.GetAsJson($"Customer/GetByName/{Uri.EscapeUriString(customer.Name)}");
-            //    if (data == null)
-            //    {
-            //        RefreshEvents.ChangeErrorInvoke(Properties.Resources.CustomerAlreadyRemoved, ErrorType.Error);
-            //    }
-            //    else
-            //    {
-            //        var tempCustomer = JsonConvert.DeserializeObject<Customer>(data);
-            //        customer.Id = tempCustomer.Id;
-            //    }
-
-            //}
             customer.IsActive = false;
             var data = await App.CommunicationService.PutAsJson("Customer", customer);
             if (data != null)

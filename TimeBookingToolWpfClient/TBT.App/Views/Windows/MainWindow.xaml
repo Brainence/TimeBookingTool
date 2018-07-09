@@ -48,7 +48,7 @@
                             VerticalAlignment="Center">
             </ContentControl>
             <StackPanel  VerticalAlignment="Center">
-                <TextBlock  FontSize="15" Background="Transparent" Foreground="{Binding Brush}" HorizontalAlignment="Center" Text="{Binding ErrorMessage}"/>
+                <TextBlock  FontSize="15" Background="Transparent" Foreground="{Binding Brush}" HorizontalAlignment="Center" Text="{Binding ErrorMessage}" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel HorizontalAlignment="Right"  Margin="10 0 0 10" Orientation="Horizontal" 
                         Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">
