@@ -157,40 +157,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var x = value as ObservableCollection<TimeEntry>;
-
-            if (x == null || !x.Any()) return "00:00 (00.00)";
-
-            var timeEntries = x.Where(t => !t.IsRunning).ToList();
-
-            var sum = timeEntries.Count > 0 ? timeEntries.Select(t => t.Duration).Aggregate((t1, t2) => t1.Add(t2)) : new TimeSpan();
-
-            return $"{(sum.Hours + sum.Days * 24):00}:{sum.Minutes:00} ({sum.TotalHours:00.00})";
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
-    public class SalaryConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if(value is null)
-            {
-                return "";
-            }
-            var sal = (decimal)value;
-            if(sal==decimal.Zero)
-            {
-                return "";
-            }
-            else
-            {
-                return value;
-            }
+            return value is TimeSpan ? TimeEntriesHelper.GetFullTime((TimeSpan)value) : TimeEntriesHelper.CalcFullTime(value as ObservableCollection<TimeEntry>);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

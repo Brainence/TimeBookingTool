@@ -13,8 +13,7 @@ namespace TBT.App.Models.AppModels
         private User _user;
         private Activity _activity;
         private TimeSpan _duration;
-        private DateTime _date;
-        private DateTime? _timeLimit;
+        private DateTime _date;      
         private DateTime? _lastUpdated;
 
         public TimeEntry()
@@ -69,13 +68,6 @@ namespace TBT.App.Models.AppModels
             get { return _isRunning; }
             set { SetProperty(ref _isRunning, value); }
         }
-
-        public DateTime? TimeLimit
-        {
-            get { return _timeLimit; }
-            set { SetProperty(ref _timeLimit, value); }
-        }
-
         public DateTime? LastUpdated
         {
             get { return _lastUpdated; }

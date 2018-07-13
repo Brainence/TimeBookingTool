@@ -20,7 +20,7 @@ namespace TBT.App.ViewModels.MainWindow
         private Activity _selectedActivity;
         private string _comment;
         private string _timeText;
-        private DateTime? _selectedDay;
+        private DateTime _selectedDay;
         private int? _savedProjectId;
         private int? _savedActivityId;
 
@@ -71,7 +71,7 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _timeText, value); }
         }
 
-        public DateTime? SelectedDay
+        public DateTime SelectedDay
         {
             get { return _selectedDay; }
             set { SetProperty(ref _selectedDay, value); }
@@ -98,7 +98,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (e.PropertyName == "SelectedDay")
             {
-                SelectedDay = (sender as CalendarTabViewModel)?.SelectedDay.Date;
+                SelectedDay = (sender as CalendarTabViewModel).SelectedDay.Date;
             }
         }
 
@@ -106,18 +106,16 @@ namespace TBT.App.ViewModels.MainWindow
         {
             try
             {
-
                 if (User == null) return;
-
                 if (Comment != null && Comment.Length >= 2048)
                 {
                     RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CommentLenghError} 2048.", ErrorType.Error);
                     return;
                 }
 
-                TimeSpan duration;
+                var duration = new TimeSpan();
                 var input = TimeText;
-                var notToday = SelectedDay.HasValue && SelectedDay.Value != DateTime.Today;
+                var notToday = SelectedDay != DateTime.Today;
 
                 if (string.IsNullOrEmpty(input))
                 {
@@ -126,24 +124,23 @@ namespace TBT.App.ViewModels.MainWindow
                         RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.YouHaveToInputTheTime}", ErrorType.Error);
                         return;
                     }
-                    duration = new TimeSpan();
                 }
                 else
                 {
                     duration = input.ToTimespan();
                 }
 
-                if (!await CanStartOrEditTimeEntry(string.IsNullOrEmpty(input) && !notToday ? duration : (TimeSpan?)null) && User?.TimeLimit != null)
+                if (! await App.CanStartOrEditTimeEntry(User, duration))
                 {
-                    RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.YouHaveReachedMonthly} {User.TimeLimit.Value}-{Properties.Resources.HourLimit}", ErrorType.Error);
+                    RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.YouHaveReachedMonthly} {User.TimeLimit}-{Properties.Resources.HourLimit}", ErrorType.Error);
                     return;
                 }
 
-                var timeEntry = new TimeEntry()
+                var timeEntry = new TimeEntry
                 {
-                    User = new User() { Id = User.Id },
-                    Activity = new Activity() { Id = SelectedActivity.Id },
-                    Date = SelectedDay.HasValue && SelectedDay.Value != DateTime.Now.Date ? SelectedDay.Value.ToUniversalTime() : DateTime.UtcNow,
+                    User = new User { Id = User.Id },
+                    Activity = new Activity { Id = SelectedActivity.Id },
+                    Date = SelectedDay != DateTime.Now.Date ? SelectedDay.ToUniversalTime() : DateTime.UtcNow,
                     Comment = Comment,
                     IsActive = true,
                     Duration = duration
@@ -176,24 +173,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        private async Task<bool> CanStartOrEditTimeEntry(TimeSpan? duration)
-        {
-            try
-            {
-                if (User?.TimeLimit == null) return false;
-
-                var now = DateTime.Now;
-
-                var from = new DateTime(now.Year, now.Month, 1);
-                var to = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
-
-                return await App.CanStartOrEditTimeEntry(User.Id, User.TimeLimit.Value, from, to, duration);
-            }
-            catch
-            {
-                return false;
-            }
-        }
+       
 
         public void RefreshCurrentUser(User user)
         {

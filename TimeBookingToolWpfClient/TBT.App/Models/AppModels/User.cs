@@ -17,7 +17,7 @@ namespace TBT.App.Models.AppModels
         private bool _isActive;
         private ObservableCollection<Project> _projects;
         private ObservableCollection<TimeEntry> _timeEntries;
-        private int? _timeLimit;
+        private int _timeLimit;
         private TimeSpan? _currentTimeZone;
         private Company _company;
 
@@ -84,7 +84,7 @@ namespace TBT.App.Models.AppModels
             set { SetProperty(ref _timeEntries, value); }
         }
 
-        public int? TimeLimit
+        public int TimeLimit
         {
             get { return _timeLimit; }
             set { SetProperty(ref _timeLimit, value); }

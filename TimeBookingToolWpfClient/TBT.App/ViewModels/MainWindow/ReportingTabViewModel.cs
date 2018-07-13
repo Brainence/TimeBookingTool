@@ -40,7 +40,7 @@ namespace TBT.App.ViewModels.MainWindow
         private int? _selectedTipIndex;
         private bool _itemsLoading;
         private ObservableCollection<TimeEntry> _timeEntries;
-        private int _selectedUserIndex;
+        //private int _selectedUserIndex;
 
 
         private decimal? _salary;
@@ -88,6 +88,7 @@ namespace TBT.App.ViewModels.MainWindow
                 if (SetProperty(ref _reportingUser, value))
                 {
                     _savedReportingUserId = value?.Id;
+                    Task.Run(async () => await RefreshReportTimeEntires(ReportingUser?.Id));
                 }
             }
         }
@@ -134,18 +135,18 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public int SelectedUserIndex
-        {
-            get { return _selectedUserIndex; }
-            set
-            {
-                if (SetProperty(ref _selectedUserIndex, value) && value >= 0)
-                {
-                    ReportingUser = Users[value];
-                    Task.Run(() => RefreshReportTimeEntires(ReportingUser?.Id)).Wait();
-                }
-            }
-        }
+        //public int SelectedUserIndex
+        //{
+        //    get { return _selectedUserIndex; }
+        //    set
+        //    {
+        //        if (SetProperty(ref _selectedUserIndex, value) && value >= 0)
+        //        {
+        //            ReportingUser = Users[value];
+        //            Task.Run(() => RefreshReportTimeEntires(ReportingUser?.Id)).Wait();
+        //        }
+        //    }
+        //}
 
         public bool ItemsLoading
         {
@@ -249,7 +250,7 @@ namespace TBT.App.ViewModels.MainWindow
             };
             RefreshReportTimeEntiresCommand = new RelayCommand(async obj => await RefreshReportTimeEntires(ReportingUser.Id), null);
             CreateCompanyReportCommand = new RelayCommand(obj => SaveCompanyReport(), obj => User.IsAdmin);
-            CreateUserReportCommand = new RelayCommand( obj => SaveUserReport(), null);
+            CreateUserReportCommand = new RelayCommand(obj => SaveUserReport(), null);
             SaveToClipboardCommand = new RelayCommand(obj => SaveTotalTimeToClipboard(), obj => TimeEntries?.Any() == true);
             SaveMonthlySalaryToClipboardCommand = new RelayCommand(obj => SaveMonthlySalaryToClipboard());
             SelectedTipIndex = 0;
@@ -322,7 +323,7 @@ namespace TBT.App.ViewModels.MainWindow
 
 
             var data = await App.CommunicationService.GetAsJson(
-                $"TimeEntry/GetByUser/{userId}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}/false");
+                $"TimeEntry/GetByUser/{userId}/{From.ToUrl()}/{To.ToUrl()}/false");
 
             if (data != null)
             {
@@ -336,7 +337,7 @@ namespace TBT.App.ViewModels.MainWindow
                 LoadData = result;
                 ItemsLoading = false;
             }
-           
+
 
 
 
@@ -440,7 +441,7 @@ namespace TBT.App.ViewModels.MainWindow
         }
 
 
-        private  void SaveUserReport()
+        private void SaveUserReport()
         {
             SaveXPSDocument(CreateUserReport(new ReportPage { DataContext = this }));
         }
@@ -498,14 +499,14 @@ namespace TBT.App.ViewModels.MainWindow
 
                     using (var xpsd = new XpsDocument(dlg.FileName, FileAccess.ReadWrite))
                     {
-                       XpsDocument.CreateXpsDocumentWriter(xpsd).Write(document);
+                        XpsDocument.CreateXpsDocumentWriter(xpsd).Write(document);
                     }
-                    RefreshEvents.ChangeErrorInvoke("Report saved",ErrorType.Success);
+                    RefreshEvents.ChangeErrorInvoke("Report saved", ErrorType.Success);
                 }
             }
             catch (Exception)
             {
-                RefreshEvents.ChangeErrorInvoke($"Error occurred during saving report",ErrorType.Error);
+                RefreshEvents.ChangeErrorInvoke($"Error occurred during saving report", ErrorType.Error);
             }
         }
 
@@ -513,7 +514,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         private async void SaveCompanyReport()
         {
-            
+
             var users = new List<UserReportModel>(Users.Count);
             foreach (var user in Users)
             {
@@ -529,19 +530,17 @@ namespace TBT.App.ViewModels.MainWindow
                 else
                 {
                     var data = await App.CommunicationService.GetAsJson(
-                        $"TimeEntry/GetByUser/{user.Id}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}/false");
+                        $"TimeEntry/GetByUser/{user.Id}/{From.ToUrl()}/{To.ToUrl()}/false");
                     if (data != null)
                     {
-                        reportModel.Duration =
-                            TimeEntriesHelper.CalcFullTime(
-                                new List<TimeEntry>(JsonConvert.DeserializeObject<List<TimeEntry>>(data)));
+                        reportModel.Duration = TimeEntriesHelper.CalcFullTime(JsonConvert.DeserializeObject<List<TimeEntry>>(data));
                     }
                     else
                     {
                         continue;
                     }
                 }
-                users.Add(reportModel);            
+                users.Add(reportModel);
             }
 
             var allUsersReportPage = new AllUsersReportPage
@@ -616,7 +615,6 @@ namespace TBT.App.ViewModels.MainWindow
                 ReportingUser = _savedReportingUserId.HasValue
                     ? Users?.FirstOrDefault(x => x.Id == _savedReportingUserId.Value)
                     : Users?.FirstOrDefault(x => x.Id == User.Id);
-                SelectedUserIndex = Users?.IndexOf(ReportingUser) ?? -1;
             }
             else
             {
@@ -652,7 +650,7 @@ namespace TBT.App.ViewModels.MainWindow
             LoadData = null;
             Users = null;
             ReportingUser = null;
-            
+
         }
 
         #region IDisposable

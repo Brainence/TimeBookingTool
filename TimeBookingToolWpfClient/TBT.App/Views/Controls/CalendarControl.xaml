@@ -94,7 +94,7 @@
                     </Button>
 
                     <ListBox x:Name="WeekListBox"
-                             ItemsSource="{Binding Path=Week, Mode=TwoWay}" 
+                             ItemsSource="{Binding Path=Week}" 
                              HorizontalContentAlignment="Stretch"
                              HorizontalAlignment="Stretch"
                              SelectedItem="{Binding SelectedDay}"
@@ -224,7 +224,7 @@
                     <TextBlock FontSize="14" 
                                FontWeight="Bold"
                                VerticalAlignment="Center"
-                               Text="{Binding Path=DayTime, StringFormat={}\: {0}}"/>
+                               Text="{Binding Path=DayTime, Converter={StaticResource DurationConverter}, StringFormat={}\: {0}}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 5">
@@ -235,7 +235,7 @@
                     <TextBlock FontSize="14" 
                                FontWeight="Bold"
                                VerticalAlignment="Center"
-                               Text="{Binding Path=WeekTime, StringFormat={}\: {0}}"/>
+                               Text="{Binding Path=WeekTime, Converter={StaticResource DurationConverter}, StringFormat={}\: {0}}"/>
                 </StackPanel>
             </Grid>
 

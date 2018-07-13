@@ -132,8 +132,11 @@ namespace TBT.App.ViewModels.MainWindow
                 refresh = await Start();
                 ScrollToEdited?.Invoke(0);
             }
+
             if (refresh)
+            {
                 RefreshTimeEntries?.Invoke();
+            }
         }
 
         private async Task<bool> Stop()
@@ -150,13 +153,14 @@ namespace TBT.App.ViewModels.MainWindow
         private async Task<bool> Start()
         {
             if (TimeEntry.IsRunning || TimeEntry.Duration >= _dayLimit) return false;
-            var result = await App.GlobalTimer.Start(TimeEntry.Id);
-            if (result)
+
+            if (await App.GlobalTimer.Start(TimeEntry.Id))
             {
                 _startDate = DateTime.UtcNow;
                 App.GlobalTimer.TimerTick += TimerTick;
+                return true;
             }
-            return result;
+            return false;
         }
 
         private async Task Remove()
@@ -193,14 +197,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        private async Task<bool> CanStartOrEditTimeEntry(TimeSpan? duration = null)
-        {
-            if (TimeEntry?.User == null) return false;
-            var now = DateTime.Now;
-            var from = new DateTime(now.Year, now.Month, 1);
-            var to = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
-            return await App.CanStartOrEditTimeEntry(TimeEntry.User.Id, TimeEntry.User.TimeLimit, from, to, duration);
-        }
+       
 
         private async void TimerTick()
         {
@@ -215,7 +212,7 @@ namespace TBT.App.ViewModels.MainWindow
         public async void InitLoading()
         {
             TimerTextBlock = TimeEntriesHelper.GetShortDuration(TimeEntry.Duration);
-            var canStartOrEdit = await CanStartOrEditTimeEntry(TimeEntry.IsRunning ? TimeEntry.Duration : (TimeSpan?)null);
+            var canStartOrEdit = await App.CanStartOrEditTimeEntry(TimeEntry.User,TimeEntry.Duration);
             CanEdit = TimeEntry.IsRunning || canStartOrEdit;
             CanStart = TimeEntry.IsRunning || canStartOrEdit && TimeEntry.Duration < _dayLimit;
             if (TimeEntry.IsRunning && canStartOrEdit)
