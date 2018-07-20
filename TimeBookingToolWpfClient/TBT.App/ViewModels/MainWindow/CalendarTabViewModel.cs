@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +11,7 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class CalendarTabViewModel : BaseViewModel, ICacheable
+    public class CalendarTabViewModel : ObservableObject, ICacheable
     {
         #region Fields
 
@@ -34,7 +33,12 @@ namespace TBT.App.ViewModels.MainWindow
         public ObservableCollection<DateTime> Week
         {
             get { return _week; }
-            set { SetProperty(ref _week, value); }
+            set
+            {
+                SetProperty(ref _week, value);
+                GetTimeEnteredForWeek();
+                RaisePropertyChanged(nameof(SelectedDay));
+            }
         }
 
         public bool IsDateNameShort
@@ -49,10 +53,8 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _selectedDay; }
             set
             {
-
                 SetProperty(ref _selectedDay, value);
                 SelectedDayChanged();
-
             }
         }
 
@@ -112,9 +114,8 @@ namespace TBT.App.ViewModels.MainWindow
         public CalendarTabViewModel(User user)
         {
             _user = user;
-            Week = GetWeekOfDay(DateTime.Now);
             IsDateNameShort = true;
-            _selectedDay = DateTime.Now.Date;
+            GoToDefaultWeek();
             TimeEntryItems = new TimeEntryItemsViewModel { TimeEntries = User?.TimeEntries, };
             EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, SelectedDay = SelectedDay };
 
@@ -124,9 +125,9 @@ namespace TBT.App.ViewModels.MainWindow
             _editTimeEntryViewModel.RefreshTimeEntries += RefreshTimeEntries;
 
             ChangeWeekCommand = new RelayCommand(obj => ChangeWeek(Convert.ToInt32(obj)), null);
-            GoToSelectedDayCommand = new RelayCommand(obj => GoToWeek(true, false), obj => SelectedDay.StartOfWeek(DayOfWeek.Monday) != Week.FirstOrDefault());
-            BackTodayCommand = new RelayCommand(obj => GoToWeek(false, true), obj => SelectedDay.Date != DateTime.Now.Date);
-            GoToCurrentWeekCommand = new RelayCommand(obj => GoToWeek(false, false), obj => !Week.Contains(DateTime.Now.Date));
+            GoToSelectedDayCommand = new RelayCommand(obj => GoToWeek(true), obj => SelectedDay.StartOfWeek(DayOfWeek.Monday) != Week.FirstOrDefault());
+            BackTodayCommand = new RelayCommand(obj => GoToDefaultWeek(), obj => SelectedDay.Date != DateTime.Now.Date);
+            GoToCurrentWeekCommand = new RelayCommand(obj => GoToWeek(false), obj => !Week.Contains(DateTime.Now.Date));
         }
 
         #endregion
@@ -139,24 +140,20 @@ namespace TBT.App.ViewModels.MainWindow
             await GetTimeEnteredForWeek();
         }
 
-        public async void ChangeWeek(int offset)
+        public void ChangeWeek(int offset)
         {
             Week = new ObservableCollection<DateTime>(Week.Select(x => x.AddDays(offset)));
-            RaisePropertyChanged(nameof(SelectedDay));
-            await GetTimeEnteredForWeek();
         }
 
-        private void GoToWeek(bool toSelectedDay, bool changeDay)
+        private void GoToWeek(bool toSelectedDay)
         {
-            Week = GetWeekOfDay(toSelectedDay ? SelectedDay : DateTime.Now);
-            if (changeDay)
-            {
-                SelectedDay = DateTime.Now.Date;
-                RaisePropertyChanged(nameof(SelectedDay));
-            }
-             GetTimeEnteredForWeek();
+            Week = GetWeekOfDay(toSelectedDay ? SelectedDay : DateTime.Now.Date);
+        }
 
-
+        private void GoToDefaultWeek()
+        {
+            Week = GetWeekOfDay(DateTime.Now);
+            SelectedDay = DateTime.Now.Date;
         }
 
         public async Task SelectedDayChanged()
@@ -167,20 +164,16 @@ namespace TBT.App.ViewModels.MainWindow
             if (data == null)
             {
                 TimeEntryItems.TimeEntries = new ObservableCollection<TimeEntry>();
-                IsLoading = false;
                 return;
             }
-
             var timeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(data);
             foreach (var timeEntry in timeEntries)
             {
                 timeEntry.Date = timeEntry.Date.ToLocalTime();
             }
-
             TimeEntryItems.TimeEntries = timeEntries;
             User.TimeEntries = timeEntries;
-            DayTime = TimeEntriesHelper.SumTime(User.TimeEntries.Where(x => !x.IsRunning));
-            IsLoading = false;
+            DayTime = TimeEntriesHelper.SumTime(timeEntries.Where(x => !x.IsRunning));
         }
 
         private async Task GetTimeEnteredForWeek()
@@ -209,6 +202,7 @@ namespace TBT.App.ViewModels.MainWindow
             if (sender != this)
             {
                 User = user;
+                RefreshTimeEntries();
             }
         }
 
@@ -227,6 +221,8 @@ namespace TBT.App.ViewModels.MainWindow
         public void CloseTab()
         {
             TimeEntryItems?.TimeEntries?.Clear();
+            EditTimeEntryViewModel.SelectedProject = null;
+            EditTimeEntryViewModel.SelectedActivity = null;
             RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
         }
 

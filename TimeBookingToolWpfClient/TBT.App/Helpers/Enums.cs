@@ -14,7 +14,7 @@
     {
         Absence,
         Vacation,
-        Sickness       
+        Sickness
     }
 
     public enum ErrorType

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 using TBT.App.Common;
 using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
@@ -20,7 +19,7 @@ using TBT.App.ViewModels.EtcViewModels;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class MainWindowViewModel : BaseViewModel, IDisposable
+    public class MainWindowViewModel : ObservableObject, IDisposable
     {
         #region Fields
 
@@ -34,7 +33,7 @@ namespace TBT.App.ViewModels.MainWindow
         private double _width;
         private bool _windowState;
         private bool _isConnected;
-        private BaseViewModel _languageControl;
+        private ObservableObject _languageControl;
         private string _errorMessage;
         private Brush _brush;
         private CancellationTokenSource _tokenSource;
@@ -80,9 +79,9 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _selectedViewModel; }
             set
             {
-                var name = value.GetType().Name;
                 if (value != null)
                 {
+                    var name = value.GetType().Name;
                     if (_viewModelCache.ContainsKey(name))
                     {
                         _viewModelCache[name].ExpiresDate = DateTime.Now.AddMinutes(5);
@@ -155,7 +154,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public BaseViewModel LanguageControl
+        public ObservableObject LanguageControl
         {
             get { return _languageControl; }
             set { SetProperty(ref _languageControl, value); }
@@ -163,8 +162,6 @@ namespace TBT.App.ViewModels.MainWindow
 
         public ICommand RefreshAllCommand { get; set; }
         public ICommand SignOutCommand { get; set; }
-        public ICommand SizeChangeCommand { get; set; }
-        public ICommand LoadCommand { get; set; }
         public ICommand CloseCommand { get; set; }
 
         public event Action<bool> ChangeDateSize;
@@ -193,12 +190,8 @@ namespace TBT.App.ViewModels.MainWindow
                 SignOutCommand = new RelayCommand(obj => SignOut(), null);
                 CloseCommand = new RelayCommand(obj => Close(), null);
                 RefreshAllCommand = new RelayCommand(obj => RefreshAll(), null);
-                try
-                {
-                    Task.Run(() => RefreshEvents.RefreshCurrentUser(null)).Wait();
-                    InitTabs();
-                }
-                catch (Exception) { }
+                Task.Run(() => RefreshEvents.RefreshCurrentUser(null)).Wait();
+                InitTabs();
                 WindowState = true;
                 App.GlobalTimer.StartTimer();
             }
@@ -223,12 +216,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         private async void RefreshAll()
         {
-            try
-            {
-                await RefreshEvents.RefreshCurrentUser(this);
-
-            }
-            catch (Exception) { }
+            await RefreshEvents.RefreshCurrentUser(this);
         }
 
         private async void SignOut()
@@ -241,11 +229,9 @@ namespace TBT.App.ViewModels.MainWindow
             if (!OpenAuthenticationWindow(false))
             {
                 LoggedOut = false;
-                try
-                {
-                    await RefreshEvents.RefreshCurrentUser(null);
-                }
-                catch (Exception) { }
+
+                await RefreshEvents.RefreshCurrentUser(null);
+
                 SelectedTab = Tabs[0];
                 IsVisible = true;
             }
@@ -257,32 +243,11 @@ namespace TBT.App.ViewModels.MainWindow
         public void InitNotifyIcon()
         {
             App.ContextMenuStripOpening += NotifyIcon_ContextMenuStripOpening;
-            App.OpenWindow += NotifyIcon_OpenWindow;
-            App.Quit += NotifyIcon_Quit;
-            App.SignOut += NotifyIcon_SignOut;
-            App.GlobalNotificationDoubleClick += NotifyIcon_GlobalNotificationDoubleClick;
+            App.OpenWindow += ShowMainWindow;
+            App.Quit += ExitApplication;
+            App.SignOut += SignOut;
+            App.GlobalNotificationDoubleClick += ShowMainWindow;
         }
-
-        private void NotifyIcon_GlobalNotificationDoubleClick()
-        {
-            ShowMainWindow();
-        }
-
-        private void NotifyIcon_SignOut()
-        {
-            SignOut();
-        }
-
-        private void NotifyIcon_Quit()
-        {
-            ExitApplication();
-        }
-
-        private void NotifyIcon_OpenWindow()
-        {
-            ShowMainWindow();
-        }
-
         private void NotifyIcon_ContextMenuStripOpening()
         {
             App.GlobalNotification.ContextMenuStrip.Items[5].Enabled = !LoggedOut;
@@ -388,14 +353,58 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void InitTabs()
         {
-            Tabs = new ObservableCollection<MainWindowTabItem>();
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.CalendarTab, Title = Resources.Calendar, Tag = "../Icons/calendar_white.png", OnlyForAdmins = false });
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.ReportingTab, Title = Resources.Reporting, Tag = "../Icons/reporting_white.png", OnlyForAdmins = false });
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.PeopleTab, Title = Resources.People, Tag = "../Icons/people_white.png", OnlyForAdmins = false });
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.CustomersTab, Title = Resources.Customers, Tag = "../Icons/customers_white.png", OnlyForAdmins = true });
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.ProjectsTab, Title = Resources.Projects, Tag = "../Icons/projects_white.png", OnlyForAdmins = true });
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.TasksTab, Title = Resources.Tasks, Tag = "../Icons/tasks_white.png", OnlyForAdmins = true });
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.SettingsTab, Title = Resources.Settings, Tag = "../Icons/settings_white.png", OnlyForAdmins = false });
+            Tabs = new ObservableCollection<MainWindowTabItem>
+            {
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.CalendarTab,
+                    Title = Resources.Calendar,
+                    Tag = "../Icons/calendar_white.png",
+                    OnlyForAdmins = false
+                },
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.ReportingTab,
+                    Title = Resources.Reporting,
+                    Tag = "../Icons/reporting_white.png",
+                    OnlyForAdmins = false
+                },
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.PeopleTab,
+                    Title = Resources.People,
+                    Tag = "../Icons/people_white.png",
+                    OnlyForAdmins = false
+                },
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.CustomersTab,
+                    Title = Resources.Customers,
+                    Tag = "../Icons/customers_white.png",
+                    OnlyForAdmins = true
+                },
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.ProjectsTab,
+                    Title = Resources.Projects,
+                    Tag = "../Icons/projects_white.png",
+                    OnlyForAdmins = true
+                },
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.TasksTab,
+                    Title = Resources.Tasks,
+                    Tag = "../Icons/tasks_white.png",
+                    OnlyForAdmins = true
+                },
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.SettingsTab,
+                    Title = Resources.Settings,
+                    Tag = "../Icons/settings_white.png",
+                    OnlyForAdmins = false
+                }
+            };
             _viewModelCache = new Dictionary<string, ICacheable>();
             SelectedTab = Tabs[0];
             App.GlobalTimer.CacheTimerTick += CheckViewModelCache;
@@ -455,7 +464,7 @@ namespace TBT.App.ViewModels.MainWindow
                 Task.Run(async () =>
                 {
                     var token = _tokenSource.Token;
-                    await Task.Delay(5000);
+                    await Task.Delay(5000, token);
                     token.ThrowIfCancellationRequested();
                     ErrorMessage = "";
                 });
@@ -465,18 +474,14 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void CheckViewModelCache()
         {
-
+            var selectedName = SelectedViewModel.GetType().Name;
             if (_viewModelCache?.Any() != true) { return; }
-            var keys = _viewModelCache.Where(i => i.Value.ExpiresDate < DateTime.Now).Select(i => i.Key).ToList();
-            foreach (var key in keys)
+            foreach (var key in _viewModelCache.Where(i => i.Value.ExpiresDate < DateTime.Now).Select(i => i.Key).ToList())
             {
-                if (key == SelectedViewModel.GetType().Name) continue;
+                if (key == selectedName) continue;
                 _viewModelCache[key].CloseTab();
                 _viewModelCache.Remove(key);
-
             }
-
-
         }
 
         #endregion

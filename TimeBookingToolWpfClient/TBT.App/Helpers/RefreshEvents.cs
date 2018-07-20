@@ -30,57 +30,58 @@ namespace TBT.App.Helpers
 
         public static event Action<object, User> ChangeCurrentUser;
         public static event Action ScrollTimeEntryItemsToTop;
-        public static event Action<string,ErrorType> ChangeError;
-
+        public static event Action<string, ErrorType> ChangeError;      
         #endregion
 
         #region Refresh data methods
 
-        public static void ScrolTimeEntriesToTop()
+        public static void ScrollTimeEntriesToTop()
         {
             ScrollTimeEntryItemsToTop?.Invoke();
         }
 
-        public static void ChangeErrorInvoke(string message,ErrorType type)
+        public static void ChangeErrorInvoke(string message, ErrorType type)
         {
-            ChangeError?.Invoke(message,type);
+            ChangeError?.Invoke(message, type);
         }
 
         public static async Task RefreshCurrentUser(object sender)
         {
- 
-                var data = await App.CommunicationService.GetAsJson($"User?email={App.Username}");
-                if (data == null)
-                {
-                    return;
-                }
-                var currentUser = JsonConvert.DeserializeObject<User>(data);               
+            var data = await App.CommunicationService.GetAsJson($"User?email={App.Username}");
+            if (data == null)
+            {
+                return;
+            }
+            var currentUser = JsonConvert.DeserializeObject<User>(data);
+            if (currentUser.CurrentTimeZone != DateTimeOffset.Now.Offset)
+            {
                 currentUser.CurrentTimeZone = DateTimeOffset.Now.Offset;
-                currentUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", currentUser));
-                _companyId = currentUser.Company.Id;
-                ChangeCurrentUser?.Invoke(sender, currentUser);
+                data = await App.CommunicationService.PutAsJson("User", currentUser);
+                if (data != null)
+                {
+                    currentUser = JsonConvert.DeserializeObject<User>(data);
+                }
+            }
+            _companyId = currentUser.Company.Id;
+            ChangeCurrentUser?.Invoke(sender, currentUser);
         }
 
         public static async Task<ObservableCollection<User>> RefreshUsersList()
         {
- 
-                var data = await App.CommunicationService.GetAsJson($"User/GetByCompany/{_companyId}");
-
-                return data != null ? JsonConvert.DeserializeObject<ObservableCollection<User>>(data) : new ObservableCollection<User>();
+            var data = await App.CommunicationService.GetAsJson($"User/GetByCompany/{_companyId}");
+            return data != null ? JsonConvert.DeserializeObject<ObservableCollection<User>>(data) : new ObservableCollection<User>();
         }
 
         public static async Task<ObservableCollection<Customer>> RefreshCustomersList()
         {
-    
-                var data = await App.CommunicationService.GetAsJson($"Customer/GetByCompany/{_companyId}");
-                return data != null ? JsonConvert.DeserializeObject<ObservableCollection<Customer>>(data) : new ObservableCollection<Customer>();
+            var data = await App.CommunicationService.GetAsJson($"Customer/GetByCompany/{_companyId}");
+            return data != null ? JsonConvert.DeserializeObject<ObservableCollection<Customer>>(data) : new ObservableCollection<Customer>();
         }
 
         public static async Task<ObservableCollection<Project>> RefreshProjectsList()
         {
-
-                var data = await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId}");
-                return data != null ? JsonConvert.DeserializeObject<ObservableCollection<Project>>(data) : new ObservableCollection<Project>();
+            var data = await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId}");
+            return data != null ? JsonConvert.DeserializeObject<ObservableCollection<Project>>(data) : new ObservableCollection<Project>();
         }
 
         public static async Task<ObservableCollection<Activity>> RefreshTasksList()
@@ -88,9 +89,10 @@ namespace TBT.App.Helpers
             var data = await App.CommunicationService.GetAsJson($"Activity/GetByCompany/{_companyId}");
             return data == null
                 ? new ObservableCollection<Activity>()
-                : new ObservableCollection<Activity>(JsonConvert.DeserializeObject<List<Activity>>(data)
-                    .OrderBy(a => a.Project.Name).ThenBy(a => a.Name));
-
+                : new ObservableCollection<Activity>(
+                    JsonConvert.DeserializeObject<List<Activity>>(data)
+                    .OrderBy(a => a.Project.Name)
+                        .ThenBy(a => a.Name));
         }
 
         #endregion

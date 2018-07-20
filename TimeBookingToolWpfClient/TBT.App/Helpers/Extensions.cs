@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows.Forms;
 using TBT.App.Properties;
 
 namespace TBT.App.Helpers
@@ -25,7 +24,7 @@ namespace TBT.App.Helpers
 
     public static class StringExtensions
     {
-        public static TimeSpan ToTimespan(this string input)
+        public static TimeSpan ToTimeSpan(this string input)
         {
             TimeSpan duration;
             if (input.Contains(":"))
@@ -39,7 +38,6 @@ namespace TBT.App.Helpers
             else
             {
                 var hours = double.Parse(input);
-               
                 if (hours <= 0)
                 {
                    return  TimeSpan.Zero;;
@@ -60,13 +58,13 @@ namespace TBT.App.Helpers
 
             if (!int.TryParse(hour, out var h) & int.TryParse(min, out var m) || h < 0 || m < 0 || m > 59)
             {
-                throw new Exception($"{Resources.IncorrectTimeInputFormat}.");
+                RefreshEvents.ChangeErrorInvoke($"{Resources.IncorrectTimeInputFormat}.",ErrorType.Error);
             }
 
             var duration = new TimeSpan(h, m, 0);
             if (duration.TotalHours >= 24)
             {
-                throw new Exception($"{Resources.EnteredBigTime}.");
+                RefreshEvents.ChangeErrorInvoke($"{Resources.EnteredBigTime}.",ErrorType.Error);
             }
             return duration;
         }

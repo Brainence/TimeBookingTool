@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TBT.App.Helpers;
@@ -13,7 +14,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class CustomerTabViewModel : BaseViewModel, ICacheable
+    public class CustomerTabViewModel : ObservableObject, ICacheable
     {
         #region Fields
 
@@ -74,7 +75,6 @@ namespace TBT.App.ViewModels.MainWindow
                 }
                 SetProperty(ref _currentCompany, value);
             }
-
         }
 
         public bool IsAdmin
@@ -84,7 +84,6 @@ namespace TBT.App.ViewModels.MainWindow
         }
 
         public ICommand CreateNewCustomerCommand { get; set; }
-        public ICommand RefreshCustomersCommand { get; set; }
         public ICommand EditCustomerCommand { get; set; }
         public ICommand RemoveCustomerCommand { get; set; }
 
@@ -100,7 +99,6 @@ namespace TBT.App.ViewModels.MainWindow
                 _currentCompany = user.Company;
             }
             CreateNewCustomerCommand = new RelayCommand(obj => CreateNewCustomer(), null);
-            RefreshCustomersCommand = new RelayCommand(async obj => { Customers = await RefreshEvents.RefreshCustomersList(); }, null);
             EditCustomerCommand = new RelayCommand(obj => EditCustomer(obj as Customer), obj => IsAdmin);
             RemoveCustomerCommand = new RelayCommand(obj => RemoveCustomer(obj as Customer), obj => IsAdmin);
         }
@@ -116,15 +114,12 @@ namespace TBT.App.ViewModels.MainWindow
                 RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CustomerWithName} '{NewCustomersName}' {Properties.Resources.AlreadyExists}", ErrorType.Error);
                 return;
             }
-            var customer = new Customer { Name = NewCustomersName, IsActive = true, Company = _currentCompany };
-            var newCustomer = await App.CommunicationService.PostAsJson("Customer", customer);
-
-            if (newCustomer != null)
+            var data = await App.CommunicationService.PostAsJson("Customer", new Customer { Name = NewCustomersName, IsActive = true, Company = _currentCompany });
+            if (data != null)
             {
                 NewCustomersName = "";
-                Customers.Add(JsonConvert.DeserializeObject<Customer>(newCustomer));
+                Customers.Add(JsonConvert.DeserializeObject<Customer>(data));
                 Customers = new ObservableCollection<Customer>(Customers);
-
                 //TODO: Move to Resources
                 RefreshEvents.ChangeErrorInvoke("Customer successfully added", ErrorType.Success);
             }
@@ -136,25 +131,20 @@ namespace TBT.App.ViewModels.MainWindow
 
         public async void EditCustomer(Customer customer)
         {
-            if (customer == null) return;
-
             var editContext = new EditCustomerViewModel(customer.Name);
             var editWindow = new EditWindow()
             {
                 DataContext = new EditWindowViewModel(editContext)
             };
-
             editContext.CloseWindow += editWindow.Close;
             editWindow.ShowDialog();
             editContext.CloseWindow -= editWindow.Close;
-
             if (editContext.EditingCustomersName == customer.Name)
             {
                 //Todo Move to Resources
                 RefreshEvents.ChangeErrorInvoke("Client successfully edited", ErrorType.Success);
                 return;
             }
-
             if (editContext.SaveChanges && editContext.EditingCustomersName != customer.Name)
             {
                 customer.Name = editContext.EditingCustomersName;
@@ -177,7 +167,6 @@ namespace TBT.App.ViewModels.MainWindow
         {
             var message = customer.Projects.Any() ? $"\nThis Customer have {customer.Projects.Count} active project" : "";
             if (MessageBox.Show(Properties.Resources.AreYouSure + message, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
-
             customer.IsActive = false;
             var data = await App.CommunicationService.PutAsJson("Customer", customer);
             if (data != null)
@@ -193,9 +182,17 @@ namespace TBT.App.ViewModels.MainWindow
 
         public void RefreshCompany(object sender, User currentUser)
         {
-            if (sender != this) { CurrentCompany = currentUser.Company; }
+            if (sender != this)
+            {
+                CurrentCompany = currentUser.Company;
+                RefreshData();
+            }
         }
 
+        private async Task RefreshData()
+        {
+            Customers = await RefreshEvents.RefreshCustomersList();
+        }
         #endregion
 
         #region Interface members
@@ -204,7 +201,7 @@ namespace TBT.App.ViewModels.MainWindow
         public async void OpenTab(User currentUser)
         {
             RefreshEvents.ChangeCurrentUser += RefreshCompany;
-            Customers = await RefreshEvents.RefreshCustomersList();
+            await RefreshData();
         }
 
         public void CloseTab()

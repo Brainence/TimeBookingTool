@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.ObjectModel;
 using TBT.App.Models.Base;
 
@@ -28,6 +27,11 @@ namespace TBT.App.Models.AppModels
             _projects = new ObservableCollection<Project>();
             _timeEntries = new ObservableCollection<TimeEntry>();
             _isActive = true;
+        }
+
+        public User Clone()
+        {
+            return this.MemberwiseClone() as User;
         }
 
         public int Id
@@ -114,7 +118,7 @@ namespace TBT.App.Models.AppModels
 
         public override string ToString()
         {
-            return $"{FirstName} {LastName}";
+            return FullName;
         }
     }
 }

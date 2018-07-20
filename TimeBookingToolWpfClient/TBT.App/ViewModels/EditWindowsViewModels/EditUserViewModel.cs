@@ -9,7 +9,7 @@ using TBT.App.ViewModels.MainWindow;
 
 namespace TBT.App.ViewModels.EditWindowsViewModels
 {
-    public class EditUserViewModel : BaseViewModel
+    public class EditUserViewModel : ObservableObject
     {
         #region Fields
 
@@ -65,11 +65,6 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
 
         public event Action<User> NewUserAdded;
         public event Action CloseWindow;
-
-
-
-
-
         #endregion
 
         #region Constructors
@@ -77,7 +72,6 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public EditUserViewModel()
         {
             AddSaveCommand = new RelayCommand(obj => AddSaveUser(obj as ResetPasswordParameters), null);
-
         }
 
         #endregion
@@ -147,6 +141,8 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                             EditingUser = JsonConvert.DeserializeObject<User>(data);
                             RefreshEvents.ChangeErrorInvoke(Properties.Resources.UserAccountCreated, ErrorType.Success);
                             NewUserAdded?.Invoke(EditingUser);
+                            EditingUser = null;
+                            Salary = null;
                         }
                     }
                     else

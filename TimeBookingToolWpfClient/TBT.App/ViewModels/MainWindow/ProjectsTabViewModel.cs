@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TBT.App.Helpers;
@@ -13,7 +15,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class ProjectsTabViewModel : BaseViewModel, ICacheable
+    public class ProjectsTabViewModel : ObservableObject, ICacheable
     {
         #region Fields
 
@@ -21,7 +23,8 @@ namespace TBT.App.ViewModels.MainWindow
         private ObservableCollection<Customer> _customers;
         private ObservableCollection<Project> _projects;
         private Customer _selectedCustomer;
-      
+        private int _savedCustomerId;
+
         private bool _itemsLoading;
 
         #endregion
@@ -49,7 +52,13 @@ namespace TBT.App.ViewModels.MainWindow
         public Customer SelectedCustomer
         {
             get { return _selectedCustomer; }
-            set { SetProperty(ref _selectedCustomer, value); }
+            set
+            {
+                if (SetProperty(ref _selectedCustomer, value) && value != null)
+                {
+                    _savedCustomerId = value.Id;
+                }
+            }
         }
 
         public bool ItemsLoading
@@ -59,7 +68,6 @@ namespace TBT.App.ViewModels.MainWindow
         }
 
         public ICommand CreateNewProjectCommand { get; set; }
-        public ICommand RefreshProjectsCommand { get; set; }
         public ICommand EditProjectCommand { get; set; }
         public ICommand RemoveProjectCommand { get; set; }
 
@@ -70,7 +78,6 @@ namespace TBT.App.ViewModels.MainWindow
         public ProjectsTabViewModel()
         {
             CreateNewProjectCommand = new RelayCommand(obj => CreateNewProject(), null);
-            RefreshProjectsCommand = new RelayCommand(async obj => { Projects = await RefreshEvents.RefreshProjectsList(); }, null);
             EditProjectCommand = new RelayCommand(obj => EditProject(obj as Project), null);
             RemoveProjectCommand = new RelayCommand(obj => RemoveProject(obj as Project), null);
         }
@@ -111,9 +118,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         private async void EditProject(Project project)
         {
-            //TODO ???
-            if (project == null) return;
-            var editContext = new EditProjectViewModel(project) {Customers = Customers, SelectedCustomer = Customers.FirstOrDefault(x => x.Id == project.Customer.Id) };
+            var editContext = new EditProjectViewModel(project) { Customers = Customers, SelectedCustomer = Customers.FirstOrDefault(x => x.Id == project.Customer.Id) };
             var window = new EditWindow()
             {
                 DataContext = new EditWindowViewModel(editContext)
@@ -138,28 +143,12 @@ namespace TBT.App.ViewModels.MainWindow
 
         private async void RemoveProject(Project project)
         {
-            if (project == null) return;
             var message = project.Activities.Any() ? $"\nThis project have {project.Activities.Count} active tasks" : "";
             if (MessageBox.Show(Properties.Resources.AreYouSure + message, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
-
-
-            //if (project.Id < 0)
-            //{
-            //    var tempProject =
-            //        JsonConvert.DeserializeObject<Project>(
-            //            await App.CommunicationService.GetAsJson($"Project/GetByName/{Uri.EscapeUriString(project.Name)}"));
-            //    if (tempProject == null)
-            //    {
-            //        RefreshEvents.ChangeErrorInvoke(Properties.Resources.ProjectAlreadyRemoved, ErrorType.Error);
-            //        return;
-            //    }
-            //    project.Id = tempProject.Id;
-            //}
             project.IsActive = false;
-            var data = await App.CommunicationService.PutAsJson("Project", project);
-            if (data != null)
+            if (await App.CommunicationService.PutAsJson("Project", project) != null)
             {
-                Projects.Remove(Projects?.FirstOrDefault(item => item.Id == project.Id));
+                Projects.Remove(Projects.FirstOrDefault(item => item.Id == project.Id));
                 //TODO move to resource 
                 RefreshEvents.ChangeErrorInvoke("Project success deleted", ErrorType.Success);
             }
@@ -170,8 +159,24 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
+        public void RefreshData(object sender, User user)
+        {
+            if (sender != this)
+            {
+                Refresh();
+            }
+        }
 
-
+        public async Task Refresh()
+        {
+            Customers = await RefreshEvents.RefreshCustomersList();
+            Projects = new ObservableCollection<Project>(Customers.SelectMany(x => x.Projects, (cust, proj) =>
+            {
+                proj.Customer = cust;
+                return proj;
+            }).OrderBy(x => x.Name));
+            SelectedCustomer = _savedCustomerId == 0 ? Customers.FirstOrDefault() : Customers.FirstOrDefault(x => x.Id == _savedCustomerId);
+        }
         #endregion
 
         #region Interface members
@@ -179,14 +184,13 @@ namespace TBT.App.ViewModels.MainWindow
         public DateTime ExpiresDate { get; set; }
         public async void OpenTab(User current)
         {
-            Projects = new ObservableCollection<Project>((await RefreshEvents.RefreshProjectsList()).OrderBy(x=>x.Name));
-            Customers = await RefreshEvents.RefreshCustomersList();
-            SelectedCustomer = Customers.FirstOrDefault();
-           
+            RefreshEvents.ChangeCurrentUser += RefreshData;
+            await Refresh();
         }
 
         public void CloseTab()
         {
+            RefreshEvents.ChangeCurrentUser -= RefreshData;
             Projects?.Clear();
             Customers?.Clear();
         }

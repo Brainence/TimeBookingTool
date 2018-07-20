@@ -9,7 +9,7 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class TimeEntryViewModel : BaseViewModel
+    public class TimeEntryViewModel : ObservableObject
     {
         #region Fields
 
@@ -229,7 +229,7 @@ namespace TBT.App.ViewModels.MainWindow
                 RefreshEvents.ChangeErrorInvoke("Comment length cannot be greater then 2048", ErrorType.Error);
                 return;
             }
-            TimeEntry.Duration = string.IsNullOrEmpty(TimerTextBox) ? new TimeSpan() : TimerTextBox.ToTimespan();
+            TimeEntry.Duration = string.IsNullOrEmpty(TimerTextBox) ? new TimeSpan() : TimerTextBox.ToTimeSpan();
             if (TimeEntry.Activity != null)
             {
                 TimeEntry.Activity = new Activity() { Id = TimeEntry.Activity.Id };

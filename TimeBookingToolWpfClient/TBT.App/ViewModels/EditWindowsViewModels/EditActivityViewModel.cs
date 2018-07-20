@@ -8,7 +8,7 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.EditWindowsViewModels
 {
-    public class EditActivityViewModel: BaseViewModel
+    public class EditActivityViewModel: ObservableObject
     {
         #region Fields
 

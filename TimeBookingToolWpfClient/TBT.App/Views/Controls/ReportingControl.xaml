@@ -34,10 +34,10 @@
                 Width="448" FontSize="13" FontWeight="Bold" Foreground="#c2422b"
                 Style="{StaticResource ComboBoxFlatStyle}"
                 ItemsSource="{Binding Projects}"
-                SelectedItem="{Binding  CurrentProject,Mode=TwoWay}" Margin="0,43,0,0"/>
+                SelectedItem="{Binding  CurrentProject,Mode=TwoWay}" Height="20" VerticalAlignment="Bottom"/>
 
         </StackPanel>
-        
+
         <Grid Grid.Row="1" Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -80,10 +80,6 @@
                         Command="{Binding CreateUserReportCommand}"
                         Template="{StaticResource HyperlinkButtonTemplate}">
                         <Image Source="../../Resources/Icons/user_report.png" Height="18" ToolTip="{x:Static p:Resources.UserReport}" />
-                    </Button>
-
-                    <Button Command="{Binding GetTimeEntriesCommand}" CommandParameter="{Binding User.Id}" Template="{StaticResource HyperlinkButtonTemplate}" Margin="8 0 0 0">
-                        <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="{x:Static p:Resources.RefreshReport}" />
                     </Button>
                 </StackPanel>
             </Grid>
@@ -164,12 +160,11 @@
 
             </Grid>
 
-            <StackPanel  Grid.Row="2">
+            <StackPanel  Grid.Row="2" Margin="0,10,0,-10">
                 <StackPanel Margin="0 10 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
                     <TextBlock Text="{x:Static p:Resources.HourlySalary}" FontSize="14" FontWeight="Bold"/>
                     <TextBlock Text="{Binding Path=HourlySalary, StringFormat={}:   {0:0.##} $}" FontSize="14" FontWeight="Bold"/>
                     <TextBlock Text="{Binding Path=HourUah, StringFormat={}  ({0:0.##} ₴)}" FontSize="14" FontWeight="Bold"/>
-                    
                 </StackPanel>
 
                 <StackPanel Margin="0 10 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
@@ -180,11 +175,9 @@
                         <Image Source="../../Resources/Icons/reporting_white.png" Height="18" ToolTip="{x:Static p:Resources.CopyTotalToClipboard}"/>
                     </Button>
                 </StackPanel>
-                <StackPanel  Margin="0 10 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <TextBlock Text="{x:Static p:Resources.TotalTime}"
-                               FontSize="14" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding FullTime,StringFormat={}:  {0}}"
-                               FontSize="14" FontWeight="Bold" />
+                <StackPanel  Margin="0 5 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
+                    <TextBlock Text="{x:Static p:Resources.TotalTime}" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding TimeEntries, Converter={StaticResource DurationConverter},StringFormat={}:  {0}}" FontSize="14" FontWeight="Bold" />
                     <Button x:Name="SaveTotalToClipboardButton" Margin="10 0 0 0" Command="{Binding SaveToClipboardCommand}">
                         <Image Source="../../Resources/Icons/reporting_white.png" Height="18" ToolTip="{x:Static p:Resources.CopyTotalToClipboard}"/>
                     </Button>

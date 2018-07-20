@@ -12,13 +12,13 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class PeopleTabViewModel : BaseViewModel, ICacheable
+    public class PeopleTabViewModel : ObservableObject, ICacheable
     {
         #region Fields
 
         private User _currentUser;
-        private BaseViewModel _createNewUserViewModel;
-        private BaseViewModel _editMyProfileViewModel;
+        private ObservableObject _createNewUserViewModel;
+        private ObservableObject _editMyProfileViewModel;
         private bool _isExpandenNewUser;
         private bool _isExpandedEdit;
         private ObservableCollection<User> _users;
@@ -33,13 +33,13 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _currentUser, value); }
         }
 
-        public BaseViewModel CreateNewUserViewModel
+        public ObservableObject CreateNewUserViewModel
         {
             get { return _createNewUserViewModel; }
             set { SetProperty(ref _createNewUserViewModel, value); }
         }
 
-        public BaseViewModel EditMyProfileViewModel
+        public ObservableObject EditMyProfileViewModel
         {
             get { return _editMyProfileViewModel; }
             set { SetProperty(ref _editMyProfileViewModel, value); }
@@ -115,28 +115,12 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void AddNewUser(User newUser)
         {
-            Users.Add(new User
-            {
-                Id = newUser.Id,
-                Company = newUser.Company,
-                CurrentTimeZone = newUser.CurrentTimeZone,
-                FirstName = newUser.FirstName,
-                IsActive = newUser.IsActive,
-                IsAdmin = newUser.IsAdmin,
-                LastName = newUser.LastName,
-                Password = newUser.Password,
-                Projects = newUser.Projects,
-                TimeEntries = newUser.TimeEntries,
-                TimeLimit = newUser.TimeLimit,
-                Username = newUser.Username,
-                MonthlySalary = newUser.MonthlySalary,
-            });
+            Users.Add(newUser.Clone());
             Users = new ObservableCollection<User>(Users.OrderBy(user => user.FirstName).ThenBy(user => user.LastName));
         }
 
         private void EditUser(User user)
         {
-            if (user == null) return;
             var tempUserInfo = new { user.FirstName, user.LastName };
             user.Company = CurrentUser.Company;
             var editContext = new EditUserViewModel()
@@ -158,23 +142,18 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 Users = new ObservableCollection<User>(Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName));
             }
-
-            (EditMyProfileViewModel as EditUserViewModel).Salary = user.MonthlySalary;
+            editContext.Salary = user.MonthlySalary;
         }
 
         private async void RemoveUser(User user)
         {
-
-            if (user == null) return;
             if (user.IsAdmin && Users.Count(item => item.IsAdmin) == 1)
             {
                 RefreshEvents.ChangeErrorInvoke(Properties.Resources.YouCantRemoveLastAdmin, ErrorType.Error);
                 return;
             }
             if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
-
             user.IsActive = false;
-
             if (await App.CommunicationService.PutAsJson("User", user) != null)
             {
                 Users.Remove(user);
@@ -202,8 +181,10 @@ namespace TBT.App.ViewModels.MainWindow
             var editingUser = (EditMyProfileViewModel as EditUserViewModel).EditingUser;
             App.Username = editingUser.Username;
             int index;
-            if (Users != null && (index = Users.IndexOf(Users.FirstOrDefault(u => u.Id == CurrentUser.Id))) >= 0)
-            { Users[index] = editingUser; }
+            if ((index = Users.IndexOf(Users.FirstOrDefault(u => u.Id == CurrentUser.Id))) >= 0)
+            {
+                Users[index] = editingUser;
+            }
         }
 
         #endregion
@@ -234,14 +215,12 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region IDisposable
 
-        private bool disposed = false;
+        private bool _disposed;
 
         public virtual void Dispose()
         {
-            if (disposed) { return; }
-
-            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
-            disposed = true;
+            if (_disposed) { return; }
+            _disposed = true;
         }
 
         #endregion

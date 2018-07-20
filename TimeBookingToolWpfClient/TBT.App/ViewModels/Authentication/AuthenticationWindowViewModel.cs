@@ -6,12 +6,12 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.Authentication
 {
-    public class AuthenticationWindowViewModel: BaseViewModel
+    public class AuthenticationWindowViewModel: ObservableObject
     {
         #region Fields
 
         private string _errorMsg;
-        private BaseViewModel _currentViewModel;
+        private ObservableObject _currentViewModel;
         private Brush _errorColor;
 
         #endregion
@@ -24,7 +24,7 @@ namespace TBT.App.ViewModels.Authentication
             set { SetProperty(ref _errorMsg, value); }
         }
 
-        public BaseViewModel CurrentViewModel
+        public ObservableObject CurrentViewModel
         {
             get { return _currentViewModel; }
             set { SetProperty(ref _currentViewModel, value); }

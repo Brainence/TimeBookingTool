@@ -14,7 +14,7 @@ using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class SettingsTabViewModel : BaseViewModel, ICacheable
+    public class SettingsTabViewModel : ObservableObject, ICacheable
     {
         #region Fields
 
@@ -123,31 +123,25 @@ namespace TBT.App.ViewModels.MainWindow
 
         public async void Send()
         {
-            try
+            var data = new
             {
-                var obj = new
-                {
-                    Text,
-                    Type = _selectedIteam.ToString(),
-                    Date = Date.ToShortDateString(),
-                    Email = _currentUser.Username
-                };
-                var rez = JsonConvert.DeserializeObject<bool>(
-                    await App.CommunicationService.PostAsJson("User/SendEmail", obj));
-                if (rez)
-                {
-                    Text = "";
-                    MessageBox.Show("Sent");
-                }
-                else
-                {
-                    MessageBox.Show("Error");
-                }
-            }
-            catch (Exception e)
+                Text,
+                Type = _selectedIteam.ToString(),
+                Date = Date.ToShortDateString(),
+                Email = _currentUser.Username
+            };
+
+            var result = await App.CommunicationService.PostAsJson("User/SendEmail", data);
+            if (result != null && JsonConvert.DeserializeObject<bool>(result))
             {
-                MessageBox.Show(e.Message + e.InnerException?.Message);
+                Text = "";
+                RefreshEvents.ChangeErrorInvoke("Mail sent",ErrorType.Success);
             }
+            else
+            {
+                RefreshEvents.ChangeErrorInvoke("Error while sending", ErrorType.Error);
+            }
+
         }
 
 

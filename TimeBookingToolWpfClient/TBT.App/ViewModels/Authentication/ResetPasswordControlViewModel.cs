@@ -7,7 +7,7 @@ using TBT.App.Helpers;
 
 namespace TBT.App.ViewModels.Authentication
 {
-    public class ResetPasswordControlViewModel: BaseViewModel
+    public class ResetPasswordControlViewModel: ObservableObject
     {
         #region Fields
 

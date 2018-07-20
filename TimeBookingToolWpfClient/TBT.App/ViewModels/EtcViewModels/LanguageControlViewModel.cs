@@ -15,7 +15,7 @@ using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.EtcViewModels
 {
-    public class LanguageControlViewModel:BaseViewModel
+    public class LanguageControlViewModel:ObservableObject
     {
         #region Fields
 
@@ -60,7 +60,7 @@ namespace TBT.App.ViewModels.EtcViewModels
                 new LanguageItem() { Culture = "en", Flag = "../../Resources/Icons/en.png" , LanguageName="English" }
             };
             var currentCulture = Thread.CurrentThread.CurrentUICulture.ToString();
-            SelectedLanguage = Languages?.FirstOrDefault(x => x.Culture == currentCulture);
+            SelectedLanguage = Languages.FirstOrDefault(x => x.Culture == currentCulture);
             ShowSelectedLanguage = true;
         }
 

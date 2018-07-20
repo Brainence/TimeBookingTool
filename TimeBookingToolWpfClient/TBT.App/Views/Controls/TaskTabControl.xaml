@@ -43,10 +43,6 @@
                     <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="{x:Static p:Resources.CreateTask}" />
                 </Button>
             </StackPanel>
-
-            <Button Grid.Column="1" Command="{Binding Path=RefreshTasksCommand}" Template="{StaticResource HyperlinkButtonTemplate}" HorizontalAlignment="Right">
-                <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="{x:Static p:Resources.RefreshTask}" />
-            </Button>
         </Grid>
 
         <Grid Grid.Row="1"

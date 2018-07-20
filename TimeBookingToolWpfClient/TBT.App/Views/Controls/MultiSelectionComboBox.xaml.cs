@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,7 +19,7 @@ namespace TBT.App.Views.Controls
         public MultiSelectionComboBox()
         {
             InitializeComponent();
-            if(!_companyId.HasValue) { Task.Run(() => RefreshEvents.RefreshCurrentUser(null)).Wait(); }
+            if (!_companyId.HasValue) { Task.Run(() => RefreshEvents.RefreshCurrentUser(null)).Wait(); }
         }
 
         public static void CurrentUserChanged(object sender, User value)
@@ -78,43 +77,39 @@ namespace TBT.App.Views.Controls
             set
             {
                 if (value == null) return;
-
-                var temp = ItemsSource.Cast<CheckableObject>();
-                foreach (var x in temp)
+                var list = ItemsSource.Cast<CheckableObject>().ToList();
+                foreach (var item in list)
                 {
-                    if (value.Contains(x.Obj))
-                        x.IsChecked = value.Contains(x.Obj);
+                    if (value.Contains(item.Obj))
+                    {
+                        item.IsChecked = value.Contains(item.Obj);
+                    }
                 }
-                ItemsSource = temp;
+                ItemsSource = list;
             }
         }
 
-        public static async void ItemsSourceMultiple_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public static async void ItemsSourceMultiple_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs args)
         {
-            var x = (MultiSelectionComboBox)d;
-
+            var comboBox = (MultiSelectionComboBox)d;
             var list = new List<object>();
 
-            try
+            var data = await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId ?? 0}");
+            if (data != null)
             {
-                var allProjects = JsonConvert.DeserializeObject<List<Project>>(
-                    await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId ?? 0}"));
-                var userProjects = (ObservableCollection<Project>) e.NewValue;
-
+                var allProjects = JsonConvert.DeserializeObject<List<Project>>(data);
+                var userProjects = (ObservableCollection<Project>)args.NewValue;
                 foreach (var elem in allProjects)
                 {
-                    var item = new CheckableObject(x.PropertyPath);
-                    item.Obj = elem;
-                    item.IsChecked = userProjects == null ? false : userProjects.Select(t => t.Id).Contains(elem.Id);
-                    item.IsCheckedPropertyChanged += () => { x.ItemChecked(); };
+                    var item = new CheckableObject(comboBox.PropertyPath)
+                    {
+                        Obj = elem,
+                        IsChecked = userProjects?.Select(t => t.Id).Contains(elem.Id) ?? false
+                    };
+                    item.IsCheckedPropertyChanged += comboBox.ItemChecked;
                     list.Add(item);
                 }
-
-                x.ItemsSource = list;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                comboBox.ItemsSource = list;
             }
         }
 
@@ -136,40 +131,30 @@ namespace TBT.App.Views.Controls
 
         private async void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            try
+            var project = ((sender as CheckBox).DataContext as CheckableObject).Obj as Project;
+            var data = await App.CommunicationService.GetAsJson($"User/{User.Id}");
+            if (data != null)
             {
-
-                var project = ((sender as CheckBox).DataContext as CheckableObject).Obj as Project;
-
-                var user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User/{User.Id}"));
+                var user = JsonConvert.DeserializeObject<User>(data);
 
                 if (project != null && user != null)
                 {
                     await App.CommunicationService.PostAsJson($"UserProject/Add/{user.Id}/{project.Id}", null);
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error occurred while assigning user to project. {ex.Message} {ex.InnerException?.Message}");
-            }
         }
 
         private async void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            try
+            var project = ((sender as CheckBox).DataContext as CheckableObject).Obj as Project;
+            var data = await App.CommunicationService.GetAsJson($"User/{User.Id}");
+            if (data != null)
             {
-                var project = ((sender as CheckBox).DataContext as CheckableObject).Obj as Project;
-
-                var user = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User/{User.Id}"));
-
+                var user = JsonConvert.DeserializeObject<User>(data);
                 if (project != null && user != null)
                 {
                     await App.CommunicationService.Delete($"UserProject/Remove/{user.Id}/{project.Id}");
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error occurred while assigning user to project. {ex.Message} {ex.InnerException?.Message}");
             }
         }
 

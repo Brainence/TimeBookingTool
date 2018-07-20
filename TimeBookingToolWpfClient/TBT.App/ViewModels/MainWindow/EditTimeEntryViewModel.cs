@@ -11,7 +11,7 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class EditTimeEntryViewModel : BaseViewModel
+    public class EditTimeEntryViewModel : ObservableObject
     {
         #region Fields
 
@@ -21,8 +21,8 @@ namespace TBT.App.ViewModels.MainWindow
         private string _comment;
         private string _timeText;
         private DateTime _selectedDay;
-        private int? _savedProjectId;
-        private int? _savedActivityId;
+        private int _savedProjectId;
+        private int _savedActivityId;
 
         #endregion
 
@@ -39,10 +39,11 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _selectedProject; }
             set
             {
-                if (SetProperty(ref _selectedProject, value))
+                if (SetProperty(ref _selectedProject, value) && value != null)
                 {
+                  
                     SelectedActivity = null;
-                    if (value != null) { _savedProjectId = value?.Id; }
+                    _savedProjectId = value.Id;
                 }
             }
         }
@@ -54,7 +55,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (SetProperty(ref _selectedActivity, value) && value != null)
                 {
-                    _savedActivityId = value?.Id;
+                    _savedActivityId = value.Id;
                 }
             }
         }
@@ -112,12 +113,9 @@ namespace TBT.App.ViewModels.MainWindow
                     RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CommentLenghError} 2048.", ErrorType.Error);
                     return;
                 }
-
                 var duration = new TimeSpan();
-                var input = TimeText;
                 var notToday = SelectedDay != DateTime.Today;
-
-                if (string.IsNullOrEmpty(input))
+                if (string.IsNullOrEmpty(TimeText))
                 {
                     if (notToday)
                     {
@@ -127,10 +125,10 @@ namespace TBT.App.ViewModels.MainWindow
                 }
                 else
                 {
-                    duration = input.ToTimespan();
+                    duration = TimeText.ToTimeSpan();
                 }
 
-                if (! await App.CanStartOrEditTimeEntry(User, duration))
+                if (!await App.CanStartOrEditTimeEntry(User, duration))
                 {
                     RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.YouHaveReachedMonthly} {User.TimeLimit}-{Properties.Resources.HourLimit}", ErrorType.Error);
                     return;
@@ -145,15 +143,12 @@ namespace TBT.App.ViewModels.MainWindow
                     IsActive = true,
                     Duration = duration
                 };
-
                 Comment = string.Empty;
-
                 var data = await App.CommunicationService.PostAsJson("TimeEntry", timeEntry);
                 if (data != null)
                 {
                     timeEntry = JsonConvert.DeserializeObject<TimeEntry>(data);
-
-                    if (string.IsNullOrEmpty(input) && !notToday)
+                    if (string.IsNullOrEmpty(TimeText) && !notToday)
                     {
                         await App.GlobalTimer.Start(timeEntry.Id);
                     }
@@ -161,7 +156,6 @@ namespace TBT.App.ViewModels.MainWindow
                     User.TimeEntries.Add(timeEntry);
                     RefreshTimeEntries?.Invoke();
                 }
-
             }
             catch (OverflowException)
             {
@@ -173,21 +167,12 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-       
-
         public void RefreshCurrentUser(User user)
         {
             User = user;
-            if (_savedProjectId.HasValue)
-            {
-                SelectedProject = User?.Projects?.FirstOrDefault(x => x.Id == _savedProjectId.Value);
-                if (_savedActivityId.HasValue)
-                {
-                    SelectedActivity = SelectedProject?.Activities?.FirstOrDefault(x => x.Id == _savedActivityId);
-                }
-            }
+            SelectedProject = User?.Projects?.FirstOrDefault(x => x.Id == _savedProjectId);
+            SelectedActivity = SelectedProject?.Activities?.FirstOrDefault(x => x.Id == _savedActivityId);
         }
-
         #endregion
     }
 }

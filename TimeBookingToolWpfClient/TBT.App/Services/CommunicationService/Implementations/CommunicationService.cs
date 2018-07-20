@@ -15,7 +15,6 @@ namespace TBT.App.Services.CommunicationService.Implementations
 {
     public class CommunicationService : ICommunicationService
     {
-        private static string _baseUrl;
         private static HttpClient _client;
         private static bool _isConnect;
 
@@ -29,14 +28,13 @@ namespace TBT.App.Services.CommunicationService.Implementations
 
                 _isConnect = value;
                 ConnectionChanged?.Invoke(value);
-               
+
             }
         }
 
         static CommunicationService()
         {
-            _baseUrl = ConfigurationManager.AppSettings[Constants.ServerBaseUrl];
-            _client = new HttpClient() { BaseAddress = new Uri(_baseUrl) };
+            _client = new HttpClient() { BaseAddress = new Uri(ConfigurationManager.AppSettings[Constants.ServerBaseUrl]) };
             App.StaticPropertyChanged += ListenAccessToken;
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All };
             IsConnected = true;
@@ -96,18 +94,18 @@ namespace TBT.App.Services.CommunicationService.Implementations
                 switch (response.StatusCode)
                 {
                     case HttpStatusCode.Unauthorized:
-                    {
-                        if (await App.UpdateTokens())
                         {
-                            IsConnected = true;
-                            return await (await serverResponse(url, data)).Content.ReadAsStringAsync();
+                            if (await App.UpdateTokens())
+                            {
+                                IsConnected = true;
+                                return await (await serverResponse(url, data)).Content.ReadAsStringAsync();
+                            }
                         }
-                    }
                         break;
                     case HttpStatusCode.NotFound:
-                    {
-                        throw new HttpResponseException(response);
-                    }
+                        {
+                            throw new HttpResponseException(response);
+                        }
 
                     default:
                         if (!response.IsSuccessStatusCode)
@@ -130,7 +128,7 @@ namespace TBT.App.Services.CommunicationService.Implementations
             {
                 IsConnected = false;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //RefreshEvents.ChangeErrorInvoke(ex.Message,ErrorType.Error);
             }

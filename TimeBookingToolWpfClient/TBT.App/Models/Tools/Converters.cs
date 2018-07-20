@@ -123,7 +123,7 @@ namespace TBT.App.Models.Tools
         {
             TimeEntry timeEntry = (TimeEntry)value;
 
-            if (timeEntry == null || timeEntry.Activity == null) return "";
+            if (timeEntry?.Activity == null) return "";
             if (timeEntry.Activity.Project == null) return timeEntry.Activity;
             if (timeEntry.Activity.Project.Customer == null) return $"{timeEntry.Activity.Project} | {timeEntry.Activity}";
 
@@ -140,10 +140,8 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            TimeEntry timeEntry = (TimeEntry)value;
-
-            if (string.IsNullOrEmpty(timeEntry?.Comment)) return "";
-            return timeEntry.Comment;
+            var timeEntry = (TimeEntry)value;
+            return string.IsNullOrEmpty(timeEntry?.Comment) ? "" : timeEntry.Comment;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -157,7 +155,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is TimeSpan ? TimeEntriesHelper.GetFullTime((TimeSpan)value) : TimeEntriesHelper.CalcFullTime(value as ObservableCollection<TimeEntry>);
+            return value is TimeSpan span ? TimeEntriesHelper.GetFullTime(span) : TimeEntriesHelper.CalcFullTime(value as ObservableCollection<TimeEntry>);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -174,9 +172,7 @@ namespace TBT.App.Models.Tools
 
             if (project == null) return "";
 
-            if (project.Customer != null) return $"{project} ({project.Customer})";
-
-            return $"{project}";
+            return project.Customer != null ? $"{project} ({project.Customer})" : $"{project}";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -189,9 +185,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var x = value as bool?;
-
-            return x.HasValue && x.Value ? null : parameter.ToString();
+            return value is bool x && x ? null : parameter.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -204,10 +198,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int year;
-            var res = int.TryParse(value.ToString(), out year);
-
-            return res ? year == DateTime.Now.Year ? Visibility.Collapsed : Visibility.Visible : Visibility.Collapsed;
+            return int.TryParse(value.ToString(), out var year) ? year == DateTime.Now.Year ? Visibility.Collapsed : Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -221,16 +212,13 @@ namespace TBT.App.Models.Tools
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null) return Visibility.Collapsed;
+            var res = DateTime.TryParse(value.ToString(), out var dateTime);
 
-            DateTime dateTime;
-            var res = DateTime.TryParse(value.ToString(), out dateTime);
-
-            bool timeLimit = parameter != null ? parameter.ToString() == "TimiLimit" : false;
-
-            if (timeLimit)
+            if (parameter != null && parameter.ToString() == "TimiLimit")
+            {
                 return res ? dateTime.Date == DateTime.Now.Date && App.EnableNotification ? Visibility.Visible : Visibility.Collapsed : Visibility.Collapsed;
-            else
-                return res ? dateTime.Date == DateTime.Now.Date ? Visibility.Visible : Visibility.Collapsed : Visibility.Collapsed;
+            }
+            return res ? dateTime.Date == DateTime.Now.Date ? Visibility.Visible : Visibility.Collapsed : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -243,9 +231,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            DateTime dateTime;
-            var res = DateTime.TryParse(value.ToString(), out dateTime);
-
+            var res = DateTime.TryParse(value.ToString(), out var dateTime);
             var now = DateTime.Now;
             var totalDays = (now.Date - dateTime.Date).TotalDays;
             var n = (int)Math.Ceiling(totalDays);
@@ -263,10 +249,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            DateTime dateTime;
-            var res = DateTime.TryParse(value?.ToString(), out dateTime);
-
-            return res ? dateTime.Date == DateTime.Now.Date ? Resources.Start.ToUpper() : Resources.Create.ToUpper() : Resources.Create.ToUpper();
+            return DateTime.TryParse(value?.ToString(), out var dateTime) ? dateTime.Date == DateTime.Now.Date ? Resources.Start.ToUpper() : Resources.Create.ToUpper() : Resources.Create.ToUpper();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -279,8 +262,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!values.Any()) { return null; }
-            return new ResetPasswordParameters() { TokenPassword = values[0]?.ToString(), NewPassword = values[1]?.ToString(), ConfirmPassword = values[2]?.ToString() };
+            return !values.Any() ? null : new ResetPasswordParameters() { TokenPassword = values[0]?.ToString(), NewPassword = values[1]?.ToString(), ConfirmPassword = values[2]?.ToString() };
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -293,8 +275,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!values.Any()) { return null; }
-            return new AuthenticationControlClosePararmeters() { Password = values[0]?.ToString(), CurrentWindow = values[1] as Window };
+            return !values.Any() ? null : new AuthenticationControlClosePararmeters() { Password = values[0]?.ToString(), CurrentWindow = values[1] as Window };
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -309,19 +290,15 @@ namespace TBT.App.Models.Tools
         {
             var user = value[0] as User;
             var curUser = (int)value[1];
-            if(user == null)
+            if (user == null)
             {
                 return Visibility.Collapsed;
             }
-            if(user.IsAdmin)
+            if (user.IsAdmin)
             {
                 return Visibility.Visible;
             }
-            if(user.Id ==curUser)
-            {
-                return Visibility.Visible;
-            }
-            return Visibility.Collapsed;
+            return user.Id == curUser ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -365,8 +342,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var temp = value as IEnumerable;
-            return temp != null && temp.GetEnumerator().MoveNext() ? Visibility.Visible : Visibility.Collapsed;
+            return value is IEnumerable temp && temp.GetEnumerator().MoveNext() ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -379,8 +355,7 @@ namespace TBT.App.Models.Tools
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var temp = value as IEnumerable;
-            return temp != null && temp.GetEnumerator().MoveNext() ? Visibility.Collapsed : Visibility.Visible;
+            return value is IEnumerable temp && temp.GetEnumerator().MoveNext() ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -467,6 +442,7 @@ namespace TBT.App.Models.Tools
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return ((value as IList)?.Count ?? 0) > 0;
+
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

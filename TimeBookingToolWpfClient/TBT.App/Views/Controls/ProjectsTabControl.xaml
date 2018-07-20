@@ -38,10 +38,6 @@
                     <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="{x:Static p:Resources.CreateProject}" />
                 </Button>
             </StackPanel>
-
-            <Button Grid.Column="1" Command="{Binding Path=RefreshProjectsCommand}" Template="{StaticResource HyperlinkButtonTemplate}" HorizontalAlignment="Right">
-                <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="{x:Static p:Resources.RefreshProject}" />
-            </Button>
         </Grid>
 
 

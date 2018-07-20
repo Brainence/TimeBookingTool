@@ -180,15 +180,13 @@
     <Compile Include="Models\AppModels\Activity.cs" />
     <Compile Include="Models\AppModels\TimeEntry.cs" />
     <Compile Include="Models\AppModels\User.cs" />
-    <Compile Include="Models\Base\BaseViewModel.cs" />
-    <Compile Include="Models\Base\IModelObservableViewModel.cs" />
     <Compile Include="Models\Base\ObservableObject.cs" />
     <Compile Include="Models\Commands\RelayCommand.cs" />
-    <Compile Include="Models\Tools\ApiDollarRate.cs" />
+    <Compile Include="Helpers\ApiDollarRate.cs" />
     <Compile Include="Models\Tools\Bindings.cs" />
     <Compile Include="Models\Tools\Converters.cs" />
     <Compile Include="Models\Tools\AccessToken.cs" />
-    <Compile Include="Models\Tools\UserReportModel.cs" />
+    <Compile Include="Helpers\UserReportModel.cs" />
     <Compile Include="Properties\Resources.uk-UA.Designer.cs">
       <DependentUpon>Resources.uk-UA.resx</DependentUpon>
       <AutoGen>True</AutoGen>
