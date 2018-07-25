@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Net;
 using System.Net.Http;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using TBT.App.Common;
+using TBT.App.Helpers;
 using TBT.App.Services.CommunicationService.Interfaces;
 
 namespace TBT.App.Services.CommunicationService.Implementations
@@ -102,17 +104,16 @@ namespace TBT.App.Services.CommunicationService.Implementations
                             }
                         }
                         break;
-                    case HttpStatusCode.NotFound:
+                    case HttpStatusCode.BadGateway:
                         {
-                            throw new HttpResponseException(response);
+                            throw new ValidationException(await response.Content.ReadAsStringAsync());
                         }
 
                     default:
                         if (!response.IsSuccessStatusCode)
                         {
-                            throw new Exception(await response.Content.ReadAsStringAsync());
+                            throw new Exception();
                         }
-
                         break;
                 }
 
@@ -120,17 +121,13 @@ namespace TBT.App.Services.CommunicationService.Implementations
                 IsConnected = true;
                 return responseString;
             }
-            catch (HttpResponseException)
+            catch (ValidationException ex)
+            {
+                RefreshEvents.ChangeErrorInvoke(ex.Message, ErrorType.Error);
+            }
+            catch (Exception)
             {
                 IsConnected = false;
-            }
-            catch (HttpRequestException)
-            {
-                IsConnected = false;
-            }
-            catch (Exception ex)
-            {
-                //RefreshEvents.ChangeErrorInvoke(ex.Message,ErrorType.Error);
             }
             return null;
         }

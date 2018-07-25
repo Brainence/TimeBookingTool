@@ -22,6 +22,10 @@ namespace TBT.App.Models.AppModels
             _isActive = true;
         }
 
+        public Project Clone()
+        {
+            return this.MemberwiseClone() as Project;
+        }
         public int Id
         {
             get { return _id; }

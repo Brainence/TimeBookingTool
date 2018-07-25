@@ -110,8 +110,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         private async void EditTask(Activity activity)
         {
-            var tempData = new { activity.Name, ProjectName = activity.Project.Name };
-            var editContext = new EditActivityViewModel(activity) { Projects = Projects };
+            var editContext = new EditActivityViewModel(activity.Clone()) { Projects = Projects };
             var window = new EditWindow()
             {
                 DataContext = new EditWindowViewModel(editContext)
@@ -119,25 +118,23 @@ namespace TBT.App.ViewModels.MainWindow
             editContext.NewItemSaved += window.Close;
             window.ShowDialog();
             editContext.NewItemSaved -= window.Close;
-            if (tempData.Name == editContext.EditingActivity.Name && tempData.ProjectName == editContext.SelectedProject.Name)
-            {
-                RefreshEvents.ChangeErrorInvoke("Activity successful edited", ErrorType.Success);
-                return;
-            }
+           
             if (editContext.SaveActivity)
             {
-                activity = editContext.EditingActivity;
-                activity.Project = editContext.SelectedProject;
-                if (await App.CommunicationService.PutAsJson("Activity", activity) != null)
+                if (activity.Name == editContext.EditingActivity.Name && activity.Project.Name == editContext.SelectedProject.Name)
                 {
-                    Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name));
+                    RefreshEvents.ChangeErrorInvoke("Activity successful edited", ErrorType.Success);
+                    return;
+                }
+
+                var data = await App.CommunicationService.PutAsJson("Activity", editContext.EditingActivity);
+                if (data != null)
+                {
+                    Activities.Remove(activity);
+                    Activities.Add(JsonConvert.DeserializeObject<Activity>(data));
+                    Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name).ThenBy(x=>x.Name));
                     //TODO Move to recourse 
                     RefreshEvents.ChangeErrorInvoke("Activity successful edited", ErrorType.Success);
-                }
-                else
-                {
-                    //TODO remove
-                    RefreshEvents.ChangeErrorInvoke("Error deleted Activity", ErrorType.Error);
                 }
             }
         }
@@ -152,11 +149,6 @@ namespace TBT.App.ViewModels.MainWindow
                 //TODO Move to recourse
                 RefreshEvents.ChangeErrorInvoke("Activity deleted edited", ErrorType.Success);
             }
-            else
-            {
-                //TODO remove
-                RefreshEvents.ChangeErrorInvoke("Error deleted Activity", ErrorType.Error);
-            }
         }
 
         public void RefreshData(object sender, User user)
@@ -170,8 +162,13 @@ namespace TBT.App.ViewModels.MainWindow
         private async Task Refresh()
         {
             Projects = await RefreshEvents.RefreshProjectsList();
-            Activities = await RefreshEvents.RefreshTasksList();
-            SelectedProject = _savedProjectId == 0 ? Projects.FirstOrDefault() : Projects.FirstOrDefault(x => x.Id == _savedProjectId);
+            Activities = new ObservableCollection<Activity>(Projects.SelectMany(x => x.Activities,
+                (proj, activ) =>
+                {
+                    activ.Project = proj;
+                    return activ;
+                }).OrderBy(x=>x.Project.Name).ThenBy(x=>x.Name));
+            SelectedProject = Projects.FirstOrDefault(x => x.Id == _savedProjectId) ?? Projects.FirstOrDefault();
         }
 
         #endregion
@@ -182,7 +179,7 @@ namespace TBT.App.ViewModels.MainWindow
         public async void OpenTab(User currentUser)
         {
             RefreshEvents.ChangeCurrentUser += RefreshData;
-            await Refresh();           
+            await Refresh();
         }
 
         public void CloseTab()

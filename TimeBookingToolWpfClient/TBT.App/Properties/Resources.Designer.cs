@@ -970,7 +970,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Salary mist be above 0.
+        ///   Looks up a localized string similar to Salary must be above 0.
         /// </summary>
         public static string SalaryMustBe {
             get {

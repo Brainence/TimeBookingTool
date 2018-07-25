@@ -112,13 +112,14 @@ namespace TBT.App.ViewModels.MainWindow
                 Projects.Add(project);
                 Projects = new ObservableCollection<Project>(_projects.OrderBy(p => p.Name));
                 NewProjectName = "";
+                RefreshEvents.ChangeErrorInvoke("Project created successful", ErrorType.Success);
             }
         }
 
 
         private async void EditProject(Project project)
         {
-            var editContext = new EditProjectViewModel(project) { Customers = Customers, SelectedCustomer = Customers.FirstOrDefault(x => x.Id == project.Customer.Id) };
+            var editContext = new EditProjectViewModel(project.Clone()) { Customers = Customers, SelectedCustomer = project.Customer };
             var window = new EditWindow()
             {
                 DataContext = new EditWindowViewModel(editContext)
@@ -128,12 +129,18 @@ namespace TBT.App.ViewModels.MainWindow
             editContext.NewItemSaved -= window.Close;
             if (editContext.SaveProject)
             {
-                editContext.EditingProject.Customer = editContext.SelectedCustomer;
+                if (Projects.FirstOrDefault(x => x.Name == editContext.EditingProject.Name && x.Id != editContext.EditingProject.Id) != null)
+                {
+                    RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.ProjectWithName} {editContext.EditingProject.Name} {Properties.Resources.AlreadyExists}", ErrorType.Error);
+                    return;
+                }
+
                 var data = await App.CommunicationService.PutAsJson("Project", editContext.EditingProject);
                 if (data != null)
                 {
                     var newProject = JsonConvert.DeserializeObject<Project>(data);
                     Projects.Remove(project);
+                    newProject.Customer = Customers.FirstOrDefault(x => x.Id == newProject.Customer.Id);
                     Projects.Add(newProject);
                     Projects = new ObservableCollection<Project>(Projects.OrderBy(x => x.Name));
                     RefreshEvents.ChangeErrorInvoke("Project updated successful", ErrorType.Success);
@@ -151,11 +158,6 @@ namespace TBT.App.ViewModels.MainWindow
                 Projects.Remove(Projects.FirstOrDefault(item => item.Id == project.Id));
                 //TODO move to resource 
                 RefreshEvents.ChangeErrorInvoke("Project success deleted", ErrorType.Success);
-            }
-            else
-            {
-                //TODO remove
-                RefreshEvents.ChangeErrorInvoke("Error removed project", ErrorType.Error);
             }
         }
 
@@ -175,7 +177,7 @@ namespace TBT.App.ViewModels.MainWindow
                 proj.Customer = cust;
                 return proj;
             }).OrderBy(x => x.Name));
-            SelectedCustomer = _savedCustomerId == 0 ? Customers.FirstOrDefault() : Customers.FirstOrDefault(x => x.Id == _savedCustomerId);
+            SelectedCustomer = Customers.FirstOrDefault(x => x.Id == _savedCustomerId) ?? Customers.FirstOrDefault();
         }
         #endregion
 

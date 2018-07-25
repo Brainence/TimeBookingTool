@@ -48,10 +48,9 @@
                             VerticalAlignment="Center">
             </ContentControl>-->
             <StackPanel  VerticalAlignment="Center">
-                <TextBlock  FontSize="15" Background="Transparent" Foreground="{Binding Brush}" HorizontalAlignment="Center" Text="{Binding ErrorMessage}" FontWeight="Bold"/>
+                <TextBlock  FontSize="18" Background="Transparent" Foreground="{Binding Brush}" HorizontalAlignment="Center" Text="{Binding ErrorMessage}" FontWeight="Bold"/>
             </StackPanel>
-            <StackPanel HorizontalAlignment="Right"  Margin="10 0 0 10" Orientation="Horizontal" 
-                        Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Right"  Margin="10 0 0 10" Orientation="Horizontal" >
 
                 <Image Source="../../Resources/Icons/refresh.png" Height="18" Margin="0 5 5 5" Cursor="Hand" ToolTip="{x:Static p:Resources.Refresh}">
                     <Image.InputBindings>

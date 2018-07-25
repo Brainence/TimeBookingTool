@@ -114,8 +114,9 @@ namespace TBT.App.ViewModels.MainWindow
         public CalendarTabViewModel(User user)
         {
             _user = user;
-            IsDateNameShort = true;
-            GoToDefaultWeek();
+             IsDateNameShort = true;
+            _week = GetWeekOfDay(DateTime.Now);
+            _selectedDay = DateTime.Now.Date;
             TimeEntryItems = new TimeEntryItemsViewModel { TimeEntries = User?.TimeEntries, };
             EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, SelectedDay = SelectedDay };
 
@@ -202,7 +203,6 @@ namespace TBT.App.ViewModels.MainWindow
             if (sender != this)
             {
                 User = user;
-                RefreshTimeEntries();
             }
         }
 
@@ -215,7 +215,7 @@ namespace TBT.App.ViewModels.MainWindow
         public async void OpenTab(User currentUser)
         {
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
-            await RefreshEvents.RefreshCurrentUser(null);
+            await RefreshEvents.RefreshCurrentUser(null,true);
         }
 
         public void CloseTab()

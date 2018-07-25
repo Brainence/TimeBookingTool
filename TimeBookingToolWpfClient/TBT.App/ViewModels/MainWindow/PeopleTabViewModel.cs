@@ -102,8 +102,7 @@ namespace TBT.App.ViewModels.MainWindow
                 ShowAdmin = false,
                 ShowPassword = false,
                 ForSaving = true,
-                EditingUser = CurrentUser,
-                Salary = CurrentUser.MonthlySalary
+                EditingUser = CurrentUser
             };
             EditUserCommand = new RelayCommand(obj => EditUser(obj as User), null);
             RemoveUserCommand = new RelayCommand(obj => RemoveUser(obj as User), null);
@@ -128,8 +127,7 @@ namespace TBT.App.ViewModels.MainWindow
                 EditingUser = user,
                 ShowAdmin = true,
                 ShowPassword = false,
-                ForSaving = true,
-                Salary = user.MonthlySalary
+                ForSaving = true
             };
             var window = new EditWindow()
             {
@@ -142,7 +140,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 Users = new ObservableCollection<User>(Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName));
             }
-            editContext.Salary = user.MonthlySalary;
+            (EditMyProfileViewModel as EditUserViewModel).EditingUser = user;
         }
 
         private async void RemoveUser(User user)
@@ -159,11 +157,6 @@ namespace TBT.App.ViewModels.MainWindow
                 Users.Remove(user);
                 //TODO move to resource
                 RefreshEvents.ChangeErrorInvoke("User removed successfully", ErrorType.Success);
-            }
-            else
-            {
-                //Todo remove
-                RefreshEvents.ChangeErrorInvoke("User can`t removed", ErrorType.Error);
             }
         }
 

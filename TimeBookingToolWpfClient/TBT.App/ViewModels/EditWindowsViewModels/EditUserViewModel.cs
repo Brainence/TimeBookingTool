@@ -18,7 +18,6 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         private bool _showAdmin;
         private bool _forSaving;
         private bool _changePassword;
-        private decimal? _salary;
         #endregion
 
         #region Properties
@@ -52,15 +51,6 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
             get { return _changePassword; }
             set { SetProperty(ref _changePassword, value); }
         }
-
-
-        public decimal? Salary
-        {
-            get { return _salary; }
-            set { SetProperty(ref _salary, value); }
-        }
-
-
         public ICommand AddSaveCommand { get; set; }
 
         public event Action<User> NewUserAdded;
@@ -80,12 +70,6 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
 
         private async void AddSaveUser(ResetPasswordParameters changePasswordParameters)
         {
-            if (!Salary.HasValue || Salary <= 0)
-            {
-                RefreshEvents.ChangeErrorInvoke(Properties.Resources.SalaryMustBe, ErrorType.Error);
-                return;
-            }
-            EditingUser.MonthlySalary = Salary;
             if (ForSaving)
             {
                 if (string.IsNullOrEmpty(EditingUser?.Username)) return;
@@ -95,12 +79,12 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
                         || string.IsNullOrWhiteSpace(changePasswordParameters.NewPassword)
                         || string.IsNullOrWhiteSpace(changePasswordParameters.ConfirmPassword))
                     {
-                        RefreshEvents.ChangeErrorInvoke(Properties.Resources.AllPasswordFieldsRequired,ErrorType.Error);
+                        RefreshEvents.ChangeErrorInvoke(Properties.Resources.AllPasswordFieldsRequired, ErrorType.Error);
                         return;
                     }
                     if (changePasswordParameters.NewPassword != changePasswordParameters.ConfirmPassword)
                     {
-                        RefreshEvents.ChangeErrorInvoke(Properties.Resources.ConfirmYourPassword,ErrorType.Error);
+                        RefreshEvents.ChangeErrorInvoke(Properties.Resources.ConfirmYourPassword, ErrorType.Error);
                         return;
                     }
 
@@ -129,26 +113,25 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
             }
             else
             {
-                if (EditingUser == null || (EditingUser != null && string.IsNullOrEmpty(EditingUser.Username))) return;
-                var data = await App.CommunicationService.GetAsJson($"User?email={EditingUser.Username}");
+                if (string.IsNullOrEmpty(EditingUser.Username) || string.IsNullOrEmpty(EditingUser.FirstName) ||
+                    string.IsNullOrEmpty(EditingUser.LastName) || string.IsNullOrEmpty(EditingUser.Password))
+                {
+                    RefreshEvents.ChangeErrorInvoke("All fields must be filled", ErrorType.Error);
+                    return;
+                };
+                if (!EditingUser.MonthlySalary.HasValue || EditingUser.MonthlySalary <= 0)
+                {
+                    RefreshEvents.ChangeErrorInvoke("Salary must be above 0", ErrorType.Error);
+                    return;
+                }
+
+                var data = await App.CommunicationService.PostAsJson("User/NewUser", EditingUser);
                 if (data != null)
                 {
-                    if (JsonConvert.DeserializeObject<User>(data) == null)
-                    {
-                        data = await App.CommunicationService.PostAsJson("User/NewUser", EditingUser);
-                        if (data != null)
-                        {
-                            EditingUser = JsonConvert.DeserializeObject<User>(data);
-                            RefreshEvents.ChangeErrorInvoke(Properties.Resources.UserAccountCreated, ErrorType.Success);
-                            NewUserAdded?.Invoke(EditingUser);
-                            EditingUser = null;
-                            Salary = null;
-                        }
-                    }
-                    else
-                    {
-                       RefreshEvents.ChangeErrorInvoke(Properties.Resources.UsernameAlreadyExists,ErrorType.Error);
-                    }
+                    EditingUser = JsonConvert.DeserializeObject<User>(data);
+                    RefreshEvents.ChangeErrorInvoke(Properties.Resources.UserAccountCreated, ErrorType.Success);
+                    NewUserAdded?.Invoke(EditingUser);
+                    EditingUser = new User() { Company = EditingUser.Company };
                 }
             }
             CloseWindow?.Invoke();

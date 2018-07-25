@@ -15,6 +15,11 @@ namespace TBT.App.Models.AppModels
             _isActive = true;
         }
 
+        public Activity Clone()
+        {
+            return MemberwiseClone() as Activity;
+        }
+
         public int Id
         {
             get { return _id; }

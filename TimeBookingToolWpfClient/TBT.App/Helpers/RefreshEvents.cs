@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using TBT.App.Models.AppModels;
 using TBT.App.Views.Controls;
 
@@ -45,9 +46,10 @@ namespace TBT.App.Helpers
             ChangeError?.Invoke(message, type);
         }
 
-        public static async Task RefreshCurrentUser(object sender)
+        public static async Task RefreshCurrentUser(object sender,bool needProjects = false)
         {
-            var data = await App.CommunicationService.GetAsJson($"User?email={App.Username}");
+            var serveerPath = needProjects ? "/GetUserProject":"";
+            var data = await App.CommunicationService.GetAsJson($"User{serveerPath}?email={App.Username}");
             if (data == null)
             {
                 return;

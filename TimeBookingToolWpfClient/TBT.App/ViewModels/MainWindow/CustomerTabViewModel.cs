@@ -123,10 +123,6 @@ namespace TBT.App.ViewModels.MainWindow
                 //TODO: Move to Resources
                 RefreshEvents.ChangeErrorInvoke("Customer successfully added", ErrorType.Success);
             }
-            else
-            {
-                RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CustomerWithName} '{NewCustomersName}' {Properties.Resources.AlreadyExists}", ErrorType.Error);
-            }
         }
 
         public async void EditCustomer(Customer customer)
@@ -147,19 +143,19 @@ namespace TBT.App.ViewModels.MainWindow
             }
             if (editContext.SaveChanges && editContext.EditingCustomersName != customer.Name)
             {
-                customer.Name = editContext.EditingCustomersName;
+                if (Customers.FirstOrDefault(x => x.Name == editContext.EditingCustomersName) != null)
+                {
+                    RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CustomerWithName} '{editContext.EditingCustomersName}' {Properties.Resources.AlreadyExists}", ErrorType.Error);
+                    return;
+                }
 
                 if (await App.CommunicationService.PutAsJson("Customer", customer) != null)
                 {
+                    customer.Name = editContext.EditingCustomersName;
                     //Todo Move to Resources
                     RefreshEvents.ChangeErrorInvoke("Client successfully edited", ErrorType.Success);
                 }
-                else
-                {
-                    //Todo Move to Resources
-                    //TODO Remove
-                    RefreshEvents.ChangeErrorInvoke("Error Loaded Customer", ErrorType.Error);
-                }
+               
             }
         }
 
@@ -173,10 +169,6 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 Customers.Remove(customer);
                 RefreshEvents.ChangeErrorInvoke("Client successfully Removed", ErrorType.Success);//Todo Move to Resources
-            }
-            else
-            {
-                RefreshEvents.ChangeErrorInvoke("Error Removed Customer", ErrorType.Error);//Todo Move to Resources
             }
         }
 
