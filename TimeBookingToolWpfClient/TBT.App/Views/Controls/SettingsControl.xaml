@@ -26,13 +26,13 @@
                                       IsChecked="{Binding GreetingCheck, Mode=TwoWay}"/>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="454" Margin="12,0,0,0">
-                <TextBlock Text="{x:Static p:Resources.Date}" Height="18" Margin="0 0 25 0"/>
-                <DatePicker Margin="12 0 0 0" SelectedDate="{Binding Date, Mode=TwoWay}" Width="104" Height="26"/>
+                <TextBlock Text="{x:Static p:Resources.Date}" Height="18" Margin="0 0 40 0" />
+                <DatePicker SelectedDate="{Binding Date, Mode=TwoWay}" Width="100" Height="25"/>
                 <ComboBox Width="150"  
                           Style="{StaticResource ComboBoxFlatStyle}"
                           ItemsSource="{Binding ItemList}"
                           SelectedItem="{Binding SelectedItem}"
-                          Height="20"
+                          Height="25"
                           Margin="30 0 0 0" Foreground="#c2422b" FontWeight="Bold" />
             </StackPanel>
 
@@ -40,7 +40,7 @@
                 <TextBlock Text="{x:Static p:Resources.Comment}" Height="18" Margin="0 0 10 0" />
                 <TextBox TextWrapping="Wrap" Text="{Binding Mode=TwoWay, Path=Text}" Width="394" Height="160" />
             </StackPanel>
-            <Button Command="{Binding SendEmail}" Margin="400,5,0,0" HorizontalAlignment="Left" Width="66" Content="Send" Height="26" />
+            <Button Command="{Binding SendEmail}" Margin="400,5,0,0" HorizontalAlignment="Left" Width="73" Content="Send" Height="26" />
         </StackPanel>
     </Grid>
 </UserControl>

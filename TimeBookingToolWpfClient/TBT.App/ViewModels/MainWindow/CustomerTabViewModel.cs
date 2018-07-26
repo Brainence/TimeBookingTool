@@ -111,7 +111,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (Customers.FirstOrDefault(x => x.Name == NewCustomersName) != null)
             {
-                RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CustomerWithName} '{NewCustomersName}' {Properties.Resources.AlreadyExists}", ErrorType.Error);
+                RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CustomerWithName} {Properties.Resources.AlreadyExists}", ErrorType.Error);
                 return;
             }
             var data = await App.CommunicationService.PostAsJson("Customer", new Customer { Name = NewCustomersName, IsActive = true, Company = _currentCompany });
@@ -121,7 +121,7 @@ namespace TBT.App.ViewModels.MainWindow
                 Customers.Add(JsonConvert.DeserializeObject<Customer>(data));
                 Customers = new ObservableCollection<Customer>(Customers);
                 //TODO: Move to Resources
-                RefreshEvents.ChangeErrorInvoke("Customer successfully added", ErrorType.Success);
+                RefreshEvents.ChangeErrorInvoke("Customer created", ErrorType.Success);
             }
         }
 
@@ -138,24 +138,27 @@ namespace TBT.App.ViewModels.MainWindow
             if (editContext.EditingCustomersName == customer.Name)
             {
                 //Todo Move to Resources
-                RefreshEvents.ChangeErrorInvoke("Client successfully edited", ErrorType.Success);
+                RefreshEvents.ChangeErrorInvoke("Customer edited", ErrorType.Success);
                 return;
             }
             if (editContext.SaveChanges && editContext.EditingCustomersName != customer.Name)
             {
                 if (Customers.FirstOrDefault(x => x.Name == editContext.EditingCustomersName) != null)
                 {
-                    RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CustomerWithName} '{editContext.EditingCustomersName}' {Properties.Resources.AlreadyExists}", ErrorType.Error);
+                    RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CustomerWithName} {Properties.Resources.AlreadyExists}", ErrorType.Error);
                     return;
                 }
-
+                var oldName = customer.Name;
+                customer.Name = editContext.EditingCustomersName;
                 if (await App.CommunicationService.PutAsJson("Customer", customer) != null)
                 {
-                    customer.Name = editContext.EditingCustomersName;
                     //Todo Move to Resources
-                    RefreshEvents.ChangeErrorInvoke("Client successfully edited", ErrorType.Success);
+                    RefreshEvents.ChangeErrorInvoke("Customer edited", ErrorType.Success);
                 }
-               
+                else
+                {
+                    customer.Name = oldName;
+                }
             }
         }
 
@@ -168,7 +171,7 @@ namespace TBT.App.ViewModels.MainWindow
             if (data != null)
             {
                 Customers.Remove(customer);
-                RefreshEvents.ChangeErrorInvoke("Client successfully Removed", ErrorType.Success);//Todo Move to Resources
+                RefreshEvents.ChangeErrorInvoke("Customer deleted", ErrorType.Success);//Todo Move to Resources
             }
         }
 

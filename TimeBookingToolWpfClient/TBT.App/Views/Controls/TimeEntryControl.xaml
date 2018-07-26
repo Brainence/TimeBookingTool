@@ -167,7 +167,7 @@
                                  Text="{Binding TimerTextBox}"
                                  PreviewTextInput="CheckInput"/>
                         <TextBox Name="commentArea"
-                                 Text="{Binding Path=Comment, Mode=TwoWay}" 
+                                 Text="{Binding Path=TimeEntry.Comment, Mode=TwoWay}" 
                                  Width="370" Height="80"
                                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                                  HorizontalAlignment="Left" VerticalAlignment="Top"/>

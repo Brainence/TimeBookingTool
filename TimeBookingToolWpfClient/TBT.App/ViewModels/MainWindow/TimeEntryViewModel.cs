@@ -197,7 +197,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-       
+
 
         private async void TimerTick()
         {
@@ -212,7 +212,7 @@ namespace TBT.App.ViewModels.MainWindow
         public async void InitLoading()
         {
             TimerTextBlock = TimeEntriesHelper.GetShortDuration(TimeEntry.Duration);
-            var canStartOrEdit = await App.CanStartOrEditTimeEntry(TimeEntry.User,TimeEntry.Duration);
+            var canStartOrEdit = await App.CanStartOrEditTimeEntry(TimeEntry.User, TimeEntry.Duration);
             CanEdit = TimeEntry.IsRunning || canStartOrEdit;
             CanStart = TimeEntry.IsRunning || canStartOrEdit && TimeEntry.Duration < _dayLimit;
             if (TimeEntry.IsRunning && canStartOrEdit)
@@ -224,7 +224,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         public async void SaveTimeEntry()
         {
-            if (TimeEntry.Comment != null && TimeEntry.Comment.Length >= 2048)
+            if (Comment != null && Comment.Length >= 2048)
             {
                 RefreshEvents.ChangeErrorInvoke("Comment length cannot be greater then 2048", ErrorType.Error);
                 return;
@@ -238,7 +238,6 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 TimeEntry.User = new User() { Id = TimeEntry.User.Id };
             }
-            TimeEntry.Comment = Comment;
             await App.CommunicationService.PutAsJson("TimeEntry/ClientDuration", TimeEntry);
             IsEditing = !IsEditing;
             RefreshTimeEntries?.Invoke();

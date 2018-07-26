@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -95,7 +94,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
             if (Projects.FirstOrDefault(x => x.Name == NewProjectName) != null)
             {
-                RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.ProjectWithName} {NewProjectName} {Properties.Resources.AlreadyExists}", ErrorType.Error);
+                RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.ProjectWithName} {Properties.Resources.AlreadyExists}", ErrorType.Error);
                 return;
             }
             var project = new Project()
@@ -112,7 +111,7 @@ namespace TBT.App.ViewModels.MainWindow
                 Projects.Add(project);
                 Projects = new ObservableCollection<Project>(_projects.OrderBy(p => p.Name));
                 NewProjectName = "";
-                RefreshEvents.ChangeErrorInvoke("Project created successful", ErrorType.Success);
+                RefreshEvents.ChangeErrorInvoke("Project created", ErrorType.Success);
             }
         }
 
@@ -131,7 +130,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (Projects.FirstOrDefault(x => x.Name == editContext.EditingProject.Name && x.Id != editContext.EditingProject.Id) != null)
                 {
-                    RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.ProjectWithName} {editContext.EditingProject.Name} {Properties.Resources.AlreadyExists}", ErrorType.Error);
+                    RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.ProjectWithName} {Properties.Resources.AlreadyExists}", ErrorType.Error);
                     return;
                 }
 
@@ -143,7 +142,7 @@ namespace TBT.App.ViewModels.MainWindow
                     newProject.Customer = Customers.FirstOrDefault(x => x.Id == newProject.Customer.Id);
                     Projects.Add(newProject);
                     Projects = new ObservableCollection<Project>(Projects.OrderBy(x => x.Name));
-                    RefreshEvents.ChangeErrorInvoke("Project updated successful", ErrorType.Success);
+                    RefreshEvents.ChangeErrorInvoke("Project edited", ErrorType.Success);
                 }
             }
         }
@@ -157,7 +156,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 Projects.Remove(Projects.FirstOrDefault(item => item.Id == project.Id));
                 //TODO move to resource 
-                RefreshEvents.ChangeErrorInvoke("Project success deleted", ErrorType.Success);
+                RefreshEvents.ChangeErrorInvoke("Project deleted", ErrorType.Success);
             }
         }
 

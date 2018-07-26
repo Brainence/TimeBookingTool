@@ -156,7 +156,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 Users.Remove(user);
                 //TODO move to resource
-                RefreshEvents.ChangeErrorInvoke("User removed successfully", ErrorType.Success);
+                RefreshEvents.ChangeErrorInvoke("User deleted", ErrorType.Success);
             }
         }
 

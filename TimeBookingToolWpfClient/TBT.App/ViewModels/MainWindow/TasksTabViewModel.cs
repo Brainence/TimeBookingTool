@@ -104,7 +104,7 @@ namespace TBT.App.ViewModels.MainWindow
                 Activities.Add(newActivity);
                 Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name));
                 NewTaskName = "";
-                RefreshEvents.ChangeErrorInvoke("Task created successful", ErrorType.Success);
+                RefreshEvents.ChangeErrorInvoke("Task created", ErrorType.Success);
             }
         }
 
@@ -123,7 +123,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (activity.Name == editContext.EditingActivity.Name && activity.Project.Name == editContext.SelectedProject.Name)
                 {
-                    RefreshEvents.ChangeErrorInvoke("Activity successful edited", ErrorType.Success);
+                    RefreshEvents.ChangeErrorInvoke("Task edited", ErrorType.Success);
                     return;
                 }
 
@@ -134,7 +134,7 @@ namespace TBT.App.ViewModels.MainWindow
                     Activities.Add(JsonConvert.DeserializeObject<Activity>(data));
                     Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name).ThenBy(x=>x.Name));
                     //TODO Move to recourse 
-                    RefreshEvents.ChangeErrorInvoke("Activity successful edited", ErrorType.Success);
+                    RefreshEvents.ChangeErrorInvoke("Task edited", ErrorType.Success);
                 }
             }
         }
@@ -147,7 +147,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 Activities.Remove(activity);
                 //TODO Move to recourse
-                RefreshEvents.ChangeErrorInvoke("Activity deleted edited", ErrorType.Success);
+                RefreshEvents.ChangeErrorInvoke("Task deleted", ErrorType.Success);
             }
         }
 
