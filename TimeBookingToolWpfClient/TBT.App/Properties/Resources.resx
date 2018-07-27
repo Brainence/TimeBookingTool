@@ -250,7 +250,7 @@
     <value>Quit</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Refresh all data</value>
+    <value>Refresh</value>
   </data>
   <data name="RefreshCustomer" xml:space="preserve">
     <value>Refresh customers list</value>
@@ -392,7 +392,7 @@
     <value>Please confirm your password.</value>
   </data>
   <data name="CustomerWithName" xml:space="preserve">
-    <value>Customer with name</value>
+    <value>Customer with this name</value>
   </data>
   <data name="EnteredBigTime" xml:space="preserve">
     <value>Time entered for day must be less then 24 hours</value>
@@ -425,16 +425,16 @@
     <value>Password has been changed.</value>
   </data>
   <data name="ProjectWithName" xml:space="preserve">
-    <value>Project with name</value>
+    <value>Project with this name</value>
   </data>
   <data name="UserNameDoesntExist" xml:space="preserve">
-    <value>Username doesn't exist.</value>
+    <value>Username doesn't exist</value>
   </data>
   <data name="UserNameIsRequierd" xml:space="preserve">
-    <value>Username is required.</value>
+    <value>Username is required</value>
   </data>
   <data name="UserNameOfPasswordEmpty" xml:space="preserve">
-    <value>Username or password is empty.</value>
+    <value>Username or password is empty</value>
   </data>
   <data name="YouHaveReachedMonthly" xml:space="preserve">
     <value>You have reached your monthly</value>
@@ -495,13 +495,13 @@
     <value>Incorrect password entered.</value>
   </data>
   <data name="UserAccountCreated" xml:space="preserve">
-    <value>User account created successfully.</value>
+    <value>User account created</value>
   </data>
   <data name="UsernameAlreadyExists" xml:space="preserve">
-    <value>Username already exists.</value>
+    <value>Username already exists</value>
   </data>
   <data name="UserWasSaved" xml:space="preserve">
-    <value>User was saved successfully.</value>
+    <value>User saved</value>
   </data>
   <data name="YouCantRemoveLastAdmin" xml:space="preserve">
     <value>You can't remove last admin.</value>

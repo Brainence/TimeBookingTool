@@ -430,7 +430,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Customer with name.
+        ///   Looks up a localized string similar to Customer with this name.
         /// </summary>
         public static string CustomerWithName {
             get {
@@ -844,7 +844,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project with name.
+        ///   Looks up a localized string similar to Project with this name.
         /// </summary>
         public static string ProjectWithName {
             get {
@@ -862,7 +862,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Refresh all data.
+        ///   Looks up a localized string similar to Refresh.
         /// </summary>
         public static string Refresh {
             get {
@@ -1259,7 +1259,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User account created successfully..
+        ///   Looks up a localized string similar to User account created.
         /// </summary>
         public static string UserAccountCreated {
             get {
@@ -1277,7 +1277,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username already exists..
+        ///   Looks up a localized string similar to Username already exists.
         /// </summary>
         public static string UsernameAlreadyExists {
             get {
@@ -1286,7 +1286,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username doesn&apos;t exist..
+        ///   Looks up a localized string similar to Username doesn&apos;t exist.
         /// </summary>
         public static string UserNameDoesntExist {
             get {
@@ -1295,7 +1295,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username is required..
+        ///   Looks up a localized string similar to Username is required.
         /// </summary>
         public static string UserNameIsRequierd {
             get {
@@ -1313,7 +1313,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username or password is empty..
+        ///   Looks up a localized string similar to Username or password is empty.
         /// </summary>
         public static string UserNameOfPasswordEmpty {
             get {
@@ -1331,7 +1331,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User was saved successfully..
+        ///   Looks up a localized string similar to User saved.
         /// </summary>
         public static string UserWasSaved {
             get {

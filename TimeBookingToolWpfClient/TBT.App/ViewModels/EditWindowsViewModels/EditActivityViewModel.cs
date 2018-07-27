@@ -33,7 +33,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
             {
                 if (SetProperty(ref _selectedProject, value))
                 {
-                    EditingActivity.Project = SelectedProject;
+                    EditingActivity.Project = value;
                 }
             }
         }

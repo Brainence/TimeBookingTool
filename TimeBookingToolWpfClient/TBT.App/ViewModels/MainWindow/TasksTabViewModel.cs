@@ -104,7 +104,7 @@ namespace TBT.App.ViewModels.MainWindow
                 Activities.Add(newActivity);
                 Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name));
                 NewTaskName = "";
-                RefreshEvents.ChangeErrorInvoke("Task created successful", ErrorType.Success);
+                RefreshEvents.ChangeErrorInvoke("Task created", ErrorType.Success);
             }
         }
 
@@ -123,7 +123,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (activity.Name == editContext.EditingActivity.Name && activity.Project.Name == editContext.SelectedProject.Name)
                 {
-                    RefreshEvents.ChangeErrorInvoke("Activity successful edited", ErrorType.Success);
+                    RefreshEvents.ChangeErrorInvoke("Task edited", ErrorType.Success);
                     return;
                 }
                 if (await App.CommunicationService.PutAsJson("Activity", editContext.EditingActivity) != null)
@@ -131,7 +131,7 @@ namespace TBT.App.ViewModels.MainWindow
                     Activities.Remove(activity);
                     Activities.Add(editContext.EditingActivity);
                     Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name).ThenBy(x=>x.Name));
-                    RefreshEvents.ChangeErrorInvoke("Activity successful edited", ErrorType.Success);
+                    RefreshEvents.ChangeErrorInvoke("Task edited", ErrorType.Success);
                 }
             }
         }
@@ -143,7 +143,7 @@ namespace TBT.App.ViewModels.MainWindow
             if (await App.CommunicationService.PutAsJson("Activity", activity) != null)
             {
                 Activities.Remove(activity);
-                RefreshEvents.ChangeErrorInvoke("Activity deleted edited", ErrorType.Success);
+                RefreshEvents.ChangeErrorInvoke("Task deleted", ErrorType.Success);
             }
         }
 

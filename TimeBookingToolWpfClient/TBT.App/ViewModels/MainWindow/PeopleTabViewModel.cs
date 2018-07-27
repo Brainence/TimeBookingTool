@@ -155,7 +155,7 @@ namespace TBT.App.ViewModels.MainWindow
             if (await App.CommunicationService.PutAsJson("User", user) != null)
             {
                 Users.Remove(user);
-                RefreshEvents.ChangeErrorInvoke("User removed successfully", ErrorType.Success);
+                RefreshEvents.ChangeErrorInvoke("User deleted", ErrorType.Success);
             }
         }
 
