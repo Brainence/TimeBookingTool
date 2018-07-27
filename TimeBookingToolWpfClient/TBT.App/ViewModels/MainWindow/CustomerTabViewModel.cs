@@ -120,7 +120,6 @@ namespace TBT.App.ViewModels.MainWindow
                 NewCustomersName = "";
                 Customers.Add(JsonConvert.DeserializeObject<Customer>(data));
                 Customers = new ObservableCollection<Customer>(Customers);
-                //TODO: Move to Resources
                 RefreshEvents.ChangeErrorInvoke("Customer successfully added", ErrorType.Success);
             }
         }
@@ -137,7 +136,6 @@ namespace TBT.App.ViewModels.MainWindow
             editContext.CloseWindow -= editWindow.Close;
             if (editContext.EditingCustomersName == customer.Name)
             {
-                //Todo Move to Resources
                 RefreshEvents.ChangeErrorInvoke("Client successfully edited", ErrorType.Success);
                 return;
             }
@@ -149,11 +147,15 @@ namespace TBT.App.ViewModels.MainWindow
                     return;
                 }
 
-                if (await App.CommunicationService.PutAsJson("Customer", customer) != null)
+                var oldName = customer.Name;
+                customer.Name = editContext.EditingCustomersName;
+                if (await App.CommunicationService.PutAsJson("Customer",customer) != null)
                 {
-                    customer.Name = editContext.EditingCustomersName;
-                    //Todo Move to Resources
                     RefreshEvents.ChangeErrorInvoke("Client successfully edited", ErrorType.Success);
+                }
+                else
+                {
+                    customer.Name = oldName;
                 }
                
             }
@@ -168,7 +170,7 @@ namespace TBT.App.ViewModels.MainWindow
             if (data != null)
             {
                 Customers.Remove(customer);
-                RefreshEvents.ChangeErrorInvoke("Client successfully Removed", ErrorType.Success);//Todo Move to Resources
+                RefreshEvents.ChangeErrorInvoke("Client successfully Removed", ErrorType.Success);
             }
         }
 
@@ -201,10 +203,6 @@ namespace TBT.App.ViewModels.MainWindow
             RefreshEvents.ChangeCurrentUser -= RefreshCompany;
             Customers?.Clear();
         }
-
-        public void Dispose()
-        { }
-
         #endregion
 
     }

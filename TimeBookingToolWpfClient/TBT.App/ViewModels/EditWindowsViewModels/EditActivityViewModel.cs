@@ -29,7 +29,13 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public Project SelectedProject
         {
             get { return _selectedProject; }
-            set { SetProperty(ref _selectedProject, value); }
+            set
+            {
+                if (SetProperty(ref _selectedProject, value))
+                {
+                    EditingActivity.Project = SelectedProject;
+                }
+            }
         }
 
         public Activity EditingActivity

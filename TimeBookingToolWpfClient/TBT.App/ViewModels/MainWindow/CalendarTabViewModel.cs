@@ -36,7 +36,7 @@ namespace TBT.App.ViewModels.MainWindow
             set
             {
                 SetProperty(ref _week, value);
-                GetTimeEnteredForWeek();
+                GetTimeEntriesForWeek();
                 RaisePropertyChanged(nameof(SelectedDay));
             }
         }
@@ -138,7 +138,7 @@ namespace TBT.App.ViewModels.MainWindow
         private async void RefreshTimeEntries()
         {
             await SelectedDayChanged();
-            await GetTimeEnteredForWeek();
+            await GetTimeEntriesForWeek();
         }
 
         public void ChangeWeek(int offset)
@@ -177,7 +177,7 @@ namespace TBT.App.ViewModels.MainWindow
             DayTime = TimeEntriesHelper.SumTime(timeEntries.Where(x => !x.IsRunning));
         }
 
-        private async Task GetTimeEnteredForWeek()
+        private async Task GetTimeEntriesForWeek()
         {
             if (User.Id > 0)
             {
@@ -225,21 +225,6 @@ namespace TBT.App.ViewModels.MainWindow
             EditTimeEntryViewModel.SelectedActivity = null;
             RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
         }
-
-        #region IDisposable
-
-        private bool _disposed;
-
-        public virtual void Dispose()
-        {
-            if (_disposed) { return; }
-
-            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
-            _disposed = true;
-        }
-
-        #endregion
-
         #endregion
     }
 }

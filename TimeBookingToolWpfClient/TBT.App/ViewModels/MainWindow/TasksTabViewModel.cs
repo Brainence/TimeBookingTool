@@ -126,14 +126,11 @@ namespace TBT.App.ViewModels.MainWindow
                     RefreshEvents.ChangeErrorInvoke("Activity successful edited", ErrorType.Success);
                     return;
                 }
-
-                var data = await App.CommunicationService.PutAsJson("Activity", editContext.EditingActivity);
-                if (data != null)
+                if (await App.CommunicationService.PutAsJson("Activity", editContext.EditingActivity) != null)
                 {
                     Activities.Remove(activity);
-                    Activities.Add(JsonConvert.DeserializeObject<Activity>(data));
+                    Activities.Add(editContext.EditingActivity);
                     Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name).ThenBy(x=>x.Name));
-                    //TODO Move to recourse 
                     RefreshEvents.ChangeErrorInvoke("Activity successful edited", ErrorType.Success);
                 }
             }
@@ -146,7 +143,6 @@ namespace TBT.App.ViewModels.MainWindow
             if (await App.CommunicationService.PutAsJson("Activity", activity) != null)
             {
                 Activities.Remove(activity);
-                //TODO Move to recourse
                 RefreshEvents.ChangeErrorInvoke("Activity deleted edited", ErrorType.Success);
             }
         }
@@ -188,11 +184,6 @@ namespace TBT.App.ViewModels.MainWindow
             Projects?.Clear();
             Activities?.Clear();
         }
-
-        #endregion
-
-        #region IDisposable
-        public virtual void Dispose() { }
 
         #endregion
     }

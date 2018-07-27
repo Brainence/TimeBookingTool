@@ -134,14 +134,10 @@ namespace TBT.App.ViewModels.MainWindow
                     RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.ProjectWithName} {editContext.EditingProject.Name} {Properties.Resources.AlreadyExists}", ErrorType.Error);
                     return;
                 }
-
-                var data = await App.CommunicationService.PutAsJson("Project", editContext.EditingProject);
-                if (data != null)
+                if (await App.CommunicationService.PutAsJson("Project", editContext.EditingProject) != null)
                 {
-                    var newProject = JsonConvert.DeserializeObject<Project>(data);
                     Projects.Remove(project);
-                    newProject.Customer = Customers.FirstOrDefault(x => x.Id == newProject.Customer.Id);
-                    Projects.Add(newProject);
+                    Projects.Add(editContext.EditingProject);
                     Projects = new ObservableCollection<Project>(Projects.OrderBy(x => x.Name));
                     RefreshEvents.ChangeErrorInvoke("Project updated successful", ErrorType.Success);
                 }
@@ -156,7 +152,6 @@ namespace TBT.App.ViewModels.MainWindow
             if (await App.CommunicationService.PutAsJson("Project", project) != null)
             {
                 Projects.Remove(Projects.FirstOrDefault(item => item.Id == project.Id));
-                //TODO move to resource 
                 RefreshEvents.ChangeErrorInvoke("Project success deleted", ErrorType.Success);
             }
         }
@@ -196,14 +191,6 @@ namespace TBT.App.ViewModels.MainWindow
             Projects?.Clear();
             Customers?.Clear();
         }
-
-        #region IDisposable
-
-        public void Dispose()
-        { }
-
-        #endregion
-
         #endregion
     }
 }

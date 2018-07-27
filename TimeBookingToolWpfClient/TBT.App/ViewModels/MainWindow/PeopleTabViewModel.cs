@@ -155,7 +155,6 @@ namespace TBT.App.ViewModels.MainWindow
             if (await App.CommunicationService.PutAsJson("User", user) != null)
             {
                 Users.Remove(user);
-                //TODO move to resource
                 RefreshEvents.ChangeErrorInvoke("User removed successfully", ErrorType.Success);
             }
         }
@@ -205,19 +204,6 @@ namespace TBT.App.ViewModels.MainWindow
             editMyProfile.CloseWindow -= ChangeCurrentUserInfo;
             Users?.Clear();
         }
-
-        #region IDisposable
-
-        private bool _disposed;
-
-        public virtual void Dispose()
-        {
-            if (_disposed) { return; }
-            _disposed = true;
-        }
-
-        #endregion
-
         #endregion
 
     }

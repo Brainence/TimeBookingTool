@@ -197,6 +197,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 SetProperty(ref _loadData, value);
                 FilterTimeEntry();
+                UpdateProjectList();
             }
         }
 
@@ -229,7 +230,6 @@ namespace TBT.App.ViewModels.MainWindow
             SaveToClipboardCommand = new RelayCommand(obj => SaveTotalTimeToClipboard(), obj => TimeEntries?.Any() == true);
             SaveMonthlySalaryToClipboardCommand = new RelayCommand(obj => SaveMonthlySalaryToClipboard());
             ChangeInterval();
-            UpdateProjectList();
             ItemsLoading = true;
         }
 
@@ -301,7 +301,6 @@ namespace TBT.App.ViewModels.MainWindow
                     time.Date = time.Date.ToLocalTime();
                 }
                 LoadData = result;
-                UpdateProjectList();
                 ItemsLoading = false;
             }
         }
@@ -521,21 +520,6 @@ namespace TBT.App.ViewModels.MainWindow
             TimeEntries?.Clear();
             LoadData?.Clear();
         }
-
-        #region IDisposable
-
-        private bool disposed;
-
-        public virtual void Dispose()
-        {
-            if (disposed) { return; }
-
-            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
-            disposed = true;
-        }
-
-        #endregion
-
         #endregion
     }
 

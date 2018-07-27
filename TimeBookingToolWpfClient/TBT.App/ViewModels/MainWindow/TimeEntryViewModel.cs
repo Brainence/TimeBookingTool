@@ -197,8 +197,6 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-       
-
         private async void TimerTick()
         {
             var currentDuration = TimeEntry.Duration + DateTime.UtcNow.TimeOfDay - _startDate.TimeOfDay;

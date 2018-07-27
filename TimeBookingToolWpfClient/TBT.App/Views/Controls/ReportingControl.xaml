@@ -49,8 +49,8 @@
             <Grid Grid.Row="0" HorizontalAlignment="Left">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="245"/>
-                    <ColumnDefinition Width="148"/>
-                    <ColumnDefinition Width="105"/>
+                    <ColumnDefinition Width="178"/>
+                    <ColumnDefinition Width="75"/>
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Horizontal" Grid.Column="0"  Margin="0 0 0 0">
@@ -63,12 +63,11 @@
                                     VerticalAlignment="Center" Foreground="#c2422b" FontWeight="Bold" FontSize="13"  Width="110"/>
                 </StackPanel>
 
-                <ComboBox x:Name="DateComboBox" Grid.Column="1" Style="{StaticResource ComboBoxFlatStyle}" Margin="25 0 0 0" ItemsSource="{Binding IntervalTips}" 
-                       SelectedIndex="{Binding SelectedTipIndex}" Foreground="#c2422b" FontWeight="Bold" FontSize="13" Height="25">
-                </ComboBox>
+                <ComboBox x:Name="DateComboBox" Grid.Column="1" Style="{StaticResource ComboBoxFlatStyle}" Margin="25,0,0,0" ItemsSource="{Binding IntervalTips}" 
+                       SelectedIndex="{Binding SelectedTipIndex}" Foreground="#c2422b" FontWeight="Bold" FontSize="13"/>
 
 
-                <StackPanel Grid.Column="2" HorizontalAlignment="Right" Margin="0 0 0 0" Orientation="Horizontal" VerticalAlignment="Center">
+                <StackPanel Grid.Column="2" HorizontalAlignment="Right" Margin="0,2,0,3" Orientation="Horizontal" VerticalAlignment="Center" Height="20" Width="48">
                     <Button Height="20" Margin="0 0 0 0"
                         Command="{Binding CreateCompanyReportCommand}"
                         Visibility="{Binding Path=User.IsAdmin, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}}"

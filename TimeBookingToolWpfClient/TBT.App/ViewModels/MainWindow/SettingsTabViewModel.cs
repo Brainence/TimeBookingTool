@@ -18,13 +18,12 @@ namespace TBT.App.ViewModels.MainWindow
     {
         #region Fields
 
-        private bool _runOnSturtupCheck;
         private RegistryKey _registryKey;
 
         private DateTime _date;
         private string _text;
-        private Absence _selectedIteam;
-        private List<Absence> _iteamList;
+        private AbsenceType _selectedAbsenceType;
+        private List<AbsenceType> _absenceTypeList;
         private User _currentUser;
 
 
@@ -69,15 +68,15 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _text; }
             set { SetProperty(ref _text, value); }
         }
-        public Absence SelectedItem
+        public AbsenceType SelectedItem
         {
-            get { return _selectedIteam; }
-            set { SetProperty(ref _selectedIteam, value); }
+            get { return _selectedAbsenceType; }
+            set { SetProperty(ref _selectedAbsenceType, value); }
         }
-        public List<Absence> ItemList
+        public List<AbsenceType> ItemList
         {
-            get { return _iteamList; }
-            set { SetProperty(ref _iteamList, value); }
+            get { return _absenceTypeList; }
+            set { SetProperty(ref _absenceTypeList, value); }
         }
 
         public ICommand SendEmail { get; set; }
@@ -91,7 +90,7 @@ namespace TBT.App.ViewModels.MainWindow
                 ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             SendEmail = new RelayCommand(obj => Send(), null);
             Date = DateTime.Now;
-            ItemList = Enum.GetValues(typeof(Absence)).Cast<Absence>().ToList();
+            ItemList = Enum.GetValues(typeof(AbsenceType)).Cast<AbsenceType>().ToList();
         }
 
 
@@ -126,7 +125,7 @@ namespace TBT.App.ViewModels.MainWindow
             var data = new
             {
                 Text,
-                Type = _selectedIteam.ToString(),
+                Type = _selectedAbsenceType.ToString(),
                 Date = Date.ToShortDateString(),
                 Email = _currentUser.Username
             };
@@ -160,13 +159,6 @@ namespace TBT.App.ViewModels.MainWindow
         {
             RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
         }
-
-        #region IDisposable
-
-        public virtual void Dispose() { }
-
-        #endregion
-
         #endregion
     }
 }

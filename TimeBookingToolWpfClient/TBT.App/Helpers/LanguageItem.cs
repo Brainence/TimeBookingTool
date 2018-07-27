@@ -10,8 +10,7 @@ namespace TBT.App.Helpers
 
         public override bool Equals(LanguageItem x, LanguageItem y)
         {
-            if (x == null || y == null) return false;
-            return x.Culture == y.Culture;
+            return x?.Culture == y?.Culture;
         }
 
         public override int GetHashCode(LanguageItem obj)

@@ -91,7 +91,7 @@ namespace TBT.App.Views.Controls
 
         public static async void ItemsSourceMultiple_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs args)
         {
-            var comboBox = (MultiSelectionComboBox)d;
+            var comboBox = d as MultiSelectionComboBox;
             var list = new List<object>();
 
             var data = await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId ?? 0}");

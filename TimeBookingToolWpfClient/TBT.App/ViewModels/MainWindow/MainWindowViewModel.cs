@@ -440,13 +440,11 @@ namespace TBT.App.ViewModels.MainWindow
                     break;
                 case ErrorType.Error:
                     {
-                        //Todo change to red
                         Brush = MessageColors.White;
                     }
                     break;
                 case ErrorType.NotConnected:
                     {
-                        //Todo change to red
                         Brush = MessageColors.White;
                     }
                     break;

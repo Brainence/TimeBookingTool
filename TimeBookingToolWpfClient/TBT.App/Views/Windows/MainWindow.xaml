@@ -37,9 +37,10 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <ListBox Grid.Row="0" Style="{StaticResource HeaderStyle}">
-            </ListBox>
-            <ContentControl Grid.Row="1" Margin="0 5 0 0" Content="{Binding SelectedViewModel}"/>
+            <ListBox Grid.Row="0" Style="{StaticResource HeaderStyle}"/>
+            <controls:SpinnersCogs Margin="0 5 0 0" Grid.Row="1"  Background="White" Visibility="{Binding Path=IsConnected, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
+            
+            <ContentControl Grid.Row="1" Margin="0 5 0 0" Content="{Binding SelectedViewModel}" Visibility="{Binding Path=IsConnected, Converter={StaticResource BoolToVisibilityConverter}}"/>
         </Grid>
 
         <Grid Grid.Row="1">
