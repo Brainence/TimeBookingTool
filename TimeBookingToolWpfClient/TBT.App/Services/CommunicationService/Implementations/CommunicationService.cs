@@ -123,7 +123,7 @@ namespace TBT.App.Services.CommunicationService.Implementations
             }
             catch (ValidationException ex)
             {
-                RefreshEvents.ChangeErrorInvoke(ex.Message, ErrorType.Error);
+                RefreshEvents.ChangeErrorInvoke(ex.Message.Trim('\"'), ErrorType.Error);
             }
             catch (Exception)
             {
