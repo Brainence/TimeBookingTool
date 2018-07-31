@@ -17,7 +17,8 @@
             <local:TextControl Margin="0 0 0 5" Label="{x:Static p:Resources.FirstName}" Text="{Binding Path=EditingUser.FirstName, Mode=TwoWay}"/>
             <local:TextControl Margin="0 0 0 5" Label="{x:Static p:Resources.LastName}" Text="{Binding Path=EditingUser.LastName, Mode=TwoWay}"/>
             <local:TextControl Margin="0 0 0 5" Label="{x:Static p:Resources.Username}" Text="{Binding Path=EditingUser.Username, Mode=TwoWay}"/>
-            <local:TextControl Margin="0 0 0 5" Label="{x:Static p:Resources.Salary}" Text="{Binding Path=EditingUser.MonthlySalary, Mode=TwoWay, StringFormat={}{0:0}}"/>
+            <local:TextControl Margin="0 0 0 5" Label="{x:Static p:Resources.Salary}" Text="{Binding Path=EditingUser.MonthlySalary, Mode=TwoWay, StringFormat={}{0:0}}"
+                               Visibility="{Binding ShowAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
             <local:TextControl Margin="0 0 0 5" Label="{x:Static p:Resources.Password}" Text="{Binding Path=EditingUser.Password, Mode=TwoWay}"
                                Visibility="{Binding ShowPassword, Converter={StaticResource BoolToVisibilityConverter}}"/>
             <local:TextControl Margin="0 0 0 5" Label="{x:Static p:Resources.TimeLimit}" Text="{Binding Path=EditingUser.TimeLimit, Mode=TwoWay}"
