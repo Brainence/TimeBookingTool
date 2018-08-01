@@ -171,7 +171,7 @@
                     <TextBlock  Text="{Binding Path=Salary, Mode=TwoWay, StringFormat={}:   {0:0.##} $}" FontSize="14" FontWeight="Bold"/>
                     <TextBlock Text="{Binding Path=FullUah,StringFormat={}  ({0:0.##} ₴)}" FontSize="14" FontWeight="Bold"/>
                     <Button  Margin="10 0 0 0" Command="{Binding SaveMonthlySalaryToClipboardCommand}">
-                        <Image Source="../../Resources/Icons/reporting_white.png" Height="18" ToolTip="{x:Static p:Resources.CopyTotalToClipboard}"/>
+                        <Image Source="../../Resources/Icons/reporting_white.png" Height="18" ToolTip="{x:Static p:Resources.CopySalaryToClipboard}"/>
                     </Button>
                 </StackPanel>
                 <StackPanel  Margin="0 5 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
