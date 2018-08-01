@@ -19,8 +19,8 @@ namespace TBT.App.Models.AppModels
         private int _timeLimit;
         private TimeSpan? _currentTimeZone;
         private Company _company;
-
         private decimal? _monthlySalary;
+        private bool _isBlocked;
        
         public User()
         {
@@ -111,8 +111,12 @@ namespace TBT.App.Models.AppModels
             get { return _monthlySalary; }
             set { SetProperty(ref _monthlySalary, value); }
         }
-      
 
+        public bool IsBlocked
+        {
+            get { return _isBlocked; }
+            set { SetProperty(ref _isBlocked, value); }
+        }
 
         public string FullName => $"{FirstName} {LastName}";
 

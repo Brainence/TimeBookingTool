@@ -30,22 +30,25 @@ namespace TBT.App.ViewModels.MainWindow
 
 
         private User _user;
-        private ObservableCollection<User> _users;
         private User _reportingUser;
         private DateTime _from;
         private DateTime _to;
-        private ObservableCollection<string> _intervalTips;
         private int _selectedTipIndex;
-        private ObservableCollection<TimeEntry> _timeEntries;
         private decimal _salary;
         private decimal _hourlySalary;
         private decimal _salaryUah;
         private decimal _hourlySalaryUah;
         private decimal _dollarRate;
         private Project _currentProject;
-        private ObservableCollection<Project> _projects;
-        private List<TimeEntry> _loadData;
         private int _savedReportingUser;
+        private bool _needBlockedUsers;
+
+        private ObservableCollection<Project> _projects;
+        private ObservableCollection<TimeEntry> _loadedTimeEntries;
+        private ObservableCollection<TimeEntry> _timeEntries;
+        private ObservableCollection<string> _intervalTips;
+        private ObservableCollection<User> _users;
+        private ObservableCollection<User> _loadedUsers;
 
 
         #endregion
@@ -64,6 +67,15 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _users, value); }
         }
 
+        private ObservableCollection<User> LoadedUsers
+        {
+            get => _loadedUsers;
+            set
+            {
+                SetProperty(ref _loadedUsers, value);
+                UpdateUserList();
+            }
+        }
         public User ReportingUser
         {
             get { return _reportingUser; }
@@ -119,17 +131,6 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public ObservableCollection<TimeEntry> TimeEntries
-        {
-            get { return _timeEntries; }
-            set
-            {
-                SetProperty(ref _timeEntries, value);
-                CalcSalary();
-            }
-        }
-
-
         public decimal Salary
         {
             get { return _salary; }
@@ -139,6 +140,7 @@ namespace TBT.App.ViewModels.MainWindow
                 FullUah = value * DollarRate;
             }
         }
+
         public decimal HourlySalary
         {
             get { return _hourlySalary; }
@@ -148,16 +150,19 @@ namespace TBT.App.ViewModels.MainWindow
                 HourUah = value * DollarRate;
             }
         }
+
         public decimal HourUah
         {
             get { return _hourlySalaryUah; }
             set { SetProperty(ref _hourlySalaryUah, value); }
         }
+
         public decimal FullUah
         {
             get { return _salaryUah; }
             set { SetProperty(ref _salaryUah, value); }
         }
+
         public decimal DollarRate
         {
             get { return _dollarRate; }
@@ -178,19 +183,41 @@ namespace TBT.App.ViewModels.MainWindow
                 FilterTimeEntry();
             }
         }
+
         public ObservableCollection<Project> Projects
         {
             get { return _projects; }
             set { SetProperty(ref _projects, value); }
         }
-        private List<TimeEntry> LoadData
+
+        public ObservableCollection<TimeEntry> TimeEntries
         {
-            get { return _loadData; }
+            get { return _timeEntries; }
             set
             {
-                SetProperty(ref _loadData, value);
+                SetProperty(ref _timeEntries, value);
+                CalcSalary();
+            }
+        }
+
+        private ObservableCollection<TimeEntry> LoadedTimeEntries
+        {
+            get { return _loadedTimeEntries; }
+            set
+            {
+                SetProperty(ref _loadedTimeEntries, value);
                 FilterTimeEntry();
                 UpdateProjectList();
+            }
+        }
+
+        public bool NeedBlocked
+        {
+            get => _needBlockedUsers;
+            set
+            {
+                SetProperty(ref _needBlockedUsers, value);
+                UpdateUserList();
             }
         }
 
@@ -208,7 +235,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         public ReportingTabViewModel(User currentUser)
         {
-            _loadData = new List<TimeEntry>();
+            _loadedTimeEntries = new ObservableCollection<TimeEntry>();
             User = currentUser;
             ReportingUser = User;
             CurrentProject = All;
@@ -217,7 +244,7 @@ namespace TBT.App.ViewModels.MainWindow
                 Resources.LastMonth, Resources.ThisYear, Resources.LastYear,
                 Resources.AllTime
             };
-           
+
             CreateCompanyReportCommand = new RelayCommand(obj => SaveCompanyReport(), obj => User.IsAdmin);
             CreateUserReportCommand = new RelayCommand(obj => SaveXPSDocument(CreateUserReport()), null);
             SaveToClipboardCommand = new RelayCommand(obj => SaveTotalTimeToClipboard(), obj => TimeEntries?.Any() == true);
@@ -283,16 +310,16 @@ namespace TBT.App.ViewModels.MainWindow
                 _to = temp;
             }
             UpdateTime();
-            LoadData?.Clear();
+            LoadedTimeEntries?.Clear();
             var data = await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{userId}/{From.ToUrl()}/{To.ToUrl()}/false");
             if (data != null)
             {
-                var result = JsonConvert.DeserializeObject<List<TimeEntry>>(data);
+                var result = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(data);
                 foreach (var time in result)
                 {
                     time.Date = time.Date.ToLocalTime();
                 }
-                LoadData = result;
+                LoadedTimeEntries = result;
             }
         }
 
@@ -328,7 +355,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void UpdateProjectList()
         {
-            var projects = LoadData.Select(x => x.Activity.Project).ToList();
+            var projects = LoadedTimeEntries.Select(x => x.Activity.Project).ToList();
             var tempMas = new List<Project>(projects.Count + 1);
             tempMas.AddRange(projects);
             tempMas.Add(All);
@@ -338,9 +365,21 @@ namespace TBT.App.ViewModels.MainWindow
             }
             Projects = new ObservableCollection<Project>(tempMas.Distinct());
         }
+
+        public void UpdateUserList()
+        {
+            var temp = _needBlockedUsers ? new ObservableCollection<User>(LoadedUsers.OrderBy(x=>x.IsBlocked).ThenBy(x=>x.FirstName))
+                : new ObservableCollection<User>(LoadedUsers.Where(x=>!x.IsBlocked).OrderBy(x=>x.FirstName));
+            if (temp.FirstOrDefault(x => x.Id == _savedReportingUser) == null)
+            {
+                ReportingUser = Users.FirstOrDefault();
+            }
+
+            Users = temp;
+        }
         private void FilterTimeEntry()
         {
-            TimeEntries = new ObservableCollection<TimeEntry>(All == CurrentProject ? LoadData : LoadData.Where(entry => entry.Activity.Project == CurrentProject));
+            TimeEntries = new ObservableCollection<TimeEntry>(All == CurrentProject ? LoadedTimeEntries : LoadedTimeEntries.Where(entry => entry.Activity.Project == CurrentProject));
         }
 
 
@@ -416,7 +455,7 @@ namespace TBT.App.ViewModels.MainWindow
                 };
                 if (user.Id == User.Id)
                 {
-                    reportModel.Duration = TimeEntriesHelper.CalcFullTime(LoadData);
+                    reportModel.Duration = TimeEntriesHelper.CalcFullTime(LoadedTimeEntries);
                 }
                 else
                 {
@@ -474,7 +513,7 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (User.IsAdmin)
             {
-                Users = await RefreshEvents.RefreshUsersList();
+                LoadedUsers = await RefreshEvents.RefreshUsersList();
                 ReportingUser = (Users.FirstOrDefault(x => x.Id == _savedReportingUser) ?? Users.FirstOrDefault(x => x.Id == User.Id)) ?? Users.FirstOrDefault();
             }
             else
@@ -507,7 +546,7 @@ namespace TBT.App.ViewModels.MainWindow
             RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
             Users?.Clear();
             TimeEntries?.Clear();
-            LoadData?.Clear();
+            LoadedTimeEntries?.Clear();
         }
 
         public async void RefreshTab()
@@ -515,7 +554,7 @@ namespace TBT.App.ViewModels.MainWindow
             DollarRate = 0;
             Users?.Clear();
             TimeEntries?.Clear();
-            LoadData?.Clear();
+            LoadedTimeEntries?.Clear();
             await RefreshEvents.RefreshCurrentUser(null);
             RefreshRate();
             await RefreshUsersList();
