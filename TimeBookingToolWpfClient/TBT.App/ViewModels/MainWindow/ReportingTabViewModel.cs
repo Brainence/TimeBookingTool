@@ -194,7 +194,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        private Project All = new Project { Name = "All", Id = -1 };
+        private readonly Project All = new Project { Name = "All", Id = -1 };
 
         public ICommand CreateCompanyReportCommand { get; set; }
         public ICommand CreateUserReportCommand { get; set; }
@@ -229,7 +229,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         #region Methods
 
-        private async void ChangeInterval()
+        private void ChangeInterval()
         {
             var now = DateTime.Now;
             switch (SelectedTipIndex)
@@ -266,10 +266,10 @@ namespace TBT.App.ViewModels.MainWindow
                     _to = DateTime.Now.Date;
                     break;
             }
-            await RefreshReportTimeEntries(ReportingUser?.Id);
+            RefreshReportTimeEntries(ReportingUser?.Id);
         }
 
-        private async Task RefreshReportTimeEntries(int? userId)
+        private async void RefreshReportTimeEntries(int? userId)
         {
             if (userId == null || userId <= 0)
             {
@@ -519,7 +519,7 @@ namespace TBT.App.ViewModels.MainWindow
             await RefreshEvents.RefreshCurrentUser(null);
             RefreshRate();
             await RefreshUsersList();
-            await RefreshReportTimeEntries(ReportingUser?.Id);
+            RefreshReportTimeEntries(ReportingUser?.Id);
         }
 
         #endregion

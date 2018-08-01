@@ -143,7 +143,7 @@ namespace TBT.App.ViewModels.MainWindow
             SelectedDay = DateTime.Now.Date;
         }
 
-        public async Task SelectedDayChanged()
+        public async void SelectedDayChanged()
         {
             if (User.Id == 0) return;
 
@@ -163,7 +163,7 @@ namespace TBT.App.ViewModels.MainWindow
             DayTime = TimeEntriesHelper.SumTime(timeEntries.Where(x => !x.IsRunning));
         }
 
-        private async Task GetTimeEntriesForWeek()
+        private async void GetTimeEntriesForWeek()
         {
             if (User.Id > 0)
             {
@@ -215,8 +215,8 @@ namespace TBT.App.ViewModels.MainWindow
         public async void RefreshTab()
         {
             await RefreshEvents.RefreshCurrentUser(null, true);
-            await SelectedDayChanged();
-            await GetTimeEntriesForWeek();
+            SelectedDayChanged();
+            GetTimeEntriesForWeek();
         }
 
         #endregion
