@@ -48,7 +48,7 @@ namespace TBT.App.Helpers
 
         public static async Task RefreshCurrentUser(object sender,bool needProjects = false)
         {
-            var serveerPath = needProjects ? "/GetUserProject":"";
+            var serveerPath = needProjects ? "/GetUserWithProject" : "";
             var data = await App.CommunicationService.GetAsJson($"User{serveerPath}?email={App.Username}");
             if (data == null)
             {
@@ -75,14 +75,25 @@ namespace TBT.App.Helpers
         }
 
         public static async Task<ObservableCollection<Customer>> RefreshCustomersList()
-        {
+        { 
             var data = await App.CommunicationService.GetAsJson($"Customer/GetByCompany/{_companyId}");
+            return data != null ? JsonConvert.DeserializeObject<ObservableCollection<Customer>>(data) : new ObservableCollection<Customer>();
+        }
+        public static async Task<ObservableCollection<Customer>> RefreshCustomersListWithActivity()
+        {
+            var data = await App.CommunicationService.GetAsJson($"Customer/GetByCompanyWithActivities/{_companyId}");
             return data != null ? JsonConvert.DeserializeObject<ObservableCollection<Customer>>(data) : new ObservableCollection<Customer>();
         }
 
         public static async Task<ObservableCollection<Project>> RefreshProjectsList()
         {
             var data = await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId}");
+            return data != null ? JsonConvert.DeserializeObject<ObservableCollection<Project>>(data) : new ObservableCollection<Project>();
+        }
+
+        public static async Task<ObservableCollection<Project>> RefreshProjectsListWithActivity()
+        {
+            var data = await App.CommunicationService.GetAsJson($"Project/GetByCompanyWithActivity/{_companyId}");
             return data != null ? JsonConvert.DeserializeObject<ObservableCollection<Project>>(data) : new ObservableCollection<Project>();
         }
 

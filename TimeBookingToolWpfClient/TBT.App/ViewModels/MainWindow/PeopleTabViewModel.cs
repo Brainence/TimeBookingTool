@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -8,6 +9,7 @@ using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
 using TBT.App.ViewModels.EditWindowsViewModels;
+using TBT.App.Views.Controls;
 using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
@@ -22,7 +24,7 @@ namespace TBT.App.ViewModels.MainWindow
         private bool _isExpandenNewUser;
         private bool _isExpandedEdit;
         private ObservableCollection<User> _users;
-
+        private ObservableCollection<Project> _allProjects;
         #endregion
 
         #region Properties
@@ -75,6 +77,16 @@ namespace TBT.App.ViewModels.MainWindow
             set
             {
                 SetProperty(ref _users, value);
+            }
+        }
+
+        public ObservableCollection<Project> AllProjects
+        {
+            get { return _allProjects; }
+            set
+            {
+                SetProperty(ref _allProjects, value);
+                MultiSelectionComboBox.AllProjects = value;
             }
         }
 
@@ -178,21 +190,20 @@ namespace TBT.App.ViewModels.MainWindow
                 Users[index] = editingUser;
             }
         }
-
         #endregion
 
         #region Interface members
 
         public DateTime ExpiresDate { get; set; }
-        public async void OpenTab(User currentUser)
+        public void OpenTab(User currentUser)
         {
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
-            CurrentUser = currentUser;
             ((EditUserViewModel)CreateNewUserViewModel).NewUserAdded += AddNewUser;
             var editMyProfile = EditMyProfileViewModel as EditUserViewModel;
             ChangeUserForNested += editMyProfile.RefreshCurrentUser;
             editMyProfile.CloseWindow += ChangeCurrentUserInfo;
-            Users = await RefreshEvents.RefreshUsersList();
+            CurrentUser = currentUser;
+            RefreshTab();
         }
 
         public void CloseTab()
@@ -203,6 +214,16 @@ namespace TBT.App.ViewModels.MainWindow
             ChangeUserForNested -= editMyProfile.RefreshCurrentUser;
             editMyProfile.CloseWindow -= ChangeCurrentUserInfo;
             Users?.Clear();
+            AllProjects?.Clear();
+        }
+
+        public async void RefreshTab()
+        {
+            Users?.Clear();
+            AllProjects?.Clear();
+            await RefreshEvents.RefreshCurrentUser(null);
+            AllProjects = await RefreshEvents.RefreshProjectsList();
+            Users = await RefreshEvents.RefreshUsersList();          
         }
         #endregion
 

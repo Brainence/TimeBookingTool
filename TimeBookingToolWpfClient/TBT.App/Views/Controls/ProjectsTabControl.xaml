@@ -41,20 +41,11 @@
         </Grid>
 
 
-        <Grid Grid.Row="1"
-                          Margin="20" 
-                          Height="50"
-                          Width="50"
-                          Visibility="{Binding Path=Projects, Converter={StaticResource EnumerableToNotVisibilityConverter}}"
-                          HorizontalAlignment="Center" 
-                          VerticalAlignment="Center">
-            <local:SpinnersCogs/>
-        </Grid>
+        
 
         <Grid VerticalAlignment="Top" 
                           Grid.Row="1"
-                          Margin="20"
-                          Visibility="{Binding Path=Projects, Converter={StaticResource EnumerableToVisibilityConverter}}">
+                          Margin="20">
 
             <ScrollViewer
                               MinHeight="100"

@@ -33,7 +33,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="2"
+        <!--<Grid Grid.Row="2"
                           Margin="20" 
                           Height="50"
                           Width="50"
@@ -42,7 +42,7 @@
                           VerticalAlignment="Center">
 
             <controls:SpinnersCogs/>
-        </Grid>
+        </Grid>-->
 
         <Grid VerticalAlignment="Top" 
                           Grid.Row="2"

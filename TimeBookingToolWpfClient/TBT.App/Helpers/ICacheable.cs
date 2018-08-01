@@ -8,5 +8,6 @@ namespace TBT.App.Helpers
         DateTime ExpiresDate { get; set; }
         void OpenTab(User currentUser);
         void CloseTab();
+        void RefreshTab();
     }
 }

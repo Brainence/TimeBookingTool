@@ -28,7 +28,6 @@ namespace TBT.App.Views.Controls
         }
 
         private static int? _companyId;
-
         public string PropertyPath { get; set; }
 
         public IEnumerable ItemsSourceMultiple
@@ -89,28 +88,24 @@ namespace TBT.App.Views.Controls
             }
         }
 
-        public static async void ItemsSourceMultiple_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs args)
+        public static ObservableCollection<Project> AllProjects { get; set; }
+
+        public static void ItemsSourceMultiple_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs args)
         {
             var comboBox = d as MultiSelectionComboBox;
             var list = new List<object>();
-
-            var data = await App.CommunicationService.GetAsJson($"Project/GetByCompany/{_companyId ?? 0}");
-            if (data != null)
+            var userProjects = (ObservableCollection<Project>)args.NewValue;
+            foreach (var elem in AllProjects)
             {
-                var allProjects = JsonConvert.DeserializeObject<List<Project>>(data);
-                var userProjects = (ObservableCollection<Project>)args.NewValue;
-                foreach (var elem in allProjects)
+                var item = new CheckableObject(comboBox.PropertyPath)
                 {
-                    var item = new CheckableObject(comboBox.PropertyPath)
-                    {
-                        Obj = elem,
-                        IsChecked = userProjects?.Select(t => t.Id).Contains(elem.Id) ?? false
-                    };
-                    item.IsCheckedPropertyChanged += comboBox.ItemChecked;
-                    list.Add(item);
-                }
-                comboBox.ItemsSource = list;
+                    Obj = elem,
+                    IsChecked = userProjects?.Select(t => t.Id).Contains(elem.Id) ?? false
+                };
+                item.IsCheckedPropertyChanged += comboBox.ItemChecked;
+                list.Add(item);
             }
+            comboBox.ItemsSource = list;
         }
 
         public event Action Checked;

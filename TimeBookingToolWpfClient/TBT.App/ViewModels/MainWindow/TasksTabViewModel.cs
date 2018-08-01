@@ -118,7 +118,7 @@ namespace TBT.App.ViewModels.MainWindow
             editContext.NewItemSaved += window.Close;
             window.ShowDialog();
             editContext.NewItemSaved -= window.Close;
-           
+
             if (editContext.SaveActivity)
             {
                 if (activity.Name == editContext.EditingActivity.Name && activity.Project.Name == editContext.SelectedProject.Name)
@@ -130,7 +130,7 @@ namespace TBT.App.ViewModels.MainWindow
                 {
                     Activities.Remove(activity);
                     Activities.Add(editContext.EditingActivity);
-                    Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name).ThenBy(x=>x.Name));
+                    Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name).ThenBy(x => x.Name));
                     RefreshEvents.ChangeErrorInvoke("Task edited", ErrorType.Success);
                 }
             }
@@ -151,20 +151,8 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (this != sender)
             {
-                Refresh();
+                RefreshTab();
             }
-        }
-
-        private async Task Refresh()
-        {
-            Projects = await RefreshEvents.RefreshProjectsList();
-            Activities = new ObservableCollection<Activity>(Projects.SelectMany(x => x.Activities,
-                (proj, activ) =>
-                {
-                    activ.Project = proj;
-                    return activ;
-                }).OrderBy(x=>x.Project.Name).ThenBy(x=>x.Name));
-            SelectedProject = Projects.FirstOrDefault(x => x.Id == _savedProjectId) ?? Projects.FirstOrDefault();
         }
 
         #endregion
@@ -172,10 +160,10 @@ namespace TBT.App.ViewModels.MainWindow
         #region Interface members
 
         public DateTime ExpiresDate { get; set; }
-        public async void OpenTab(User currentUser)
+        public void OpenTab(User currentUser)
         {
             RefreshEvents.ChangeCurrentUser += RefreshData;
-            await Refresh();
+            RefreshTab();
         }
 
         public void CloseTab()
@@ -183,6 +171,20 @@ namespace TBT.App.ViewModels.MainWindow
             RefreshEvents.ChangeCurrentUser -= RefreshData;
             Projects?.Clear();
             Activities?.Clear();
+        }
+
+        public async void RefreshTab()
+        {
+            Projects?.Clear();
+            Activities?.Clear();
+            Projects = await RefreshEvents.RefreshProjectsListWithActivity();
+            Activities = new ObservableCollection<Activity>(Projects.SelectMany(x => x.Activities,
+                (proj, activ) =>
+                {
+                    activ.Project = proj;
+                    return activ;
+                }).OrderBy(x => x.Project.Name).ThenBy(x => x.Name));
+            SelectedProject = Projects.FirstOrDefault(x => x.Id == _savedProjectId) ?? Projects.FirstOrDefault();
         }
 
         #endregion

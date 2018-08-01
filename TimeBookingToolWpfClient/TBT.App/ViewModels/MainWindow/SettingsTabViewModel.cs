@@ -159,6 +159,12 @@ namespace TBT.App.ViewModels.MainWindow
         {
             RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
         }
+
+        public void RefreshTab()
+        {
+            
+        }
+
         #endregion
     }
 }

@@ -45,16 +45,6 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="1"
-                          Margin="20" 
-                          Height="50"
-                          Width="50"
-                          Visibility="{Binding Path=Activities, Converter={StaticResource EnumerableToNotVisibilityConverter}}"
-                          HorizontalAlignment="Center" 
-                          VerticalAlignment="Center">
-
-            <local:SpinnersCogs/>
-        </Grid>
 
         <Grid VerticalAlignment="Top" 
                           Grid.Row="1"

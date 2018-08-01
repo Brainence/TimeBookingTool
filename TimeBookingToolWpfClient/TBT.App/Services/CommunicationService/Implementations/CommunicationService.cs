@@ -118,6 +118,10 @@ namespace TBT.App.Services.CommunicationService.Implementations
                 }
 
                 var responseString = await response.Content.ReadAsStringAsync();
+                if (responseString.StartsWith("null"))
+                {
+                    responseString = null;
+                }
                 IsConnected = true;
                 return responseString;
             }

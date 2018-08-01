@@ -23,7 +23,6 @@ namespace TBT.App.ViewModels.MainWindow
         private TimeSpan _dayTime;
         private EditTimeEntryViewModel _editTimeEntryViewModel;
         private TimeEntryItemsViewModel _timeEntryItems;
-        private bool _isLoading;
 
 
         #endregion
@@ -65,7 +64,6 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (SetProperty(ref _user, value))
                 {
-                    RefreshTimeEntries();
                     ChangeUserForNested?.Invoke(value);
                 }
             }
@@ -95,12 +93,6 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _timeEntryItems, value); }
         }
 
-        public bool IsLoading
-        {
-            get { return _isLoading; }
-            set { SetProperty(ref _isLoading, value); }
-        }
-
         public ICommand BackTodayCommand { get; set; }
         public ICommand GoToSelectedDayCommand { get; set; }
         public ICommand GoToCurrentWeekCommand { get; set; }
@@ -121,9 +113,9 @@ namespace TBT.App.ViewModels.MainWindow
             EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, SelectedDay = SelectedDay };
 
             PropertyChanged += _editTimeEntryViewModel.ChangeButtonName;
-            TimeEntryItems.RefreshTimeEntries += RefreshTimeEntries;
+            _timeEntryItems.RefreshTimeEntries += RefreshTab;
             ChangeUserForNested += _editTimeEntryViewModel.RefreshCurrentUser;
-            _editTimeEntryViewModel.RefreshTimeEntries += RefreshTimeEntries;
+            _editTimeEntryViewModel.RefreshTimeEntries += RefreshTab;
 
             ChangeWeekCommand = new RelayCommand(obj => ChangeWeek(Convert.ToInt32(obj)), null);
             GoToSelectedDayCommand = new RelayCommand(obj => GoToWeek(true), obj => SelectedDay.StartOfWeek(DayOfWeek.Monday) != Week.FirstOrDefault());
@@ -134,12 +126,6 @@ namespace TBT.App.ViewModels.MainWindow
         #endregion
 
         #region Methods
-
-        private async void RefreshTimeEntries()
-        {
-            await SelectedDayChanged();
-            await GetTimeEntriesForWeek();
-        }
 
         public void ChangeWeek(int offset)
         {
@@ -212,19 +198,27 @@ namespace TBT.App.ViewModels.MainWindow
 
         public DateTime ExpiresDate { get; set; }
 
-        public async void OpenTab(User currentUser)
+        public void OpenTab(User currentUser)
         {
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
-            await RefreshEvents.RefreshCurrentUser(null,true);
+            RefreshTab();
         }
 
         public void CloseTab()
         {
+            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
             TimeEntryItems?.TimeEntries?.Clear();
             EditTimeEntryViewModel.SelectedProject = null;
             EditTimeEntryViewModel.SelectedActivity = null;
-            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
         }
+
+        public async void RefreshTab()
+        {
+            await RefreshEvents.RefreshCurrentUser(null, true);
+            await SelectedDayChanged();
+            await GetTimeEntriesForWeek();
+        }
+
         #endregion
     }
 }

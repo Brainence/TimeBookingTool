@@ -36,7 +36,6 @@ namespace TBT.App.ViewModels.MainWindow
         private DateTime _to;
         private ObservableCollection<string> _intervalTips;
         private int _selectedTipIndex;
-        private bool _itemsLoading;
         private ObservableCollection<TimeEntry> _timeEntries;
         private decimal _salary;
         private decimal _hourlySalary;
@@ -118,12 +117,6 @@ namespace TBT.App.ViewModels.MainWindow
                     ChangeInterval();
                 }
             }
-        }
-
-        public bool ItemsLoading
-        {
-            get { return _itemsLoading; }
-            set { SetProperty(ref _itemsLoading, value); }
         }
 
         public ObservableCollection<TimeEntry> TimeEntries
@@ -230,7 +223,6 @@ namespace TBT.App.ViewModels.MainWindow
             SaveToClipboardCommand = new RelayCommand(obj => SaveTotalTimeToClipboard(), obj => TimeEntries?.Any() == true);
             SaveMonthlySalaryToClipboardCommand = new RelayCommand(obj => SaveMonthlySalaryToClipboard());
             ChangeInterval();
-            ItemsLoading = true;
         }
 
         #endregion
@@ -291,7 +283,7 @@ namespace TBT.App.ViewModels.MainWindow
                 _to = temp;
             }
             UpdateTime();
-
+            LoadData?.Clear();
             var data = await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{userId}/{From.ToUrl()}/{To.ToUrl()}/false");
             if (data != null)
             {
@@ -301,7 +293,6 @@ namespace TBT.App.ViewModels.MainWindow
                     time.Date = time.Date.ToLocalTime();
                 }
                 LoadData = result;
-                ItemsLoading = false;
             }
         }
 
@@ -472,20 +463,11 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void SaveTotalTimeToClipboard()
         {
-            Clipboard.SetText($"{Resources.TotalTime}: {TimeEntriesHelper.SumTime(TimeEntries.ToList()).TotalHours:N2}");
+            Clipboard.SetText($"{TimeEntriesHelper.SumTime(TimeEntries.ToList()).TotalHours:N2}");
         }
         private void SaveMonthlySalaryToClipboard()
         {
             Clipboard.SetText($"{FullUah:0.00}₴");
-        }
-
-        public void RefreshCurrentUser(object sender, User user)
-        {
-            if (sender != this)
-            {
-                User = user;
-                RefreshUsersList();
-            }
         }
 
         public async Task RefreshUsersList()
@@ -501,16 +483,23 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
+        public void RefreshCurrentUser(object sender, User user)
+        {
+            if (sender != this)
+            {
+                User = user;
+            }
+        }
+
         #endregion
 
         #region Interface members
 
         public DateTime ExpiresDate { get; set; }
-        public async void OpenTab(User currentUser)
+        public void OpenTab(User currentUser)
         {
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
-            RefreshRate();
-            await RefreshUsersList();
+            RefreshTab();
         }
 
         public void CloseTab()
@@ -520,6 +509,19 @@ namespace TBT.App.ViewModels.MainWindow
             TimeEntries?.Clear();
             LoadData?.Clear();
         }
+
+        public async void RefreshTab()
+        {
+            DollarRate = 0;
+            Users?.Clear();
+            TimeEntries?.Clear();
+            LoadData?.Clear();
+            await RefreshEvents.RefreshCurrentUser(null);
+            RefreshRate();
+            await RefreshUsersList();
+            await RefreshReportTimeEntries(ReportingUser?.Id);
+        }
+
         #endregion
     }
 

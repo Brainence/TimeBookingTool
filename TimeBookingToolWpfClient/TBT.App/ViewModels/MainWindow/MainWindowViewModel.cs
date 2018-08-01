@@ -67,9 +67,8 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (SetProperty(ref _selectedTab, value) && value != null)
                 {
-                    var temp = GetViewModelFromEnum(value.Control);
                     SelectedViewModel?.CloseTab();
-                    SelectedViewModel = temp;
+                    SelectedViewModel = GetViewModelFromEnum(value.Control);
                 }
             }
         }
@@ -160,7 +159,7 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _languageControl, value); }
         }
 
-        public ICommand RefreshAllCommand { get; set; }
+        public ICommand RefreshCommand { get; set; }
         public ICommand SignOutCommand { get; set; }
         public ICommand CloseCommand { get; set; }
 
@@ -189,7 +188,7 @@ namespace TBT.App.ViewModels.MainWindow
                 IsVisible = true;
                 SignOutCommand = new RelayCommand(obj => SignOut(), null);
                 CloseCommand = new RelayCommand(obj => Close(), null);
-                RefreshAllCommand = new RelayCommand(obj => RefreshAll(), null);
+                RefreshCommand = new RelayCommand(obj => RefreshViewModel(), null);
                 Task.Run(() => RefreshEvents.RefreshCurrentUser(null)).Wait();
                 InitTabs();
                 WindowState = true;
@@ -214,9 +213,9 @@ namespace TBT.App.ViewModels.MainWindow
             _viewModelCache?.Clear();
         }
 
-        private async void RefreshAll()
+        private void RefreshViewModel()
         {
-            await RefreshEvents.RefreshCurrentUser(this);
+            SelectedViewModel.RefreshTab();
         }
 
         private async void SignOut()

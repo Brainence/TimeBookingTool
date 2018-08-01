@@ -55,7 +55,7 @@
 
                 <Image Source="../../Resources/Icons/refresh.png" Height="18" Margin="0 5 5 5" Cursor="Hand" ToolTip="{x:Static p:Resources.Refresh}">
                     <Image.InputBindings>
-                        <MouseBinding Gesture="LeftClick" Command="{Binding RefreshAllCommand}"/>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding RefreshCommand}"/>
                     </Image.InputBindings>
                 </Image>
                 <Image Source="../../Resources/Icons/exit.png" Height="18" Margin="5 5 0 5" Cursor="Hand" ToolTip="{x:Static p:Resources.SignOut}">

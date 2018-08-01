@@ -24,8 +24,6 @@ namespace TBT.App.ViewModels.MainWindow
         private Customer _selectedCustomer;
         private int _savedCustomerId;
 
-        private bool _itemsLoading;
-
         #endregion
 
         #region Properties
@@ -60,11 +58,6 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public bool ItemsLoading
-        {
-            get { return _itemsLoading; }
-            set { SetProperty(ref _itemsLoading, value); }
-        }
 
         public ICommand CreateNewProjectCommand { get; set; }
         public ICommand EditProjectCommand { get; set; }
@@ -108,6 +101,7 @@ namespace TBT.App.ViewModels.MainWindow
             if (data != null)
             {
                 project = JsonConvert.DeserializeObject<Project>(data);
+                project.Customer = Customers.FirstOrDefault(x => x.Id == project.Customer.Id);
                 Projects.Add(project);
                 Projects = new ObservableCollection<Project>(_projects.OrderBy(p => p.Name));
                 NewProjectName = "";
@@ -150,7 +144,7 @@ namespace TBT.App.ViewModels.MainWindow
             project.IsActive = false;
             if (await App.CommunicationService.PutAsJson("Project", project) != null)
             {
-                Projects.Remove(Projects.FirstOrDefault(item => item.Id == project.Id));
+                Projects.Remove(project);
                 RefreshEvents.ChangeErrorInvoke("Project deleted", ErrorType.Success);
             }
         }
@@ -159,29 +153,19 @@ namespace TBT.App.ViewModels.MainWindow
         {
             if (sender != this)
             {
-                Refresh();
+                RefreshTab();
             }
         }
 
-        public async Task Refresh()
-        {
-            Customers = await RefreshEvents.RefreshCustomersList();
-            Projects = new ObservableCollection<Project>(Customers.SelectMany(x => x.Projects, (cust, proj) =>
-            {
-                proj.Customer = cust;
-                return proj;
-            }).OrderBy(x => x.Name));
-            SelectedCustomer = Customers.FirstOrDefault(x => x.Id == _savedCustomerId) ?? Customers.FirstOrDefault();
-        }
         #endregion
 
         #region Interface members
 
         public DateTime ExpiresDate { get; set; }
-        public async void OpenTab(User current)
+        public void OpenTab(User current)
         {
             RefreshEvents.ChangeCurrentUser += RefreshData;
-            await Refresh();
+            RefreshTab();
         }
 
         public void CloseTab()
@@ -190,6 +174,20 @@ namespace TBT.App.ViewModels.MainWindow
             Projects?.Clear();
             Customers?.Clear();
         }
+
+        public async void RefreshTab()
+        {
+            Customers?.Clear();
+            Projects?.Clear();
+            Customers = await RefreshEvents.RefreshCustomersListWithActivity();
+            Projects = new ObservableCollection<Project>(Customers.SelectMany(x => x.Projects, (cust, proj) =>
+            {
+                proj.Customer = cust;
+                return proj;
+            }).OrderBy(x => x.Name));
+            SelectedCustomer = Customers.FirstOrDefault(x => x.Id == _savedCustomerId) ?? Customers.FirstOrDefault();
+        }
+
         #endregion
     }
 }

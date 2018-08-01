@@ -18,7 +18,6 @@ namespace TBT.App.ViewModels.MainWindow
     {
         #region Fields
 
-        private bool _itemsLoading;
         private string _newCustomersName;
         private ObservableCollection<Customer> _customers;
         private bool _isExpanded;
@@ -28,12 +27,6 @@ namespace TBT.App.ViewModels.MainWindow
         #endregion
 
         #region Properties
-
-        public bool ItemsLoading
-        {
-            get { return _itemsLoading; }
-            set { SetProperty(ref _itemsLoading, value); }
-        }
 
         public string NewCustomersName
         {
@@ -168,7 +161,6 @@ namespace TBT.App.ViewModels.MainWindow
             if (data != null)
             {
                 Customers.Remove(customer);
-                RefreshEvents.ChangeErrorInvoke("Customer deleted", ErrorType.Success);//Todo Move to Resources
             }
         }
 
@@ -177,23 +169,17 @@ namespace TBT.App.ViewModels.MainWindow
             if (sender != this)
             {
                 CurrentCompany = currentUser.Company;
-                RefreshData();
             }
-        }
-
-        private async Task RefreshData()
-        {
-            Customers = await RefreshEvents.RefreshCustomersList();
         }
         #endregion
 
         #region Interface members
 
         public DateTime ExpiresDate { get; set; }
-        public async void OpenTab(User currentUser)
+        public void OpenTab(User currentUser)
         {
             RefreshEvents.ChangeCurrentUser += RefreshCompany;
-            await RefreshData();
+            RefreshTab();
         }
 
         public void CloseTab()
@@ -201,6 +187,14 @@ namespace TBT.App.ViewModels.MainWindow
             RefreshEvents.ChangeCurrentUser -= RefreshCompany;
             Customers?.Clear();
         }
+
+        public async void RefreshTab()
+        {
+            Customers?.Clear();
+            await RefreshEvents.RefreshCurrentUser(null);
+            Customers = await RefreshEvents.RefreshCustomersList();
+        }
+
         #endregion
 
     }
