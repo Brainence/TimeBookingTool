@@ -331,6 +331,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy salary to clipboard.
+        /// </summary>
+        public static string CopySalaryToClipboard {
+            get {
+                return ResourceManager.GetString("CopySalaryToClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy total time to clipboard.
         /// </summary>
         public static string CopyTotalToClipboard {

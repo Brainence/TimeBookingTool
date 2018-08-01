@@ -560,4 +560,7 @@
   <data name="SalaryMustBe" xml:space="preserve">
     <value>Salary must be above 0</value>
   </data>
+  <data name="CopySalaryToClipboard" xml:space="preserve">
+    <value>Copy salary to clipboard</value>
+  </data>
 </root>
