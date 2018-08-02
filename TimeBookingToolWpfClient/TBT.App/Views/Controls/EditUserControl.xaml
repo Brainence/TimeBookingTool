@@ -26,6 +26,8 @@
 
             <local:CheckBoxControl Margin="0 0 0 5" Label="{x:Static p:Resources.Admin}" IsChecked="{Binding Path=EditingUser.IsAdmin, Mode=TwoWay}" 
                                Visibility="{Binding Path=ShowAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <local:CheckBoxControl Margin="0 0 0 5" Label="Blocked" IsChecked="{Binding Path=EditingUser.IsBlocked, Mode=TwoWay}" 
+                               Visibility="{Binding Path=ShowAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
             <local:CheckBoxControl Margin="0 0 0 5" Label="{x:Static p:Resources.ChangePassword}" IsChecked="{Binding Path=ChangePassword, Mode=TwoWay}" 
                                Visibility="{Binding Path=ShowPassword, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
             <Grid Visibility="{Binding ChangePassword, Converter={StaticResource BoolToVisibilityConverter}}">
