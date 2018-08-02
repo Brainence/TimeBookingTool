@@ -190,6 +190,10 @@ namespace TBT.App.ViewModels.MainWindow
                 CloseCommand = new RelayCommand(obj => Close(), null);
                 RefreshCommand = new RelayCommand(obj => RefreshViewModel(), null);
                 Task.Run(() => RefreshEvents.RefreshCurrentUser(null)).Wait();
+                if (CurrentUser.IsBlocked)
+                {
+                    SignOut();
+                }
                 InitTabs();
                 WindowState = true;
                 App.GlobalTimer.StartTimer();
