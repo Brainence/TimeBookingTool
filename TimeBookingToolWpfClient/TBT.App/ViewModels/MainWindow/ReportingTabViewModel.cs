@@ -325,7 +325,7 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void CalcSalary()
         {
-            if (ReportingUser.MonthlySalary == null)
+            if (ReportingUser?.MonthlySalary == null)
             {
                 Salary = 0;
                 HourlySalary = 0;
@@ -368,8 +368,8 @@ namespace TBT.App.ViewModels.MainWindow
 
         public void UpdateUserList()
         {
-            var temp = _needBlockedUsers ? new ObservableCollection<User>(LoadedUsers.OrderBy(x=>x.IsBlocked).ThenBy(x=>x.FirstName))
-                : new ObservableCollection<User>(LoadedUsers.Where(x=>!x.IsBlocked).OrderBy(x=>x.FirstName));
+            var temp = _needBlockedUsers ? new ObservableCollection<User>(LoadedUsers.OrderBy(x => x.IsBlocked).ThenBy(x => x.FirstName))
+                : new ObservableCollection<User>(LoadedUsers.Where(x => !x.IsBlocked).OrderBy(x => x.FirstName));
             if (temp.FirstOrDefault(x => x.Id == _savedReportingUser) == null)
             {
                 ReportingUser = Users.FirstOrDefault();
@@ -551,14 +551,13 @@ namespace TBT.App.ViewModels.MainWindow
 
         public async void RefreshTab()
         {
-            DollarRate = 0;
             Users?.Clear();
             TimeEntries?.Clear();
             LoadedTimeEntries?.Clear();
             await RefreshEvents.RefreshCurrentUser(null);
-            RefreshRate();
             await RefreshUsersList();
-            RefreshReportTimeEntries(ReportingUser?.Id);
+            DollarRate = 0;
+            RefreshRate();
         }
 
         #endregion
