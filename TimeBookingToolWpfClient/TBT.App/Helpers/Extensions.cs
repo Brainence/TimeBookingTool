@@ -40,13 +40,13 @@ namespace TBT.App.Helpers
                 var hours = double.Parse(input);
                 if (hours <= 0)
                 {
-                   return  TimeSpan.Zero;;
+                   return  TimeSpan.Zero;
                 }
                 duration = TimeSpan.FromHours(hours);
-                if (duration.TotalHours >= 24)
-                {
-                    return TimeSpan.FromHours(23.9);
-                }
+                //if (duration.TotalHours >= 24)
+                //{
+                //    return TimeSpan.FromHours(23.9);
+                //}
             }
             return duration;
         }

@@ -71,7 +71,7 @@ namespace TBT.App.Helpers
         public static async Task<ObservableCollection<User>> RefreshUsersList()
         {
             var data = await App.CommunicationService.GetAsJson($"User/GetByCompany/{_companyId}");
-            return data != null ? JsonConvert.DeserializeObject<ObservableCollection<User>>(data) : new ObservableCollection<User>();
+            return data != null ? new ObservableCollection<User>(JsonConvert.DeserializeObject<ObservableCollection<User>>(data).OrderBy(x=>x.IsBlocked).ThenBy(x => x.Username)) : new ObservableCollection<User>();
         }
 
         public static async Task<ObservableCollection<Customer>> RefreshCustomersList()

@@ -227,7 +227,14 @@ namespace TBT.App.ViewModels.MainWindow
                 RefreshEvents.ChangeErrorInvoke("Comment length cannot be greater then 2048", ErrorType.Error);
                 return;
             }
-            TimeEntry.Duration = string.IsNullOrEmpty(TimerTextBox) ? new TimeSpan() : TimerTextBox.ToTimeSpan();
+            var duration = TimerTextBox.ToTimeSpan();
+            if (duration >= TimeSpan.FromHours(24))
+            {
+                RefreshEvents.ChangeErrorInvoke("Please select correct time", ErrorType.Error);
+                return;
+            }
+
+            TimeEntry.Duration = string.IsNullOrEmpty(TimerTextBox) ? new TimeSpan() : duration;
             if (TimeEntry.Activity != null)
             {
                 TimeEntry.Activity = new Activity() { Id = TimeEntry.Activity.Id };

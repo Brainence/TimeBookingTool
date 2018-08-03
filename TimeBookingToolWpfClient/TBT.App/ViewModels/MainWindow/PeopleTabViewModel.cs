@@ -127,16 +127,15 @@ namespace TBT.App.ViewModels.MainWindow
         private void AddNewUser(User newUser)
         {
             Users.Add(newUser.Clone());
-            Users = new ObservableCollection<User>(Users.OrderBy(user => user.FirstName).ThenBy(user => user.LastName));
+            Users = new ObservableCollection<User>(Users.OrderBy(x => x.IsBlocked).ThenBy(x => x.Username));
         }
 
         private void EditUser(User user)
         {
-            var tempUserInfo = new { user.FirstName, user.LastName };
             user.Company = CurrentUser.Company;
             var editContext = new EditUserViewModel()
             {
-                EditingUser = user,
+                EditingUser = user.Clone(),
                 ShowAdmin = true,
                 ShowPassword = false,
                 ForSaving = true
@@ -148,10 +147,10 @@ namespace TBT.App.ViewModels.MainWindow
             editContext.CloseWindow += window.Close;
             window.ShowDialog();
             editContext.CloseWindow -= window.Close;
-            if (user.FirstName != tempUserInfo.FirstName || user.LastName != tempUserInfo.LastName)
-            {
-                Users = new ObservableCollection<User>(Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName));
-            }
+            Users.Remove(Users.FirstOrDefault(x => x.Id == user.Id));
+            Users.Add(editContext.EditingUser);
+            Users = new ObservableCollection<User>(Users.OrderBy(x => x.IsBlocked).ThenBy(x => x.Username));
+
             (EditMyProfileViewModel as EditUserViewModel).EditingUser = user;
         }
 
@@ -223,7 +222,7 @@ namespace TBT.App.ViewModels.MainWindow
             AllProjects?.Clear();
             await RefreshEvents.RefreshCurrentUser(null);
             AllProjects = await RefreshEvents.RefreshProjectsList();
-            Users = await RefreshEvents.RefreshUsersList();          
+            Users = await RefreshEvents.RefreshUsersList();
         }
         #endregion
 

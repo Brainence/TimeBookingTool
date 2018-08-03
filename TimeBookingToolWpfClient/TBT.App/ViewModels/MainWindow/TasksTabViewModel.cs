@@ -87,7 +87,7 @@ namespace TBT.App.ViewModels.MainWindow
             }
             if (Activities.FirstOrDefault(x => x.Name == NewTaskName) != null)
             {
-                RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.ActivityWithName} '{NewTaskName}' {Properties.Resources.AlreadyExists}", ErrorType.Error);
+                RefreshEvents.ChangeErrorInvoke($"Task with this name already exist", ErrorType.Error);
                 return;
             }
             var newActivity = new Activity

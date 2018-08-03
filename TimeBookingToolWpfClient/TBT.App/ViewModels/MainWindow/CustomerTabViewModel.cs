@@ -126,14 +126,14 @@ namespace TBT.App.ViewModels.MainWindow
             };
             editContext.CloseWindow += editWindow.Close;
             editWindow.ShowDialog();
-            editContext.CloseWindow -= editWindow.Close;
-            if (editContext.EditingCustomersName == customer.Name)
-            {
-                RefreshEvents.ChangeErrorInvoke("Customer edited", ErrorType.Success);
-                return;
-            }
+            editContext.CloseWindow -= editWindow.Close;          
             if (editContext.SaveChanges && editContext.EditingCustomersName != customer.Name)
             {
+                if (editContext.EditingCustomersName == customer.Name)
+                {
+                    RefreshEvents.ChangeErrorInvoke("Customer edited", ErrorType.Success);
+                    return;
+                }
                 if (Customers.FirstOrDefault(x => x.Name == editContext.EditingCustomersName) != null)
                 {
                     RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CustomerWithName} {Properties.Resources.AlreadyExists}", ErrorType.Error);

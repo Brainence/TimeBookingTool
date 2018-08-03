@@ -190,7 +190,7 @@ namespace TBT.App.ViewModels.MainWindow
                 CloseCommand = new RelayCommand(obj => Close(), null);
                 RefreshCommand = new RelayCommand(obj => RefreshViewModel(), null);
                 Task.Run(() => RefreshEvents.RefreshCurrentUser(null)).Wait();
-                if (CurrentUser.IsBlocked)
+                if (CurrentUser == null || CurrentUser.IsBlocked)
                 {
                     SignOut();
                 }
@@ -423,7 +423,7 @@ namespace TBT.App.ViewModels.MainWindow
             IsConnected = isConnected;
             if (!isConnected)
             {
-                NewError(Resources.ConnectionLost, ErrorType.NotConnected);
+                NewError("Connection lost. Trying to recover", ErrorType.NotConnected);
             }
             else
             {

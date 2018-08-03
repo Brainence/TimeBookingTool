@@ -110,7 +110,7 @@ namespace TBT.App.ViewModels.MainWindow
                 if (User == null) return;
                 if (Comment != null && Comment.Length >= 2048)
                 {
-                    RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CommentLenghError} 2048.", ErrorType.Error);
+                    RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CommentLenghError} 2048", ErrorType.Error);
                     return;
                 }
                 var duration = new TimeSpan();
@@ -126,6 +126,11 @@ namespace TBT.App.ViewModels.MainWindow
                 else
                 {
                     duration = TimeText.ToTimeSpan();
+                    if (duration >= TimeSpan.FromHours(24))
+                    {
+                        RefreshEvents.ChangeErrorInvoke("Please select correct time",ErrorType.Error);
+                        return;
+                    }
                 }
 
                 if (!await App.CanStartOrEditTimeEntry(User, duration))

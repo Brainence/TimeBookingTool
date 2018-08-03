@@ -122,6 +122,11 @@ namespace TBT.App.ViewModels.MainWindow
             editContext.NewItemSaved -= window.Close;
             if (editContext.SaveProject)
             {
+                if (project.Name == editContext.EditingProject.Name && project.Customer.Name == editContext.SelectedCustomer.Name)
+                {
+                    RefreshEvents.ChangeErrorInvoke("Project edited", ErrorType.Success);
+                    return;
+                }
                 if (Projects.FirstOrDefault(x => x.Name == editContext.EditingProject.Name && x.Id != editContext.EditingProject.Id) != null)
                 {
                     RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.ProjectWithName} {Properties.Resources.AlreadyExists}", ErrorType.Error);
