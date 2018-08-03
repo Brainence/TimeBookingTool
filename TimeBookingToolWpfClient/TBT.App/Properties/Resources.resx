@@ -467,7 +467,7 @@
     <value>Hello</value>
   </data>
   <data name="ConnectionLost" xml:space="preserve">
-    <value>Connection lost. Trying to recover.</value>
+    <value>Connection lost</value>
   </data>
   <data name="NiceWishToNotification" xml:space="preserve">
     <value>Have a nice day</value>

@@ -322,7 +322,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connection lost. Trying to recover..
+        ///   Looks up a localized string similar to Connection lost.
         /// </summary>
         public static string ConnectionLost {
             get {
