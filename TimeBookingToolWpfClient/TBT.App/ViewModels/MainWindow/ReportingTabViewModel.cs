@@ -372,7 +372,7 @@ namespace TBT.App.ViewModels.MainWindow
                 : new ObservableCollection<User>(LoadedUsers.Where(x => !x.IsBlocked).OrderBy(x => x.FirstName));
             if (temp.FirstOrDefault(x => x.Id == _savedReportingUser) == null)
             {
-                ReportingUser = Users.FirstOrDefault();
+                ReportingUser = LoadedUsers.FirstOrDefault();
             }
 
             Users = temp;
