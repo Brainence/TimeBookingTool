@@ -418,33 +418,12 @@ namespace TBT.App.ViewModels.MainWindow
             if (sender != this) { CurrentUser = newUser; }
         }
 
-        public async void RefreshIsConnected(bool isConnected)
+        public void RefreshIsConnected(bool isConnected)
         {
             IsConnected = isConnected;
             if (!isConnected)
             {
-                NewError("Connection lost. Trying to recover", ErrorType.NotConnected);
-                var res = await Task.Run(async () =>
-                {
-                    while (true)
-                    {
-                        await Task.Delay(30000);
-
-                        if (!IsConnected)
-                        {
-                            await App.CommunicationService.GetAsJson($"User?email={App.Username}");
-                            if (IsConnected)
-                            {
-                                return true;
-                            }
-                           
-                        }
-                    }
-                });
-                if (res)
-                {
-                    SelectedViewModel.RefreshTab();
-                }
+                NewError("Connection lost", ErrorType.NotConnected);
             }
             else
             {

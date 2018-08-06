@@ -112,7 +112,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 NewCustomersName = "";
                 Customers.Add(JsonConvert.DeserializeObject<Customer>(data));
-                Customers = new ObservableCollection<Customer>(Customers);
+                Customers = new ObservableCollection<Customer>(Customers.OrderBy(x=>x.Name));
                 RefreshEvents.ChangeErrorInvoke("Customer created", ErrorType.Success);
             }
         }
@@ -141,6 +141,7 @@ namespace TBT.App.ViewModels.MainWindow
                 }
                 var oldName = customer.Name;
                 customer.Name = editContext.EditingCustomersName;
+                Customers = new ObservableCollection<Customer>(Customers.OrderBy(x=>x.Name));
                 if (await App.CommunicationService.PutAsJson("Customer", customer) != null)
                 {
                     RefreshEvents.ChangeErrorInvoke("Customer edited", ErrorType.Success);

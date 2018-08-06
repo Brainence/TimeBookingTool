@@ -127,7 +127,7 @@ namespace TBT.App.ViewModels.MainWindow
         private void AddNewUser(User newUser)
         {
             Users.Add(newUser.Clone());
-            Users = new ObservableCollection<User>(Users.OrderBy(x => x.IsBlocked).ThenBy(x => x.Username));
+            Users = new ObservableCollection<User>(Users.OrderBy(x => x.IsBlocked).ThenBy(x => x.FullName));
         }
 
         private void EditUser(User user)
@@ -149,7 +149,7 @@ namespace TBT.App.ViewModels.MainWindow
             editContext.CloseWindow -= window.Close;
             Users.Remove(Users.FirstOrDefault(x => x.Id == user.Id));
             Users.Add(editContext.EditingUser);
-            Users = new ObservableCollection<User>(Users.OrderBy(x => x.IsBlocked).ThenBy(x => x.Username));
+            Users = new ObservableCollection<User>(Users.OrderBy(x => x.IsBlocked).ThenBy(x => x.FullName));
 
             (EditMyProfileViewModel as EditUserViewModel).EditingUser = user;
         }

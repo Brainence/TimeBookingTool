@@ -134,8 +134,8 @@ namespace TBT.App.ViewModels.MainWindow
                 }
                 if (await App.CommunicationService.PutAsJson("Project", editContext.EditingProject) != null)
                 {
-                    Projects.Remove(project);
-                    Projects.Add(editContext.EditingProject);
+                    project.Name = editContext.EditingProject.Name;
+                    project.Customer = editContext.EditingProject.Customer;
                     Projects = new ObservableCollection<Project>(Projects.OrderBy(x => x.Name));
                     RefreshEvents.ChangeErrorInvoke("Project edited", ErrorType.Success);
                 }

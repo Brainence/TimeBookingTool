@@ -95,7 +95,7 @@
                                                                 <Setter Property="Foreground" Value="#c2422b"></Setter>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding IsBlocked}" Value="True">
-                                                                <Setter Property="Foreground" Value="#0d47a1"></Setter>
+                                                                <Setter Property="Foreground" Value="#7f7f7f"></Setter>
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -110,7 +110,7 @@
                                                                 <Setter Property="Foreground" Value="#c2422b"></Setter>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding IsBlocked}" Value="True">
-                                                                <Setter Property="Foreground" Value="#0d47a1"></Setter>
+                                                                <Setter Property="Foreground" Value="#7f7f7f"></Setter>
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>

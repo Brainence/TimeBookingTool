@@ -102,7 +102,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 newActivity = JsonConvert.DeserializeObject<Activity>(data);
                 Activities.Add(newActivity);
-                Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name));
+                Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name).ThenBy(x=>x.Name));
                 NewTaskName = "";
                 RefreshEvents.ChangeErrorInvoke("Task created", ErrorType.Success);
             }
@@ -128,8 +128,8 @@ namespace TBT.App.ViewModels.MainWindow
                 }
                 if (await App.CommunicationService.PutAsJson("Activity", editContext.EditingActivity) != null)
                 {
-                    Activities.Remove(activity);
-                    Activities.Add(editContext.EditingActivity);
+                    activity.Name = editContext.EditingActivity.Name;
+                    activity.Project = editContext.EditingActivity.Project;
                     Activities = new ObservableCollection<Activity>(Activities.OrderBy(x => x.Project.Name).ThenBy(x => x.Name));
                     RefreshEvents.ChangeErrorInvoke("Task edited", ErrorType.Success);
                 }
