@@ -9,7 +9,7 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class TimeEntryViewModel : BaseViewModel
+    public class TimeEntryViewModel : ObservableObject
     {
         #region Fields
 
@@ -132,8 +132,11 @@ namespace TBT.App.ViewModels.MainWindow
                 refresh = await Start();
                 ScrollToEdited?.Invoke(0);
             }
+
             if (refresh)
+            {
                 RefreshTimeEntries?.Invoke();
+            }
         }
 
         private async Task<bool> Stop()
@@ -150,13 +153,14 @@ namespace TBT.App.ViewModels.MainWindow
         private async Task<bool> Start()
         {
             if (TimeEntry.IsRunning || TimeEntry.Duration >= _dayLimit) return false;
-            var result = await App.GlobalTimer.Start(TimeEntry.Id);
-            if (result)
+
+            if (await App.GlobalTimer.Start(TimeEntry.Id))
             {
                 _startDate = DateTime.UtcNow;
                 App.GlobalTimer.TimerTick += TimerTick;
+                return true;
             }
-            return result;
+            return false;
         }
 
         private async Task Remove()
@@ -193,15 +197,6 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        private async Task<bool> CanStartOrEditTimeEntry(TimeSpan? duration = null)
-        {
-            if (TimeEntry?.User == null) return false;
-            var now = DateTime.Now;
-            var from = new DateTime(now.Year, now.Month, 1);
-            var to = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
-            return await App.CanStartOrEditTimeEntry(TimeEntry.User.Id, TimeEntry.User.TimeLimit, from, to, duration);
-        }
-
         private async void TimerTick()
         {
             var currentDuration = TimeEntry.Duration + DateTime.UtcNow.TimeOfDay - _startDate.TimeOfDay;
@@ -215,7 +210,7 @@ namespace TBT.App.ViewModels.MainWindow
         public async void InitLoading()
         {
             TimerTextBlock = TimeEntriesHelper.GetShortDuration(TimeEntry.Duration);
-            var canStartOrEdit = await CanStartOrEditTimeEntry(TimeEntry.IsRunning ? TimeEntry.Duration : (TimeSpan?)null);
+            var canStartOrEdit = await App.CanStartOrEditTimeEntry(TimeEntry.User, TimeEntry.Duration);
             CanEdit = TimeEntry.IsRunning || canStartOrEdit;
             CanStart = TimeEntry.IsRunning || canStartOrEdit && TimeEntry.Duration < _dayLimit;
             if (TimeEntry.IsRunning && canStartOrEdit)
@@ -227,12 +222,19 @@ namespace TBT.App.ViewModels.MainWindow
 
         public async void SaveTimeEntry()
         {
-            if (TimeEntry.Comment != null && TimeEntry.Comment.Length >= 2048)
+            if (Comment != null && Comment.Length >= 2048)
             {
                 RefreshEvents.ChangeErrorInvoke("Comment length cannot be greater then 2048", ErrorType.Error);
                 return;
             }
-            TimeEntry.Duration = string.IsNullOrEmpty(TimerTextBox) ? new TimeSpan() : TimerTextBox.ToTimespan();
+            var duration = TimerTextBox.ToTimeSpan();
+            if (duration >= TimeSpan.FromHours(24))
+            {
+                RefreshEvents.ChangeErrorInvoke("Please select correct time", ErrorType.Error);
+                return;
+            }
+
+            TimeEntry.Duration = string.IsNullOrEmpty(TimerTextBox) ? new TimeSpan() : duration;
             if (TimeEntry.Activity != null)
             {
                 TimeEntry.Activity = new Activity() { Id = TimeEntry.Activity.Id };
@@ -241,7 +243,6 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 TimeEntry.User = new User() { Id = TimeEntry.User.Id };
             }
-            TimeEntry.Comment = Comment;
             await App.CommunicationService.PutAsJson("TimeEntry/ClientDuration", TimeEntry);
             IsEditing = !IsEditing;
             RefreshTimeEntries?.Invoke();

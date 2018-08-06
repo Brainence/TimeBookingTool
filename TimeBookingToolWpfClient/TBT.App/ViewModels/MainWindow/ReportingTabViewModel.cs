@@ -18,47 +18,37 @@ using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
-using TBT.App.Models.Tools;
 using TBT.App.Properties;
 using TBT.App.Services.CommunicationService.Implementations;
 using TBT.App.Views.Controls;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class ReportingTabViewModel : BaseViewModel, ICacheable
+    public class ReportingTabViewModel : ObservableObject, ICacheable
     {
         #region Fields
 
 
         private User _user;
-        private ObservableCollection<User> _users;
         private User _reportingUser;
-        private int? _savedReportingUserId;
         private DateTime _from;
         private DateTime _to;
-        private ObservableCollection<string> _itervalTips;
-        private int? _selectedTipIndex;
-        private bool _itemsLoading;
-        private ObservableCollection<TimeEntry> _timeEntries;
-        private int _selectedUserIndex;
-
-
-        private decimal? _salary;
-        private decimal? _hourlySalary;
-
-
-        private decimal? _salaryUah;
-        private decimal? _hourlySalaryUah;
-        private decimal? _dollarRate;
-
-
-
+        private int _selectedTipIndex;
+        private decimal _salary;
+        private decimal _hourlySalary;
+        private decimal _salaryUah;
+        private decimal _hourlySalaryUah;
+        private decimal _dollarRate;
         private Project _currentProject;
+        private int _savedReportingUser;
+        private bool _needBlockedUsers;
+
         private ObservableCollection<Project> _projects;
-        private IEnumerable<TimeEntry> _loadData;
-
-
-        private string _fullTime;
+        private ObservableCollection<TimeEntry> _loadedTimeEntries;
+        private ObservableCollection<TimeEntry> _timeEntries;
+        private ObservableCollection<string> _intervalTips;
+        private ObservableCollection<User> _users;
+        private ObservableCollection<User> _loadedUsers;
 
 
         #endregion
@@ -74,20 +64,27 @@ namespace TBT.App.ViewModels.MainWindow
         public ObservableCollection<User> Users
         {
             get { return _users; }
-            set
-            {
-                SetProperty(ref _users, value);
-            }
+            set { SetProperty(ref _users, value); }
         }
 
+        private ObservableCollection<User> LoadedUsers
+        {
+            get => _loadedUsers;
+            set
+            {
+                SetProperty(ref _loadedUsers, value);
+                UpdateUserList();
+            }
+        }
         public User ReportingUser
         {
             get { return _reportingUser; }
             set
             {
-                if (SetProperty(ref _reportingUser, value))
+                if (SetProperty(ref _reportingUser, value) && value != null)
                 {
-                    _savedReportingUserId = value?.Id;
+                    _savedReportingUser = value.Id;
+                    RefreshReportTimeEntries(ReportingUser.Id);
                 }
             }
         }
@@ -99,7 +96,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (SetProperty(ref _from, value))
                 {
-                    RefreshReportTimeEntires(ReportingUser?.Id);
+                    RefreshReportTimeEntries(ReportingUser?.Id);
                 }
             }
         }
@@ -111,18 +108,18 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (SetProperty(ref _to, value))
                 {
-                    RefreshReportTimeEntires(ReportingUser?.Id);
+                    RefreshReportTimeEntries(ReportingUser?.Id);
                 }
             }
         }
 
         public ObservableCollection<string> IntervalTips
         {
-            get { return _itervalTips; }
-            set { SetProperty(ref _itervalTips, value); }
+            get { return _intervalTips; }
+            set { SetProperty(ref _intervalTips, value); }
         }
 
-        public int? SelectedTipIndex
+        public int SelectedTipIndex
         {
             get { return _selectedTipIndex; }
             set
@@ -134,62 +131,46 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public int SelectedUserIndex
-        {
-            get { return _selectedUserIndex; }
-            set
-            {
-                if (SetProperty(ref _selectedUserIndex, value) && value >= 0)
-                {
-                    ReportingUser = Users[value];
-                    Task.Run(() => RefreshReportTimeEntires(ReportingUser?.Id)).Wait();
-                }
-            }
-        }
-
-        public bool ItemsLoading
-        {
-            get { return _itemsLoading; }
-            set { SetProperty(ref _itemsLoading, value); }
-        }
-
-        public ObservableCollection<TimeEntry> TimeEntries
-        {
-            get { return _timeEntries; }
-            set
-            {
-                SetProperty(ref _timeEntries, value);
-            }
-        }
-
-
-        public decimal? Salary
+        public decimal Salary
         {
             get { return _salary; }
-            set { SetProperty(ref _salary, value); }
+            set
+            {
+                SetProperty(ref _salary, value);
+                FullUah = value * DollarRate;
+            }
         }
-        public decimal? HourlySalary
+
+        public decimal HourlySalary
         {
             get { return _hourlySalary; }
-            set { SetProperty(ref _hourlySalary, value); }
+            set
+            {
+                SetProperty(ref _hourlySalary, value);
+                HourUah = value * DollarRate;
+            }
         }
-        public decimal? HourUah
+
+        public decimal HourUah
         {
             get { return _hourlySalaryUah; }
             set { SetProperty(ref _hourlySalaryUah, value); }
         }
-        public decimal? FullUah
+
+        public decimal FullUah
         {
             get { return _salaryUah; }
             set { SetProperty(ref _salaryUah, value); }
         }
-        public decimal? DollarRate
+
+        public decimal DollarRate
         {
             get { return _dollarRate; }
             set
             {
                 SetProperty(ref _dollarRate, value);
-                CalcSalaryUah();
+                HourUah = HourlySalary * DollarRate;
+                FullUah = Salary * DollarRate;
             }
         }
 
@@ -202,31 +183,46 @@ namespace TBT.App.ViewModels.MainWindow
                 FilterTimeEntry();
             }
         }
+
         public ObservableCollection<Project> Projects
         {
             get { return _projects; }
             set { SetProperty(ref _projects, value); }
         }
-        private IEnumerable<TimeEntry> LoadData
+
+        public ObservableCollection<TimeEntry> TimeEntries
         {
-            get { return _loadData; }
+            get { return _timeEntries; }
             set
             {
-                SetProperty(ref _loadData, value);
-                FilterTimeEntry();
+                SetProperty(ref _timeEntries, value);
+                CalcSalary();
             }
         }
 
-        private Project All => new Project { Name = "All", Id = -1 };
-
-
-        public string FullTime
+        private ObservableCollection<TimeEntry> LoadedTimeEntries
         {
-            get { return _fullTime; }
-            set { SetProperty(ref _fullTime, value); }
+            get { return _loadedTimeEntries; }
+            set
+            {
+                SetProperty(ref _loadedTimeEntries, value);
+                FilterTimeEntry();
+                UpdateProjectList();
+            }
         }
 
-        public ICommand RefreshReportTimeEntiresCommand { get; set; }
+        public bool NeedBlocked
+        {
+            get => _needBlockedUsers;
+            set
+            {
+                SetProperty(ref _needBlockedUsers, value);
+                UpdateUserList();
+            }
+        }
+
+        private readonly Project All = new Project { Name = "All", Id = -1 };
+
         public ICommand CreateCompanyReportCommand { get; set; }
         public ICommand CreateUserReportCommand { get; set; }
         public ICommand SaveToClipboardCommand { get; set; }
@@ -239,29 +235,28 @@ namespace TBT.App.ViewModels.MainWindow
 
         public ReportingTabViewModel(User currentUser)
         {
+            _loadedTimeEntries = new ObservableCollection<TimeEntry>();
             User = currentUser;
             ReportingUser = User;
-            Users = null;
+            CurrentProject = All;
             IntervalTips = new ObservableCollection<string>() {
                 Resources.ThisWeek, Resources.LastWeek, Resources.ThisMonth,
                 Resources.LastMonth, Resources.ThisYear, Resources.LastYear,
                 Resources.AllTime
             };
-            RefreshReportTimeEntiresCommand = new RelayCommand(async obj => await RefreshReportTimeEntires(ReportingUser.Id), null);
+
             CreateCompanyReportCommand = new RelayCommand(obj => SaveCompanyReport(), obj => User.IsAdmin);
-            CreateUserReportCommand = new RelayCommand( obj => SaveUserReport(), null);
+            CreateUserReportCommand = new RelayCommand(obj => SaveXPSDocument(CreateUserReport()), null);
             SaveToClipboardCommand = new RelayCommand(obj => SaveTotalTimeToClipboard(), obj => TimeEntries?.Any() == true);
             SaveMonthlySalaryToClipboardCommand = new RelayCommand(obj => SaveMonthlySalaryToClipboard());
-            SelectedTipIndex = 0;
-            SetProjectList();
-
+            ChangeInterval();
         }
 
         #endregion
 
         #region Methods
 
-        private async void ChangeInterval()
+        private void ChangeInterval()
         {
             var now = DateTime.Now;
             switch (SelectedTipIndex)
@@ -298,11 +293,10 @@ namespace TBT.App.ViewModels.MainWindow
                     _to = DateTime.Now.Date;
                     break;
             }
-            UpdateTime();
-            await RefreshReportTimeEntires(ReportingUser?.Id);
+            RefreshReportTimeEntries(ReportingUser?.Id);
         }
 
-        private async Task RefreshReportTimeEntires(int? userId)
+        private async void RefreshReportTimeEntries(int? userId)
         {
             if (userId == null || userId <= 0)
             {
@@ -314,32 +308,19 @@ namespace TBT.App.ViewModels.MainWindow
                 var temp = _from;
                 _from = _to;
                 _to = temp;
-                UpdateTime();
             }
-
-
-            ItemsLoading = true;
-
-
-            var data = await App.CommunicationService.GetAsJson(
-                $"TimeEntry/GetByUser/{userId}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}/false");
-
+            UpdateTime();
+            LoadedTimeEntries?.Clear();
+            var data = await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{userId}/{From.ToUrl()}/{To.ToUrl()}/false");
             if (data != null)
             {
-                var result = JsonConvert.DeserializeObject<List<TimeEntry>>(data);
-
+                var result = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(data);
                 foreach (var time in result)
                 {
                     time.Date = time.Date.ToLocalTime();
                 }
-                SetProjectList(result.Select(x => x.Activity.Project));
-                LoadData = result;
-                ItemsLoading = false;
+                LoadedTimeEntries = result;
             }
-           
-
-
-
         }
 
         private void CalcSalary()
@@ -350,52 +331,18 @@ namespace TBT.App.ViewModels.MainWindow
                 HourlySalary = 0;
                 return;
             }
-
-            HourlySalary = ReportingUser.MonthlySalary / 168;
-
-            if (TimeEntries == null || !TimeEntries.Any())
-            {
-                Salary = 0;
-            }
-            else
-            {
-                Salary = (decimal)TimeEntriesHelper.SumTime(TimeEntries.ToList()).TotalHours * HourlySalary;
-            }
-
-            CalcSalaryUah();
-        }
-
-        private void CalcSalaryUah()
-        {
-            if (DollarRate != null)
-            {
-                HourUah = HourlySalary * DollarRate;
-                FullUah = Salary * DollarRate;
-            }
-            else
-            {
-                HourUah = 0;
-                FullUah = 0;
-            }
+            HourlySalary = ReportingUser.MonthlySalary.Value / 168;
+            Salary = (decimal)TimeEntriesHelper.SumTime(TimeEntries).TotalHours * HourlySalary;
         }
         private void RefreshRate()
         {
-
             if (CommunicationService.IsConnected)
             {
                 Task.Run(async () =>
                 {
-                    DollarRate = null;
-                    var json = await new HttpClient().GetStringAsync(
-                        ConfigurationManager.AppSettings[Constants.ApiUrl] + "pubinfo?json&exchange&coursid=5");
-
-                    var usd = JsonConvert.DeserializeObject<List<ApiDollarRate>>(json).FirstOrDefault(x => x.Ccy == "USD");
-
-                    DollarRate = usd?.Buy;
-                    if (DollarRate != null)
-                    {
-                        CalcSalary();
-                    }
+                    var json = await new HttpClient().GetStringAsync(ConfigurationManager.AppSettings[Constants.ApiUrl] + "pubinfo?json&exchange&coursid=5");
+                    DollarRate = JsonConvert.DeserializeObject<List<ApiDollarRate>>(json)
+                                     .FirstOrDefault(x => x.Ccy == "USD")?.Buy ?? 0;
                 });
             }
         }
@@ -406,77 +353,64 @@ namespace TBT.App.ViewModels.MainWindow
             RaisePropertyChanged(nameof(From));
         }
 
-        private void SetProjectList(IEnumerable<Project> mas = null)
+        private void UpdateProjectList()
         {
-
-            var temp = new List<Project> { All };
-
-            if (CurrentProject != null)
+            var projects = LoadedTimeEntries.Select(x => x.Activity.Project).ToList();
+            var tempMas = new List<Project>(projects.Count + 1);
+            tempMas.AddRange(projects);
+            tempMas.Add(All);
+            if (projects.FirstOrDefault(x => x.Id == CurrentProject.Id) == null)
             {
-                temp.Add(CurrentProject);
+                CurrentProject = All;
             }
-            if (mas != null)
+            Projects = new ObservableCollection<Project>(tempMas.Distinct());
+        }
+
+        public void UpdateUserList()
+        {
+            var temp = _needBlockedUsers ? new ObservableCollection<User>(LoadedUsers.OrderBy(x => x.IsBlocked).ThenBy(x => x.FirstName))
+                : new ObservableCollection<User>(LoadedUsers.Where(x => !x.IsBlocked).OrderBy(x => x.FirstName));
+            if (temp.FirstOrDefault(x => x.Id == _savedReportingUser) == null)
             {
-                temp.AddRange(mas);
+                ReportingUser = LoadedUsers.FirstOrDefault();
             }
 
-            Projects = new ObservableCollection<Project>(temp.Distinct());
-
+            Users = temp;
         }
         private void FilterTimeEntry()
         {
-            if (LoadData == null || CurrentProject == null)
-            {
-                TimeEntries = new ObservableCollection<TimeEntry>();
-                return;
-
-            }
-            TimeEntries = CurrentProject.Id == All.Id ?
-                new ObservableCollection<TimeEntry>(LoadData) :
-                new ObservableCollection<TimeEntry>(LoadData.Where(t => t.Activity.Project == CurrentProject));
-
-            CalcSalary();
-            FullTime = TimeEntriesHelper.CalcFullTime(TimeEntries.ToList());
+            TimeEntries = new ObservableCollection<TimeEntry>(All == CurrentProject ? LoadedTimeEntries : LoadedTimeEntries.Where(entry => entry.Activity.Project == CurrentProject));
         }
 
 
-        private  void SaveUserReport()
-        {
-            SaveXPSDocument(CreateUserReport(new ReportPage { DataContext = this }));
-        }
+        #region UserReport
 
-        private FixedDocument CreateUserReport(ReportPage control)
+        private FixedDocument CreateUserReport()
         {
-
+            var control = new ReportPage { DataContext = this };
             var fixedDoc = new FixedDocument();
             var pageContent = new PageContent();
             var fixedPage = new FixedPage();
-
             try
             {
                 control.TimeEntryItemsControl.UpdateLayout();
-
                 fixedPage.Height = control.TimeEntryItemsControl.DesiredSize.Height + control.TimeEntryItemsControl.Margin.Top
                                    + control.TimeEntryItemsControl.Margin.Bottom
                                    + control.Header.DesiredSize.Height
                                    + control.Header.Margin.Top
                                    + control.Header.Margin.Bottom;
                 fixedPage.Width = 1100;
-
                 control.Height = fixedPage.Height;
                 control.Width = fixedPage.Width;
-
                 fixedPage.Children.Add(control);
                 ((IAddChild)pageContent).AddChild(fixedPage);
                 fixedDoc.Pages.Add(pageContent);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
+                RefreshEvents.ChangeErrorInvoke(ex.InnerException?.Message ?? ex.Message, ErrorType.Error);
             }
-
             return fixedDoc;
-
         }
 
         private void SaveXPSDocument(FixedDocument document, bool isUserReport = true)
@@ -498,22 +432,19 @@ namespace TBT.App.ViewModels.MainWindow
 
                     using (var xpsd = new XpsDocument(dlg.FileName, FileAccess.ReadWrite))
                     {
-                       XpsDocument.CreateXpsDocumentWriter(xpsd).Write(document);
+                        XpsDocument.CreateXpsDocumentWriter(xpsd).Write(document);
                     }
-                    RefreshEvents.ChangeErrorInvoke("Report saved",ErrorType.Success);
+                    RefreshEvents.ChangeErrorInvoke("Report saved", ErrorType.Success);
                 }
             }
             catch (Exception)
             {
-                RefreshEvents.ChangeErrorInvoke($"Error occurred during saving report",ErrorType.Error);
+                RefreshEvents.ChangeErrorInvoke($"Error occurred during saving report", ErrorType.Error);
             }
         }
 
-
-
         private async void SaveCompanyReport()
         {
-            
             var users = new List<UserReportModel>(Users.Count);
             foreach (var user in Users)
             {
@@ -524,26 +455,19 @@ namespace TBT.App.ViewModels.MainWindow
                 };
                 if (user.Id == User.Id)
                 {
-                    reportModel.Duration = TimeEntriesHelper.CalcFullTime(LoadData.ToList());
+                    reportModel.Duration = TimeEntriesHelper.CalcFullTime(LoadedTimeEntries);
                 }
                 else
                 {
                     var data = await App.CommunicationService.GetAsJson(
-                        $"TimeEntry/GetByUser/{user.Id}/{App.UrlSafeDateToString(From)}/{App.UrlSafeDateToString(To)}/false");
+                        $"TimeEntry/GetByUser/{user.Id}/{From.ToUrl()}/{To.ToUrl()}/false");
                     if (data != null)
                     {
-                        reportModel.Duration =
-                            TimeEntriesHelper.CalcFullTime(
-                                new List<TimeEntry>(JsonConvert.DeserializeObject<List<TimeEntry>>(data)));
-                    }
-                    else
-                    {
-                        continue;
+                        reportModel.Duration = TimeEntriesHelper.CalcFullTime(JsonConvert.DeserializeObject<List<TimeEntry>>(data));
                     }
                 }
-                users.Add(reportModel);            
+                users.Add(reportModel);
             }
-
             var allUsersReportPage = new AllUsersReportPage
             {
                 DataContext = new
@@ -561,44 +485,42 @@ namespace TBT.App.ViewModels.MainWindow
             var fixedDoc = new FixedDocument();
             var pageContent = new PageContent();
             var fixedPage = new FixedPage();
-
-            try
-            {
-
-                var n = (control.DataContext as dynamic).Users.Count;
-
-                fixedPage.Height = n * 50 + 150;
-                fixedPage.Width = 800;
-
-                control.Height = n * 50 + 150;
-                control.Width = 800;
-
-                control.UpdateLayout();
-
-                fixedPage.Children.Add(control);
-                ((IAddChild)pageContent).AddChild(fixedPage);
-                fixedDoc.Pages.Add(pageContent);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
-            }
-
+            var count = (control.DataContext as dynamic).Users.Count;
+            fixedPage.Height = count * 50 + 150;
+            fixedPage.Width = 800;
+            control.Height = count * 50 + 150;
+            control.Width = 800;
+            control.UpdateLayout();
+            fixedPage.Children.Add(control);
+            ((IAddChild)pageContent).AddChild(fixedPage);
+            fixedDoc.Pages.Add(pageContent);
             return fixedDoc;
         }
 
+        #endregion
+
+
         private void SaveTotalTimeToClipboard()
         {
-            Clipboard.SetText($"{Resources.TotalTime}: {TimeEntriesHelper.SumTime(TimeEntries.ToList()).TotalHours:N2}");
+            Clipboard.SetText($"{TimeEntriesHelper.SumTime(TimeEntries.ToList()).TotalHours:N2}");
         }
         private void SaveMonthlySalaryToClipboard()
         {
-            Clipboard.SetText($"{FullUah.Value.ToString("0.00")} ₴");
+            Clipboard.SetText($"{FullUah:0.00}₴");
         }
 
-
-
-
+        public async Task RefreshUsersList()
+        {
+            if (User.IsAdmin)
+            {
+                LoadedUsers = await RefreshEvents.RefreshUsersList();
+                ReportingUser = (Users.FirstOrDefault(x => x.Id == _savedReportingUser) ?? Users.FirstOrDefault(x => x.Id == User.Id)) ?? Users.FirstOrDefault();
+            }
+            else
+            {
+                ReportingUser = User;
+            }
+        }
 
         public void RefreshCurrentUser(object sender, User user)
         {
@@ -608,66 +530,35 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public async Task RefreshUsersList()
-        {
-            if (User.IsAdmin)
-            {
-                Users = await RefreshEvents.RefreshUsersList();
-                ReportingUser = _savedReportingUserId.HasValue
-                    ? Users?.FirstOrDefault(x => x.Id == _savedReportingUserId.Value)
-                    : Users?.FirstOrDefault(x => x.Id == User.Id);
-                SelectedUserIndex = Users?.IndexOf(ReportingUser) ?? -1;
-            }
-            else
-            {
-                ReportingUser = User;
-            }
-        }
-
         #endregion
 
         #region Interface members
 
         public DateTime ExpiresDate { get; set; }
-        public async void OpenTab(User currentUser)
+        public void OpenTab(User currentUser)
         {
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
-            User = currentUser;
-            RefreshRate();
-            CurrentProject = All;
-            SelectedTipIndex = 0;
-            await RefreshUsersList();
+            RefreshTab();
         }
 
         public void CloseTab()
         {
             RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
-            Salary = 0;
-            HourlySalary = 0;
-            FullUah = 0;
-            HourUah = 0;
-            DollarRate = null;
-            //FullTime = "00:00 (00.00)";
-            Projects = null;
-            LoadData = null;
-            Users = null;
-            ReportingUser = null;
-            
+            Users?.Clear();
+            TimeEntries?.Clear();
+            LoadedTimeEntries?.Clear();
         }
 
-        #region IDisposable
-
-        private bool disposed = false;
-
-        public virtual void Dispose()
+        public async void RefreshTab()
         {
-            if (disposed) { return; }
-
-            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
-            disposed = true;
+            Users?.Clear();
+            TimeEntries?.Clear();
+            LoadedTimeEntries?.Clear();
+            await RefreshEvents.RefreshCurrentUser(null);
+            await RefreshUsersList();
+            DollarRate = 0;
+            RefreshRate();
         }
-
-        #endregion
 
         #endregion
     }

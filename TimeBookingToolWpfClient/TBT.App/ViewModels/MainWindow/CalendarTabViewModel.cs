@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +11,7 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class CalendarTabViewModel : BaseViewModel, ICacheable
+    public class CalendarTabViewModel : ObservableObject, ICacheable
     {
         #region Fields
 
@@ -20,12 +19,11 @@ namespace TBT.App.ViewModels.MainWindow
         private DateTime _selectedDay;
         private bool _isDateNameShort;
         private User _user;
-        private string _weekTime;
-        private string _dayTime;
+        private TimeSpan _weekTime;
+        private TimeSpan _dayTime;
         private EditTimeEntryViewModel _editTimeEntryViewModel;
         private TimeEntryItemsViewModel _timeEntryItems;
-        private bool _isLoading;
-        private bool isFirstOpen;
+
 
         #endregion
 
@@ -34,7 +32,12 @@ namespace TBT.App.ViewModels.MainWindow
         public ObservableCollection<DateTime> Week
         {
             get { return _week; }
-            set { SetProperty(ref _week, value); }
+            set
+            {
+                SetProperty(ref _week, value);
+                GetTimeEntriesForWeek();
+                RaisePropertyChanged(nameof(SelectedDay));
+            }
         }
 
         public bool IsDateNameShort
@@ -49,10 +52,8 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _selectedDay; }
             set
             {
-
                 SetProperty(ref _selectedDay, value);
-                RefreshTimeEntries(Week);
-
+                SelectedDayChanged();
             }
         }
 
@@ -63,19 +64,18 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (SetProperty(ref _user, value))
                 {
-                    RefreshTimeEntries(Week);
                     ChangeUserForNested?.Invoke(value);
                 }
             }
         }
 
-        public string WeekTime
+        public TimeSpan WeekTime
         {
             get { return _weekTime; }
             set { SetProperty(ref _weekTime, value); }
         }
 
-        public string DayTime
+        public TimeSpan DayTime
         {
             get { return _dayTime; }
             set { SetProperty(ref _dayTime, value); }
@@ -93,12 +93,6 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _timeEntryItems, value); }
         }
 
-        public bool IsLoading
-        {
-            get { return _isLoading; }
-            set { SetProperty(ref _isLoading, value); }
-        }
-
         public ICommand BackTodayCommand { get; set; }
         public ICommand GoToSelectedDayCommand { get; set; }
         public ICommand GoToCurrentWeekCommand { get; set; }
@@ -111,106 +105,78 @@ namespace TBT.App.ViewModels.MainWindow
 
         public CalendarTabViewModel(User user)
         {
-            isFirstOpen = true;
-            User = user;
-            Week = GetWeekOfDay(DateTime.Now);
-            IsDateNameShort = true;
+            _user = user;
+             IsDateNameShort = true;
+            _week = GetWeekOfDay(DateTime.Now);
+            _selectedDay = DateTime.Now.Date;
             TimeEntryItems = new TimeEntryItemsViewModel { TimeEntries = User?.TimeEntries, };
-            TimeEntryItems.RefreshTimeEntries += Refresh;
             EditTimeEntryViewModel = new EditTimeEntryViewModel() { User = User, SelectedDay = SelectedDay };
+
             PropertyChanged += _editTimeEntryViewModel.ChangeButtonName;
+            _timeEntryItems.RefreshTimeEntries += RefreshTab;
             ChangeUserForNested += _editTimeEntryViewModel.RefreshCurrentUser;
-            SelectedDay = DateTime.Now.Date;
-            _editTimeEntryViewModel.RefreshTimeEntries += Refresh;
+            _editTimeEntryViewModel.RefreshTimeEntries += RefreshTab;
 
             ChangeWeekCommand = new RelayCommand(obj => ChangeWeek(Convert.ToInt32(obj)), null);
-            GoToSelectedDayCommand = new RelayCommand(obj => GoToDefaultWeek(true, false), obj => SelectedDay.StartOfWeek(DayOfWeek.Monday) != Week.FirstOrDefault());
-            BackTodayCommand = new RelayCommand(obj => GoToDefaultWeek(false, true), obj => SelectedDay.Date != DateTime.Now.Date);
-            GoToCurrentWeekCommand = new RelayCommand(obj => GoToDefaultWeek(false, false), obj => !Week.Contains(DateTime.Now.Date));
-            isFirstOpen = false;
-            GetTimeEnteredForWeek(Week);
+            GoToSelectedDayCommand = new RelayCommand(obj => GoToWeek(true), obj => SelectedDay.StartOfWeek(DayOfWeek.Monday) != Week.FirstOrDefault());
+            BackTodayCommand = new RelayCommand(obj => GoToDefaultWeek(), obj => SelectedDay.Date != DateTime.Now.Date);
+            GoToCurrentWeekCommand = new RelayCommand(obj => GoToWeek(false), obj => !Week.Contains(DateTime.Now.Date));
         }
 
         #endregion
 
         #region Methods
 
-        private async void Refresh()
+        public void ChangeWeek(int offset)
         {
-            await RefreshTimeEntries(Week);
+            Week = new ObservableCollection<DateTime>(Week.Select(x => x.AddDays(offset)));
         }
 
-        public async void ChangeWeek(int offset)
+        private void GoToWeek(bool toSelectedDay)
         {
-            Week = WeekOffset(Week, offset);
-            RaisePropertyChanged(nameof(SelectedDay));
-            await RefreshTimeEntries(Week);
+            Week = GetWeekOfDay(toSelectedDay ? SelectedDay : DateTime.Now.Date);
         }
 
-        private void GoToDefaultWeek(bool toSelectedDay, bool changeDay)
+        private void GoToDefaultWeek()
         {
-            Week = GetWeekOfDay(toSelectedDay ? SelectedDay : DateTime.Now);
-            SelectedDay = changeDay ? DateTime.Now.Date : SelectedDay;
-            RaisePropertyChanged(nameof(SelectedDay));
+            Week = GetWeekOfDay(DateTime.Now);
+            SelectedDay = DateTime.Now.Date;
         }
 
-        private async Task RefreshTimeEntries(ObservableCollection<DateTime> week)
+        public async void SelectedDayChanged()
         {
-            if (isFirstOpen) return;
-            if (User.Id != 0)
-            {
-                await SelectedDayChanged(false);
-            }
-            if (week != null && week.Any())
-                await GetTimeEnteredForWeek(week);
-        }
+            if (User.Id == 0) return;
 
-        public async Task SelectedDayChanged(bool showLoading = true)
-        {
-            if (User.Id <= 0) return;
-            if (showLoading) IsLoading = true;
-
-            var data = await App.CommunicationService.GetAsJson(
-                $"TimeEntry/GetByUser/{User.Id}/{App.UrlSafeDateToString(SelectedDay)}/{App.UrlSafeDateToString(SelectedDay)}");
-
+            var data = await App.CommunicationService.GetAsJson($"TimeEntry/GetByUser/{User.Id}/{SelectedDay.ToUrl()}/{SelectedDay.ToUrl()}");
             if (data == null)
             {
                 TimeEntryItems.TimeEntries = new ObservableCollection<TimeEntry>();
-                IsLoading = false;
                 return;
             }
-
-            var timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(data);
+            var timeEntries = JsonConvert.DeserializeObject<ObservableCollection<TimeEntry>>(data);
             foreach (var timeEntry in timeEntries)
             {
                 timeEntry.Date = timeEntry.Date.ToLocalTime();
             }
-            TimeEntryItems.TimeEntries = new ObservableCollection<TimeEntry>(timeEntries);
-            User.TimeEntries = TimeEntryItems.TimeEntries;
-            DayTime = TimeEntriesHelper.CalcFullTime(User.TimeEntries.Where(x=>!x.IsRunning).ToList());
-            IsLoading = false;
+            TimeEntryItems.TimeEntries = timeEntries;
+            User.TimeEntries = timeEntries;
+            DayTime = TimeEntriesHelper.SumTime(timeEntries.Where(x => !x.IsRunning));
         }
 
-        private async Task GetTimeEnteredForWeek(ObservableCollection<DateTime> week)
+        private async void GetTimeEntriesForWeek()
         {
             if (User.Id > 0)
             {
-                var data = await App.CommunicationService.GetAsJson(
-                    $"TimeEntry/GetDuration/{User.Id}/{App.UrlSafeDateToString(week.FirstOrDefault())}/{App.UrlSafeDateToString(week.LastOrDefault())}");
+                var data = await App.CommunicationService.GetAsJson($"TimeEntry/GetDuration/{User.Id}/{Week.FirstOrDefault().ToUrl()}/{Week.LastOrDefault().ToUrl()}");
                 if (data != null)
                 {
-                    WeekTime = TimeEntriesHelper.GetFullTime(JsonConvert.DeserializeObject<TimeSpan>(data));
+                    WeekTime = JsonConvert.DeserializeObject<TimeSpan>(data);
                     return;
                 }
             }
-            WeekTime = TimeEntriesHelper.GetFullTime();
+            WeekTime = TimeSpan.Zero;
         }
 
-        private ObservableCollection<DateTime> WeekOffset(ObservableCollection<DateTime> week, int days)
-        {
-            return new ObservableCollection<DateTime>(week.Select(x => x.AddDays(days)));
-
-        }
 
         private ObservableCollection<DateTime> GetWeekOfDay(DateTime day)
         {
@@ -232,31 +198,26 @@ namespace TBT.App.ViewModels.MainWindow
 
         public DateTime ExpiresDate { get; set; }
 
-        public async void OpenTab(User currentUser)
+        public void OpenTab(User currentUser)
         {
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
-            await RefreshEvents.RefreshCurrentUser(null);
+            RefreshTab();
         }
 
         public void CloseTab()
         {
+            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
             TimeEntryItems?.TimeEntries?.Clear();
-            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
+            EditTimeEntryViewModel.SelectedProject = null;
+            EditTimeEntryViewModel.SelectedActivity = null;
         }
 
-        #region IDisposable
-
-        private bool _disposed;
-
-        public virtual void Dispose()
+        public async void RefreshTab()
         {
-            if (_disposed) { return; }
-
-            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
-            _disposed = true;
+            await RefreshEvents.RefreshCurrentUser(null, true);
+            SelectedDayChanged();
+            GetTimeEntriesForWeek();
         }
-
-        #endregion
 
         #endregion
     }

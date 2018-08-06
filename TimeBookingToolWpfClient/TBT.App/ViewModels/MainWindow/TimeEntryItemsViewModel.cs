@@ -7,7 +7,7 @@ using TBT.App.Models.Base;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class TimeEntryItemsViewModel: BaseViewModel
+    public class TimeEntryItemsViewModel: ObservableObject
     {
         #region Fields
 
@@ -27,7 +27,7 @@ namespace TBT.App.ViewModels.MainWindow
                 if(SetProperty(ref _timeEntries, value))
                 {
                     if(_timeEntries.Any(x => x.IsRunning))
-                    { RefreshEvents.ScrolTimeEntriesToTop(); }
+                    { RefreshEvents.ScrollTimeEntriesToTop(); }
                 }
             }
         }

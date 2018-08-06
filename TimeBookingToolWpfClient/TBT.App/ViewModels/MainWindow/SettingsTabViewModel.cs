@@ -14,17 +14,16 @@ using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class SettingsTabViewModel : BaseViewModel, ICacheable
+    public class SettingsTabViewModel : ObservableObject, ICacheable
     {
         #region Fields
 
-        private bool _runOnSturtupCheck;
         private RegistryKey _registryKey;
 
         private DateTime _date;
         private string _text;
-        private Absence _selectedIteam;
-        private List<Absence> _iteamList;
+        private AbsenceType _selectedAbsenceType;
+        private List<AbsenceType> _absenceTypeList;
         private User _currentUser;
 
 
@@ -69,15 +68,15 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _text; }
             set { SetProperty(ref _text, value); }
         }
-        public Absence SelectedItem
+        public AbsenceType SelectedItem
         {
-            get { return _selectedIteam; }
-            set { SetProperty(ref _selectedIteam, value); }
+            get { return _selectedAbsenceType; }
+            set { SetProperty(ref _selectedAbsenceType, value); }
         }
-        public List<Absence> ItemList
+        public List<AbsenceType> ItemList
         {
-            get { return _iteamList; }
-            set { SetProperty(ref _iteamList, value); }
+            get { return _absenceTypeList; }
+            set { SetProperty(ref _absenceTypeList, value); }
         }
 
         public ICommand SendEmail { get; set; }
@@ -91,7 +90,7 @@ namespace TBT.App.ViewModels.MainWindow
                 ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             SendEmail = new RelayCommand(obj => Send(), null);
             Date = DateTime.Now;
-            ItemList = Enum.GetValues(typeof(Absence)).Cast<Absence>().ToList();
+            ItemList = Enum.GetValues(typeof(AbsenceType)).Cast<AbsenceType>().ToList();
         }
 
 
@@ -123,31 +122,25 @@ namespace TBT.App.ViewModels.MainWindow
 
         public async void Send()
         {
-            try
+            var data = new
             {
-                var obj = new
-                {
-                    Text,
-                    Type = _selectedIteam.ToString(),
-                    Date = Date.ToShortDateString(),
-                    Email = _currentUser.Username
-                };
-                var rez = JsonConvert.DeserializeObject<bool>(
-                    await App.CommunicationService.PostAsJson("User/SendEmail", obj));
-                if (rez)
-                {
-                    Text = "";
-                    MessageBox.Show("Sent");
-                }
-                else
-                {
-                    MessageBox.Show("Error");
-                }
-            }
-            catch (Exception e)
+                Text,
+                Type = _selectedAbsenceType.ToString(),
+                Date = Date.ToShortDateString(),
+                Email = _currentUser.Username
+            };
+
+            var result = await App.CommunicationService.PostAsJson("User/SendEmail", data);
+            if (result != null && JsonConvert.DeserializeObject<bool>(result))
             {
-                MessageBox.Show(e.Message + e.InnerException?.Message);
+                Text = "";
+                RefreshEvents.ChangeErrorInvoke("Mail sent",ErrorType.Success);
             }
+            else
+            {
+                RefreshEvents.ChangeErrorInvoke("Error while sending", ErrorType.Error);
+            }
+
         }
 
 
@@ -167,11 +160,10 @@ namespace TBT.App.ViewModels.MainWindow
             RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
         }
 
-        #region IDisposable
-
-        public virtual void Dispose() { }
-
-        #endregion
+        public void RefreshTab()
+        {
+            
+        }
 
         #endregion
     }

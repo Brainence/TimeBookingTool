@@ -5,17 +5,17 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.EditWindowsViewModels
 {
-    public class EditWindowViewModel: BaseViewModel
+    public class EditWindowViewModel: ObservableObject
     {
         #region Fields
 
-        private BaseViewModel _editControl;
+        private ObservableObject _editControl;
 
         #endregion
 
         #region Properties
 
-        public BaseViewModel EditControl
+        public ObservableObject EditControl
         {
             get { return _editControl; }
             set { SetProperty(ref _editControl, value); }
@@ -27,7 +27,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
 
         #region Constructors
 
-        public EditWindowViewModel(BaseViewModel editControl)
+        public EditWindowViewModel(ObservableObject editControl)
         {
             CloseCommand = new RelayCommand(obj => (obj as Window)?.Close(), null);
             EditControl = editControl;

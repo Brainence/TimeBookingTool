@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Net;
 using System.Net.Http;
@@ -9,13 +10,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using TBT.App.Common;
+using TBT.App.Helpers;
 using TBT.App.Services.CommunicationService.Interfaces;
 
 namespace TBT.App.Services.CommunicationService.Implementations
 {
     public class CommunicationService : ICommunicationService
     {
-        private static string _baseUrl;
         private static HttpClient _client;
         private static bool _isConnect;
 
@@ -29,14 +30,13 @@ namespace TBT.App.Services.CommunicationService.Implementations
 
                 _isConnect = value;
                 ConnectionChanged?.Invoke(value);
-               
+
             }
         }
 
         static CommunicationService()
         {
-            _baseUrl = ConfigurationManager.AppSettings[Constants.ServerBaseUrl];
-            _client = new HttpClient() { BaseAddress = new Uri(_baseUrl) };
+            _client = new HttpClient() { BaseAddress = new Uri(ConfigurationManager.AppSettings[Constants.ServerBaseUrl]) };
             App.StaticPropertyChanged += ListenAccessToken;
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All };
             IsConnected = true;
@@ -96,43 +96,42 @@ namespace TBT.App.Services.CommunicationService.Implementations
                 switch (response.StatusCode)
                 {
                     case HttpStatusCode.Unauthorized:
-                    {
-                        if (await App.UpdateTokens())
                         {
-                            IsConnected = true;
-                            return await (await serverResponse(url, data)).Content.ReadAsStringAsync();
+                            if (await App.UpdateTokens())
+                            {
+                                IsConnected = true;
+                                return await (await serverResponse(url, data)).Content.ReadAsStringAsync();
+                            }
                         }
-                    }
                         break;
-                    case HttpStatusCode.NotFound:
-                    {
-                        throw new HttpResponseException(response);
-                    }
+                    case HttpStatusCode.BadGateway:
+                        {
+                            throw new ValidationException(await response.Content.ReadAsStringAsync());
+                        }
 
                     default:
                         if (!response.IsSuccessStatusCode)
                         {
-                            throw new Exception(await response.Content.ReadAsStringAsync());
+                            throw new Exception();
                         }
-
                         break;
                 }
 
                 var responseString = await response.Content.ReadAsStringAsync();
+                if (responseString.StartsWith("null"))
+                {
+                    responseString = null;
+                }
                 IsConnected = true;
                 return responseString;
             }
-            catch (HttpResponseException)
+            catch (ValidationException ex)
+            {
+                RefreshEvents.ChangeErrorInvoke(ex.Message.Trim('\"'), ErrorType.Error);
+            }
+            catch (Exception)
             {
                 IsConnected = false;
-            }
-            catch (HttpRequestException)
-            {
-                IsConnected = false;
-            }
-            catch(Exception ex)
-            {
-                //RefreshEvents.ChangeErrorInvoke(ex.Message,ErrorType.Error);
             }
             return null;
         }

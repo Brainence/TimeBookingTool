@@ -5,7 +5,7 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.EditWindowsViewModels
 {
-    public class EditCustomerViewModel: BaseViewModel
+    public class EditCustomerViewModel: ObservableObject
     {
         #region Fields
 

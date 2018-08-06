@@ -39,17 +39,7 @@
                     </StackPanel>
                 </Grid>
 
-                <Grid Grid.Row="3"
-                          Margin="0 20" 
-                          Height="50"
-                          Width="50"
-                          Visibility="{Binding Path=Users, Converter={StaticResource EnumerableToNotVisibilityConverter}}"
-                          HorizontalAlignment="Center" 
-                          VerticalAlignment="Center">
-
-                    <controls:SpinnersCogs/>
-                </Grid>
-
+                
                 <Grid Grid.Row="3"
                           Visibility="{Binding Path=Users, Converter={StaticResource EnumerableToVisibilityConverter}}">
                     <ScrollViewer 
@@ -71,18 +61,18 @@
 
                                         <Rectangle Stroke="#C2C2C2" Height="1" Grid.ColumnSpan="6"/>
 
-                                        <Grid HorizontalAlignment="Center" Grid.Row="1" Margin="0 5">
+                                        <Grid HorizontalAlignment="Left" Grid.Row="1" Margin="0 3">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition SharedSizeGroup="Admin" Width="20"/>
-                                                <ColumnDefinition SharedSizeGroup="FullName" Width="155"/>
-                                                <ColumnDefinition SharedSizeGroup="Username" Width="156"/>
-                                                <ColumnDefinition SharedSizeGroup="SallaryForMonth" Width="*"/>
+                                                <ColumnDefinition SharedSizeGroup="FullName" Width="Auto"/>
+                                                <ColumnDefinition SharedSizeGroup="Username" Width="Auto"/>
+                                                <ColumnDefinition SharedSizeGroup="SallaryForMonth" Width="Auto"/>
                                                 <ColumnDefinition SharedSizeGroup="Project" Width="40"/>
                                                 <ColumnDefinition SharedSizeGroup="Remove"/>
                                                 <ColumnDefinition SharedSizeGroup="Edit"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Image Height="16" Grid.Column="0" Margin="0 5" Source="../../Resources/Icons/administrator.png" ToolTip="{x:Static p:Resources.Admin}">
+                                            <Image Height="16" Grid.Column="0" Margin="0" Source="../../Resources/Icons/administrator.png" ToolTip="{x:Static p:Resources.Admin}">
                                                 <Image.Style>
                                                     <Style TargetType="Image">
                                                         <Style.Triggers>
@@ -97,24 +87,30 @@
                                                 </Image.Style>
                                             </Image>
 
-                                            <TextBlock Grid.Column="1" Margin="5 0" Text="{Binding FullName}" VerticalAlignment="Center">
+                                            <TextBlock Grid.Column="1" Margin="4 0" Text="{Binding FullName}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding IsAdmin}" Value="True">
                                                                 <Setter Property="Foreground" Value="#c2422b"></Setter>
                                                             </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsBlocked}" Value="True">
+                                                                <Setter Property="Foreground" Value="#7f7f7f"></Setter>
+                                                            </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
                                                 </TextBlock.Style>
                                             </TextBlock>
 
-                                            <TextBlock Grid.Column="2" Margin="5 0" Text="{Binding Username}" VerticalAlignment="Center">
+                                            <TextBlock Grid.Column="2" Margin="4 0" Text="{Binding Username}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding IsAdmin}" Value="True">
                                                                 <Setter Property="Foreground" Value="#c2422b"></Setter>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsBlocked}" Value="True">
+                                                                <Setter Property="Foreground" Value="#7f7f7f"></Setter>
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -131,9 +127,9 @@
                                             </TextBlock>
 
 
-                                            <controls:MultiSelectionComboBox Grid.Column="4" Margin="0 3 10 3" Height="20"
+                                            <controls:MultiSelectionComboBox Grid.Column="4" Margin="0 3 10 0" Height="20"
                                                                                  ItemsSourceMultiple="{Binding Projects}" 
-                                                                                 Width="Auto" Style="{StaticResource ComboBoxFlatStyle}"
+                                                                                 Width="20" Style="{StaticResource ComboBoxFlatStyle}"
                                                                                  Visibility="{Binding ElementName=PeopleTab, Path=DataContext.CurrentUser.IsAdmin, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                                                                                  User="{Binding}"/>
                                             <Button Command="{Binding ElementName=PeopleTab, Path=DataContext.EditUserCommand}"

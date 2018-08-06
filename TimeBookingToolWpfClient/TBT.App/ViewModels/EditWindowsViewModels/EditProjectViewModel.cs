@@ -8,7 +8,7 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.EditWindowsViewModels
 {
-    public class EditProjectViewModel: BaseViewModel
+    public class EditProjectViewModel: ObservableObject
     {
         #region Fields
 

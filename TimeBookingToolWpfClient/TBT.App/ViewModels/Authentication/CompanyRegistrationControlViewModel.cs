@@ -7,7 +7,7 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.Authentication
 {
-    public class CompanyRegistrationControlViewModel: BaseViewModel
+    public class CompanyRegistrationControlViewModel: ObservableObject
     {
         #region Fields
 
@@ -16,7 +16,6 @@ namespace TBT.App.ViewModels.Authentication
         private string _firstName;
         private string _lastName;
         private AuthenticationWindowViewModel _mainVM;
-        private bool _canRegister;
 
         #endregion
 

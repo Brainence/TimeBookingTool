@@ -31,15 +31,9 @@
                     <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="{x:Static p:Resources.CreateCustomer}" />
                 </Button>
             </StackPanel>
-
-            <Button Grid.Column="1" Command="{Binding Path=RefreshCustomersCommand}" 
-                    Template="{StaticResource HyperlinkButtonTemplate}" 
-                    Margin="0" HorizontalAlignment="Right">
-                <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="{x:Static p:Resources.RefreshCustomer}" />
-            </Button>
         </Grid>
 
-        <Grid Grid.Row="2"
+        <!--<Grid Grid.Row="2"
                           Margin="20" 
                           Height="50"
                           Width="50"
@@ -48,7 +42,7 @@
                           VerticalAlignment="Center">
 
             <controls:SpinnersCogs/>
-        </Grid>
+        </Grid>-->
 
         <Grid VerticalAlignment="Top" 
                           Grid.Row="2"
@@ -85,13 +79,13 @@
                                                            Width="100"
                                                            Margin="0 10 5 5" 
                                                            Text="{Binding Path=Name}"
-                                                           Foreground="#c2422b"/>
+                                                           Foreground="#c2422b" TextAlignment="Center"/>
 
                                     <Expander Grid.Column="1" 
                                               Width="310"
                                               Margin="5 5 0 5" 
                                               Header="{x:Static p:Resources.Projects}"
-                                              IsExpanded="{Binding IsExpanded}">
+                                              IsExpanded="{Binding IsExpanded}" HorizontalAlignment="Right">
 
                                         <ItemsControl ItemsSource="{Binding Projects}">
                                             <ItemsControl.ItemTemplate>

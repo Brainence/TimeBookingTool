@@ -8,7 +8,7 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.EditWindowsViewModels
 {
-    public class EditActivityViewModel: BaseViewModel
+    public class EditActivityViewModel: ObservableObject
     {
         #region Fields
 
@@ -29,7 +29,13 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public Project SelectedProject
         {
             get { return _selectedProject; }
-            set { SetProperty(ref _selectedProject, value); }
+            set
+            {
+                if (SetProperty(ref _selectedProject, value))
+                {
+                    EditingActivity.Project = value;
+                }
+            }
         }
 
         public Activity EditingActivity

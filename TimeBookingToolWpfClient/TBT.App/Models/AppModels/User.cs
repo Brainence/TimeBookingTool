@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.ObjectModel;
 using TBT.App.Models.Base;
 
@@ -17,17 +16,22 @@ namespace TBT.App.Models.AppModels
         private bool _isActive;
         private ObservableCollection<Project> _projects;
         private ObservableCollection<TimeEntry> _timeEntries;
-        private int? _timeLimit;
+        private int _timeLimit;
         private TimeSpan? _currentTimeZone;
         private Company _company;
-
         private decimal? _monthlySalary;
+        private bool _isBlocked;
        
         public User()
         {
             _projects = new ObservableCollection<Project>();
             _timeEntries = new ObservableCollection<TimeEntry>();
             _isActive = true;
+        }
+
+        public User Clone()
+        {
+            return this.MemberwiseClone() as User;
         }
 
         public int Id
@@ -84,7 +88,7 @@ namespace TBT.App.Models.AppModels
             set { SetProperty(ref _timeEntries, value); }
         }
 
-        public int? TimeLimit
+        public int TimeLimit
         {
             get { return _timeLimit; }
             set { SetProperty(ref _timeLimit, value); }
@@ -107,14 +111,18 @@ namespace TBT.App.Models.AppModels
             get { return _monthlySalary; }
             set { SetProperty(ref _monthlySalary, value); }
         }
-      
 
+        public bool IsBlocked
+        {
+            get { return _isBlocked; }
+            set { SetProperty(ref _isBlocked, value); }
+        }
 
         public string FullName => $"{FirstName} {LastName}";
 
         public override string ToString()
         {
-            return $"{FirstName} {LastName}";
+            return FullName;
         }
     }
 }

@@ -7,14 +7,14 @@ namespace TBT.App.Helpers
 {
     public static class TimeEntriesHelper
     {
-        public static string CalcFullTime(List<TimeEntry> timeEntries)
+        public static string CalcFullTime(IEnumerable<TimeEntry> timeEntries)
         {
             return GetFullTime(SumTime(timeEntries));
         }
 
-        public static TimeSpan SumTime(List<TimeEntry> timeEntries)
+        public static TimeSpan SumTime(IEnumerable<TimeEntry> timeEntries)
         {
-            return timeEntries == null || timeEntries.Any() ? timeEntries.Aggregate(TimeSpan.Zero,(sum, time) => sum.Add(time.Duration)) : TimeSpan.Zero;
+            return timeEntries?.Aggregate(TimeSpan.Zero,(sum, time) => sum.Add(time.Duration)) ?? TimeSpan.Zero;
         }
 
         public static string GetFullTime(TimeSpan time = default(TimeSpan))

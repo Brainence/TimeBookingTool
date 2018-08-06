@@ -17,7 +17,7 @@ namespace TBT.App.Models.AppModels
 
         public Activity Clone()
         {
-            return (Activity)MemberwiseClone();
+            return MemberwiseClone() as Activity;
         }
 
         public int Id

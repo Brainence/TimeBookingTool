@@ -16,28 +16,37 @@
                     Visibility="{Binding Path=User.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Margin="20 20 20 0">
             <TextBlock Text="{x:Static p:Resources.User}" Width="50"
                        Foreground="#4d4d4d" FontSize="13"
-                       TextAlignment="Left" Margin="0,10,0,0" Height="20" VerticalAlignment="Top"/>
+                       TextAlignment="Left" Margin="0,13,0,33"/>
             <ComboBox 
-                Width="448" FontSize="13" FontWeight="Bold" Foreground="#c2422b"
+                Width="366" FontSize="13" FontWeight="Bold" Foreground="#c2422b"
                 Style="{StaticResource ComboBoxFlatStyle}"
                 ItemsSource="{Binding Users}"
-                SelectedIndex="{Binding SelectedUserIndex,StringFormat={}{0.Name}}" Margin="0,10,0,30"/>
+                SelectedItem="{Binding Path=ReportingUser}" Height="20" Margin="0,12,0,31"/>
+            <local:CheckBoxControl Label="Blocked"
+                Margin="2,13,0,33"  Foreground="#4d4d4d" FontSize="13" 
+                IsChecked="{Binding NeedBlocked, Mode=TwoWay}" Width="88"/>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch"  Margin="20,20,20,0">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch"  Margin="20,10,0,0" Height="40" VerticalAlignment="Bottom">
             <TextBlock Text="{x:Static p:Resources.Project}" Width="50"
                        Foreground="#4d4d4d" FontSize="13"
-                       VerticalAlignment="Bottom"
-                       TextAlignment="Left" Height="20"/>
+                       TextAlignment="Left" RenderTransformOrigin="0.5,0.5" Margin="0,20,0,0"/>
 
             <ComboBox 
-                Width="448" FontSize="13" FontWeight="Bold" Foreground="#c2422b"
+                Width="423" FontSize="13" FontWeight="Bold" Foreground="#c2422b"
                 Style="{StaticResource ComboBoxFlatStyle}"
                 ItemsSource="{Binding Projects}"
-                SelectedItem="{Binding  CurrentProject,Mode=TwoWay}" Margin="0,43,0,0"/>
+                SelectedItem="{Binding  CurrentProject,Mode=TwoWay}" Height="20" VerticalAlignment="Bottom"/>
 
+            <StackPanel Width="36" Margin="0,20,0,0">
+                <Button Height="20"
+                        Command="{Binding CreateUserReportCommand}"
+                        Template="{StaticResource HyperlinkButtonTemplate}" HorizontalAlignment="Right" Width="21">
+                    <Image Source="../../Resources/Icons/user_report.png" Height="18" ToolTip="{x:Static p:Resources.UserReport}" />
+                </Button>
+            </StackPanel>
         </StackPanel>
-        
+
         <Grid Grid.Row="1" Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -48,47 +57,34 @@
 
             <Grid Grid.Row="0" HorizontalAlignment="Left">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="245"/>
-                    <ColumnDefinition Width="148"/>
-                    <ColumnDefinition Width="105"/>
+                    <ColumnDefinition Width="263"/>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="75"/>
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Horizontal" Grid.Column="0"  Margin="0 0 0 0">
                     <DatePicker SelectedDate="{Binding From, Mode=TwoWay}" 
-                            VerticalAlignment="Center" Foreground="#c2422b" FontWeight="Bold" FontSize="13" Width="110"/>
+                            VerticalAlignment="Center" Foreground="#c2422b" FontWeight="Bold" FontSize="13" Width="113"/>
 
-                    <TextBlock Text="→" Margin="5 0" TextAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Text="→" Margin="5,4,5,5" TextAlignment="Center" VerticalAlignment="Center" Width="20"/>
 
                     <DatePicker SelectedDate="{Binding To, Mode=TwoWay}"
-                                    VerticalAlignment="Center" Foreground="#c2422b" FontWeight="Bold" FontSize="13"  Width="110"/>
+                                    VerticalAlignment="Center" Foreground="#c2422b" FontWeight="Bold" FontSize="13"  Width="113"/>
                 </StackPanel>
 
-                <ComboBox x:Name="DateComboBox" Grid.Column="1" Style="{StaticResource ComboBoxFlatStyle}" Margin="25 0 0 0" ItemsSource="{Binding IntervalTips}" 
-                       SelectedIndex="{Binding SelectedTipIndex}" Foreground="#c2422b" FontWeight="Bold" FontSize="13" Height="25">
-                </ComboBox>
+                <ComboBox x:Name="DateComboBox" Grid.Column="1" Style="{StaticResource ComboBoxFlatStyle}" Margin="20,0,0,0" ItemsSource="{Binding IntervalTips}" 
+                       SelectedIndex="{Binding SelectedTipIndex}" Foreground="#c2422b" FontWeight="Bold" FontSize="13" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="190"/>
 
-
-                <StackPanel Grid.Column="2" HorizontalAlignment="Right" Margin="0 0 0 0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Height="20" Margin="0 0 0 0"
+                <Button
                         Command="{Binding CreateCompanyReportCommand}"
-                        Visibility="{Binding Path=User.IsAdmin, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                        Template="{StaticResource HyperlinkButtonTemplate}">
-                        <Image Source="../../Resources/Icons/company_report.png" Height="18" ToolTip="{x:Static p:Resources.CompanyReport}" />
-                    </Button>
+                        Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}"
+                        Template="{StaticResource HyperlinkButtonTemplate}" Margin="61,0,-16,0" Grid.Column="2"  >
+                    <Image Source="../../Resources/Icons/company_report.png" Height="18" ToolTip="{x:Static p:Resources.CompanyReport}" />
+                </Button>
 
-                    <Button Height="20" Margin="8 0 0 0"
-                        Command="{Binding CreateUserReportCommand}"
-                        Template="{StaticResource HyperlinkButtonTemplate}">
-                        <Image Source="../../Resources/Icons/user_report.png" Height="18" ToolTip="{x:Static p:Resources.UserReport}" />
-                    </Button>
-
-                    <Button Command="{Binding GetTimeEntriesCommand}" CommandParameter="{Binding User.Id}" Template="{StaticResource HyperlinkButtonTemplate}" Margin="8 0 0 0">
-                        <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="{x:Static p:Resources.RefreshReport}" />
-                    </Button>
-                </StackPanel>
             </Grid>
 
-            <Grid Grid.Row="1" 
+            <!--<Grid Grid.Row="1" 
               Height="50"
               Width="50"
               Margin="20"
@@ -97,11 +93,11 @@
               VerticalAlignment="Center">
 
                 <local:SpinnersCogs />
-            </Grid>
+            </Grid>-->
 
             <Grid VerticalAlignment="Top" 
-              Grid.Row="1"
-              Visibility="{Binding ItemsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}">
+              Grid.Row="1">
+                <!--Visibility="{Binding ItemsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}"-->
 
                 <ScrollViewer Margin="0 20 0 0"
                           MinHeight="100"
@@ -164,12 +160,11 @@
 
             </Grid>
 
-            <StackPanel  Grid.Row="2">
+            <StackPanel  Grid.Row="2" Margin="0,10,0,-10">
                 <StackPanel Margin="0 10 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
                     <TextBlock Text="{x:Static p:Resources.HourlySalary}" FontSize="14" FontWeight="Bold"/>
                     <TextBlock Text="{Binding Path=HourlySalary, StringFormat={}:   {0:0.##} $}" FontSize="14" FontWeight="Bold"/>
                     <TextBlock Text="{Binding Path=HourUah, StringFormat={}  ({0:0.##} ₴)}" FontSize="14" FontWeight="Bold"/>
-                    
                 </StackPanel>
 
                 <StackPanel Margin="0 10 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
@@ -177,14 +172,12 @@
                     <TextBlock  Text="{Binding Path=Salary, Mode=TwoWay, StringFormat={}:   {0:0.##} $}" FontSize="14" FontWeight="Bold"/>
                     <TextBlock Text="{Binding Path=FullUah,StringFormat={}  ({0:0.##} ₴)}" FontSize="14" FontWeight="Bold"/>
                     <Button  Margin="10 0 0 0" Command="{Binding SaveMonthlySalaryToClipboardCommand}">
-                        <Image Source="../../Resources/Icons/reporting_white.png" Height="18" ToolTip="{x:Static p:Resources.CopyTotalToClipboard}"/>
+                        <Image Source="../../Resources/Icons/reporting_white.png" Height="18" ToolTip="{x:Static p:Resources.CopySalaryToClipboard}"/>
                     </Button>
                 </StackPanel>
-                <StackPanel  Margin="0 10 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <TextBlock Text="{x:Static p:Resources.TotalTime}"
-                               FontSize="14" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding FullTime,StringFormat={}:  {0}}"
-                               FontSize="14" FontWeight="Bold" />
+                <StackPanel  Margin="0 5 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
+                    <TextBlock Text="{x:Static p:Resources.TotalTime}" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding TimeEntries, Converter={StaticResource DurationConverter},StringFormat={}:  {0}}" FontSize="14" FontWeight="Bold" />
                     <Button x:Name="SaveTotalToClipboardButton" Margin="10 0 0 0" Command="{Binding SaveToClipboardCommand}">
                         <Image Source="../../Resources/Icons/reporting_white.png" Height="18" ToolTip="{x:Static p:Resources.CopyTotalToClipboard}"/>
                     </Button>

@@ -26,7 +26,6 @@ namespace TBT.App.Models.AppModels
         {
             return MemberwiseClone() as Project;
         }
-
         public int Id
         {
             get { return _id; }

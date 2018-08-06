@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
+using TBT.App.Properties;
 
 namespace TBT.App.Helpers
 {
@@ -14,14 +15,18 @@ namespace TBT.App.Helpers
             }
             return dt.AddDays(-diff).Date;
         }
+
+        public static string ToUrl(this DateTime date)
+        {
+            return date.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+        }
     }
 
     public static class StringExtensions
     {
-        public static TimeSpan ToTimespan(this string input)
+        public static TimeSpan ToTimeSpan(this string input)
         {
             TimeSpan duration;
-            double hours = 0;
             if (input.Contains(":"))
             {
                 duration = InputSeparatedBy(input, ':');
@@ -32,22 +37,16 @@ namespace TBT.App.Helpers
             }
             else
             {
-                var res = double.TryParse(input, out hours);
-
-                if (!res || hours < 0)
+                var hours = double.Parse(input);
+                if (hours <= 0)
                 {
-                    throw new Exception($"{Properties.Resources.IncorrectTimeInputFormat}.");
+                   return  TimeSpan.Zero;
                 }
-
                 duration = TimeSpan.FromHours(hours);
-                if (duration.TotalHours > 24)
-                {
-                    throw new Exception($"{Properties.Resources.EnteredBigTime}.");
-                }
-                else if (duration.TotalHours == 24.0)
-                {
-                    duration = TimeSpan.FromHours(23.9999);
-                }
+                //if (duration.TotalHours >= 24)
+                //{
+                //    return TimeSpan.FromHours(23.9);
+                //}
             }
             return duration;
         }
@@ -57,20 +56,15 @@ namespace TBT.App.Helpers
             var hour = input.Substring(0, input.IndexOf(separator));
             var min = input.Substring(input.IndexOf(separator) + 1);
 
-            int h;
-            int m;
-
-            var res = int.TryParse(hour, out h) & int.TryParse(min, out m);
-
-            if (!res || h < 0 || m < 0 || m > 59)
+            if (!int.TryParse(hour, out var h) & int.TryParse(min, out var m) || h < 0 || m < 0 || m > 59)
             {
-                throw new Exception($"{Properties.Resources.IncorrectTimeInputFormat}.");
+                RefreshEvents.ChangeErrorInvoke($"{Resources.IncorrectTimeInputFormat}.",ErrorType.Error);
             }
 
             var duration = new TimeSpan(h, m, 0);
             if (duration.TotalHours >= 24)
             {
-                throw new Exception($"{Properties.Resources.EnteredBigTime}.");
+                RefreshEvents.ChangeErrorInvoke($"{Resources.EnteredBigTime}.",ErrorType.Error);
             }
             return duration;
         }

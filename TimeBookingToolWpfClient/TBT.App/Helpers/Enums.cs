@@ -10,11 +10,11 @@
         TasksTab,
         SettingsTab
     }
-    public enum Absence
+    public enum AbsenceType
     {
         Absence,
         Vacation,
-        Sickness       
+        Sickness
     }
 
     public enum ErrorType

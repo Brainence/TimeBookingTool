@@ -5,15 +5,14 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using TBT.App.Common;
+using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Services.CommunicationService.Implementations;
 using TBT.App.Services.Encryption.Implementations;
@@ -183,25 +182,13 @@ namespace TBT.App
 
         public static void ShowBalloon(string title, string body, int timeout, bool enabled)
         {
-            try
-            {
-                if (!enabled || string.IsNullOrEmpty(body) || string.IsNullOrEmpty(title) || GlobalNotification == null) return;
 
-                GlobalNotification.Visible = true;
+            if (!enabled || string.IsNullOrEmpty(body) || string.IsNullOrEmpty(title) || GlobalNotification == null) return;
+            GlobalNotification.Visible = true;
+            GlobalNotification.BalloonTipTitle = title;
+            GlobalNotification.BalloonTipText = body;
+            GlobalNotification.ShowBalloonTip(timeout);
 
-                if (title != null)
-                {
-                    GlobalNotification.BalloonTipTitle = title;
-                }
-
-                if (body != null)
-                {
-                    GlobalNotification.BalloonTipText = body;
-                }
-
-                GlobalNotification.ShowBalloonTip(timeout);
-            }
-            catch { }
         }
 
         public bool IsProcessOpen(string name)
@@ -212,28 +199,17 @@ namespace TBT.App
         protected override void OnStartup(StartupEventArgs e)
         {
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
-
-            var thisProc = Process.GetCurrentProcess();
-
             if (!IsProcessOpen("TimeBookingTool.exe"))
             {
-                if (Process.GetProcessesByName(thisProc.ProcessName).Length > 1)
+                if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
                 {
                     MessageBox.Show("Application is already running.");
                     Current.Shutdown();
                     return;
                 }
             }
-
             base.OnStartup(e);
         }
-
-        public static string UrlSafeDateToString(DateTime date)
-        {
-            string urlSafeDateString = date.ToUniversalTime().ToString("yyyyMMddTHHmmss", CultureInfo.InvariantCulture);
-            return urlSafeDateString;
-        }
-
         public static async Task<bool> UpdateTokens()
         {
             using (var httpClient = new HttpClient())
@@ -258,20 +234,19 @@ namespace TBT.App
                         AccessToken = x["access_token"];
                         RefreshToken = x["refresh_token"];
 
-                        return await Task.FromResult(true);
+                        return true;
                     }
-                    return await Task.FromResult(false);
+                    return false;
                 }
                 catch
                 {
-                    return await Task.FromResult(false);
+                    return false;
                 }
             }
         }
 
         private async void Application_Startup(object sender, StartupEventArgs e)
         {
-           
             bool authorized = false;
             if (RememberMe)
             {
@@ -294,8 +269,8 @@ namespace TBT.App
                 {
                     var subscribers = _openWindow.GetInvocationList();
 
-                    for (int i = 0; i < subscribers.Length; i++)
-                        _globalNotificationDoubleClick -= subscribers[i] as Action;
+                    foreach (var t in subscribers)
+                        _globalNotificationDoubleClick -= t as Action;
                 }
 
                 _globalNotificationDoubleClick += value;
@@ -343,8 +318,8 @@ namespace TBT.App
                 {
                     var subscribers = _openWindow.GetInvocationList();
 
-                    for (int i = 0; i < subscribers.Length; i++)
-                        _contextMenuStripOpening -= subscribers[i] as Action;
+                    foreach (var t in subscribers)
+                        _contextMenuStripOpening -= t as Action;
                 }
 
                 _contextMenuStripOpening += value;
@@ -370,8 +345,8 @@ namespace TBT.App
                 {
                     var subscribers = _openWindow.GetInvocationList();
 
-                    for (int i = 0; i < subscribers.Length; i++)
-                        _quit -= subscribers[i] as Action;
+                    foreach (var t in subscribers)
+                        _quit -= t as Action;
                 }
 
                 _quit += value;
@@ -395,8 +370,8 @@ namespace TBT.App
                 {
                     var subscribers = _openWindow.GetInvocationList();
 
-                    for (int i = 0; i < subscribers.Length; i++)
-                        _signOut -= subscribers[i] as Action;
+                    foreach (var t in subscribers)
+                        _signOut -= t as Action;
                 }
 
                 _signOut += value;
@@ -420,8 +395,8 @@ namespace TBT.App
                 {
                     var subscribers = _openWindow.GetInvocationList();
 
-                    for (int i = 0; i < subscribers.Length; i++)
-                        _openWindow -= subscribers[i] as Action;
+                    foreach (var t in subscribers)
+                        _openWindow -= t as Action;
                 }
 
                 _openWindow += value;
@@ -436,32 +411,31 @@ namespace TBT.App
             _openWindow?.Invoke();
         }
 
-        public static async Task<bool> CanStartOrEditTimeEntry(int userId, int? userTimeLimit, DateTime from, DateTime to, TimeSpan? duration)
+        public static async Task<bool> CanStartOrEditTimeEntry(User user, TimeSpan duration)
         {
-            try
+            if (user.Id <= 0) return false;
+            if (user.TimeLimit == 0)
             {
-                if (userId <= 0 || userTimeLimit <= 0 && !userTimeLimit.HasValue) return await Task.FromResult(false);
-
-                var sum = JsonConvert.DeserializeObject<TimeSpan?>(
-                    await CommunicationService.GetAsJson($"TimeEntry/GetDuration/{userId}/{UrlSafeDateToString(from)}/{UrlSafeDateToString(to)}"));
-
-                if (sum.HasValue)
-                    return await Task.FromResult(!userTimeLimit.HasValue || (sum.Value.TotalHours + (duration.HasValue ? duration.Value.TotalHours : 0.0) < userTimeLimit));
-                return await Task.FromResult(true);
+                return true;
             }
-            catch (Exception ex)
+
+            var now = DateTime.Now;
+            var from = new DateTime(now.Year, now.Month, 1);
+            var to = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
+
+            var data = await CommunicationService.GetAsJson($"TimeEntry/GetDuration/{user.Id}/{from.ToUrl()}/{to.ToUrl()}");
+            if (data != null)
             {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
-                return await Task.FromResult(false);
+                return JsonConvert.DeserializeObject<TimeSpan>(data).TotalHours + duration.TotalHours < user.TimeLimit;
             }
+            return false;
         }
 
         public static event PropertyChangedEventHandler StaticPropertyChanged;
 
         protected static void OnStaticPropertyChanged(string propertyName)
         {
-            var e = new PropertyChangedEventArgs(propertyName);
-            StaticPropertyChanged?.Invoke(typeof(App), e);
+            StaticPropertyChanged?.Invoke(typeof(App), new PropertyChangedEventArgs(propertyName));
         }
     }
 }
