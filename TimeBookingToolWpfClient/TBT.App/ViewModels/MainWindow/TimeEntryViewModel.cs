@@ -228,13 +228,13 @@ namespace TBT.App.ViewModels.MainWindow
                 return;
             }
             var duration = TimerTextBox.ToTimeSpan();
-            if (duration >= TimeSpan.FromHours(24))
+            if (duration == null || duration?.Minutes > 59 || duration >= TimeSpan.FromHours(24))
             {
                 RefreshEvents.ChangeErrorInvoke("Please select correct time", ErrorType.Error);
                 return;
             }
 
-            TimeEntry.Duration = string.IsNullOrEmpty(TimerTextBox) ? new TimeSpan() : duration;
+            TimeEntry.Duration = string.IsNullOrEmpty(TimerTextBox) ? new TimeSpan() : duration.Value;
             if (TimeEntry.Activity != null)
             {
                 TimeEntry.Activity = new Activity() { Id = TimeEntry.Activity.Id };
