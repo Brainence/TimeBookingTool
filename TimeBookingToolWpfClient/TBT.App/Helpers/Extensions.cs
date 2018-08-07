@@ -24,9 +24,9 @@ namespace TBT.App.Helpers
 
     public static class StringExtensions
     {
-        public static TimeSpan ToTimeSpan(this string input)
+        public static TimeSpan? ToTimeSpan(this string input)
         {
-            TimeSpan duration;
+            TimeSpan? duration;
             if (input.Contains(":"))
             {
                 duration = InputSeparatedBy(input, ':');
@@ -40,31 +40,28 @@ namespace TBT.App.Helpers
                 var hours = double.Parse(input);
                 if (hours <= 0)
                 {
-                   return  TimeSpan.Zero;
+                    RefreshEvents.ChangeErrorInvoke("Please select correct time", ErrorType.Error);
+                    return null;
                 }
                 duration = TimeSpan.FromHours(hours);
-                //if (duration.TotalHours >= 24)
-                //{
-                //    return TimeSpan.FromHours(23.9);
-                //}
             }
             return duration;
         }
 
-        private static TimeSpan InputSeparatedBy(string input, char separator)
+        private static TimeSpan? InputSeparatedBy(string input, char separator)
         {
             var hour = input.Substring(0, input.IndexOf(separator));
             var min = input.Substring(input.IndexOf(separator) + 1);
 
             if (!int.TryParse(hour, out var h) & int.TryParse(min, out var m) || h < 0 || m < 0 || m > 59)
             {
-                RefreshEvents.ChangeErrorInvoke($"{Resources.IncorrectTimeInputFormat}.",ErrorType.Error);
+                return null;
             }
 
             var duration = new TimeSpan(h, m, 0);
             if (duration.TotalHours >= 24)
             {
-                RefreshEvents.ChangeErrorInvoke($"{Resources.EnteredBigTime}.",ErrorType.Error);
+                RefreshEvents.ChangeErrorInvoke($"{Resources.EnteredBigTime}.", ErrorType.Error);
             }
             return duration;
         }

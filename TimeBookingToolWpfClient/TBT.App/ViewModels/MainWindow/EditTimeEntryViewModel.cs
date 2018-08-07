@@ -41,7 +41,7 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (SetProperty(ref _selectedProject, value) && value != null)
                 {
-                  
+
                     SelectedActivity = null;
                     _savedProjectId = value.Id;
                 }
@@ -113,7 +113,7 @@ namespace TBT.App.ViewModels.MainWindow
                     RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CommentLenghError} 2048", ErrorType.Error);
                     return;
                 }
-                var duration = new TimeSpan();
+                TimeSpan? duration = new TimeSpan();
                 var notToday = SelectedDay != DateTime.Today;
                 if (string.IsNullOrEmpty(TimeText))
                 {
@@ -126,14 +126,14 @@ namespace TBT.App.ViewModels.MainWindow
                 else
                 {
                     duration = TimeText.ToTimeSpan();
-                    if (duration >= TimeSpan.FromHours(24))
+                    if (duration == null || duration?.Minutes > 59 || duration >= TimeSpan.FromHours(24))
                     {
-                        RefreshEvents.ChangeErrorInvoke("Please select correct time",ErrorType.Error);
+                        RefreshEvents.ChangeErrorInvoke("Please select correct time", ErrorType.Error);
                         return;
                     }
                 }
 
-                if (!await App.CanStartOrEditTimeEntry(User, duration))
+                if (!await App.CanStartOrEditTimeEntry(User, duration.Value))
                 {
                     RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.YouHaveReachedMonthly} {User.TimeLimit}-{Properties.Resources.HourLimit}", ErrorType.Error);
                     return;
@@ -146,7 +146,7 @@ namespace TBT.App.ViewModels.MainWindow
                     Date = SelectedDay != DateTime.Now.Date ? SelectedDay.ToUniversalTime() : DateTime.UtcNow,
                     Comment = Comment,
                     IsActive = true,
-                    Duration = duration
+                    Duration = duration.Value
                 };
                 Comment = string.Empty;
                 var data = await App.CommunicationService.PostAsJson("TimeEntry", timeEntry);
