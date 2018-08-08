@@ -10,11 +10,9 @@ namespace TBT.App
     {
         private DispatcherTimer _timer;
         private DateTime _cacheTickInterval;
-        private DateTime _midnightTickTime;
         public GlobalTimer()
         {
-            _timer = new DispatcherTimer();
-            _timer.Interval = new TimeSpan(0, 0, 1);
+            _timer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 1) };
             _timer.Tick += Timer_Tick;
             _cacheTickInterval = DateTime.Now;
         }
@@ -22,7 +20,7 @@ namespace TBT.App
         private void Timer_Tick(object sender, EventArgs e)
         {
             _timerTick?.Invoke();
-            if((DateTime.Now.TimeOfDay - _cacheTickInterval.TimeOfDay).Minutes > 0)
+            if ((DateTime.Now.TimeOfDay - _cacheTickInterval.TimeOfDay).Minutes > 0)
             {
                 CacheTimerTick?.Invoke();
                 _cacheTickInterval = DateTime.Now;
@@ -31,38 +29,25 @@ namespace TBT.App
 
         public async Task<bool> Start(int id)
         {
-            try
+            if (_timer.IsEnabled) _timer.Stop();
+            var data = await App.CommunicationService.GetAsJson($"TimeEntry/Start/{id}");
+            if (data != null && JsonConvert.DeserializeObject<bool>(data))
             {
-                if (_timer.IsEnabled) _timer.Stop();
-
-                var result = JsonConvert.DeserializeObject<bool>(
-                    await App.CommunicationService.GetAsJson($"TimeEntry/Start/{id}"));
-
-                if (result) _timer.Start();
-
-                return result;
+                _timer.Start();
+                return true;
             }
-            catch
-            {
-                return false;
-            }
+            return false;
         }
 
         public async Task<bool> Stop(int id)
         {
-            try
+            var data = await App.CommunicationService.GetAsJson($"TimeEntry/Stop/{id}");
+            if (data != null && JsonConvert.DeserializeObject<bool>(data))
             {
-                var result = JsonConvert.DeserializeObject<bool>(
-                    await App.CommunicationService.GetAsJson($"TimeEntry/Stop/{id}"));
-
-                if (result) _timer.Stop();
-
-                return await Task.FromResult(result);
+                _timer.Stop();
+                return true;
             }
-            catch
-            {
-                return await Task.FromResult(false);
-            }
+            return false;
         }
 
         public void StartTimer()
@@ -87,10 +72,9 @@ namespace TBT.App
                 {
                     var subscribers = _timerTick.GetInvocationList();
 
-                    for (int i = 0; i < subscribers.Length; i++)
-                        _timerTick -= subscribers[i] as Action;
+                    foreach (var action in subscribers)
+                        _timerTick -= action as Action;
                 }
-
                 _timerTick += value;
             }
             remove
@@ -98,6 +82,5 @@ namespace TBT.App
                 _timerTick -= value;
             }
         }
-
     }
 }

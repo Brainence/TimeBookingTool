@@ -8,14 +8,13 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.EditWindowsViewModels
 {
-    public class EditProjectViewModel: BaseViewModel
+    public class EditProjectViewModel: ObservableObject
     {
         #region Fields
 
         private ObservableCollection<Customer> _customers;
         private Customer _selectedCustomer;
         private Project _editingProject;
-        private int _selectedCustomerIndex;
 
         #endregion
 
@@ -30,33 +29,15 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public Customer SelectedCustomer
         {
             get { return _selectedCustomer; }
-            set
-            {
-                if (SetProperty(ref _selectedCustomer, value))
-                {
-                    SaveProject = false;
-                    SelectedCustomerIndex =
-                        Customers.IndexOf(Customers.FirstOrDefault(c => c.Id == _selectedCustomer.Id));
-                }
-            }
+            set { SetProperty(ref _selectedCustomer, value); }
         }
 
-        public int SelectedCustomerIndex
-        {
-            get { return _selectedCustomerIndex; }
-            set { SetProperty(ref _selectedCustomerIndex, value); }
-        }
+       
 
         public Project EditingProject
         {
             get { return _editingProject; }
-            set
-            {
-                if(SetProperty(ref _editingProject, value))
-                {
-                    SaveProject = false;
-                }
-            }
+            set { SetProperty(ref _editingProject, value); }
         }
 
         public bool SaveProject { get; set; }
@@ -70,9 +51,8 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
 
         public EditProjectViewModel(Project project)
         {
-            _selectedCustomerIndex = -1;
             EditingProject = project;
-            SaveProject = false;
+            SelectedCustomer = project.Customer;
             SaveCommand = new RelayCommand(obj => Save(), null);
         }
 
@@ -83,6 +63,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public void Save()
         {
             SaveProject = true;
+            EditingProject.Customer = SelectedCustomer;
             NewItemSaved?.Invoke();
         }
 

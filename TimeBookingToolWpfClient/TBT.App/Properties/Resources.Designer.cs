@@ -19,7 +19,7 @@ namespace TBT.App.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -57,6 +57,15 @@ namespace TBT.App.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Absence.
+        /// </summary>
+        public static string Absence {
+            get {
+                return ResourceManager.GetString("Absence", resourceCulture);
             }
         }
         
@@ -313,11 +322,20 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connection lost. Trying to recover..
+        ///   Looks up a localized string similar to Connection lost.
         /// </summary>
         public static string ConnectionLost {
             get {
                 return ResourceManager.GetString("ConnectionLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy salary to clipboard.
+        /// </summary>
+        public static string CopySalaryToClipboard {
+            get {
+                return ResourceManager.GetString("CopySalaryToClipboard", resourceCulture);
             }
         }
         
@@ -421,11 +439,20 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Customer with name.
+        ///   Looks up a localized string similar to Customer with this name.
         /// </summary>
         public static string CustomerWithName {
             get {
                 return ResourceManager.GetString("CustomerWithName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        public static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
             }
         }
         
@@ -610,6 +637,15 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hourly Salary.
+        /// </summary>
+        public static string HourlySalary {
+            get {
+                return ResourceManager.GetString("HourlySalary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incorrect password entered..
         /// </summary>
         public static string IncorrectPasswordEntered {
@@ -678,6 +714,15 @@ namespace TBT.App.Properties {
         public static string Limit {
             get {
                 return ResourceManager.GetString("Limit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message.
+        /// </summary>
+        public static string Message {
+            get {
+                return ResourceManager.GetString("Message", resourceCulture);
             }
         }
         
@@ -808,7 +853,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project with name.
+        ///   Looks up a localized string similar to Project with this name.
         /// </summary>
         public static string ProjectWithName {
             get {
@@ -826,7 +871,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Refresh all data.
+        ///   Looks up a localized string similar to Refresh.
         /// </summary>
         public static string Refresh {
             get {
@@ -925,6 +970,24 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Salary.
+        /// </summary>
+        public static string Salary {
+            get {
+                return ResourceManager.GetString("Salary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Salary must be above 0.
+        /// </summary>
+        public static string SalaryMustBe {
+            get {
+                return ResourceManager.GetString("SalaryMustBe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {
@@ -1011,6 +1074,15 @@ namespace TBT.App.Properties {
         public static string ShortSeconds {
             get {
                 return ResourceManager.GetString("ShortSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sickness.
+        /// </summary>
+        public static string Sickness {
+            get {
+                return ResourceManager.GetString("Sickness", resourceCulture);
             }
         }
         
@@ -1196,7 +1268,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User account created successfully..
+        ///   Looks up a localized string similar to User account created.
         /// </summary>
         public static string UserAccountCreated {
             get {
@@ -1214,7 +1286,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username already exists..
+        ///   Looks up a localized string similar to Username already exists.
         /// </summary>
         public static string UsernameAlreadyExists {
             get {
@@ -1223,7 +1295,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username doesn&apos;t exist..
+        ///   Looks up a localized string similar to Username doesn&apos;t exist.
         /// </summary>
         public static string UserNameDoesntExist {
             get {
@@ -1232,7 +1304,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username is required..
+        ///   Looks up a localized string similar to Username is required.
         /// </summary>
         public static string UserNameIsRequierd {
             get {
@@ -1250,7 +1322,7 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username or password is empty..
+        ///   Looks up a localized string similar to Username or password is empty.
         /// </summary>
         public static string UserNameOfPasswordEmpty {
             get {
@@ -1268,11 +1340,20 @@ namespace TBT.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User was saved successfully..
+        ///   Looks up a localized string similar to User saved.
         /// </summary>
         public static string UserWasSaved {
             get {
                 return ResourceManager.GetString("UserWasSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vacation.
+        /// </summary>
+        public static string Vacation {
+            get {
+                return ResourceManager.GetString("Vacation", resourceCulture);
             }
         }
         

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -8,21 +9,22 @@ using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
 using TBT.App.ViewModels.EditWindowsViewModels;
+using TBT.App.Views.Controls;
 using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class PeopleTabViewModel : BaseViewModel, ICacheable
+    public class PeopleTabViewModel : ObservableObject, ICacheable
     {
         #region Fields
 
         private User _currentUser;
-        private BaseViewModel _createNewUserViewModel;
-        private BaseViewModel _editMyProfileViewModel;
+        private ObservableObject _createNewUserViewModel;
+        private ObservableObject _editMyProfileViewModel;
         private bool _isExpandenNewUser;
         private bool _isExpandedEdit;
         private ObservableCollection<User> _users;
-
+        private ObservableCollection<Project> _allProjects;
         #endregion
 
         #region Properties
@@ -33,13 +35,13 @@ namespace TBT.App.ViewModels.MainWindow
             set { SetProperty(ref _currentUser, value); }
         }
 
-        public BaseViewModel CreateNewUserViewModel
+        public ObservableObject CreateNewUserViewModel
         {
             get { return _createNewUserViewModel; }
             set { SetProperty(ref _createNewUserViewModel, value); }
         }
 
-        public BaseViewModel EditMyProfileViewModel
+        public ObservableObject EditMyProfileViewModel
         {
             get { return _editMyProfileViewModel; }
             set { SetProperty(ref _editMyProfileViewModel, value); }
@@ -75,6 +77,16 @@ namespace TBT.App.ViewModels.MainWindow
             set
             {
                 SetProperty(ref _users, value);
+            }
+        }
+
+        public ObservableCollection<Project> AllProjects
+        {
+            get { return _allProjects; }
+            set
+            {
+                SetProperty(ref _allProjects, value);
+                MultiSelectionComboBox.AllProjects = value;
             }
         }
 
@@ -114,71 +126,47 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void AddNewUser(User newUser)
         {
-            Users.Add(new User
-            {
-                Id = newUser.Id,
-                Company = newUser.Company,
-                CurrentTimeZone = newUser.CurrentTimeZone,
-                FirstName = newUser.FirstName,
-                IsActive = newUser.IsActive,
-                IsAdmin = newUser.IsAdmin,
-                LastName = newUser.LastName,
-                Password = newUser.Password,
-                Projects = newUser.Projects,
-                TimeEntries = newUser.TimeEntries,
-                TimeLimit = newUser.TimeLimit,
-                Username = newUser.Username
-            });
-            Users = new ObservableCollection<User>(Users.OrderBy(user => user.FirstName).ThenBy(user => user.LastName));
+            Users.Add(newUser.Clone());
+            Users = new ObservableCollection<User>(Users.OrderBy(x => x.IsBlocked).ThenBy(x => x.FullName));
         }
 
-        private async void EditUser(User user)
+        private void EditUser(User user)
         {
-            if (user == null) return;
-            var tempUserInfo = new { user.FirstName, user.LastName };
-
-            EditWindow euw = new EditWindow()
+            user.Company = CurrentUser.Company;
+            var editContext = new EditUserViewModel()
             {
-                DataContext = new EditWindowViewModel()
-                {
-                    EditControl = new EditUserViewModel()
-                    {
-                        EditingUser = user,
-                        ShowAdmin = true,
-                        ShowPassword = false,
-                        ForSaving = true
-                    }
-                }
+                EditingUser = user.Clone(),
+                ShowAdmin = true,
+                ShowPassword = false,
+                ForSaving = true
             };
-            ((EditUserViewModel)((EditWindowViewModel)euw.DataContext).EditControl).CloseWindow += () => euw.Close();
-            euw.ShowDialog();
-            if (user.FirstName != tempUserInfo.FirstName || user.LastName != tempUserInfo.LastName)
+            var window = new EditWindow()
             {
-                Users = new ObservableCollection<User>(Users.OrderBy(u => u.FirstName).ThenBy(u => u.LastName));
-            }
+                DataContext = new EditWindowViewModel(editContext)
+            };
+            editContext.CloseWindow += window.Close;
+            window.ShowDialog();
+            editContext.CloseWindow -= window.Close;
+            Users.Remove(Users.FirstOrDefault(x => x.Id == user.Id));
+            Users.Add(editContext.EditingUser);
+            Users = new ObservableCollection<User>(Users.OrderBy(x => x.IsBlocked).ThenBy(x => x.FullName));
+
+            (EditMyProfileViewModel as EditUserViewModel).EditingUser = user;
         }
 
         private async void RemoveUser(User user)
         {
-            try
+            if (user.IsAdmin && Users.Count(item => item.IsAdmin) == 1)
             {
-                if (user == null) return;
-                if (user.IsAdmin && Users.Count(item => item.IsAdmin) == 1)
-                {
-                    MessageBox.Show(Properties.Resources.YouCantRemoveLastAdmin);
-                    return;
-                }
-                if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
-
-                user.IsActive = false;
-
-                var x = await App.CommunicationService.PutAsJson("User", user);
-
-                Users.Remove(user);
+                RefreshEvents.ChangeErrorInvoke(Properties.Resources.YouCantRemoveLastAdmin, ErrorType.Error);
+                return;
             }
-            catch (Exception ex)
+            if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+            user.IsActive = false;
+            if (await App.CommunicationService.PutAsJson("User", user) != null)
             {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                Users.Remove(user);
+                RefreshEvents.ChangeErrorInvoke("User deleted", ErrorType.Success);
             }
         }
 
@@ -196,24 +184,25 @@ namespace TBT.App.ViewModels.MainWindow
             var editingUser = (EditMyProfileViewModel as EditUserViewModel).EditingUser;
             App.Username = editingUser.Username;
             int index;
-            if (Users != null && (index = Users.IndexOf(Users.FirstOrDefault(u => u.Id == CurrentUser.Id))) >= 0)
-            { Users[index] = editingUser;}
+            if ((index = Users.IndexOf(Users.FirstOrDefault(u => u.Id == CurrentUser.Id))) >= 0)
+            {
+                Users[index] = editingUser;
+            }
         }
-
         #endregion
 
         #region Interface members
 
         public DateTime ExpiresDate { get; set; }
-        public async void OpenTab(User currentUser)
+        public void OpenTab(User currentUser)
         {
             RefreshEvents.ChangeCurrentUser += RefreshCurrentUser;
-            CurrentUser = currentUser;
             ((EditUserViewModel)CreateNewUserViewModel).NewUserAdded += AddNewUser;
             var editMyProfile = EditMyProfileViewModel as EditUserViewModel;
             ChangeUserForNested += editMyProfile.RefreshCurrentUser;
             editMyProfile.CloseWindow += ChangeCurrentUserInfo;
-            Users = await RefreshEvents.RefreshUsersList();
+            CurrentUser = currentUser;
+            RefreshTab();
         }
 
         public void CloseTab()
@@ -224,22 +213,17 @@ namespace TBT.App.ViewModels.MainWindow
             ChangeUserForNested -= editMyProfile.RefreshCurrentUser;
             editMyProfile.CloseWindow -= ChangeCurrentUserInfo;
             Users?.Clear();
+            AllProjects?.Clear();
         }
 
-        #region IDisposable
-
-        private bool disposed = false;
-
-        public virtual void Dispose()
+        public async void RefreshTab()
         {
-            if (disposed) { return; }
-
-            RefreshEvents.ChangeCurrentUser -= RefreshCurrentUser;
-            disposed = true;
+            Users?.Clear();
+            AllProjects?.Clear();
+            await RefreshEvents.RefreshCurrentUser(null);
+            AllProjects = await RefreshEvents.RefreshProjectsList();
+            Users = await RefreshEvents.RefreshUsersList();
         }
-
-        #endregion
-
         #endregion
 
     }

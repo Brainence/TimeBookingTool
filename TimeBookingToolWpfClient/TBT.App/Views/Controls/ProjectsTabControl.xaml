@@ -38,27 +38,14 @@
                     <Image Source="../../Resources/Icons/plus.png" Height="18" ToolTip="{x:Static p:Resources.CreateProject}" />
                 </Button>
             </StackPanel>
-
-            <Button Grid.Column="1" Command="{Binding Path=RefreshProjectsCommand}" Template="{StaticResource HyperlinkButtonTemplate}" HorizontalAlignment="Right">
-                <Image Source="../../Resources/Icons/refresh_black.png" Height="18" ToolTip="{x:Static p:Resources.RefreshProject}" />
-            </Button>
         </Grid>
 
 
-        <Grid Grid.Row="1"
-                          Margin="20" 
-                          Height="50"
-                          Width="50"
-                          Visibility="{Binding Path=Projects, Converter={StaticResource EnumerableToNotVisibilityConverter}}"
-                          HorizontalAlignment="Center" 
-                          VerticalAlignment="Center">
-            <local:SpinnersCogs/>
-        </Grid>
+        
 
         <Grid VerticalAlignment="Top" 
                           Grid.Row="1"
-                          Margin="20"
-                          Visibility="{Binding Path=Projects, Converter={StaticResource EnumerableToVisibilityConverter}}">
+                          Margin="20">
 
             <ScrollViewer
                               MinHeight="100"

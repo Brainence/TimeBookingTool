@@ -24,6 +24,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+
         <Grid Grid.Row="0">
 
             <StackPanel>
@@ -33,19 +35,19 @@
                             Content="{x:Static p:Resources.CurrentsWeek}"
                             Command="{Binding GoToCurrentWeekCommand}"
                             VerticalContentAlignment="Center"
-                            Margin="15 4 15 4"/>
+                            Margin="15 0 15 0"/>
 
                     <Button Template="{StaticResource HyperlinkButtonTemplate}" 
                             Content="{x:Static p:Resources.BackToToday}"
                             Command="{Binding BackTodayCommand}"
                             VerticalContentAlignment="Center"
-                            Margin="15 4 15 4"/>
+                            Margin="15 0 15 0"/>
 
                     <Button Template="{StaticResource HyperlinkButtonTemplate}" 
                             Content="{x:Static p:Resources.SelectedWeek}"
                             Command="{Binding GoToSelectedDayCommand}"
                             VerticalContentAlignment="Center"
-                            Margin="15 4 15 4"/>
+                            Margin="15 0 15 0"/>
 
                 </StackPanel>
 
@@ -94,10 +96,9 @@
                     </Button>
 
                     <ListBox x:Name="WeekListBox"
-                             ItemsSource="{Binding Path=Week, Mode=TwoWay}" 
+                             ItemsSource="{Binding Path=Week}" 
                              HorizontalContentAlignment="Stretch"
                              HorizontalAlignment="Stretch"
-                             SelectedIndex="{Binding SelectedIndex}"
                              SelectedItem="{Binding SelectedDay}"
                              BorderBrush="Transparent"
                              Background="Transparent"
@@ -200,7 +201,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <ContentControl Grid.Row="0" Margin="20 15 20 0" Content="{Binding EditTimeEntryViewModel}"/>
@@ -210,8 +211,8 @@
                             Margin="20 10 20 0" 
                             Height="170"
                             VerticalAlignment="Top" 
-                            HorizontalAlignment="Stretch"
-                            Visibility="{Binding IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
+                            HorizontalAlignment="Stretch"/>
+                            <!--Visibility="{Binding IsLoading, Converter={StaticResource BoolToNotVisibilityConverter}}"-->
             <Grid Grid.Row="2" Margin="20 10 20 5">
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -225,10 +226,10 @@
                     <TextBlock FontSize="14" 
                                FontWeight="Bold"
                                VerticalAlignment="Center"
-                               Text="{Binding Path=User.TimeEntries, Converter={StaticResource DurationConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}\: {0}}"/>
+                               Text="{Binding Path=DayTime, Converter={StaticResource DurationConverter}, StringFormat={}\: {0}}"/>
                 </StackPanel>
 
-                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 5">
                     <TextBlock FontSize="13" 
                                FontWeight="Bold"
                                VerticalAlignment="Center"
@@ -236,15 +237,15 @@
                     <TextBlock FontSize="14" 
                                FontWeight="Bold"
                                VerticalAlignment="Center"
-                               Text="{Binding Path=WeekTime, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}\: {0}}"/>
+                               Text="{Binding Path=WeekTime, Converter={StaticResource DurationConverter}, StringFormat={}\: {0}}"/>
                 </StackPanel>
             </Grid>
 
-            <StackPanel Grid.Row="1" Margin="20" VerticalAlignment="Top" HorizontalAlignment="Stretch"
+            <!--<StackPanel Grid.Row="1" Margin="20" VerticalAlignment="Top" HorizontalAlignment="Stretch"
                       Visibility="{Binding Path=IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
 
                 <local:SpinnersCogs Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </StackPanel>
+            </StackPanel>-->
         </Grid>
     </Grid>
 </UserControl>

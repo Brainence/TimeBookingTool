@@ -5,7 +5,7 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.EditWindowsViewModels
 {
-    public class EditCustomerViewModel: BaseViewModel
+    public class EditCustomerViewModel: ObservableObject
     {
         #region Fields
 
@@ -18,13 +18,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public string EditingCustomersName
         {
             get { return _editingCustomersName; }
-            set
-            {
-                if(SetProperty(ref _editingCustomersName, value))
-                {
-                    SaveChanges = false;
-                }
-            }
+            set { SetProperty(ref _editingCustomersName, value); }
         }
 
         public bool SaveChanges { get; set; }
@@ -36,9 +30,9 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
 
         #region Constructors
 
-        public EditCustomerViewModel()
+        public EditCustomerViewModel(string customerName)
         {
-            SaveChanges = false;
+            EditingCustomersName = customerName;
             SaveCommand = new RelayCommand(obj => Save(), obj => !string.IsNullOrEmpty(EditingCustomersName));
         }
 

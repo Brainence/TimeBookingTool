@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
+using System.Windows.Media;
+using TBT.App.Common;
 using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
 using TBT.App.Models.Base;
 using TBT.App.Models.Commands;
-using TBT.App.ViewModels.Authentication;
 using TBT.App.Properties;
+using TBT.App.Services.CommunicationService.Implementations;
+using TBT.App.ViewModels.Authentication;
 using TBT.App.ViewModels.EtcViewModels;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class MainWindowViewModel : BaseViewModel, IDisposable
+    public class MainWindowViewModel : ObservableObject, IDisposable
     {
         #region Fields
 
@@ -25,15 +28,15 @@ namespace TBT.App.ViewModels.MainWindow
         private MainWindowTabItem _selectedTab;
         private ICacheable _selectedViewModel;
         private Dictionary<string, ICacheable> _viewModelCache;
-        private bool _isShown;
         private bool _loggedOut;
         private bool _isVisible;
-        private DispatcherTimer _dateTimer;
         private double _width;
         private bool _windowState;
         private bool _isConnected;
-        private BaseViewModel _languageControl;
-
+        private ObservableObject _languageControl;
+        private string _errorMessage;
+        private Brush _brush;
+        private CancellationTokenSource _tokenSource;
         #endregion
 
         #region Properties
@@ -64,9 +67,8 @@ namespace TBT.App.ViewModels.MainWindow
             {
                 if (SetProperty(ref _selectedTab, value) && value != null)
                 {
-                    var temp = GetViewModelFromEnum(value.Control);
                     SelectedViewModel?.CloseTab();
-                    SelectedViewModel = temp;
+                    SelectedViewModel = GetViewModelFromEnum(value.Control);
                 }
             }
         }
@@ -76,9 +78,9 @@ namespace TBT.App.ViewModels.MainWindow
             get { return _selectedViewModel; }
             set
             {
-                var name = value.GetType().Name;
                 if (value != null)
                 {
+                    var name = value.GetType().Name;
                     if (_viewModelCache.ContainsKey(name))
                     {
                         _viewModelCache[name].ExpiresDate = DateTime.Now.AddMinutes(5);
@@ -133,19 +135,36 @@ namespace TBT.App.ViewModels.MainWindow
             }
         }
 
-        public BaseViewModel LanguageControl
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                SetProperty(ref _errorMessage, value);
+            }
+        }
+
+        public Brush Brush
+        {
+            get { return _brush; }
+            set
+            {
+                SetProperty(ref _brush, value);
+            }
+        }
+
+        public ObservableObject LanguageControl
         {
             get { return _languageControl; }
             set { SetProperty(ref _languageControl, value); }
         }
 
-        public ICommand RefreshAllCommand { get; set; }
+        public ICommand RefreshCommand { get; set; }
         public ICommand SignOutCommand { get; set; }
-        public ICommand SizeChangeCommand { get; set; }
-        public ICommand LoadCommand { get; set; }
         public ICommand CloseCommand { get; set; }
 
         public event Action<bool> ChangeDateSize;
+
 
         #endregion
 
@@ -156,6 +175,11 @@ namespace TBT.App.ViewModels.MainWindow
             IsConnected = true;
             LanguageControl = new LanguageControlViewModel();
             RefreshEvents.ChangeCurrentUser += ChangeCurrentUser;
+
+            RefreshEvents.ChangeError += NewError;
+            CommunicationService.ConnectionChanged += RefreshIsConnected;
+            _tokenSource = new CancellationTokenSource();
+
             if (!OpenAuthenticationWindow(authorized))
             {
                 App.GlobalTimer = new GlobalTimer();
@@ -164,13 +188,13 @@ namespace TBT.App.ViewModels.MainWindow
                 IsVisible = true;
                 SignOutCommand = new RelayCommand(obj => SignOut(), null);
                 CloseCommand = new RelayCommand(obj => Close(), null);
-                RefreshAllCommand = new RelayCommand(obj => RefreshAll(), null);
-                try
+                RefreshCommand = new RelayCommand(obj => RefreshViewModel(), null);
+                Task.Run(() => RefreshEvents.RefreshCurrentUser(null)).Wait();
+                if (CurrentUser == null || CurrentUser.IsBlocked)
                 {
-                    Task.Run(() => RefreshEvents.RefreshCurrentUser(null)).Wait();
-                    InitTabs();
+                    SignOut();
                 }
-                catch (Exception) { }
+                InitTabs();
                 WindowState = true;
                 App.GlobalTimer.StartTimer();
             }
@@ -193,14 +217,9 @@ namespace TBT.App.ViewModels.MainWindow
             _viewModelCache?.Clear();
         }
 
-        private async void RefreshAll()
+        private void RefreshViewModel()
         {
-            try
-            {
-                await RefreshEvents.RefreshCurrentUser(this);
-
-            }
-            catch (Exception) { }
+            SelectedViewModel.RefreshTab();
         }
 
         private async void SignOut()
@@ -213,46 +232,25 @@ namespace TBT.App.ViewModels.MainWindow
             if (!OpenAuthenticationWindow(false))
             {
                 LoggedOut = false;
-                try
-                {
-                    await RefreshEvents.RefreshCurrentUser(null);
-                }
-                catch (Exception) { }
+
+                await RefreshEvents.RefreshCurrentUser(null);
+
                 SelectedTab = Tabs[0];
                 IsVisible = true;
             }
         }
 
+
+
         #region NotifyIcon
         public void InitNotifyIcon()
         {
             App.ContextMenuStripOpening += NotifyIcon_ContextMenuStripOpening;
-            App.OpenWindow += NotifyIcon_OpenWindow;
-            App.Quit += NotifyIcon_Quit;
-            App.SignOut += NotifyIcon_SignOut;
-            App.GlobalNotificationDoubleClick += NotifyIcon_GlobalNotificationDoubleClick;
+            App.OpenWindow += ShowMainWindow;
+            App.Quit += ExitApplication;
+            App.SignOut += SignOut;
+            App.GlobalNotificationDoubleClick += ShowMainWindow;
         }
-
-        private void NotifyIcon_GlobalNotificationDoubleClick()
-        {
-            ShowMainWindow();
-        }
-
-        private void NotifyIcon_SignOut()
-        {
-            SignOut();
-        }
-
-        private void NotifyIcon_Quit()
-        {
-            ExitApplication();
-        }
-
-        private void NotifyIcon_OpenWindow()
-        {
-            ShowMainWindow();
-        }
-
         private void NotifyIcon_ContextMenuStripOpening()
         {
             App.GlobalNotification.ContextMenuStrip.Items[5].Enabled = !LoggedOut;
@@ -266,37 +264,37 @@ namespace TBT.App.ViewModels.MainWindow
             switch (tabType)
             {
                 case TabsType.CalendarTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(CalendarTabViewModel)) ? _viewModelCache[nameof(CalendarTabViewModel)] : new CalendarTabViewModel(CurrentUser);
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(CalendarTabViewModel)) ? _viewModelCache[nameof(CalendarTabViewModel)] : new CalendarTabViewModel(CurrentUser);
+                    }
                 case TabsType.ReportingTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(ReportingTabViewModel)) ? _viewModelCache[nameof(ReportingTabViewModel)] : new ReportingTabViewModel(CurrentUser);
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(ReportingTabViewModel)) ? _viewModelCache[nameof(ReportingTabViewModel)] : new ReportingTabViewModel(CurrentUser);
+                    }
                 case TabsType.PeopleTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(PeopleTabViewModel)) ? _viewModelCache[nameof(PeopleTabViewModel)] : new PeopleTabViewModel(CurrentUser);
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(PeopleTabViewModel)) ? _viewModelCache[nameof(PeopleTabViewModel)] : new PeopleTabViewModel(CurrentUser);
+                    }
                 case TabsType.CustomersTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(CustomerTabViewModel)) ? _viewModelCache[nameof(CustomerTabViewModel)] : new CustomerTabViewModel(CurrentUser);
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(CustomerTabViewModel)) ? _viewModelCache[nameof(CustomerTabViewModel)] : new CustomerTabViewModel(CurrentUser);
+                    }
                 case TabsType.ProjectsTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(ProjectsTabViewModel)) ? _viewModelCache[nameof(ProjectsTabViewModel)] : new ProjectsTabViewModel();
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(ProjectsTabViewModel)) ? _viewModelCache[nameof(ProjectsTabViewModel)] : new ProjectsTabViewModel();
+                    }
                 case TabsType.TasksTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(TasksTabViewModel)) ? _viewModelCache[nameof(TasksTabViewModel)] : new TasksTabViewModel();
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(TasksTabViewModel)) ? _viewModelCache[nameof(TasksTabViewModel)] : new TasksTabViewModel();
+                    }
                 case TabsType.SettingsTab:
-                {
-                    return _viewModelCache.ContainsKey(nameof(SettingsTabViewModel)) ? _viewModelCache[nameof(SettingsTabViewModel)] : new SettingsTabViewModel();
-                }
+                    {
+                        return _viewModelCache.ContainsKey(nameof(SettingsTabViewModel)) ? _viewModelCache[nameof(SettingsTabViewModel)] : new SettingsTabViewModel();
+                    }
                 default:
-                {
-                    return null;
-                }
+                    {
+                        return null;
+                    }
             }
         }
 
@@ -358,14 +356,58 @@ namespace TBT.App.ViewModels.MainWindow
 
         private void InitTabs()
         {
-            Tabs = new ObservableCollection<MainWindowTabItem>();
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.CalendarTab, Title = Resources.Calendar, Tag = "../Icons/calendar_white.png", OnlyForAdmins = false });
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.ReportingTab, Title = Resources.Reporting, Tag = "../Icons/reporting_white.png", OnlyForAdmins = false });
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.PeopleTab, Title = Resources.People, Tag = "../Icons/people_white.png", OnlyForAdmins = false });
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.CustomersTab, Title = Resources.Customers, Tag = "../Icons/customers_white.png", OnlyForAdmins = true });
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.ProjectsTab, Title = Resources.Projects, Tag = "../Icons/projects_white.png", OnlyForAdmins = true });
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.TasksTab, Title = Resources.Tasks, Tag = "../Icons/tasks_white.png", OnlyForAdmins = true });
-            Tabs.Add(new MainWindowTabItem() { Control = TabsType.SettingsTab, Title = Resources.Settings, Tag = "../Icons/settings_white.png", OnlyForAdmins = false });
+            Tabs = new ObservableCollection<MainWindowTabItem>
+            {
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.CalendarTab,
+                    Title = Resources.Calendar,
+                    Tag = "../Icons/calendar_white.png",
+                    OnlyForAdmins = false
+                },
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.ReportingTab,
+                    Title = Resources.Reporting,
+                    Tag = "../Icons/reporting_white.png",
+                    OnlyForAdmins = false
+                },
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.PeopleTab,
+                    Title = Resources.People,
+                    Tag = "../Icons/people_white.png",
+                    OnlyForAdmins = false
+                },
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.CustomersTab,
+                    Title = Resources.Customers,
+                    Tag = "../Icons/customers_white.png",
+                    OnlyForAdmins = true
+                },
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.ProjectsTab,
+                    Title = Resources.Projects,
+                    Tag = "../Icons/projects_white.png",
+                    OnlyForAdmins = true
+                },
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.TasksTab,
+                    Title = Resources.Tasks,
+                    Tag = "../Icons/tasks_white.png",
+                    OnlyForAdmins = true
+                },
+                new MainWindowTabItem()
+                {
+                    Control = TabsType.SettingsTab,
+                    Title = Resources.Settings,
+                    Tag = "../Icons/settings_white.png",
+                    OnlyForAdmins = false
+                }
+            };
             _viewModelCache = new Dictionary<string, ICacheable>();
             SelectedTab = Tabs[0];
             App.GlobalTimer.CacheTimerTick += CheckViewModelCache;
@@ -379,14 +421,67 @@ namespace TBT.App.ViewModels.MainWindow
         public void RefreshIsConnected(bool isConnected)
         {
             IsConnected = isConnected;
+            if (!isConnected)
+            {
+                NewError("Connection lost", ErrorType.NotConnected);
+            }
+            else
+            {
+                ErrorMessage = "";
+            }
+
+        }
+
+        public void NewError(string text, ErrorType type)
+        {
+            switch (type)
+            {
+                case ErrorType.Success:
+                    {
+                        Brush = MessageColors.Green;
+                    }
+                    break;
+                case ErrorType.Error:
+                    {
+                        Brush = MessageColors.White;
+                    }
+                    break;
+                case ErrorType.NotConnected:
+                    {
+                        Brush = MessageColors.White;
+                    }
+                    break;
+                case ErrorType.Message:
+                    {
+                        Brush = MessageColors.White;
+                    }
+                    break;
+
+            }
+            ErrorMessage = text;
+            if (type != ErrorType.NotConnected)
+            {
+                _tokenSource.Cancel();
+                _tokenSource = new CancellationTokenSource();
+
+                Task.Run(async () =>
+                {
+                    var token = _tokenSource.Token;
+                    await Task.Delay(5000, token);
+                    token.ThrowIfCancellationRequested();
+                    ErrorMessage = "";
+                });
+
+            }
         }
 
         private void CheckViewModelCache()
         {
+            var selectedName = SelectedViewModel.GetType().Name;
             if (_viewModelCache?.Any() != true) { return; }
-            var keys = _viewModelCache.Where(i => i.Value.ExpiresDate < DateTime.Now).Select(i => i.Key).ToList();
-            foreach (var key in keys)
+            foreach (var key in _viewModelCache.Where(i => i.Value.ExpiresDate < DateTime.Now).Select(i => i.Key).ToList())
             {
+                if (key == selectedName) continue;
                 _viewModelCache[key].CloseTab();
                 _viewModelCache.Remove(key);
             }
@@ -399,6 +494,7 @@ namespace TBT.App.ViewModels.MainWindow
         public void Dispose()
         {
             RefreshEvents.ChangeCurrentUser -= ChangeCurrentUser;
+            RefreshEvents.ChangeError -= NewError;
         }
 
         #endregion

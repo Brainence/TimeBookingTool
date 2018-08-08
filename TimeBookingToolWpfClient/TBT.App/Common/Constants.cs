@@ -17,6 +17,7 @@ namespace TBT.App.Common
         public static string CurrentRunningTimeEntryId => "CurrentRunningTimeEntryId";
         public static string EnableGreetingNotification => "EnableGreetingNotification";
         public static string CultureTag => "CultureTag";
+        public static string ApiUrl => "ApiUrl";
         public static Regex TimeRegex => new Regex(@"^(\d{1,2}){1}([:.]{1}\d{0,2})?$");
     }
 
@@ -24,5 +25,8 @@ namespace TBT.App.Common
     {
         public static Brush Error => Brushes.DarkRed;
         public static Brush Message => Brushes.DarkGreen;
+        public static Brush White => Brushes.White;
+        public static Brush Red => Brushes.Red;
+        public static Brush Green => Brushes.LimeGreen;
     }
 }

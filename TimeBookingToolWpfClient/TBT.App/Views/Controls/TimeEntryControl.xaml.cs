@@ -12,7 +12,14 @@ namespace TBT.App.Views.Controls
 
         private void CheckInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !Common.Constants.TimeRegex.IsMatch(timerTextBox.Text.Insert(((TextBox)e.Source).CaretIndex, e.Text));
+            var source = (TextBox)e.Source;
+            if (source.SelectionLength > 0)
+            {
+                var temp = source.SelectionStart;
+                timerTextBox.Text = timerTextBox.Text.Remove(source.SelectionStart, source.SelectionLength);
+                timerTextBox.CaretIndex = temp;
+            }
+            e.Handled = !Common.Constants.TimeRegex.IsMatch(timerTextBox.Text.Insert(source.CaretIndex, e.Text));
         }
     }
 }

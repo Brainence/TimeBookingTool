@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Windows;
 using System.Windows.Input;
 using TBT.App.Helpers;
 using TBT.App.Models.AppModels;
@@ -10,7 +9,7 @@ using TBT.App.ViewModels.MainWindow;
 
 namespace TBT.App.ViewModels.EditWindowsViewModels
 {
-    public class EditUserViewModel : BaseViewModel
+    public class EditUserViewModel : ObservableObject
     {
         #region Fields
 
@@ -19,7 +18,6 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         private bool _showAdmin;
         private bool _forSaving;
         private bool _changePassword;
-
         #endregion
 
         #region Properties
@@ -53,13 +51,10 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
             get { return _changePassword; }
             set { SetProperty(ref _changePassword, value); }
         }
-
         public ICommand AddSaveCommand { get; set; }
 
         public event Action<User> NewUserAdded;
         public event Action CloseWindow;
-
-
         #endregion
 
         #region Constructors
@@ -75,64 +70,71 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
 
         private async void AddSaveUser(ResetPasswordParameters changePasswordParameters)
         {
-            bool userChanged = false, usersListChanged = false;
-            try
+            if (ForSaving)
             {
-                if (ForSaving)
+                if (string.IsNullOrEmpty(EditingUser?.Username)) return;
+                if (changePasswordParameters != null && ChangePassword)
                 {
-                    if (string.IsNullOrEmpty(EditingUser?.Username)) return;
-                    if (changePasswordParameters != null && ChangePassword)
+                    if (string.IsNullOrWhiteSpace(changePasswordParameters.TokenPassword)
+                        || string.IsNullOrWhiteSpace(changePasswordParameters.NewPassword)
+                        || string.IsNullOrWhiteSpace(changePasswordParameters.ConfirmPassword))
                     {
-                        if (string.IsNullOrWhiteSpace(changePasswordParameters.TokenPassword)
-                            || string.IsNullOrWhiteSpace(changePasswordParameters.NewPassword)
-                            || string.IsNullOrWhiteSpace(changePasswordParameters.ConfirmPassword))
-                        {
-                            MessageBox.Show(Properties.Resources.AllPasswordFieldsRequired);
-                            return;
-                        }
-                        if (changePasswordParameters.NewPassword != changePasswordParameters.ConfirmPassword)
-                        {
-                            MessageBox.Show(Properties.Resources.ConfirmYourPassword);
-                            return;
-                        }
-                        var isValid = JsonConvert.DeserializeObject<bool?>(
-                        await App.CommunicationService.GetAsJson($"User/ValidatePassword/{EditingUser.Id}/{Uri.EscapeUriString(changePasswordParameters.TokenPassword)}"));
+                        RefreshEvents.ChangeErrorInvoke(Properties.Resources.AllPasswordFieldsRequired, ErrorType.Error);
+                        return;
+                    }
+                    if (changePasswordParameters.NewPassword != changePasswordParameters.ConfirmPassword)
+                    {
+                        RefreshEvents.ChangeErrorInvoke(Properties.Resources.ConfirmYourPassword, ErrorType.Error);
+                        return;
+                    }
 
-                        if (isValid.HasValue && !isValid.Value)
+                    var data = await App.CommunicationService.GetAsJson(
+                        $"User/ValidatePassword/{EditingUser.Id}/{Uri.EscapeUriString(changePasswordParameters.TokenPassword)}");
+
+                    if (data != null)
+                    {
+                        if (!JsonConvert.DeserializeObject<bool>(data))
                         {
-                            MessageBox.Show(Properties.Resources.IncorrectPasswordEntered);
+                            RefreshEvents.ChangeErrorInvoke(Properties.Resources.IncorrectPasswordEntered, ErrorType.Error);
                             return;
                         }
                         await App.CommunicationService.GetAsJson(
                             $"User/ChangePassword/{EditingUser.Id}/{Uri.EscapeUriString(changePasswordParameters.TokenPassword)}/{Uri.EscapeUriString(changePasswordParameters.ConfirmPassword)}");
 
-                        MessageBox.Show(Properties.Resources.PasswordBeenChanged);
+                        RefreshEvents.ChangeErrorInvoke(Properties.Resources.PasswordBeenChanged, ErrorType.Success);
                     }
-
-                    EditingUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PutAsJson("User", EditingUser));
-
-                    MessageBox.Show(Properties.Resources.UserWasSaved);
-                    userChanged = true;
                 }
-                else
+                var dataUser = await App.CommunicationService.PutAsJson("User", EditingUser);
+                if (dataUser != null)
                 {
-                    if (EditingUser == null || (EditingUser != null && string.IsNullOrEmpty(EditingUser.Username))) return;
-                    var x = JsonConvert.DeserializeObject<User>(await App.CommunicationService.GetAsJson($"User?email={EditingUser.Username}"));
-                    if (x == null)
-                    {
-                        EditingUser = JsonConvert.DeserializeObject<User>(await App.CommunicationService.PostAsJson("User/NewUser", EditingUser));
-                        MessageBox.Show(Properties.Resources.UserAccountCreated);
-                        NewUserAdded?.Invoke(EditingUser);
-                    }
-                    else
-                        MessageBox.Show(Properties.Resources.UsernameAlreadyExists);
+                    EditingUser = JsonConvert.DeserializeObject<User>(dataUser);
+                    RefreshEvents.ChangeErrorInvoke(Properties.Resources.UserWasSaved, ErrorType.Success);
                 }
-                CloseWindow?.Invoke();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                if (string.IsNullOrEmpty(EditingUser.Username) || string.IsNullOrEmpty(EditingUser.FirstName) ||
+                    string.IsNullOrEmpty(EditingUser.LastName) || string.IsNullOrEmpty(EditingUser.Password))
+                {
+                    RefreshEvents.ChangeErrorInvoke("All fields must be filled", ErrorType.Error);
+                    return;
+                };
+                if (!EditingUser.MonthlySalary.HasValue || EditingUser.MonthlySalary <= 0)
+                {
+                    RefreshEvents.ChangeErrorInvoke("Salary must be above 0", ErrorType.Error);
+                    return;
+                }
+
+                var data = await App.CommunicationService.PostAsJson("User/NewUser", EditingUser);
+                if (data != null)
+                {
+                    EditingUser = JsonConvert.DeserializeObject<User>(data);
+                    RefreshEvents.ChangeErrorInvoke(Properties.Resources.UserAccountCreated, ErrorType.Success);
+                    NewUserAdded?.Invoke(EditingUser);
+                    EditingUser = new User() { Company = EditingUser.Company };
+                }
             }
+            CloseWindow?.Invoke();
         }
 
         public void RefreshCurrentUser(object sender, User user)

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TBT.App.Helpers;
@@ -13,7 +14,7 @@ using TBT.App.Views.Windows;
 
 namespace TBT.App.ViewModels.MainWindow
 {
-    public class ProjectsTabViewModel : BaseViewModel, ICacheable
+    public class ProjectsTabViewModel : ObservableObject, ICacheable
     {
         #region Fields
 
@@ -21,8 +22,7 @@ namespace TBT.App.ViewModels.MainWindow
         private ObservableCollection<Customer> _customers;
         private ObservableCollection<Project> _projects;
         private Customer _selectedCustomer;
-        private int _selectedCustomerIndex;
-        private bool _itemsLoading;
+        private int _savedCustomerId;
 
         #endregion
 
@@ -49,23 +49,17 @@ namespace TBT.App.ViewModels.MainWindow
         public Customer SelectedCustomer
         {
             get { return _selectedCustomer; }
-            set { SetProperty(ref _selectedCustomer, value); }
+            set
+            {
+                if (SetProperty(ref _selectedCustomer, value) && value != null)
+                {
+                    _savedCustomerId = value.Id;
+                }
+            }
         }
 
-        public int SelectedCustomerIndex
-        {
-            get { return _selectedCustomerIndex; }
-            set { SetProperty(ref _selectedCustomerIndex, value); }
-        }
-
-        public bool ItemsLoading
-        {
-            get { return _itemsLoading; }
-            set { SetProperty(ref _itemsLoading, value); }
-        }
 
         public ICommand CreateNewProjectCommand { get; set; }
-        public ICommand RefreshProjectsCommand { get; set; }
         public ICommand EditProjectCommand { get; set; }
         public ICommand RemoveProjectCommand { get; set; }
 
@@ -76,10 +70,8 @@ namespace TBT.App.ViewModels.MainWindow
         public ProjectsTabViewModel()
         {
             CreateNewProjectCommand = new RelayCommand(obj => CreateNewProject(), null);
-            RefreshProjectsCommand = new RelayCommand(async obj => { Projects = await RefreshEvents.RefreshProjectsList(); }, null);
             EditProjectCommand = new RelayCommand(obj => EditProject(obj as Project), null);
             RemoveProjectCommand = new RelayCommand(obj => RemoveProject(obj as Project), null);
-            SelectedCustomerIndex = 0;
         }
 
         #endregion
@@ -88,135 +80,85 @@ namespace TBT.App.ViewModels.MainWindow
 
         private async void CreateNewProject()
         {
-            try
+            if (SelectedCustomer == null)
             {
-                var name = NewProjectName;
-                //TODO: Move validation to backend
-                var project = JsonConvert.DeserializeObject<Project>(
-                    await App.CommunicationService.GetAsJson($"Project/GetByName/{Uri.EscapeUriString(name)}"));
+                RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.CannotCreateProjectWithoutCustomer}", ErrorType.Error);
+                return;
+            }
+            if (Projects.FirstOrDefault(x => x.Name == NewProjectName) != null)
+            {
+                RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.ProjectWithName} {Properties.Resources.AlreadyExists}", ErrorType.Error);
+                return;
+            }
+            var project = new Project()
+            {
+                Name = NewProjectName,
+                Customer = SelectedCustomer,
+                IsActive = true
+            };
 
-                if (project != null)
-                {
-                    MessageBox.Show($"{Properties.Resources.ProjectWithName} '{name}' {Properties.Resources.AlreadyExists}.");
-                    return;
-                }
-                //TODO: Create project without customer
-                if (SelectedCustomerIndex < 0)
-                {
-                    MessageBox.Show($"{Properties.Resources.CannotCreateProjectWithoutCustomer}.");
-                    return;
-                }
-
-                project = new Project()
-                {
-                    Name = name,
-                    Customer = SelectedCustomer,
-                    IsActive = true
-                };
-
-                project = JsonConvert.DeserializeObject<Project>(
-                    await App.CommunicationService.PostAsJson("Project", project));
-
+            var data = await App.CommunicationService.PostAsJson("Project", project);
+            if (data != null)
+            {
+                project = JsonConvert.DeserializeObject<Project>(data);
+                project.Customer = Customers.FirstOrDefault(x => x.Id == project.Customer.Id);
                 Projects.Add(project);
                 Projects = new ObservableCollection<Project>(_projects.OrderBy(p => p.Name));
                 NewProjectName = "";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{Properties.Resources.ErrorOccuredWhileCreateProject}. {ex.Message} {ex.InnerException?.Message}");
+                RefreshEvents.ChangeErrorInvoke("Project created", ErrorType.Success);
             }
         }
 
 
         private async void EditProject(Project project)
         {
-            if (project == null) return;
-            var tempProjectCustomer = project.Customer;
+            var editContext = new EditProjectViewModel(project.Clone()) { Customers = Customers, SelectedCustomer = project.Customer };
             var window = new EditWindow()
             {
-                DataContext = new EditWindowViewModel()
-                {
-                    EditControl = new EditProjectViewModel(project)
-                    {
-                        Customers = Customers,
-                        SelectedCustomer = project.Customer
-                    }
-                }
+                DataContext = new EditWindowViewModel(editContext)
             };
-            var tempContext = (EditProjectViewModel)((EditWindowViewModel)window.DataContext).EditControl;
-            tempContext.NewItemSaved += () => { window.Close(); };
+            editContext.NewItemSaved += window.Close;
             window.ShowDialog();
-            if(tempContext.SaveProject)
+            editContext.NewItemSaved -= window.Close;
+            if (editContext.SaveProject)
             {
-                project = tempContext.EditingProject;
-                project.Customer = tempContext.SelectedCustomer ?? project.Customer;
-                try
+                if (project.Name == editContext.EditingProject.Name && project.Customer.Name == editContext.SelectedCustomer.Name)
                 {
-                    project = JsonConvert.DeserializeObject<Project>(await App.CommunicationService.PutAsJson("Project", project));
-
-                    Projects = await RefreshEvents.RefreshProjectsList();
-                    if (tempProjectCustomer.Name == project.Customer.Name)
-                    {
-                        Projects = new ObservableCollection<Project>(_projects.OrderBy(p => p.Customer.Name));
-                    }
+                    RefreshEvents.ChangeErrorInvoke("Project edited", ErrorType.Success);
+                    return;
                 }
-                catch (Exception ex)
+                if (Projects.FirstOrDefault(x => x.Name == editContext.EditingProject.Name && x.Id != editContext.EditingProject.Id) != null)
                 {
-                    MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                    RefreshEvents.ChangeErrorInvoke($"{Properties.Resources.ProjectWithName} {Properties.Resources.AlreadyExists}", ErrorType.Error);
+                    return;
+                }
+                if (await App.CommunicationService.PutAsJson("Project", editContext.EditingProject) != null)
+                {
+                    project.Name = editContext.EditingProject.Name;
+                    project.Customer = editContext.EditingProject.Customer;
+                    Projects = new ObservableCollection<Project>(Projects.OrderBy(x => x.Name));
+                    RefreshEvents.ChangeErrorInvoke("Project edited", ErrorType.Success);
                 }
             }
         }
 
         private async void RemoveProject(Project project)
         {
-            if (MessageBox.Show(Properties.Resources.AreYouSure, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
-
-            if (project == null) return;
-
-            try
+            var message = project.Activities.Any() ? $"\nThis project have {project.Activities.Count} active tasks" : "";
+            if (MessageBox.Show(Properties.Resources.AreYouSure + message, "Notification", MessageBoxButton.OKCancel) != MessageBoxResult.OK) return;
+            project.IsActive = false;
+            if (await App.CommunicationService.PutAsJson("Project", project) != null)
             {
-                if(project.Id < 0)
-                {
-                    var tempProject =
-                        JsonConvert.DeserializeObject<Project>(
-                            await App.CommunicationService.GetAsJson(
-                                $"Project/GetByName/{Uri.EscapeUriString(project.Name)}"));
-                    if (tempProject == null) { throw new Exception(Properties.Resources.ProjectAlreadyRemoved); }
-                    project.Id = tempProject.Id;
-                }
-
-                foreach (var activity in project.Activities)
-                {
-                    activity.IsActive = false;
-                    activity.Project = project;
-                    await App.CommunicationService.PutAsJson("Activity", activity);
-                }
-
-                project.IsActive = false;
-
-                Projects.Remove(Projects?.FirstOrDefault(item => item.Id == project.Id));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message} {ex.InnerException?.Message }");
+                Projects.Remove(project);
+                RefreshEvents.ChangeErrorInvoke("Project deleted", ErrorType.Success);
             }
         }
 
-        public void RefreshCustomersList(object sender, ObservableCollection<Customer> customers)
+        public void RefreshData(object sender, User user)
         {
             if (sender != this)
             {
-                var tempIndex = SelectedCustomerIndex;
-                Customers = customers;
-                SelectedCustomerIndex = tempIndex;
-            }
-        }
-
-        public void RefreshProjectsList(object sender, ObservableCollection<Project> projects)
-        {
-            if (sender != this)
-            {
-                Projects = projects;
+                RefreshTab();
             }
         }
 
@@ -225,28 +167,31 @@ namespace TBT.App.ViewModels.MainWindow
         #region Interface members
 
         public DateTime ExpiresDate { get; set; }
-        public async void OpenTab(User current)
+        public void OpenTab(User current)
         {
-            Projects = await RefreshEvents.RefreshProjectsList();
-            Customers = await RefreshEvents.RefreshCustomersList();
-            SelectedCustomer = Customers.FirstOrDefault(c => c.Id == _selectedCustomerIndex) ?? Customers.FirstOrDefault();
-            SelectedCustomerIndex = Customers.IndexOf(SelectedCustomer);
+            RefreshEvents.ChangeCurrentUser += RefreshData;
+            RefreshTab();
         }
 
         public void CloseTab()
         {
-            var temp = SelectedCustomer?.Id ?? 0;
+            RefreshEvents.ChangeCurrentUser -= RefreshData;
             Projects?.Clear();
             Customers?.Clear();
-            _selectedCustomerIndex = temp;
         }
 
-        #region IDisposable
-
-        public void Dispose()
-        { }
-
-        #endregion
+        public async void RefreshTab()
+        {
+            Customers?.Clear();
+            Projects?.Clear();
+            Customers = await RefreshEvents.RefreshCustomersListWithActivity();
+            Projects = new ObservableCollection<Project>(Customers.SelectMany(x => x.Projects, (cust, proj) =>
+            {
+                proj.Customer = cust;
+                return proj;
+            }).OrderBy(x => x.Name));
+            SelectedCustomer = Customers.FirstOrDefault(x => x.Id == _savedCustomerId) ?? Customers.FirstOrDefault();
+        }
 
         #endregion
     }

@@ -167,7 +167,7 @@
                                  Text="{Binding TimerTextBox}"
                                  PreviewTextInput="CheckInput"/>
                         <TextBox Name="commentArea"
-                                 Text="{Binding Path=Comment, Mode=TwoWay}" 
+                                 Text="{Binding Path=TimeEntry.Comment, Mode=TwoWay}" 
                                  Width="370" Height="80"
                                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                                  HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -177,8 +177,7 @@
                                     VerticalAlignment="Bottom"
                                     HorizontalAlignment="Left"
                                     Width="Auto"
-                                    Command="{Binding SaveTimeEntryCommand}" Margin="0 0 2 0"
-                                    IsEnabled="{Binding CanSave}">
+                                    Command="{Binding SaveTimeEntryCommand}" Margin="0 0 2 0">
                                 <Button.Style>
                                     <Style TargetType="Button">
                                         <Setter Property="Template">
@@ -261,7 +260,6 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <local:SpinnersApple x:Name="spinnerControl" Margin="10 0 0 0" VerticalAlignment="Center" Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

@@ -14,7 +14,7 @@ using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.Authentication
 {
-    public class AuthenticationControlViewModel: BaseViewModel
+    public class AuthenticationControlViewModel: ObservableObject
     {
         #region Fields
 
@@ -131,7 +131,7 @@ namespace TBT.App.ViewModels.Authentication
             }
         }
 
-        private void ChangeCurrentViewModel(BaseViewModel newCurrentViewModel)
+        private void ChangeCurrentViewModel(ObservableObject newCurrentViewModel)
         {
             _mainVM.ErrorMsg = string.Empty;
             _mainVM.CurrentViewModel = newCurrentViewModel;

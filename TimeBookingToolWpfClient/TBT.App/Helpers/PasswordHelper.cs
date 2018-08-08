@@ -55,20 +55,16 @@ namespace TBT.App.Helpers
             PasswordBox passwordBox = sender as PasswordBox;
             passwordBox.PasswordChanged -= PasswordChanged;
 
-            if (!(bool)GetIsUpdating(passwordBox))
+            if (!GetIsUpdating(passwordBox))
             {
                 passwordBox.Password = (string)e.NewValue;
             }
             passwordBox.PasswordChanged += PasswordChanged;
         }
 
-        private static void Attach(DependencyObject sender,
-            DependencyPropertyChangedEventArgs e)
+        private static void Attach(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            PasswordBox passwordBox = sender as PasswordBox;
-
-            if (passwordBox == null)
-                return;
+            if (!(sender is PasswordBox passwordBox))return;
 
             if ((bool)e.OldValue)
             {

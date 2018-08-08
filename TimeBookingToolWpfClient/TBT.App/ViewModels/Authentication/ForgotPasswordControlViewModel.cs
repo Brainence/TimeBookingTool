@@ -8,7 +8,7 @@ using TBT.App.Properties;
 
 namespace TBT.App.ViewModels.Authentication
 {
-    public class ForgotPasswordControlViewModel: BaseViewModel
+    public class ForgotPasswordControlViewModel: ObservableObject
     {
         #region Fields
 

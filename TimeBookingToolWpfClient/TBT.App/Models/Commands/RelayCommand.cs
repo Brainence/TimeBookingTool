@@ -8,28 +8,23 @@ namespace TBT.App.Models.Commands
         readonly Action<object> _execute;
         readonly Predicate<object> _canExecute;
 
-        public RelayCommand(Action<object> execute) : this(execute, null)
-        {
-
-        }
+        public RelayCommand(Action<object> execute) : this(execute, null) {}
 
         public RelayCommand(Action<object> execute, Predicate<object> canExecute)
         {
-            if (execute == null) throw new ArgumentNullException("execute");
-
-            _execute = execute;
+            _execute = execute ?? throw new ArgumentNullException("execute");
             _canExecute = canExecute;
         }
 
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute(parameter);
+            return _canExecute?.Invoke(parameter) ?? true;
         }
 
         public event EventHandler CanExecuteChanged
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
 
         public void Execute(object parameter)

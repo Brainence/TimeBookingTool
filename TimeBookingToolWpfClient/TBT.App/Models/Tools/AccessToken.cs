@@ -2,18 +2,11 @@
 {
     public class AccessToken
     {
-        private static AccessToken instance;
+        private static AccessToken _instance;
 
         private AccessToken() { }
 
-        public static AccessToken Instance
-        {
-            get
-            {
-                if (instance == null) instance = new AccessToken();
-                return instance;
-            }
-        }
+        public static AccessToken Instance => _instance ?? (_instance = new AccessToken());
 
         public string Token { get; set; }
     }

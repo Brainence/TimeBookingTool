@@ -17,8 +17,8 @@
 
         <Grid Grid.Row="0" Margin="20" Grid.IsSharedSizeScope="True" Name="Header">
             <StackPanel>
-                <local:DoubleLabelControl Label="{Binding Source={x:Static p:Resources.FullName}, Converter={StaticResource ToUpperConverter}, StringFormat={}{0}\:}" Text="{Binding User.FullName}" FontSize="14" Margin="5"/>
-                <local:DoubleLabelControl Label="{Binding Source={x:Static p:Resources.Email}, Converter={StaticResource ToUpperConverter}, StringFormat={}{0}\:}" Text="{Binding User.Username}" FontSize="14" Margin="5"/>
+                <local:DoubleLabelControl Label="{Binding Source={x:Static p:Resources.FullName}, Converter={StaticResource ToUpperConverter}, StringFormat={}{0}\:}" Text="{Binding ReportingUser.FullName}" FontSize="14" Margin="5"/>
+                <local:DoubleLabelControl Label="{Binding Source={x:Static p:Resources.Email}, Converter={StaticResource ToUpperConverter}, StringFormat={}{0}\:}" Text="{Binding ReportingUser.Username}" FontSize="14" Margin="5"/>
 
                 <local:DoubleLabelControl Label="{Binding Source={x:Static p:Resources.TotalTime}, Converter={StaticResource ToUpperConverter}, StringFormat={}{0}\:}" 
                                           Text="{Binding ElementName=TimeEntryItemsControl,

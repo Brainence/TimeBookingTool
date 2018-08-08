@@ -15,15 +15,13 @@ namespace TBT.App.Models.Base
 
         protected bool SetProperty<T>(ref T backingField, T value, [CallerMemberName] string propertyName = null)
         {
-            var changed = !EqualityComparer<T>.Default.Equals(backingField, value);
-
-            if (changed)
+            if (!EqualityComparer<T>.Default.Equals(backingField, value))
             {
                 backingField = value;
                 RaisePropertyChanged(propertyName);
+                return true;
             }
-
-            return changed;
+            return false;
         }
     }
 }

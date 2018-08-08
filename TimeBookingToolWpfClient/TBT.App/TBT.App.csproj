@@ -15,6 +15,8 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>true</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>E:\Brainence projects\TimeBookingToolInstall\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -40,8 +42,6 @@
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>false</BootstrapperEnabled>
     <BootstrapperComponentsUrl>http://localhost/timebookingtool</BootstrapperComponentsUrl>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -76,7 +76,7 @@
     <ManifestKeyFile>TBT.App_2_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
@@ -110,7 +110,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
@@ -174,19 +173,20 @@
     <Compile Include="Helpers\RefreshEvents.cs" />
     <Compile Include="Helpers\ResetPasswordParameters.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
+    <Compile Include="Helpers\TimeEntriesHelper.cs" />
     <Compile Include="Models\AppModels\Company.cs" />
     <Compile Include="Models\AppModels\Customer.cs" />
     <Compile Include="Models\AppModels\Project.cs" />
     <Compile Include="Models\AppModels\Activity.cs" />
     <Compile Include="Models\AppModels\TimeEntry.cs" />
     <Compile Include="Models\AppModels\User.cs" />
-    <Compile Include="Models\Base\BaseViewModel.cs" />
-    <Compile Include="Models\Base\IModelObservableViewModel.cs" />
     <Compile Include="Models\Base\ObservableObject.cs" />
     <Compile Include="Models\Commands\RelayCommand.cs" />
+    <Compile Include="Helpers\ApiDollarRate.cs" />
     <Compile Include="Models\Tools\Bindings.cs" />
     <Compile Include="Models\Tools\Converters.cs" />
     <Compile Include="Models\Tools\AccessToken.cs" />
+    <Compile Include="Helpers\UserReportModel.cs" />
     <Compile Include="Properties\Resources.uk-UA.Designer.cs">
       <DependentUpon>Resources.uk-UA.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -336,6 +336,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="packages.config">

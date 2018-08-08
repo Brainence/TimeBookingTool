@@ -8,14 +8,13 @@ using TBT.App.Models.Commands;
 
 namespace TBT.App.ViewModels.EditWindowsViewModels
 {
-    public class EditActivityViewModel: BaseViewModel
+    public class EditActivityViewModel: ObservableObject
     {
         #region Fields
 
         private ObservableCollection<Project> _projects;
         private Project _selectedProject;
         private Activity _editingActivity;
-        private int _selectedProjectIndex;
 
         #endregion
 
@@ -32,11 +31,9 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
             get { return _selectedProject; }
             set
             {
-                if(SetProperty(ref _selectedProject, value))
+                if (SetProperty(ref _selectedProject, value))
                 {
-                    SaveActivity = false;
-                    SelectedProjectIndex = Projects.Select((item, index) => new { Item = item, Index = index }).
-                                                    FirstOrDefault(x => x.Item.Id == value.Id)?.Index ?? 0;
+                    EditingActivity.Project = value;
                 }
             }
         }
@@ -44,23 +41,12 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public Activity EditingActivity
         {
             get { return _editingActivity; }
-            set
-            {
-                if (SetProperty(ref _editingActivity, value))
-                {
-                    SaveActivity = false;
-                }
-            }
+            set { SetProperty(ref _editingActivity, value); }
         }
 
-        public int SelectedProjectIndex
-        {
-            get { return _selectedProjectIndex; }
-            set { SetProperty(ref _selectedProjectIndex, value); }
-        }
+    
 
         public bool SaveActivity { get; set; }
-
         public ICommand SaveCommand { get; set; }
         public event Action NewItemSaved;
 
@@ -71,7 +57,7 @@ namespace TBT.App.ViewModels.EditWindowsViewModels
         public EditActivityViewModel(Activity activity)
         {
             EditingActivity = activity;
-            SaveActivity = false;
+            SelectedProject = activity.Project;
             SaveCommand = new RelayCommand(obj => Save(), null);
         }
 

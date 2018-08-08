@@ -250,7 +250,7 @@
     <value>Quit</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Refresh all data</value>
+    <value>Refresh</value>
   </data>
   <data name="RefreshCustomer" xml:space="preserve">
     <value>Refresh customers list</value>
@@ -312,8 +312,8 @@
   <data name="ThisYear" xml:space="preserve">
     <value>This year</value>
   </data>
-  <data name="Time" xml:space="preserve">
-    <value>Time</value>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="TimeBookingTool" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -392,7 +392,7 @@
     <value>Please confirm your password.</value>
   </data>
   <data name="CustomerWithName" xml:space="preserve">
-    <value>Customer with name</value>
+    <value>Customer with this name</value>
   </data>
   <data name="EnteredBigTime" xml:space="preserve">
     <value>Time entered for day must be less then 24 hours</value>
@@ -425,16 +425,16 @@
     <value>Password has been changed.</value>
   </data>
   <data name="ProjectWithName" xml:space="preserve">
-    <value>Project with name</value>
+    <value>Project with this name</value>
   </data>
   <data name="UserNameDoesntExist" xml:space="preserve">
-    <value>Username doesn't exist.</value>
+    <value>Username doesn't exist</value>
   </data>
   <data name="UserNameIsRequierd" xml:space="preserve">
-    <value>Username is required.</value>
+    <value>Username is required</value>
   </data>
   <data name="UserNameOfPasswordEmpty" xml:space="preserve">
-    <value>Username or password is empty.</value>
+    <value>Username or password is empty</value>
   </data>
   <data name="YouHaveReachedMonthly" xml:space="preserve">
     <value>You have reached your monthly</value>
@@ -467,7 +467,7 @@
     <value>Hello</value>
   </data>
   <data name="ConnectionLost" xml:space="preserve">
-    <value>Connection lost. Trying to recover.</value>
+    <value>Connection lost</value>
   </data>
   <data name="NiceWishToNotification" xml:space="preserve">
     <value>Have a nice day</value>
@@ -495,13 +495,13 @@
     <value>Incorrect password entered.</value>
   </data>
   <data name="UserAccountCreated" xml:space="preserve">
-    <value>User account created successfully.</value>
+    <value>User account created</value>
   </data>
   <data name="UsernameAlreadyExists" xml:space="preserve">
-    <value>Username already exists.</value>
+    <value>Username already exists</value>
   </data>
   <data name="UserWasSaved" xml:space="preserve">
-    <value>User was saved successfully.</value>
+    <value>User saved</value>
   </data>
   <data name="YouCantRemoveLastAdmin" xml:space="preserve">
     <value>You can't remove last admin.</value>
@@ -535,5 +535,32 @@
   </data>
   <data name="CustomerAlreadyRemoved" xml:space="preserve">
     <value>Customer already removed</value>
+  </data>
+  <data name="HourlySalary" xml:space="preserve">
+    <value>Hourly Salary</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="Absence" xml:space="preserve">
+    <value>Absence</value>
+  </data>
+  <data name="Sickness" xml:space="preserve">
+    <value>Sickness</value>
+  </data>
+  <data name="Vacation" xml:space="preserve">
+    <value>Vacation</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="Salary" xml:space="preserve">
+    <value>Salary</value>
+  </data>
+  <data name="SalaryMustBe" xml:space="preserve">
+    <value>Salary must be above 0</value>
+  </data>
+  <data name="CopySalaryToClipboard" xml:space="preserve">
+    <value>Copy salary to clipboard</value>
   </data>
 </root>

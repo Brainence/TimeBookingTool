@@ -1,10 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using TBT.App.Models.Base;
 
 namespace TBT.App.Models.AppModels
 {
 
-    public class Project : ObservableObject
+    public class Project : ObservableObject, IEquatable<Project>
     {
         private int _id;
         private string _name;
@@ -22,9 +24,8 @@ namespace TBT.App.Models.AppModels
 
         public Project Clone()
         {
-            return (Project)MemberwiseClone();
+            return MemberwiseClone() as Project;
         }
-
         public int Id
         {
             get { return _id; }
@@ -64,6 +65,36 @@ namespace TBT.App.Models.AppModels
         public override string ToString()
         {
             return $"{Name}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Project);
+        }
+
+        public bool Equals(Project other)
+        {
+            return other != null &&
+                   _id == other._id &&
+                   _name == other._name;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 321773176;
+            hashCode = hashCode * -1521134295 + _id.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(_name);
+            return hashCode;
+        }
+
+        public static bool operator ==(Project project1, Project project2)
+        {
+            return EqualityComparer<Project>.Default.Equals(project1, project2);
+        }
+
+        public static bool operator !=(Project project1, Project project2)
+        {
+            return !(project1 == project2);
         }
     }
 }

@@ -7,7 +7,7 @@ using TBT.App.Helpers;
 
 namespace TBT.App.ViewModels.Authentication
 {
-    public class ResetPasswordControlViewModel: BaseViewModel
+    public class ResetPasswordControlViewModel: ObservableObject
     {
         #region Fields
 
@@ -87,13 +87,12 @@ namespace TBT.App.ViewModels.Authentication
                 return;
             }
 
-            try
-            {
-                var result = JsonConvert.DeserializeObject<bool?>(
-                    await App.CommunicationService.GetAsJson(
-                        $"ResetTicket/ChangePassword/{UserId}/{args.NewPassword}/{args.TokenPassword}"));
 
-                if (result == null || (result.HasValue && !result.Value))
+            var data = await App.CommunicationService.GetAsJson(
+                $"ResetTicket/ChangePassword/{UserId}/{args.NewPassword}/{args.TokenPassword}");
+            if (data != null)
+            {
+                if (!JsonConvert.DeserializeObject<bool>(data))
                 {
                     _mainVM.ErrorColor = Common.MessageColors.Error;
                     _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
@@ -105,12 +104,11 @@ namespace TBT.App.ViewModels.Authentication
                 _mainVM.ErrorMsg = Resources.PasswordBeenChanged;
                 _mainVM.CurrentViewModel = new AuthenticationControlViewModel(_mainVM);
             }
-            catch
+            else
             {
                 _mainVM.ErrorColor = Common.MessageColors.Error;
                 _mainVM.ErrorMsg = Resources.ErrorOccurredTryAgain;
             }
-
             ChangeButtonIsEnabled = true;
             ChangeCancelButtonIsEnabled = true;
         }

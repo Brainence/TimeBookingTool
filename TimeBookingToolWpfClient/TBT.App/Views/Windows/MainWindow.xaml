@@ -26,36 +26,36 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!--Connection lost control-->
 
-        <!--<StackPanel Grid.Row="0" VerticalAlignment="Center">
-            <controls:SpinnersCogs Visibility="{Binding IsConnected, Converter={StaticResource BoolToNotVisibilityConverter}}" Grid.Row="0" />
-            <TextBox FontSize="20" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" Text="{x:Static p:Resources.ConnectionLost}" Foreground="{StaticResource SpinnerForeground}"/>
-        </StackPanel>-->
 
-        <!--Connection lost control-->
+
+
+
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="57"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <ListBox Grid.Row="0" Style="{StaticResource HeaderStyle}">
-            </ListBox>
-            <ContentControl Grid.Row="1" Margin="0 5 0 0" Content="{Binding SelectedViewModel}"/>
+            <ListBox Grid.Row="0" Style="{StaticResource HeaderStyle}"/>
+            <controls:SpinnersCogs Margin="0 5 0 0" Grid.Row="1"  Background="White" Visibility="{Binding Path=IsConnected, Converter={StaticResource BoolToNotVisibilityConverter}}"/>
+            
+            <ContentControl Grid.Row="1" Margin="0 5 0 0" Content="{Binding SelectedViewModel}" Visibility="{Binding Path=IsConnected, Converter={StaticResource BoolToVisibilityConverter}}"/>
         </Grid>
 
         <Grid Grid.Row="1">
-            <ContentControl Content="{Binding LanguageControl}" 
+            <!--<ContentControl Content="{Binding LanguageControl}" 
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Center">
-            </ContentControl>
-            <StackPanel HorizontalAlignment="Right" Grid.Column="1" Margin="10 0 0 10" Orientation="Horizontal" 
-                        Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibilityConverter}}">
+            </ContentControl>-->
+            <StackPanel  VerticalAlignment="Center">
+                <TextBlock  FontSize="18" Background="Transparent" Foreground="{Binding Brush}" HorizontalAlignment="Center" Text="{Binding ErrorMessage}" FontWeight="Bold"/>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Right"  Margin="10 0 0 10" Orientation="Horizontal" >
 
                 <Image Source="../../Resources/Icons/refresh.png" Height="18" Margin="0 5 5 5" Cursor="Hand" ToolTip="{x:Static p:Resources.Refresh}">
                     <Image.InputBindings>
-                        <MouseBinding Gesture="LeftClick" Command="{Binding RefreshAllCommand}"/>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding RefreshCommand}"/>
                     </Image.InputBindings>
                 </Image>
                 <Image Source="../../Resources/Icons/exit.png" Height="18" Margin="5 5 0 5" Cursor="Hand" ToolTip="{x:Static p:Resources.SignOut}">
